@@ -1,0 +1,214 @@
+{
+  "status": "original fictional voice design; not transcriptions or impersonations",
+  "created_on": "2026-10-15",
+  "evidence_status": "No new clips or audio accessed this pass. Inspiration references link to reel-analysis-2026.json sources.",
+  "global_direction": [
+    "Use distinct attention and rhythm, not identical Hinglish punchlines.",
+    "Allow filler, overlap, failed jokes and silence.",
+    "Funny participants still need concrete goals unrelated to entertaining the player.",
+    "An NPC may ignore a joke; laughter never establishes consent or legal safety.",
+    "Avoid universal moral conclusions after every choice.",
+    "Use human-performed reference reads before committing voice assets; browser TTS is a preview, not performance approval."
+  ],
+  "characters": [
+    {
+      "id": "kabir",
+      "name": "Kabir",
+      "role": "student / would-be comic",
+      "inner_contradiction": "Wants friends to think he is unbothered; takes parental and friend approval very seriously.",
+      "rhythm": "Starts confidently, then repairs the sentence mid-way; talks faster when covering embarrassment.",
+      "original_example_lines": [
+        "Bhai, ek second. Nahi, woh wala second nahi—phone aa raha hai.",
+        "Maine bola tha aa raha hoon. Kahan aa raha hoon, woh nahi bola."
+      ],
+      "under_pressure": "Lowers his voice and asks one specific friend for help.",
+      "anti_cringe_rule": "Uses a few borrowed English words when defending himself; never says aura to explain his own joke.",
+      "inspiration_refs": [
+        "U1",
+        "S2"
+      ]
+    },
+    {
+      "id": "officer",
+      "name": "Sharma",
+      "role": "constable",
+      "inner_contradiction": "Wants a manageable shift and respect; can be amused without abandoning a duty.",
+      "rhythm": "Short questions; lets the other person over-explain; occasional dry repetition of their own words.",
+      "original_example_lines": [
+        "Abhi tumne bola tha dost wahin hain.",
+        "Phone pakdao. Pehle naam toh batao."
+      ],
+      "under_pressure": "Stops joking, gives concrete instructions; may quietly make room before publicly conceding anything.",
+      "anti_cringe_rule": "Not a catchphrase dispenser; irritation and kindness may coexist.",
+      "inspiration_refs": [
+        "U1",
+        "U2",
+        "S2"
+      ]
+    },
+    {
+      "id": "ravi",
+      "name": "Ravi",
+      "role": "sound volunteer",
+      "inner_contradiction": "Enjoys being indispensable; borrowed equipment and somebody else’s deposit make him anxious.",
+      "rhythm": "Specific nouns, interrupted counting, occasional unnecessary technical detail.",
+      "original_example_lines": [
+        "Blue wire. Blue. Yeh bhi blue hai? Achha, darker blue.",
+        "Ek cup idhar mat—haan. Ab udhar hi rehne do."
+      ],
+      "under_pressure": "Repeats practical instructions, asks for a pair of hands rather than delivering a speech.",
+      "anti_cringe_rule": "His humour comes from attention landing on the wrong small detail.",
+      "inspiration_refs": [
+        "S4"
+      ]
+    },
+    {
+      "id": "sana",
+      "name": "Sana",
+      "role": "medical volunteer",
+      "inner_contradiction": "Wants to help and be recognised as capable; becomes abrupt when three people ask at once.",
+      "rhythm": "Rapid triage questions, unfinished sentences, small sideways jokes when the immediate task is safe.",
+      "original_example_lines": [
+        "Bottle khuli hai? Theek. Do glass—nahi, cup chalega.",
+        "Mujhe camera nahi, woh bag dena. Camera baad mein."
+      ],
+      "under_pressure": "Names a task and a person; vulnerability appears in a private pause after helping.",
+      "anti_cringe_rule": "Can laugh at a silly request without turning it into a lesson.",
+      "inspiration_refs": [
+        "S3"
+      ]
+    },
+    {
+      "id": "mira",
+      "name": "Mira",
+      "role": "student organiser",
+      "inner_contradiction": "Wants a coherent public message; privately cannot keep up with every group’s needs.",
+      "rhythm": "Different register on microphone and beside friends; occasionally repeats a public phrase then laughs at herself.",
+      "original_example_lines": [
+        "Mic pe mat bol. Mere ko bol.",
+        "Haan, sabka point hai. Ek mic hai bas."
+      ],
+      "under_pressure": "Makes a consequential compromise, then checks who noticed.",
+      "anti_cringe_rule": "No permanently wise organiser voice; she can be defensive and funny.",
+      "inspiration_refs": [
+        "S2",
+        "S4"
+      ]
+    },
+    {
+      "id": "nikhil",
+      "name": "Nikhil",
+      "role": "first-time participant",
+      "inner_contradiction": "Wants to belong, is embarrassed to admit he is lost, and tracks mundane details accurately.",
+      "rhythm": "Literal updates arriving at inconvenient times; rarely tries to make a joke.",
+      "original_example_lines": [
+        "Main wahi hoon. Wahi matlab pehle wala gate nahi.",
+        "Phone mil gaya? Achha. Charger bhi usi ke saath tha?"
+      ],
+      "under_pressure": "Says exactly whom he cannot find, stops pretending everything is fine.",
+      "anti_cringe_rule": "Do not make him a perpetual helpless child. His observations can rescue a scene.",
+      "inspiration_refs": [
+        "S2"
+      ]
+    },
+    {
+      "id": "asha",
+      "name": "Asha",
+      "role": "tea seller / local witness",
+      "inner_contradiction": "Wants ordinary work to continue and looks after familiar faces; distrusts strangers making her explain her neighbourhood.",
+      "rhythm": "Names people and places instead of abstractions; keeps working during a conversation.",
+      "original_example_lines": [
+        "Udhar chai nahi milegi. Woh mera board ghoom gaya hai.",
+        "Pehle cup rakh. Dono haath se kahani kyun suna raha hai?"
+      ],
+      "under_pressure": "Protects a doorway or customer, negotiates practically, remembers who actually helped.",
+      "anti_cringe_rule": "She is allowed to be petty, generous, bored and commercially minded.",
+      "inspiration_refs": [
+        "S1",
+        "S3"
+      ]
+    },
+    {
+      "id": "journalist",
+      "name": "Farah",
+      "role": "independent reporter",
+      "inner_contradiction": "Needs a usable story and an accurate account; worries a less careful competitor will publish first.",
+      "rhythm": "Precise follow-up questions; changes tone when camera is off.",
+      "original_example_lines": [
+        "Usse pehle kya hua? Bas woh batao.",
+        "Yeh frame acha hai. Context abhi bhi missing hai."
+      ],
+      "under_pressure": "Checks one concrete discrepancy; may miss another while rushing.",
+      "anti_cringe_rule": "Avoid turning her into the game’s truth narrator.",
+      "inspiration_refs": [
+        "S1",
+        "S4"
+      ]
+    },
+    {
+      "id": "inspector",
+      "name": "Rao",
+      "role": "deployment supervisor",
+      "inner_contradiction": "Wants instructions followed and a defensible record; local improvisation can look like insubordination.",
+      "rhythm": "Controlled complete sentences in public; clipped phrases over radio.",
+      "original_example_lines": [
+        "Mujhe dono timings chahiye. Kisne dekha?",
+        "Order clear nahi hai. Dobara confirm karo."
+      ],
+      "under_pressure": "Seeks confirmation, may delay, refuse or override a subordinate with consequences.",
+      "anti_cringe_rule": "Not automatically corrupt or automatically fair; pressure changes the available tradeoffs.",
+      "inspiration_refs": [
+        "S2"
+      ]
+    },
+    {
+      "id": "organizer",
+      "name": "Dev",
+      "role": "coalition negotiator",
+      "inner_contradiction": "Needs different groups to believe they still have influence; sometimes promises clarity he does not possess.",
+      "rhythm": "Rephrases requests as agreements; cautiously corrects himself when pressed for specifics.",
+      "original_example_lines": [
+        "Meeting boli hai. Time abhi nahi bola.",
+        "Haan, tumhara point andar rakha. Kis wording mein—woh bata raha hoon."
+      ],
+      "under_pressure": "Looks for someone to co-sign a decision; public composure and private uncertainty diverge.",
+      "anti_cringe_rule": "Let the player interrupt polished language with practical questions.",
+      "inspiration_refs": [
+        "S4"
+      ]
+    },
+    {
+      "id": "driver",
+      "name": "Imran",
+      "role": "contract driver",
+      "inner_contradiction": "Has a job to finish and costs that no faction reimburses; likes a joke until it becomes his problem.",
+      "rhythm": "Plain practical questions with a pause before the punchline.",
+      "original_example_lines": [
+        "Receipt kis ke paas hai? Payment wala nahi, delivery wala.",
+        "Sabko jaldi hai. Gaadi ko jagah bhi chahiye."
+      ],
+      "under_pressure": "Counts delay and damage, calls a supervisor, may help someone despite his own loss.",
+      "anti_cringe_rule": "No magic logistical power; no exposition about all political motives.",
+      "inspiration_refs": [
+        "S1"
+      ]
+    },
+    {
+      "id": "meera",
+      "name": "Meera",
+      "role": "small creator",
+      "inner_contradiction": "Wants a memorable clip; also genuinely likes the people she films and may regret her edit.",
+      "rhythm": "Experiments aloud with framing, then forgets the camera when something lands unexpectedly.",
+      "original_example_lines": [
+        "Ek baar normal bol. Normal wala zyada funny tha.",
+        "Ruk, woh mat repeat kar. Pehli baar hi tha."
+      ],
+      "under_pressure": "Either puts the phone down or becomes more performative; earlier relationships determine which.",
+      "anti_cringe_rule": "Not every sentence contains a platform term; humour is often in what she cuts out.",
+      "inspiration_refs": [
+        "S1",
+        "S4"
+      ]
+    }
+  ]
+}

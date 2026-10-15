@@ -26,3 +26,13 @@ const before=JSON.stringify(input);const a=build(input),b=build({...input,npcs:[
 assert.deepEqual(a.map(c=>c.id),b.map(c=>c.id));assert.equal(JSON.stringify(input),before,'candidate builder must be pure');
 assert.equal(new Set(list.map(c=>c.id)).size,list.length);
 console.log('Interaction candidate tests passed');
+const target={id:'friend',name:'FRIEND',x:1,z:0,y:0};
+const wall={x:.5,z:0,w:.15,d:4,h:3};
+assert.equal(build({player:{x:0,z:0,y:0},npcs:[target],obstacles:[wall]}).length,0,'cannot talk through wall');
+assert.equal(build({player:{x:0,z:0,y:4},npcs:[target]}).length,0,'cannot interact from another floor');
+const lowBench={x:.5,z:0,w:.15,d:4,h:.7};
+assert(build({player:{x:0,z:0,y:0},npcs:[target],obstacles:[lowBench]}).length,'can speak across low bench');
+const phone={id:'p',name:'phone',type:'phone',x:1,z:0,y:0,model:{visible:true}};
+assert.equal(build({player:{x:0,z:0,y:0},items:[phone],obstacles:[wall]}).length,0,'no pickup through wall');
+assert(build({player:{x:0,z:0,y:0},items:[{...phone,y:.82}],obstacles:[{x:1,z:0,w:.6,d:.6,h:.81}]}).some(a=>a.type==='item'),'item resting on table can be picked up');
+console.log('Interaction reach: walls, floors, low barriers and supported pickups pass');

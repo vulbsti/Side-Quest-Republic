@@ -1,0 +1,632 @@
+{
+  "created_on": "2026-10-15",
+  "status": "provisional creative analysis of prior records; new collection blocked",
+  "collection_reference": "reel-collection-2026.json",
+  "new_clips_watched": 0,
+  "new_audio_verified": 0,
+  "source_boundary": "No live Instagram access succeeded in this pass. Timings, voices, interruptions and music described below are proposed original direction, not observations of recordings.",
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://www.instagram.com/reels/DeGYClxTsXK/",
+      "basis": "Prior root-observed signed-in caption and visible comment sample, recorded in instagram-observations.json. Not revisited this pass.",
+      "premise": "Caption claims a woman takes a bus ignition key and driver laughs.",
+      "certainty": "caption claim; action, delivery, music and reaction not independently verified",
+      "comments_paraphrase": [
+        "Some viewers frame it as cinematic or entertaining.",
+        "Others challenge whether it is funny and object to interference."
+      ],
+      "interpretation": "The same public act can earn amusement and disapproval simultaneously.",
+      "do_not_infer": [
+        "Driver consent",
+        "absence of consequences",
+        "representative audience consensus",
+        "causal link to other bus footage"
+      ]
+    },
+    {
+      "id": "S2",
+      "url": "https://www.ndtv.com/india-news/jantar-mantar-protest-bus-key-dash-to-detain-me-please-how-protesters-outfoxed-delhi-cops-12144526",
+      "basis": "Previously recorded secondary reporting; not freshly fetched.",
+      "premise": "A person reportedly asks to join detained friends, then wants to leave after discovering friends are elsewhere.",
+      "certainty": "reported premise; exact sound and timing unverified",
+      "interpretation": "A sincerely pursued goal becomes embarrassing when achieved; friendship logistics collide with formal procedure."
+    },
+    {
+      "id": "S3",
+      "url": "https://www.freepressjournal.in/amp/viral/protest-hai-ya-holi-party-patna-student-protesters-ask-police-for-water-cannon-amid-heat-dance-in-the-spray-video",
+      "basis": "Previously recorded secondary reporting about Patna, July 2026.",
+      "premise": "Students reportedly ask for water spray in the heat and dance afterward.",
+      "certainty": "reported premise; do not relocate actual incident to Delhi",
+      "comments_paraphrase": [
+        "The article-selected comments compare the scene with a festival.",
+        "One contrasts it with harsher experiences elsewhere."
+      ],
+      "interpretation": "Treating an intimidating piece of equipment as a weather service creates an incongruous status reversal."
+    },
+    {
+      "id": "S4",
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "basis": "Previously recorded secondary reporting.",
+      "premise": "Chase footage reportedly recut with music or game framing; workout jokes and costumes.",
+      "certainty": "editing conventions described by reporting, not personally viewed here",
+      "interpretation": "A retrospective edit can turn vulnerability into apparent confidence. That is the editor's interpretation, not proof of the participant's feelings."
+    },
+    {
+      "id": "U1",
+      "url": null,
+      "basis": "User-provided lead",
+      "premise": "A student asks an officer to speak to their mother as a tuition teacher.",
+      "certainty": "unverified; location, people, words and response unknown",
+      "interpretation": "A domestic obligation momentarily outranks a public confrontation."
+    },
+    {
+      "id": "U2",
+      "url": null,
+      "basis": "User-provided lead",
+      "premise": "A protester compliments an officer as cute.",
+      "certainty": "unverified; location, people, words and response unknown",
+      "interpretation": "Unexpected friendliness invites a response outside the usual authority script."
+    }
+  ],
+  "comic_mechanisms": [
+    {
+      "id": "goal_reversal",
+      "sources": [
+        "S2"
+      ],
+      "mechanism": "The person gets what they asked for, then a new fact reverses their desire.",
+      "game_requirement": "Establish their original intention clearly; let the player discover the changed fact before or after committing.",
+      "performance_proposal": "One silent reaction beat before the second request. This is proposed direction, not observed timing.",
+      "cringe_failure": "An NPC announces the joke or a caption explains why it is hilarious."
+    },
+    {
+      "id": "scale_collision",
+      "sources": [
+        "U1"
+      ],
+      "mechanism": "A tiny ordinary problem takes priority inside a supposedly grand situation.",
+      "game_requirement": "Give the mother call an independent timer and earlier relationship context.",
+      "performance_proposal": "Student drops the public bravado when the phone vibrates; officer remains occupied with an unrelated task.",
+      "cringe_failure": "Everyone speaks in fluent one-liners; the mother exists only to shout a stereotype."
+    },
+    {
+      "id": "literal_service_request",
+      "sources": [
+        "S3"
+      ],
+      "mechanism": "Ask a straight logistical question where others expect confrontation.",
+      "game_requirement": "The question can be sincere, cheeky or mistimed depending on local conditions; it cannot guarantee immunity.",
+      "performance_proposal": "Deliver as a practical request, not a pre-announced roast. The other person can ignore it, answer literally or laugh.",
+      "cringe_failure": "A water-cannon joke automatically awards harmless-aura points despite distress nearby."
+    },
+    {
+      "id": "borrowed_confidence",
+      "sources": [
+        "S4"
+      ],
+      "mechanism": "An edit presents a messy experience as effortless confidence.",
+      "game_requirement": "Show an unflattering raw moment before the triumphant cut; allow the player to approve, contextualise or refuse the edit.",
+      "performance_proposal": "Music begins half a beat too early, stops at the awkward interruption, resumes only when the friends react.",
+      "cringe_failure": "Continuous victory music regardless of what happened."
+    },
+    {
+      "id": "social_permission",
+      "sources": [
+        "S1",
+        "U2"
+      ],
+      "mechanism": "The first reaction changes whether bystanders join a joke or withdraw.",
+      "game_requirement": "Track distinct reactions; one person can smile while another becomes uncomfortable.",
+      "performance_proposal": "A small glance between friends precedes group laughter. Avoid a canned audience track.",
+      "cringe_failure": "All spectators clap; a relationship score pretends there is one audience."
+    },
+    {
+      "id": "bureaucratic_literalism",
+      "sources": [
+        "S2",
+        "U1"
+      ],
+      "mechanism": "A procedural response meets a request that keeps changing.",
+      "game_requirement": "The officer recalls the earlier request accurately and has a reason to be distracted or patient.",
+      "performance_proposal": "Short concrete questions; no philosophical closing speech.",
+      "cringe_failure": "Every authority figure becomes either a sitcom fool or a moral lecturer."
+    }
+  ],
+  "audience_model": {
+    "premise": "Amusement, trust, embarrassment, attention and consent are separate responses.",
+    "dimensions": [
+      "Does this viewer understand the setup?",
+      "Who becomes the butt of the joke?",
+      "Is the target participating or merely being filmed?",
+      "Does the viewer know consequences omitted by the edit?",
+      "Is the humour helping people endure pressure, or denying what someone nearby is experiencing?"
+    ],
+    "evidence_limit": "One prior small platform-ranked thread and article-selected comments cannot establish a representative consensus.",
+    "implementation": "Record who witnessed the live moment, who saw which edit, and who received only its caption. Later reactions must use those exposures."
+  },
+  "encounter_treatments": [
+    {
+      "id": "tuition-practical",
+      "title": "Just Say Revision",
+      "inspiration_refs": [
+        "U1"
+      ],
+      "evidence_label": "Unverified user lead; completely original adaptation",
+      "characters": [
+        "kabir",
+        "officer",
+        "meera"
+      ],
+      "setup": "Kabir is confidently explaining something to the camera when his mother calls. He asks you for help before admitting what help means.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "Phone vibration interrupts his sentence. He silences it, then it rings again.",
+          "line": "Kabir: Tu bas paas khada reh. Teacher jaisa."
+        },
+        {
+          "beat": "complication",
+          "action": "The officer asks who is blocking the passage; Kabir sees a solution and makes the request badly.",
+          "line": "Sharma: Main teacher hoon ab?"
+        },
+        {
+          "beat": "playable_pause",
+          "action": "Mother is waiting; player can interrupt, hand back the phone or let the explanation continue.",
+          "line": "Kabir, quieter: Maths mat bolna. Maine maths chhod di."
+        }
+      ],
+      "choices": [
+        {
+          "action": "Offer your own improvised explanation",
+          "ambiguity": "Protects Kabir but makes you responsible for keeping the story consistent.",
+          "delayed_payoff": "A later call asks a detail established here."
+        },
+        {
+          "action": "Ask the officer to speak, without promising what he will say",
+          "ambiguity": "Lets Kabir lose control of the story; officer may help, answer literally or decline.",
+          "delayed_payoff": "Officer recognises the player later but is not automatically compliant."
+        },
+        {
+          "action": "Tell Kabir to answer honestly, then stay beside him",
+          "ambiguity": "Can be genuine support or feel like public abandonment depending on friendship and audience.",
+          "delayed_payoff": "Private response differs from the public clip."
+        },
+        {
+          "action": "Keep filming the awkwardness",
+          "ambiguity": "May be welcomed as a shared joke or resented later; ask the subject before publishing.",
+          "delayed_payoff": "Kabir can ask for the clip to be removed when family sees it."
+        }
+      ],
+      "risk_design": "Conversation usually adds familiarity; obstruction, persistence after a refusal or public humiliation can change reactions. No blanket legal claim.",
+      "reel_payoff": "The phone vibration and Kabir’s sudden change of voice carry the joke; optional original music stops at the officer’s question.",
+      "physical_requirements": {
+        "cast_presence": [
+          "kabir",
+          "officer"
+        ],
+        "props": [
+          "Kabir phone with ringing/connected states"
+        ],
+        "spatial_action": "Kabir approaches the officer only if the player asks; the officer must be within conversational range before taking the phone.",
+        "interruptions": [
+          "Mother repeats the question when nobody answers.",
+          "A genuine nearby duty can interrupt the officer without resolving the call."
+        ],
+        "state_commits": [
+          "Remember the chosen subject/alibi and who actually heard it.",
+          "Recording and permission to share are separate actions."
+        ],
+        "callback": "A later call asks a detail the player supplied; do not reroll the remembered answer."
+      },
+      "priority": "first-production-pass"
+    },
+    {
+      "id": "moving-friends",
+      "title": "Same Group, Different Location",
+      "inspiration_refs": [
+        "S2"
+      ],
+      "evidence_label": "Original farce inspired by reported reversal",
+      "characters": [
+        "nikhil",
+        "kabir",
+        "officer"
+      ],
+      "setup": "Nikhil wants to stay with friends. Three messages each refer to a different gate as the main gate.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "Nikhil confidently identifies where everyone is.",
+          "line": "Nikhil: Pakka. Abhi message aaya."
+        },
+        {
+          "beat": "complication",
+          "action": "A new message contradicts him while the officer is responding to the original request.",
+          "line": "Sharma: Tumhare dost hain ya delivery address?"
+        },
+        {
+          "beat": "reversal",
+          "action": "Player chooses whether to correct the request publicly or quietly confirm locations first.",
+          "line": "Kabir on phone: Hum toh chai pe hain. Tu kahan hai?"
+        }
+      ],
+      "choices": [
+        {
+          "action": "Ask the officer to wait while you confirm",
+          "ambiguity": "Sensible but consumes patience and may miss the group."
+        },
+        {
+          "action": "Commit to the first meeting point",
+          "ambiguity": "Decisive, but depends on the age and source of the message."
+        },
+        {
+          "action": "Get everyone on one short call",
+          "ambiguity": "Fast if trusted; noisy and confusing if people talk over one another."
+        },
+        {
+          "action": "Make the confusion into a running joke",
+          "ambiguity": "Relieves embarrassment for some; Nikhil may feel he is the joke."
+        }
+      ],
+      "delayed_payoff": "Later reunion directions use the naming convention established here. A person you mocked may hesitate to admit being lost again.",
+      "risk_design": "Costs primarily time and trust; official impatience depends on actual obstruction and other duties, not an arbitrary joke penalty.",
+      "reel_payoff": "Cut between contradictory location messages and a single unimpressed reaction; keep the final phone answer unscored.",
+      "physical_requirements": {
+        "cast_presence": [
+          "nikhil",
+          "officer"
+        ],
+        "props": [
+          "Message timestamps",
+          "Named meeting points"
+        ],
+        "spatial_action": "Friends physically change location along visible paths; location messages retain send time.",
+        "interruptions": [
+          "New message can arrive while the officer is responding."
+        ],
+        "state_commits": [
+          "Set a chosen meeting point and attendees; arrivals resolve the reunion.",
+          "Do not teleport missing friends after a dialogue button."
+        ],
+        "callback": "A later lost friend uses the shared naming convention or remains reluctant after ridicule."
+      },
+      "priority": "first-production-pass"
+    },
+    {
+      "id": "weather-counter",
+      "title": "Is There a Cooling Department?",
+      "inspiration_refs": [
+        "S3"
+      ],
+      "evidence_label": "Original Delhi scene borrowing a reported Patna joke structure; not relocation of documentary footage",
+      "characters": [
+        "kabir",
+        "sana",
+        "officer"
+      ],
+      "setup": "Everyone is hot. Kabir asks about cooling arrangements with exaggerated practical seriousness. Sana is looking for cups.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "Kabir asks the question as if at a service desk.",
+          "line": "Kabir: Paani ka arrangement kis counter pe hai?"
+        },
+        {
+          "beat": "literal_response",
+          "action": "The officer points to an ordinary water table; Kabir had expected a more dramatic response.",
+          "line": "Sharma: Left. Neela dabba."
+        },
+        {
+          "beat": "choice",
+          "action": "Sana hands over cups while still answering someone else.",
+          "line": "Sana: Joke baad mein bhi chalega. Cup abhi de sakta hai?"
+        }
+      ],
+      "choices": [
+        {
+          "action": "Commit to the literal answer and become the enthusiastic water guide",
+          "ambiguity": "Can be funny and useful, or become attention-seeking if you monopolise the area."
+        },
+        {
+          "action": "Try one more absurdly polite question",
+          "ambiguity": "Timing matters; the officer may enjoy it or be occupied with something serious."
+        },
+        {
+          "action": "Quietly take the cups and help",
+          "ambiguity": "Low spectacle; later someone may remember despite no immediate applause."
+        },
+        {
+          "action": "Ask Meera to film the failed punchline",
+          "ambiguity": "Self-deprecation can land better than trying to win the exchange."
+        }
+      ],
+      "delayed_payoff": "A later crowd recognises you as the person who knows where water is, creating an obligation you did not expect.",
+      "risk_design": "No in-game request guarantees safe police response. Do not direct actual use of crowd-control equipment.",
+      "reel_payoff": "Tiny original fan hum, dry literal answer, then normal crowd sound; no explosive meme hit.",
+      "physical_requirements": {
+        "cast_presence": [
+          "kabir",
+          "sana"
+        ],
+        "props": [
+          "Water table",
+          "Finite cups",
+          "Crate inventory"
+        ],
+        "spatial_action": "The water task requires handling a cup/crate and reaching recipients. The spoken joke alone does not increase supplies.",
+        "interruptions": [
+          "Sana can turn to someone needing attention; joke continues only if the player waits."
+        ],
+        "state_commits": [
+          "Consume visible inventory on actual handover.",
+          "Record individual witnesses rather than rewarding the whole district."
+        ],
+        "callback": "People approach the player for water later because they witnessed the earlier help."
+      },
+      "priority": "first-production-pass"
+    },
+    {
+      "id": "missing-key-account",
+      "title": "Who Has the Key?",
+      "inspiration_refs": [
+        "S1"
+      ],
+      "evidence_label": "Original fictional aftermath of a reported premise; no instructions for taking or using keys",
+      "characters": [
+        "driver",
+        "meera",
+        "officer",
+        "asha"
+      ],
+      "setup": "A missing key has become a popular joke before anyone knows whose key it is. The driver is losing time. Meera has only the final seconds on camera.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "Friends laugh at the clip; the driver asks a specific question nobody answers.",
+          "line": "Imran: Chabi kiski thi? Bas yeh bata do."
+        },
+        {
+          "beat": "contradiction",
+          "action": "Asha identifies a detail missing from the edit.",
+          "line": "Asha: Haan, par usse pehle bhi kuch hua tha."
+        },
+        {
+          "beat": "choice",
+          "action": "Player decides what to do with incomplete information while several audiences watch.",
+          "line": "Meera: Caption daal diya. Delete nahi kiya abhi."
+        }
+      ],
+      "choices": [
+        {
+          "action": "Help clarify the ownership and return the object through the visible handover",
+          "ambiguity": "Can resolve delay while embarrassing the person being celebrated."
+        },
+        {
+          "action": "Share the funny short edit unchanged",
+          "ambiguity": "Peer recognition can increase while the driver and witnesses distrust your account."
+        },
+        {
+          "action": "Ask both sides to appear in a follow-up",
+          "ambiguity": "Potentially clarifying; can also prolong unwanted attention."
+        },
+        {
+          "action": "Stay out and ask the driver about an unrelated practical need",
+          "ambiguity": "Useful assistance without claiming knowledge, but avoids the disputed responsibility."
+        }
+      ],
+      "delayed_payoff": "The public edit and the driver’s account circulate separately; later reactions depend on which version each person received.",
+      "risk_design": "Consequential interference attracts attention independently of whether a bystander laughs. No claim about legal immunity.",
+      "reel_payoff": "Two available edits from the same authored event; neither should fabricate an officer reaction.",
+      "physical_requirements": {
+        "cast_presence": [
+          "driver",
+          "meera"
+        ],
+        "props": [
+          "Incomplete recording",
+          "Visible handover point"
+        ],
+        "spatial_action": "Object resolution is a supervised abstract handover animation, not a technical key-removal interaction.",
+        "interruptions": [
+          "Driver can return to a call rather than remain a captive audience."
+        ],
+        "state_commits": [
+          "Separate recovery of the object, the driver’s report and publishing an edit."
+        ],
+        "callback": "The people who received a short edit and those who witnessed the handover respond differently."
+      },
+      "priority": "follow-up"
+    },
+    {
+      "id": "compliment-no-script",
+      "title": "That Was Not the Question",
+      "inspiration_refs": [
+        "U2",
+        "S1"
+      ],
+      "evidence_label": "Unverified user premise; original scene",
+      "characters": [
+        "meera",
+        "officer",
+        "kabir"
+      ],
+      "setup": "Meera starts a routine on-camera question, then gives an unexpectedly sincere compliment. Kabir is prepared for a roast and has no useful reaction.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "Meera asks whether the officer will answer a question.",
+          "line": "Meera: Ek normal sawaal hai."
+        },
+        {
+          "beat": "swerve",
+          "action": "Her compliment does not ask for a favour. Leave a short pause.",
+          "line": "Meera: Aap hase toh video ka mood hi badal gaya."
+        },
+        {
+          "beat": "reaction",
+          "action": "The officer can acknowledge, ignore or set a filming boundary.",
+          "line": "Sharma: Sawaal kya tha?"
+        }
+      ],
+      "choices": [
+        {
+          "action": "Let the pause stand",
+          "ambiguity": "Requires confidence without escalating the bit."
+        },
+        {
+          "action": "Ask the practical question you originally came to ask",
+          "ambiguity": "The compliment may now seem instrumental."
+        },
+        {
+          "action": "Make yourself the target of the joke",
+          "ambiguity": "Can release pressure or steal someone else’s moment."
+        },
+        {
+          "action": "Keep trying after a refusal",
+          "ambiguity": "Can become uncomfortable; the audience need not endorse it."
+        }
+      ],
+      "delayed_payoff": "Recognition changes a later greeting, not permission to bypass every rule.",
+      "risk_design": "Boundaries and situation matter; charm is not a universal protection mechanic.",
+      "reel_payoff": "Use the unanticipated pause; do not add laughter that the characters did not produce.",
+      "physical_requirements": {
+        "cast_presence": [
+          "meera",
+          "officer"
+        ],
+        "props": [
+          "Phone recording indicator"
+        ],
+        "spatial_action": "Officer and Meera exchange gaze, with enough space to leave; declining filming changes the available actions.",
+        "interruptions": [
+          "Officer turns away for a duty; player can respect the interruption or persist."
+        ],
+        "state_commits": [
+          "Familiarity changes only if the officer heard the exchange.",
+          "No automatic access permission follows a compliment."
+        ],
+        "callback": "Officer’s later greeting varies with whether the player respected a stated boundary."
+      },
+      "priority": "follow-up"
+    },
+    {
+      "id": "cardio-editor",
+      "title": "The Part Before the Music",
+      "inspiration_refs": [
+        "S4"
+      ],
+      "evidence_label": "Original fictional editing encounter inspired by reporting on chase edits",
+      "characters": [
+        "meera",
+        "kabir",
+        "nikhil"
+      ],
+      "setup": "Meera has edited a chaotic dash into an impressive clip. The raw audio includes Kabir asking where everyone went.",
+      "beats": [
+        {
+          "beat": "setup",
+          "action": "The triumphant edit plays for two seconds.",
+          "line": "Kabir: Haan, yeh wala bhej."
+        },
+        {
+          "beat": "raw_audio",
+          "action": "Nikhil accidentally plays the raw version.",
+          "line": "Recorded Kabir: Ruk, mujhe rasta nahi pata!"
+        },
+        {
+          "beat": "choice",
+          "action": "Player chooses which account travels and whose permission matters.",
+          "line": "Meera: Raw mat chala. Raw mat—haan, ab sabne sun liya."
+        }
+      ],
+      "choices": [
+        {
+          "action": "Post the confident cut with context",
+          "ambiguity": "Balances image and explanation, but still centres your group."
+        },
+        {
+          "action": "Share the raw version with friends only",
+          "ambiguity": "Intimacy and self-mockery, with a risk of forwarding."
+        },
+        {
+          "action": "Ask everyone in frame before posting",
+          "ambiguity": "Slows the joke; might reveal someone did not enjoy the moment."
+        },
+        {
+          "action": "Keep it private and turn it into an in-person joke",
+          "ambiguity": "No public recognition, but a shared memory can strengthen a relationship."
+        }
+      ],
+      "delayed_payoff": "Different people recognise different versions later; a private clip can be forwarded by an actor with their own motives.",
+      "risk_design": "Aftermath scene, not an instructional escape sequence.",
+      "reel_payoff": "Original paired music/raw audio edits make the player hear how interpretation changes.",
+      "physical_requirements": {
+        "cast_presence": [
+          "meera",
+          "kabir",
+          "nikhil"
+        ],
+        "props": [
+          "Two clips referencing the same recorded scene"
+        ],
+        "spatial_action": "Friends gather around a phone in a safe pause; player can move the phone or step back.",
+        "interruptions": [
+          "Raw clip starts before the player decides whether to stop it."
+        ],
+        "state_commits": [
+          "Store raw performance and edit recipe separately.",
+          "Save audience and subject permission when distributing an edit."
+        ],
+        "callback": "The later recogniser quotes only the version they actually received."
+      },
+      "priority": "first-production-pass"
+    }
+  ],
+  "sound_direction": {
+    "status": "original production proposal; no copied reel audio acquired or cleared",
+    "rules": [
+      "Record separate close dialogue, off-camera friend reactions, local ambience and clean room tone.",
+      "Make pauses playable; do not fill every gap with music.",
+      "Use short original musical motifs and silence to distinguish raw experience from an edited reel.",
+      "Maintain spatial off-camera voices so a reaction feels located in the crowd.",
+      "Let actors overlap selectively; subtitles must still preserve the crucial line.",
+      "Test jokes with dry audio before adding a sound cue. If a cue is the entire joke, rewrite the scene.",
+      "Do not use stock laughter as proof that the room found something funny."
+    ],
+    "needed_evidence_before_matching_reel_style": [
+      "Audible source clips with lawful access",
+      "Shot and beat annotations",
+      "Clear distinction between original audio and repost-added soundtrack",
+      "Rights/provenance for anything proposed for reuse"
+    ]
+  },
+  "acceptance_journeys": [
+    {
+      "name": "Same words, different moment",
+      "check": "A practical joke can land during calm and be ignored during an urgent task, with visible reasons."
+    },
+    {
+      "name": "Two audiences",
+      "check": "A friend laughs while a person bearing the cost does not; neither reaction is treated as the universal verdict."
+    },
+    {
+      "name": "Earned callback",
+      "check": "The later scene refers to the specific subject, promise or edit chosen earlier, not generic remembered-player text."
+    },
+    {
+      "name": "Quiet option",
+      "check": "A low-spectacle action gets a concrete later payoff without an immediate virtue lecture."
+    },
+    {
+      "name": "Failed joke survives",
+      "check": "The player can recover from awkwardness; failure is not only a numerical punishment."
+    },
+    {
+      "name": "No impossible familiarity",
+      "check": "An NPC recognises a viral clip only after a recorded exposure path."
+    }
+  ],
+  "next_evidence_step": "Collector must obtain usable observed clips or transcripts before replacing provisional performance proposals with source-grounded timing analysis.",
+  "delivery_scope": "Four priority treatments plus two follow-ups; original fiction ready for script review, not yet implemented scenes."
+}

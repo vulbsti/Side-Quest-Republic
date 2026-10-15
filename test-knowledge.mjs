@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createLivingWorld,advanceWorld,recordWorldAction} from './dist/living-world.js';
+import {DAY_ACTORS,DAY_DISTRICTS} from './dist/day-content.js';
+const make=()=>createLivingWorld(9,{actors:DAY_ACTORS,districts:DAY_DISTRICTS,encounters:[]});
+const low=make(),high=make();low.institutions.command.pressure=0;high.institutions.command.pressure=100;
+recordWorldAction(low,'officer_joke');recordWorldAction(high,'officer_joke');
+const score=(s,id,action)=>s.actors[id].decision.candidates.find(c=>c.id===action).score;
+for(const id of ['officer','inspector'])assert.equal(score(high,id,'follow-duty')-score(low,id,'follow-duty'),50,id+' must respond to command pressure');
+assert.equal(score(low,'journalist','verify'),35,'display role must not suppress reporter specialization');
+const s=make(),a=s.actors.journalist;a.activity='verify';a.commitUntil=1000;
+a.beliefs=[{claim:'test-claim',text:'An uncertain report',confidence:.4,source:'heard',sourceId:'other',learnedAt:0}];
+s.truth['test-claim']={truth:true,eventId:'secret'};advanceWorld(s,15);assert.equal(a.beliefs[0].confidence,.4,'global truth cannot corroborate an account');
+const witness=s.actors.mira;witness.district=a.district;witness.beliefs=[{claim:'test-claim',confidence:.95,source:'witness',sourceId:'visible-evidence',learnedAt:0}];advanceWorld(s,15);
+assert.equal(a.beliefs[0].confidence,.85);assert.equal(a.beliefs[0].corroboratedBy,'mira');assert.equal(a.beliefs[0].evidenceId,'visible-evidence');
+console.log('PASS: stable officer/reporter archetypes; inaccessible world truth cannot create knowledge; local witness provenance retained');

@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createTransit,boardBus,busDoorWorld,chooseSeat,moveInCabin,requestDeparture,updateTransit,disembarkBus,validateTransit,serializeTransit,restoreTransit,cabinToWorld} from './dist/transit.js';
+const s=createTransit(),bus=s.buses[0];assert.equal(s.buses.length,2);assert.deepEqual(validateTransit(s),[]);
+assert.equal(boardBus(s,bus.id,{x:0,z:0}).ok,false);assert.equal(boardBus(s,bus.id,busDoorWorld(bus)).ok,true);assert.equal(s.player.mode,'boarding');assert.equal(requestDeparture(s,bus.id).ok,false);updateTransit(s,.65);assert.equal(s.player.mode,'standing');
+assert.equal(chooseSeat(s,'0-0').ok,false);assert.equal(chooseSeat(s,'3-0').ok,false);moveInCabin(s,0,-.35);moveInCabin(s,0,-.35);assert.equal(chooseSeat(s,'3-0').ok,true);assert.equal(s.player.mode,'seated');assert.equal(disembarkBus(s).ok,false);
+assert.equal(requestDeparture(s,bus.id).ok,true);const before={x:bus.x,z:bus.z};updateTransit(s,.1);assert.ok(Math.hypot(bus.x-before.x,bus.z-before.z)<=.501);assert.equal(disembarkBus(s).ok,false);
+const saved=serializeTransit(s),restored=restoreTransit(saved);assert.deepEqual(restored,s);updateTransit(s,3);updateTransit(restored,3);assert.deepEqual(restored,s);
+const blockedPosition=bus.z;updateTransit(s,1,{blocked:()=>true});assert.equal(bus.z,blockedPosition);assert.equal(bus.obstructed,true);
+updateTransit(s,30);assert.equal(bus.status,'stopped');assert.equal(bus.z,45);assert.equal(bus.arrivalCount,1);assert.equal(chooseSeat(s,null).ok,true);for(let i=0;i<5;i++)moveInCabin(s,0,.3);assert.equal(disembarkBus(s,{blocked:()=>true}).ok,false);assert.equal(s.player.busId,bus.id);const exit=disembarkBus(s);assert.equal(exit.ok,true);assert.equal(exit.position.y,0);assert.equal(s.player.mode,'outside');assert.deepEqual(validateTransit(s),[]);
+requestDeparture(s,bus.id);updateTransit(s,30);assert.equal(bus.z,-30);assert.equal(bus.status,'stopped');assert.equal(bus.arrivalCount,2);
+const bad=serializeTransit(s);bad.buses[0].speed=Infinity;assert.equal(restoreTransit(bad),null);assert.equal(restoreTransit('{broken'),null);assert.equal(restoreTransit({}),null);
+const half=restoreTransit(saved);half.buses[0].progress=999;assert.equal(restoreTransit(half),null);
+const a=createTransit(),b=createTransit();requestDeparture(a,a.buses[1].id);requestDeparture(b,b.buses[1].id);updateTransit(a,2);for(let i=0;i<20;i++)updateTransit(b,.1);assert.ok(Math.abs(a.buses[1].z-b.buses[1].z)<1e-8);
+assert.equal(cabinToWorld({x:0,z:0,yaw:0},{x:1,z:2}).x,1);
+console.log('PASS: two buses, distance-gated boarding, occupied/nearby seats, bounded cabin motion, continuous routes, obstruction, stopped clear disembark, deterministic save/resume and invalid state rejection');

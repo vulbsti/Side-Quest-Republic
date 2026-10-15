@@ -1,0 +1,43 @@
+{
+  "collection_date": "2026-10-15",
+  "status": "blocked_before_instagram",
+  "method": "Attempted read-only CUA access to authorised signed-in Chrome Work profile. No Instagram page reached in this collection pass.",
+  "access_attempts": [
+    {
+      "action": "cua.getState",
+      "result": "Browser profiles visible; all tab inventories failed to load browser request-header policy."
+    },
+    {
+      "action": "cua.listTabs browser 2 (Work)",
+      "result": "Same request-header policy failure. Tool reported network Cloudflare 403."
+    }
+  ],
+  "new_items": [],
+  "prior_observation_pointer": "instagram-observations.json",
+  "prior_observations_are_not_newly_verified": true,
+  "candidate_leads": [
+    {
+      "url": "https://www.instagram.com/reels/DeGYClxTsXK/",
+      "source": "Prior signed-in observation record and NDTV embed",
+      "status": "not revisited this pass",
+      "caption_claim": "Woman takes bus ignition key; caption describes driver laughing.",
+      "video_audio_verified": false,
+      "filming_date": null,
+      "original_creator": null
+    },
+    {
+      "url": "https://www.instagram.com/reel/DeGcEyuhznq/",
+      "source": "NDTV embed recorded in protest-incidents.json",
+      "status": "Previously unavailable; not revisited this pass",
+      "claim": "Protester requests detention to join friends, then requests release.",
+      "video_audio_verified": false,
+      "filming_date": null,
+      "original_creator": null
+    }
+  ],
+  "limitations": [
+    "No current signed-in search results or comments collected.",
+    "Do not treat candidate URLs as watched clips.",
+    "No likes, follows, comments, messages, downloads or account changes."
+  ]
+}

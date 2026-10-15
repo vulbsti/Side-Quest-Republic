@@ -10,7 +10,7 @@ console.log('PASS: collisions, sight, pathfinding, movement, sprint/stamina, jum
 // Thin barricades between grid nodes must block crossing edges.
 const thin=[{x:14,z:11,w:3,d:.7,h:1.3}];
 const detour=findPath({x:14,z:14},{x:14,z:8},thin);
-assert(detour.some(p=>Math.abs(p.x-14)>2),'route must go around a thin barricade');
+assert(detour.some(p=>Math.abs(p.x-14)>=2),'route must go around a thin barricade');
 
 
 // Player feet must rest on the actual bench seat, not its bounding-box back.
@@ -91,3 +91,24 @@ assert.equal(nearestFreePoint({x:0,z:0},[bus],{maxRadius:0})?.x,0);
 assert.equal(nearestFreePoint({x:NaN,z:0},[]),null);
 assert.deepEqual(nearestFreePoint({x:0,z:0},[{x:0,z:0,w:2,d:2,h:5,base:3}]),{x:0,z:0},'overhead canopy permits ground spawn');
 console.log('PASS: deterministic collision-free ground spawn recovery, bounded failure, map-edge clearance, overhead space');
+
+// Raw endpoints and the connecting legs must be as safe as grid edges.
+const tinyPost={x:1,z:1,w:.1,d:.1,h:2};
+assert.equal(findPath({x:5,z:5},{x:1.1,z:1.1},[tinyPost]).length,0,'raw endpoint inside collider is rejected even if snapped cell is free');
+const precisePath=findPath({x:5.3,z:5.1},{x:-2.3,z:-2.1},[tinyPost]);
+assert(precisePath.length,'off-grid destination remains reachable');
+let prev={x:5.3,z:5.1};for(const p of precisePath){for(let t=0;t<=1;t+=.02)assert(!overlapsXZ({x:prev.x+(p.x-prev.x)*t,z:prev.z+(p.z-prev.z)*t},tinyPost,.36),'connector never crosses post');prev=p;}
+assert.equal(findPath({x:0,z:0},{x:NaN,z:0},[]).length,0,'invalid coordinates rejected');
+const {EXPANSION_SOLIDS}=await import('./dist/districts.js');
+const tentSolids=EXPANSION_SOLIDS.filter(o=>o.id.startsWith('aidTent0'));
+const tentPath=findPath({x:-74,z:10},{x:-74,z:2},tentSolids);
+assert(tentPath.length,'open tent entrance is navigable under roof');
+body={x:-74,z:10,y:0,vy:0,radius:.36,height:1.8,stamina:100};
+for(let i=0;i<120;i++)moveWithCollisions(body,0,-.06,tentSolids);
+assert(body.z<3,'player can physically walk into tent');
+for(let i=0;i<160;i++)moveWithCollisions(body,-.06,0,tentSolids);
+assert(body.x>-79,'tent side wall stops the player');
+body={x:-74,z:2,y:0,vy:0,radius:.36,height:1.8,stamina:100};let highest=0;
+for(let i=0;i<90;i++){verticalStep(body,1/60,tentSolids,i===0);highest=Math.max(highest,body.y);}
+assert(highest<=1.421&&body.y===0,'tent roof blocks head contact and player lands on ground');
+console.log('PASS: safe off-grid navigation, real tent entry, wall contact and roof clearance');

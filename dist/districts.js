@@ -25,8 +25,14 @@ export const CONNECTION_ROUTES=Object.freeze([
 ]);
 /** Every solid expansion object is registered here so tests and rendering agree. */
 export const EXPANSION_SOLIDS=Object.freeze([
- {id:'aidTentA',x:-74,z:3,w:10,d:8,h:3.4},
- {id:'aidTentB',x:-74,z:19,w:10,d:8,h:3.4},
+ ...[3,19].flatMap((z,i)=>[
+  {id:`aidTent${i}Back`,x:-74,z:z-4,w:10,d:.12,h:2.85,base:.15},
+  {id:`aidTent${i}West`,x:-79,z,w:.12,d:8,h:2.85,base:.15},
+  {id:`aidTent${i}East`,x:-69,z,w:.12,d:8,h:2.85,base:.15},
+  {id:`aidTent${i}Roof`,x:-74,z,w:10,d:8,h:3.38,base:3.22},
+  {id:`aidTent${i}FrontBeam`,x:-74,z:z+4,w:10,d:.16,h:3.3,base:2.8},
+  ...[-79,-69].map((x,j)=>({id:`aidTent${i}Post${j}`,x,z:z+4,w:.15,d:.15,h:3.4}))
+ ]),
  {id:'aidTable',x:-69,z:5,w:4,d:1.2,h:.9},
  {id:'waterCrates',x:-73,z:24,w:3,d:2,h:1.2},
  {id:'pressVan',x:73,z:-27,w:4,d:9,h:3.2},

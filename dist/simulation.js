@@ -91,4 +91,33 @@ else if(cop.state==='search'){if(detects){cop.state='chase';cop.search=6;}else{c
 }
 if(this.pursuit&&!pursuit&&!caught){this.escaped++;this.aura+=12;this.heat=Math.max(0,this.heat-16);}this.pursuit=pursuit;this.heat=clamp(this.heat-(pursuit?0:this.police.some(c=>c.state==='notice')?.05:1.3)*dt);if(caught){this.catches++;this.cooldown=12;this.heat=0;this.pursuit=false;for(const c of this.police){c.state='patrol';c.seen=0;}return 'caught';}return null;}
 }
-export function findPath(start,end,obstacles,step=2){const k=(x,z)=>x+','+z;const snap=n=>Math.round(n/step);const sx=snap(start.x),sz=snap(start.z),ex=snap(end.x),ez=snap(end.z);const blocked=(x,z)=>x*step<B.minX+1||x*step>B.maxX-1||z*step<B.minZ+1||z*step>B.maxZ-1||obstacles.some(o=>Math.abs(x*step-o.x)<o.w/2+.55&&Math.abs(z*step-o.z)<o.d/2+.55);if(blocked(ex,ez))return [];const open=[{x:sx,z:sz,g:0,f:0}],seen=new Map([[k(sx,sz),0]]),parents=new Map();let finish=null;for(let it=0;open.length&&it<18000;it++){open.sort((a,b)=>a.f-b.f);const n=open.shift();if(n.x===ex&&n.z===ez){finish=n;break;}for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){const x=n.x+dx,z=n.z+dz;if(blocked(x,z)||(dx&&dz&&(blocked(n.x+dx,n.z)||blocked(n.x,n.z+dz)))||[.25,.5,.75].some(t=>blocked(n.x+dx*t,n.z+dz*t)))continue;const g=n.g+Math.hypot(dx,dz),key=k(x,z);if(g>=(seen.get(key)??Infinity))continue;seen.set(key,g);parents.set(key,k(n.x,n.z));open.push({x,z,g,f:g+Math.hypot(ex-x,ez-z)});}}if(!finish)return [];let key=k(ex,ez),path=[];while(key!==k(sx,sz)){const [x,z]=key.split(',').map(Number);path.unshift({x:x*step,z:z*step});key=parents.get(key);if(!key)return [];}path.push({x:end.x,z:end.z});return path;}
+export function findPath(start,end,obstacles,step=2){
+ if(![start?.x,start?.z,end?.x,end?.z,step].every(Number.isFinite)||step<=0)return [];
+ const radius=.4,groundSolids=obstacles.filter(o=>(o.h??0)>0&&(o.base||0)<1.8);
+ // Local broad phase keeps A* cheap even as neighbourhood collision grows.
+ const cellSize=8,buckets=new Map();for(const o of groundSolids){for(let x=Math.floor((o.x-o.w/2)/cellSize);x<=Math.floor((o.x+o.w/2)/cellSize);x++)for(let z=Math.floor((o.z-o.d/2)/cellSize);z<=Math.floor((o.z+o.d/2)/cellSize);z++){const id=x+','+z;if(!buckets.has(id))buckets.set(id,[]);buckets.get(id).push(o);}}
+ const nearby=(a,b=a)=>{const found=new Set();for(let x=Math.floor((Math.min(a.x,b.x)-radius)/cellSize);x<=Math.floor((Math.max(a.x,b.x)+radius)/cellSize);x++)for(let z=Math.floor((Math.min(a.z,b.z)-radius)/cellSize);z<=Math.floor((Math.max(a.z,b.z)+radius)/cellSize);z++)for(const o of buckets.get(x+','+z)||[])found.add(o);return [...found];};
+ const pointClear=(p,solids=groundSolids)=>p.x>=B.minX+radius&&p.x<=B.maxX-radius&&p.z>=B.minZ+radius&&p.z<=B.maxZ-radius&&!(solids===groundSolids?nearby(p):solids).some(o=>overlapsXZ(p,o,radius));
+ const segmentClear=(a,b,solids=groundSolids)=>{if(!pointClear(a,solids)||!pointClear(b,solids))return false;for(const o of (solids===groundSolids?nearby(a,b):solids)){let enter=0,leave=1;for(const [axis,size] of [['x','w'],['z','d']]){const delta=b[axis]-a[axis],lo=o[axis]-o[size]/2-radius,hi=o[axis]+o[size]/2+radius;if(Math.abs(delta)<1e-9){if(a[axis]<=lo||a[axis]>=hi){enter=2;break;}}else{const t1=(lo-a[axis])/delta,t2=(hi-a[axis])/delta;enter=Math.max(enter,Math.min(t1,t2));leave=Math.min(leave,Math.max(t1,t2));}}if(enter<leave-1e-8&&leave>0&&enter<1)return false;}return true;};
+ // A raw click inside a prop is not a destination; snapping must not launder it.
+ if(!pointClear(end))return [];
+ const startSolids=groundSolids.filter(o=>(o.h??0)>(start.y||0)+.025);
+ if(!pointClear(start,startSolids))return [];
+ if(segmentClear(start,end))return [{x:end.x,z:end.z}];
+ const k=(x,z)=>x+','+z,point=n=>({x:n.x*step,z:n.z*step});
+ const connectors=(p,solids)=>{const cx=Math.round(p.x/step),cz=Math.round(p.z/step),found=[];for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++){const n={x:cx+dx,z:cz+dz},q=point(n);if(pointClear(q)&&segmentClear(p,q,solids))found.push({...n,cost:dist(p,q)/step});}return found.sort((a,b)=>a.cost-b.cost);};
+ const starts=connectors(start,startSolids),ends=connectors(end,groundSolids);if(!starts.length||!ends.length)return [];
+ const endMap=new Map(ends.map(n=>[k(n.x,n.z),n])),open=[],seen=new Map(),parents=new Map(),edgeCache=new Map(),cellCache=new Map();
+ const push=n=>{open.push(n);let i=open.length-1;while(i>0){const p=(i-1)>>1;if(open[p].f<=n.f)break;open[i]=open[p];i=p;}open[i]=n;};
+ const pop=()=>{const first=open[0],last=open.pop();if(open.length){let i=0;while(i*2+1<open.length){let c=i*2+1;if(c+1<open.length&&open[c+1].f<open[c].f)c++;if(open[c].f>=last.f)break;open[i]=open[c];i=c;}open[i]=last;}return first;};
+ const cellClear=n=>{const id=k(n.x,n.z);if(!cellCache.has(id))cellCache.set(id,pointClear(point(n)));return cellCache.get(id);};
+ const edgeClear=(a,b)=>{const ak=k(a.x,a.z),bk=k(b.x,b.z),id=ak<bk?ak+'|'+bk:bk+'|'+ak;if(!edgeCache.has(id))edgeCache.set(id,segmentClear(point(a),point(b)));return edgeCache.get(id);};
+ for(const n of starts){const key=k(n.x,n.z);seen.set(key,n.cost);push({...n,g:n.cost,f:n.cost+dist(point(n),end)/step});parents.set(key,null);}
+ let finish=null;
+ for(let it=0;open.length&&it<24000;it++){
+  const n=pop(),key=k(n.x,n.z);if(n.g>seen.get(key)+1e-8)continue;if(endMap.has(key)){finish=n;break;}
+  for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){const next={x:n.x+dx,z:n.z+dz},q=point(next);if(!cellClear(next)||!edgeClear(n,next))continue;const g=n.g+Math.hypot(dx,dz),nk=k(next.x,next.z);if(g>=(seen.get(nk)??Infinity))continue;seen.set(nk,g);parents.set(nk,key);push({...next,g,f:g+dist(q,end)/step});}
+ }
+ if(!finish)return [];const path=[];let key=k(finish.x,finish.z);while(key!==null){const [x,z]=key.split(',').map(Number);path.unshift({x:x*step,z:z*step});key=parents.get(key);if(key===undefined)return [];}
+ path.push({x:end.x,z:end.z});return path;
+}
