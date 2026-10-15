@@ -3,3 +3,5 @@
 @media(max-width:700px){#dayRibbon{bottom:185px;width:calc(100vw - 30px);max-width:410px}#openDay{padding:9px 12px}#dayPanel{width:96vw;max-height:94dvh}#dayBody{max-height:58dvh}.encounter-grid,.reel-grid{grid-template-columns:1fr}#dayPanel footer{padding:10px 15px}.summary-grid{grid-template-columns:repeat(2,1fr)}#dayPanel h2{font-size:20px}#dayPanel #closeDay{font-size:10px}#dayTabs button{font-size:10px;padding:8px}#reelOverlay{padding:25px}.day-ending h1{font-size:34px!important}}
 body:has(#reelOverlay:not(.hidden)) #hud,body:has(#reelOverlay:not(.hidden)) #dayRibbon,body:has(#reelOverlay:not(.hidden)) #toast{visibility:hidden}
 .inspector-table{width:100%;border-collapse:collapse;font-size:13px}.inspector-table td,.inspector-table th{padding:10px;text-align:left;border-bottom:1px solid #b3baa3}
+
+#dayPanel .day-choices button{color:#203c34!important}#dayPanel .day-choices button b{color:inherit}

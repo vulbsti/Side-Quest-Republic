@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=21';
-import { GLTFLoader } from './vendor/GLTFLoader.js?v=21';
+import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=22';
+import { GLTFLoader } from './vendor/GLTFLoader.js?v=22';
 export {THREE};
 const M={},G={};
 export function mat(c,roughness=.8){const k=c+'_'+roughness;return M[k]??=new THREE.MeshStandardMaterial({color:c,roughness});}
@@ -21,7 +21,7 @@ for(let z of [-8.2,8.2]){cube(110,.22,.4,'#c4b79b',0,.08,z,scene);for(let x=-50;
 for(const [x,z,w,d] of [[-30,-25,22,24],[24,-25,23,28],[-31,44,22,18]]){cube(w,.15,d,mat('#83945c'),x,.0,z,scene);cube(w+.3,.2,.25,'#d6c8a5',x,.13,z-d/2,scene);cube(w+.3,.2,.25,'#d6c8a5',x,.13,z+d/2,scene);}
 cylinder(4.5,4.7,.45,'#b6ab90',0,.2,24,scene,48);cylinder(4,4,.12,'#6eaaa0',0,.45,24,scene,48);cylinder(.6,.9,1.1,'#dfd5b9',0,.9,24,scene);cylinder(1.3,1.3,.18,'#dacfb4',0,1.5,24,scene,32);obstacle(0,24,8,8,.5);
 // stage
-cube(9,.65,5,'#74684b',0,.3,-14,scene);cube(9.3,.12,5.3,'#ae9b71',0,.68,-14,scene);cube(2,.3,1,'#ac9a72',0,.15,-10.8,scene);obstacle(0,-14,9,5,.7);let banner=sign('THE AFTERNOON IS A GROUP PROJECT',10,1.1,'#d3e197','#264731');banner.position.set(0,4,-16);scene.add(banner);for(let x of [-5,5])cylinder(.06,.06,4,'#625c45',x,2,-16,scene);for(let x of [-4,4]){cube(.8,1.4,.65,'#283e34',x,1.4,-14,scene);ball(.25,'#1b2e27',x,1.5,-13.65,scene,1,1,.1);}
+cube(9,.65,5,'#74684b',0,.3,-14,scene);cube(9.3,.12,5.3,'#ae9b71',0,.68,-14,scene);cube(2,.3,1,'#ac9a72',0,.15,-10.8,scene);obstacle(0,-14,9.3,5.3,.74);obstacle(0,-10.8,2,1,.3);let banner=sign('THE AFTERNOON IS A GROUP PROJECT',10,1.1,'#d3e197','#264731');banner.position.set(0,4,-16);scene.add(banner);for(let x of [-5,5])cylinder(.06,.06,4,'#625c45',x,2,-16,scene);for(let x of [-4,4]){cube(.8,1.4,.65,'#283e34',x,1.4,-14,scene);ball(.25,'#1b2e27',x,1.5,-13.65,scene,1,1,.1);}
 const loader=new GLTFLoader();const assets={};const assetNames=['cp-colonnade','misra-yantra','delhi-bus','chai-cart','barricade'];await Promise.all(assetNames.map(async(name)=>{try{const g=await loader.loadAsync(`assets/${name}.glb`);g.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});assets[name]=g.scene;onProgress?.(name);}catch(e){console.warn('Asset missing:',name,e);}}));
 function put(name,x,z,rot=0,scale=1){if(!assets[name])return null;const o=assets[name].clone(true);o.position.set(x,0,z);o.rotation.y=rot;o.scale.setScalar(scale);scene.add(o);return o;}
 for(let i=-2;i<=2;i++){const x=i*23,z=-53+Math.abs(i)*2.7,r=-i*.12;put('cp-colonnade',x,z,r);obstacle(x,z-2.3,23,3,10);for(let cx=-10;cx<=10;cx+=4)obstacle(x+cx,z+3,.65,.65,7);}put('cp-colonnade',-53,-22,Math.PI/2);obstacle(-55,-22,3,24,10);put('cp-colonnade',-53,8,Math.PI/2);obstacle(-55,8,3,24,10);

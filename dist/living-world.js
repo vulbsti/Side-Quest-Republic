@@ -1,4 +1,4 @@
-import {deriveEscalation} from './escalation-director.js?v=21';
+import {deriveEscalation} from './escalation-director.js?v=22';
 /** Deterministic, serializable social world. All political institutions are fictional. */
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,Number(n)||0));
 const copy=x=>JSON.parse(JSON.stringify(x));

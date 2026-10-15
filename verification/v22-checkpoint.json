@@ -1,0 +1,29 @@
+{
+  "version": 22,
+  "quality_pass": false,
+  "changes": [
+    "Autonomous fictional argument requires actual participants, proximity and line of sight before approach, argument, shove and officer response",
+    "Nearby player can separate participants, call witnesses or encourage the argument; choices enter local escalation receipts",
+    "Officers respond to actual witnessed actor with last-known-position fallback, not faction membership",
+    "Incident participants reserve movement ownership and release stale paths",
+    "Inspector exposes incident participants, history and witnessed police reasons",
+    "Bounded two-arm push pose verified on shipped rigs; readable scene choice text",
+    "Autonomous civilian witnesses recoil, watch or film with saved fixed destinations",
+    "Exact stage step/cap colliders and bounded player step-up with headroom checks"
+  ],
+  "verified": [
+    "Actual-map two 60-second incident journeys: autonomous shove/response and nearby prevention; no solid penetration or teleportation",
+    "Incident stage gates, four actions, save stability, nonduplicated event emission and witness attribution",
+    "Female/male/officer actual GLB rigs: 1000-frame push and other gestures, idle recovery, seated and carry poses",
+    "Four whole-day narrative policies, save tests, spatial director, scene clock, inspector and crowd-flow regressions",
+    "Local browser autowalk to Jantar, performed slogan scene, readable choices, returned to street with second encounter saved and no logged errors",
+    "Reported stage position recovery, bounded step climb, tall obstruction rejection and jump regressions"
+  ],
+  "remaining": [
+    "Only one autonomous confrontation, not overlapping institution-driven incident networks",
+    "No differentiated RSF unit or command coercion/misidentification behaviour",
+    "Sparse crowd composition, environment and animation still below requested cinematic realism",
+    "No new verified reel voices or listened audio mix validation",
+    "Full natural browser playthrough of climax remains incomplete; automated journeys do not establish fun or final visual quality"
+  ]
+}

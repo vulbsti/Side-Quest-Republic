@@ -1,4 +1,4 @@
-import {DISTRICTS} from './districts.js?v=21';
+import {DISTRICTS} from './districts.js?v=22';
 /** Spatial dramatic direction, not a second physics engine.
  * Pure deriveEscalation(world, previous?) consumes actual living-world event receipts.
  * Persist the returned object with the save. `groups` are desired destinations and
@@ -13,7 +13,7 @@ const effects=c=>Array.isArray(c?.effects)?c.effects:Object.entries(c?.effects||
 const seedTie=(seed,id)=>{let h=Number(seed)>>>0;for(const c of id)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;return h/4294967296*.5;};
 function receipt(world,event){
  if(event.time>world.time||!world.districts[event.district])return null;
- let escalation=0,care=0,threat=null;
+ let escalation=0,care=0,threat=null,subjectId='player';
  if(event.type==='choice'){
   const encounter=world.encounters?.find(e=>e.id===event.encounterId),choice=encounter?.choices?.find(c=>c.id===event.choiceId);
   // A played receipt must match the encounter's actual resolved record.
@@ -26,9 +26,9 @@ function receipt(world,event){
   if(event.actionId==='key_returned'){escalation=-9;care=2;}
   if(event.actionId==='water_shared')care=5;
   if(event.actionId==='speaker_return')care=3;
- }else return null;
+ }else if(event.type==='incident'){subjectId=event.perpetratorId||event.actorId;if(event.incidentType==='incident-shove'){escalation=14;threat='witnessed-shove';}if(event.incidentType==='incident-player-incitement'){escalation=6;threat='public-escalation';}if(event.incidentType==='incident-prevented'){care=8;escalation=-5;}}else return null;
  if(!escalation&&!care)return null;
- return {eventId:event.id,time:event.time,district:event.district,escalation,care,threat,subjectId:'player',actionId:event.actionId||`${event.encounterId}:${event.choiceId}`};
+ return {eventId:event.id,time:event.time,district:event.district,escalation,care,threat,subjectId,actionId:event.incidentType||event.actionId||`${event.encounterId}:${event.choiceId}`};
 }
 function knownThreats(world,receipts){
  const knowledge=[];

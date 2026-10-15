@@ -1,7 +1,7 @@
-import {animationInterval} from './frame-clock.js?v=21';
+import {animationInterval} from './frame-clock.js?v=22';
 import * as THREE from 'three';
-import {GLTFLoader} from './vendor/GLTFLoader.js?v=21';
-const GESTURE={phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
+import {GLTFLoader} from './vendor/GLTFLoader.js?v=22';
+const GESTURE={push:/push|shove/,phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
 const models={}, loader=new GLTFLoader();let pending,serial=0;
 /** Loads three textured, skinned MakeHuman characters. Call before makeCharacter. */
 export function loadCharacters(onProgress=()=>{}){return pending??=Promise.all(['male','female','officer'].map(async(name)=>{models[name]=await loader.loadAsync(new URL(`./assets/humans/${name}.glb`,import.meta.url).href);onProgress(name);return name;}));}
@@ -92,7 +92,8 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  else if(GESTURE.rest.test(g)){if(sp)sp.rotation.x+=.06;if(head)head.rotation.x+=.1;}
 
  for(const layer of layers)layer.target.setFromEuler(layer.rotation);
- if(phoneGesture)reachArm(root,'Right',[-.16,1.40,.34],[-.42,1.12,.18]);
+ if(GESTURE.push.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.22,1.38,.46],[sign*.38,1.07,.20]);
+ else if(phoneGesture)reachArm(root,'Right',[-.16,1.40,.34],[-.42,1.12,.18]);
  else if(GESTURE.shrug.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.43,1.39,.28],[sign*.51,1.12,.08]);
  else if(GESTURE.point.test(g))reachArm(root,'Right',[-.20,1.38,.46],[-.40,1.18,.21]);
  else if(GESTURE.wave.test(g))reachArm(root,'Right',[-.40,1.69,.13+.035*beat],[-.52,1.43,.07]);

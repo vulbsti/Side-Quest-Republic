@@ -1,4 +1,4 @@
-import {findPath,nearestFreePoint,dist} from './simulation.js?v=21';
+import {findPath,nearestFreePoint,dist} from './simulation.js?v=22';
 /** Bounded physical crowd routing. Caller owns steering/collision and rendering.
  * Only hidden bodies may be placed at an entry. Visible bodies never teleport.
  * Call update once per simulation second before NPC steering; do not overwrite
@@ -13,7 +13,7 @@ export class CrowdFlow{
   const unseen=p=>dist(p,player)>24&&!isVisible(p);
   for(const body of candidates)if(!this.entries.has(body.id)){body.crowdManaged=true;this.entries.set(body.id,{status:body.hidden===false?'present':'waiting',district:null,target:{x:body.x,z:body.z}});}
   // Explicit recruitment/follow/scene ownership outranks ambient crowd routing.
-  for(const body of candidates){const e=this.entries.get(body.id),engaged=body.follow||body.recruited||body.sceneTarget;if(engaged){if(e.status!=='engaged'&&body.dayTarget===e.target){body.dayTarget=null;body.dayPath=null;}e.status='engaged';body.crowdObjective=null;body.crowdSpeed=null;}else if(e.status==='engaged'){e.status=body.hidden?'waiting':'present';e.target={x:body.x,z:body.z};e.directive=false;e.retryAt=0;e.reconsiderAt=0;}}
+  for(const body of candidates){const e=this.entries.get(body.id),engaged=body.follow||body.recruited||body.sceneTarget||body.incidentOrder;if(engaged){if(e.status!=='engaged'&&body.dayTarget===e.target){body.dayTarget=null;body.dayPath=null;}e.status='engaged';body.crowdObjective=null;body.crowdSpeed=null;}else if(e.status==='engaged'){e.status=body.hidden?'waiting':'present';e.target={x:body.x,z:body.z};e.directive=false;e.retryAt=0;e.reconsiderAt=0;}}
   const pool=candidates.filter(b=>this.entries.get(b.id).status!=='engaged');
   const weights=this.districts.map(d=>({d,weight:Math.max(0,Number(state.districts?.[d.id]?.density)||0)*Math.max(.05,Math.min(1,(state.districts?.[d.id]?.access??100)/100))}));
   const dispersing=!!state.flags?.dispersal||state.phase==='aftermath';

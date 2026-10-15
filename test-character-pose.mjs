@@ -35,7 +35,7 @@ try{
   {const actor=makeCharacter({variant:kind});for(let frame=0;frame<600;frame++)animateCharacter(actor,0,frame/60,{seated:true,important:true});actor.updateMatrixWorld(true);const b=actor.userData.bones;for(const [side,sign]of [['Left',1],['Right',-1]]){const hip=b[side+'UpLeg'].getWorldPosition(new THREE.Vector3()),knee=b[side+'Leg'].getWorldPosition(new THREE.Vector3()),foot=b[side+'Foot'].getWorldPosition(new THREE.Vector3()),toe=b[side+'ToeBase'].getWorldPosition(new THREE.Vector3());assert(Math.abs(hip.y-.52)<.01,kind+' seated hip matches cushion');assert(foot.distanceTo(new THREE.Vector3(sign*.16,.11,.43))<.025,kind+' feet on cabin floor');assert(knee.z>hip.z+.2&&knee.y>.35&&knee.y<.7,kind+' knee bends forward without raised legs');assert(toe.z>foot.z&&toe.y>0&&toe.y<.14,kind+' shoes point forward above floor');}}
   for(const carry of ['water','speaker','phone','key']){const actor=makeCharacter({variant:kind});for(let frame=0;frame<300;frame++)animateCharacter(actor,0,frame/60,{carry,important:true});actor.updateMatrixWorld(true);for(const [i,side]of [[0,'Left'],[1,'Right']]){const hand=CARRY_POSES[carry].hands[i];if(hand)assert(actor.userData.bones[side+'Hand'].getWorldPosition(new THREE.Vector3()).distanceTo(new THREE.Vector3(...hand))<.03,kind+' '+carry+' reaches prop grip');}}
   {const actor=makeCharacter({variant:kind});for(let frame=0;frame<300;frame++){animateCharacter(actor,1.6,frame/60,{carry:'water',important:true});if(frame>150){actor.updateMatrixWorld(true);for(const [i,side]of [[0,'Left'],[1,'Right']])assert(actor.userData.bones[side+'Hand'].getWorldPosition(new THREE.Vector3()).distanceTo(new THREE.Vector3(...CARRY_POSES.water.hands[i]))<.06,kind+' walking grip stays near crate');}}}
-  for(const gesture of ['phone','shrug','point','wave']){
+  for(const gesture of ['phone','shrug','point','wave','push']){
    const actor=makeCharacter({variant:kind}),control=makeCharacter({variant:kind});actor.userData.phase=0;
    for(const character of [actor,control])for(const action of Object.values(character.userData.actions))action.time=0;
    const samples=[],wrists=[];
@@ -47,7 +47,7 @@ try{
     if(frame>=200){samples.push(relative);actor.updateMatrixWorld(true);wrists.push(actor.userData.bones.RightHand.getWorldPosition(new THREE.Vector3()));}
    }
    for(const q of samples)assert(q.angleTo(samples[0])<(gesture==='wave'?.3:.15),`${kind} ${gesture} arm never accumulates rotation`);
-   const target={phone:[-.16,1.40,.34],shrug:[-.43,1.39,.28],point:[-.20,1.38,.46],wave:[-.40,1.69,.13]}[gesture];
+   const target={push:[-.22,1.38,.46],phone:[-.16,1.40,.34],shrug:[-.43,1.39,.28],point:[-.20,1.38,.46],wave:[-.40,1.69,.13]}[gesture];
    for(const wrist of wrists)assert(wrist.distanceTo(new THREE.Vector3(...target))<(gesture==='wave'?.055:.025),`${kind} ${gesture} reaches anatomical hand target`);
    if(['phone','shrug'].includes(gesture)){const b=actor.userData.bones,s=b.RightArm.getWorldPosition(new THREE.Vector3()),e=b.RightForeArm.getWorldPosition(new THREE.Vector3()),w=b.RightHand.getWorldPosition(new THREE.Vector3());assert(e.clone().sub(s).angleTo(w.clone().sub(e))>.7,`${kind} ${gesture} visibly bends elbow`);}
    for(let frame=1000;frame<1180;frame++){animateCharacter(actor,0,frame/60,{important:true});animateCharacter(control,0,frame/60,{important:true});}

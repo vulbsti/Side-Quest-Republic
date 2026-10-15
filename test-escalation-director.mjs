@@ -17,3 +17,12 @@ const later=structuredClone(disruptive);later.time=850;later.districts.jantar.te
 const global=structuredClone(base);global.player.aid=10000;global.player.escalation=10000;assert.deepEqual(deriveEscalation(global),baseline,'global virtue score does not substitute for local receipts');
 const absent=make();let previous=null;const counts=[];for(const time of [0,100,250,500,750,1050,1190]){absent.time=time;previous=deriveEscalation(absent,previous);counts.push(previous.groups.find(g=>g.id==='arrivals').count);assert.ok(previous.groups.every(g=>Number.isFinite(g.to.x)&&Number.isFinite(g.to.z)));}assert.ok(counts[4]>counts[0]);assert.equal(previous.stage,'dispersal');assert.ok(previous.groups.some(g=>g.objective==='disperse'));
 console.log('PASS spatial local receipts, independent arrivals/reinforcement, fictional groups, witnessed-only focus, no global moral score, save/seed stability');
+const incidentWorld=make();incidentWorld.time=690;
+incidentWorld.events.push({id:'witnessed-shove',type:'incident',incidentType:'incident-shove',time:680,district:'press',perpetratorId:'arrival-28',actorId:'arrival-28'});
+incidentWorld.actors.officer.beliefs.push({source:'witness',sourceId:'witnessed-shove',observedDistrict:'press',learnedAt:680,confidence:.95});
+const embodied=deriveEscalation(incidentWorld);
+assert.equal(embodied.receipts.find(r=>r.eventId==='witnessed-shove').subjectId,'arrival-28');
+assert(embodied.police.focus.some(f=>f.subjectId==='arrival-28'&&f.reason==='witnessed-shove'));
+assert(!embodied.police.focus.some(f=>f.subjectId==='player'),'NPC shove is not attributed to player');
+assert(embodied.candidates.find(c=>c.district==='press').reasons.localEscalation>=14);
+console.log('PASS embodied incident local pressure and correct witnessed NPC attribution');

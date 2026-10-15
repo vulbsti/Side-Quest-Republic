@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from './districts.js?v=21';
+import {WORLD_BOUNDS as B} from './districts.js?v=22';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
@@ -26,6 +26,16 @@ export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={})
  }
  return null;
 }
+// A grounded player may climb a curb, never a bench or a wall. Candidate
+// support must leave room for the complete standing body, including ceilings.
+function stepSupport(entity,obstacles,radius){
+ const feet=entity.y||0,maxStep=entity.stepHeight||0;
+ if(!maxStep||entity.grounded===false||(entity.vy||0)>0)return null;
+ const top=Math.max(feet,...obstacles.filter(o=>o.walkable!==false&&o.h>feet+.025&&o.h<=feet+maxStep+.001&&overlapsXZ(entity,o,radius)).map(o=>o.h));
+ if(top<=feet)return null;
+ if(obstacles.some(o=>o.h>top+.025&&(o.base||0)<top+(entity.height||1.8)-.01&&overlapsXZ(entity,o,radius)))return null;
+ return top;
+}
 export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??.36){
  if(![entity.x,entity.z,dx,dz,radius].every(Number.isFinite)||radius<0)return entity;
  const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
@@ -34,17 +44,18 @@ export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??
   const old=entity[axis];entity[axis]=clamp(old+delta,(axis==='x'?B.minX:B.minZ)+radius,(axis==='x'?B.maxX:B.maxZ)-radius);
   for(const o of obstacles){const feet=entity.y||0,top=o.h,bottom=o.base||0;
    if(feet>=top-.025||feet+(entity.height||1.8)<=bottom+.01)continue;
-   if(overlapsXZ(entity,o,radius)){entity[axis]=old;break;}
+   if(overlapsXZ(entity,o,radius)){const raised=stepSupport(entity,obstacles,radius);if(raised!==null){entity.y=raised;entity.vy=0;entity.grounded=true;}else entity[axis]=old;break;}
   }
  }
  return entity;
 }
 export function supportHeight(entity,obstacles,ceiling=Infinity){
- let y=0;const r=(entity.radius??.36)*.65;
+ let y=0;const r=(entity.radius??.36)*(entity.stepHeight?1:.65);
  for(const o of obstacles)if(o.walkable!==false&&o.h<=ceiling+.025&&overlapsXZ(entity,o,r))y=Math.max(y,o.h);
  return y;
 }
 export function verticalStep(entity,dt,obstacles,jump=false){
+ const recovered=stepSupport(entity,obstacles,entity.radius??.36);if(recovered!==null){entity.y=recovered;entity.vy=0;}
  const oldY=entity.y||0,ground=supportHeight(entity,obstacles,oldY);
  entity.grounded=Math.abs(oldY-ground)<.04&&(entity.vy||0)<=0;
  if(jump&&entity.grounded&&(entity.stamina??100)>10){entity.vy=7.6;entity.grounded=false;entity.stamina=(entity.stamina??100)-9;entity.jumpStarted=true;}
@@ -82,7 +93,7 @@ export function visible(a,b,obstacles){const d=dist(a,b);for(let s=1;s<Math.ceil
 export function steer(entity,target,speed,dt,obstacles){const d=dist(entity,target);if(d<.15||!Number.isFinite(dt)||dt<=0)return 0;const old={x:entity.x,z:entity.z};const dx=(target.x-entity.x)/d,dz=(target.z-entity.z)/d;const travel=Math.min(speed*dt,d);moveWithCollisions(entity,dx*travel,dz*travel,obstacles,.4);if(dist(old,entity)<speed*dt*.3){const side=entity.side||1;moveWithCollisions(entity,-dz*side*speed*dt,dx*side*speed*dt,obstacles,.4);entity.stuck=(entity.stuck||0)+dt;if(entity.stuck>1.1){entity.side=-side;entity.stuck=0;}}else entity.stuck=0;return dist(old,entity)/Math.max(dt,.001);}
 export class Simulation{
 constructor(obstacles=[]){this.obstacles=obstacles;this.reset();}
-reset(){this.time=0;this.player={x:-7,z:34,y:0,vy:0,vx:0,vz:0,yaw:Math.PI,stamina:100,radius:.36,height:1.8,grounded:true};this.heat=0;this.aura=0;this.trust=0;this.mischief=0;this.noise=0;this.pursuit=false;this.catches=0;this.cooldown=0;this.chases=0;this.escaped=0;this.sprinting=false;this.distance=0;this.police=[{x:9,z:16,home:{x:9,z:16},state:'patrol',phase:0},{x:28,z:-7,home:{x:28,z:-7},state:'patrol',phase:2},{x:-12,z:-4,home:{x:-12,z:-4},state:'patrol',phase:4},{x:9,z:-30,home:{x:9,z:-30},state:'patrol',phase:6}].map((p,i)=>({...p,y:0,yaw:0,seen:0,search:0,speed:0,side:i%2?1:-1,last:{x:p.x,z:p.z}}));}
+reset(){this.time=0;this.player={x:-7,z:34,y:0,vy:0,vx:0,vz:0,yaw:Math.PI,stamina:100,radius:.36,height:1.8,grounded:true,stepHeight:.32};this.heat=0;this.aura=0;this.trust=0;this.mischief=0;this.noise=0;this.pursuit=false;this.catches=0;this.cooldown=0;this.chases=0;this.escaped=0;this.sprinting=false;this.distance=0;this.police=[{x:9,z:16,home:{x:9,z:16},state:'patrol',phase:0},{x:28,z:-7,home:{x:28,z:-7},state:'patrol',phase:2},{x:-12,z:-4,home:{x:-12,z:-4},state:'patrol',phase:4},{x:9,z:-30,home:{x:9,z:-30},state:'patrol',phase:6}].map((p,i)=>({...p,y:0,yaw:0,seen:0,search:0,speed:0,side:i%2?1:-1,last:{x:p.x,z:p.z}}));}
 provoke(amount=20){this.heat=clamp(this.heat+amount);this.noise=4;}
 step(dt,input={}){this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);this.noise=Math.max(0,this.noise-dt);const p=this.player;let dx=input.x||0,dz=input.z||0,l=Math.hypot(dx,dz);if(l>1){dx/=l;dz/=l;}const moving=l>.05;this.sprinting=!!input.sprint&&p.stamina>2&&moving&&!input.heavy;const speed=this.sprinting?8.1:input.heavy?3.4:4.7;const damping=1-Math.exp(-dt*(moving?14:18));p.vx+=(dx*speed-p.vx)*damping;p.vz+=(dz*speed-p.vz)*damping;const old={x:p.x,z:p.z};moveWithCollisions(p,p.vx*dt,p.vz*dt,this.obstacles);this.distance+=dist(p,old);if(moving)p.yaw=Math.atan2(dx,dz);verticalStep(p,dt,this.obstacles,input.jump);p.stamina=clamp(p.stamina+(this.sprinting?-19:13)*dt);
 let pursuit=false,caught=false;for(let i=0;i<this.police.length;i++){const cop=this.police[i],d=dist(cop,p);const line=d<21&&visible(cop,p,this.obstacles);const facing=Math.cos(Math.atan2(p.x-cop.x,p.z-cop.z)-cop.yaw)>.15;const detects=line&&(facing||d<4||this.noise>0)&&this.heat>16&&this.cooldown<=0;if(cop.state==='patrol'){const dest={x:cop.home.x+Math.sin(this.time*.16+cop.phase)*5,z:cop.home.z+Math.cos(this.time*.13+cop.phase)*4};cop.speed=steer(cop,dest,1.2,dt,this.obstacles);cop.yaw=Math.atan2(dest.x-cop.x,dest.z-cop.z);if(detects&&d<12){cop.state='notice';cop.seen=.05;}}
