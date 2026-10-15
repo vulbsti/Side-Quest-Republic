@@ -1,0 +1,9 @@
+{
+  "asset": "dist/assets/materials/neem-leaf-v1.png",
+  "kind": "AI-generated botanical texture",
+  "source": "OpenAI built-in image generation",
+  "created": "2026-10-16",
+  "sha256": "4f0b5feef8c6b4cd31d58ba7174d9a0f7b4ddc3915d3f3add388ad59cb34aa64",
+  "prompt": "Single photorealistic neem leaf, top-down orthographic botanical scan, dusty olive green, visible veins, transparent background, diffuse lighting. Original texture for Delhi game foliage.",
+  "note": "Original generated asset, not a photograph or botanical identification reference."
+}

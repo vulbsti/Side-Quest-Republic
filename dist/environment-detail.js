@@ -1,4 +1,4 @@
-import { RGBELoader } from './assets/materials/RGBELoader.js?v=18';
+import { RGBELoader } from './assets/materials/RGBELoader.js?v=19';
 /** Apply only to the static world, BEFORE characters are created. */
 export async function enhanceEnvironment(THREE, world) {
   const {scene,renderer,sun}=world, loader=new THREE.TextureLoader();
@@ -54,7 +54,8 @@ export async function enhanceEnvironment(THREE, world) {
     if(hex==='adb6a3'||hex==='93a397'){o.material=old.clone();o.material.color.set(hex==='adb6a3'?'#aaaeb0':'#828e94');}
   });
   remove.forEach(o=>o.removeFromParent());
-  const foliage=addFoliage(THREE,scene);
+  let leafMap=null;try{leafMap=await loader.loadAsync(base+'neem-leaf-v1.png');leafMap.colorSpace=THREE.SRGBColorSpace;leafMap.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());report.loaded.push('neem-leaf');}catch(e){report.failed.push('neem-leaf');}
+  const foliage=addFoliage(THREE,scene,leafMap);
   report.foliage=foliage.count;
   world.setEnvironmentQuality=(mode='high')=>{
     foliage.count=mode==='balanced'?34*280:34*620;
@@ -65,17 +66,17 @@ export async function enhanceEnvironment(THREE, world) {
   addStreetDetail(THREE,scene);
   world.environmentReport=report;return report;
 }
-function addFoliage(T,scene){
+function addFoliage(T,scene,leafMap){
   let seed=5307;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
   // Actual small leaf silhouettes, no opaque balloon canopy. Three crossed
   // leaflets per instance keep the foliage readable from street-level angles.
-  const pos=[],norm=[];
+  const pos=[],norm=[],uv=[];
   for(let j=0;j<3;j++){
     const a=j*Math.PI/3,c=Math.cos(a),s=Math.sin(a);
-    for(const [x,y] of [[0,-.2],[-.10,0],[0,.22],[0,-.2],[0,.22],[.10,0]]){pos.push(x*c,y,x*s);norm.push(s,0,-c);}
+    for(const [u,v] of [[0,0],[1,0],[1,1],[0,0],[1,1],[0,1]]){const x=(u-.5)*.36,y=(v-.5)*.42;pos.push(x*c,y,x*s);norm.push(s,0,-c);uv.push(u,v);}
   }
-  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setAttribute('normal',new T.Float32BufferAttribute(norm,3));
-  const mat=new T.MeshStandardMaterial({color:'#ffffff',roughness:.88,side:T.DoubleSide});
+  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setAttribute('normal',new T.Float32BufferAttribute(norm,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));
+  const mat=new T.MeshStandardMaterial({color:'#ffffff',map:leafMap,alphaTest:leafMap?.45:0,roughness:.88,side:T.DoubleSide});
   const count=34*620,leaves=new T.InstancedMesh(geo,mat,count),d=new T.Object3D(),color=new T.Color();let idx=0;
   for(let i=0;i<34;i++){
     let x,z;if(i<16){x=-46+(i%8)*13;z=i<8?59:-63;}else{x=i%2?-43:49;z=-45+(i-16)*6;}
@@ -83,11 +84,11 @@ function addFoliage(T,scene){
     for(let k=0;k<620;k++){
       const cluster=k%5,a=cluster*1.256,rad=Math.cbrt(rnd())*2.1,theta=rnd()*Math.PI*2,v=rnd()*2-1,rr=Math.sqrt(1-v*v);
       d.position.set(x+Math.cos(a)*1.3+rad*rr*Math.cos(theta),h+(cluster===4?1.3:0)+rad*v*.85,z+Math.sin(a)*1.3+rad*rr*Math.sin(theta));
-      d.rotation.set(rnd()*Math.PI,rnd()*Math.PI,rnd()*Math.PI);d.scale.setScalar(.75+rnd()*1.2);d.updateMatrix();leaves.setMatrixAt(k*34+i,d.matrix);
-      color.setHSL(.225+rnd()*.055,.25+rnd()*.18,.16+rnd()*.13);leaves.setColorAt(k*34+i,color);idx++;
+      d.rotation.set(rnd()*Math.PI,rnd()*Math.PI,rnd()*Math.PI);d.scale.setScalar(.65+rnd()*.75);d.updateMatrix();leaves.setMatrixAt(k*34+i,d.matrix);
+      leafMap?color.setHSL(.18+rnd()*.08,.06+rnd()*.13,.65+rnd()*.25):color.setHSL(.225+rnd()*.055,.25+rnd()*.18,.16+rnd()*.13);leaves.setColorAt(k*34+i,color);idx++;
     }
   }
-  leaves.castShadow=true;leaves.receiveShadow=true;leaves.name='Instanced broadleaf foliage';leaves.computeBoundingSphere();scene.add(leaves);return leaves;
+  if(leafMap){leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,map:leafMap,alphaTest:.45,side:T.DoubleSide});}leaves.castShadow=true;leaves.receiveShadow=true;leaves.name='Instanced broadleaf foliage';leaves.computeBoundingSphere();scene.add(leaves);return leaves;
 }
 function addStreetDetail(T,scene){
   let seed=96;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};

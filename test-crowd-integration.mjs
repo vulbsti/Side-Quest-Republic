@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const source=readFileSync('dist/main.js','utf8');
+const body=source.slice(source.indexOf('function updateLivingActors(dt)'),source.indexOf('\n(async()=>'));
+const ctx={day:{state:{seed:1}},dayActorClock:0,crowdFlow:null,crowdWorld:null,npcs:[],sim:{player:{x:0,z:0}},world:{obstacles:[]},DISTRICTS:[],constructed:0,updates:0};
+ctx.CrowdFlow=class{constructor(){ctx.constructed++;}update(){ctx.updates++;}};
+vm.createContext(ctx);vm.runInContext(body,ctx);
+for(let i=0;i<6;i++)ctx.updateLivingActors(1);
+assert.equal(ctx.constructed,1,'arrival/departure state persists between simulation seconds');assert.equal(ctx.updates,6);
+ctx.day.state={seed:2};ctx.updateLivingActors(1);assert.equal(ctx.constructed,2,'a genuinely new day replaces the controller');
+console.log('PASS production crowd ownership persists across ticks and resets for a new day');

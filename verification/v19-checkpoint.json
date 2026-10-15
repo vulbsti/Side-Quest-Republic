@@ -1,0 +1,22 @@
+{
+  "milestone": "v19 persistent crowd routing and detailed foliage",
+  "base_commit": "bf5539239df34e83a63fcb943392bd0574c4d8f2",
+  "quality_pass": false,
+  "changes": [
+    "Fixed production update recreating CrowdFlow every second",
+    "Original generated transparent leaf texture replaces solid angular leaf cards; alpha-tested leaf shadows"
+  ],
+  "verified": [
+    "Production update regression preserves controller over six seconds and replaces it for a new world",
+    "Leaf PNG alpha data is transparent outside silhouette; provenance and SHA recorded",
+    "JavaScript syntax valid",
+    "Live production frame evidence: 0.9fps, p95 3001ms, simulation batch53.1ms, render submission13.2ms, dropped36.55sec",
+    "Measured pure collision/pathfinding/crowd work does not explain three-second frames"
+  ],
+  "limits": [
+    "Browser panel open request queued because task hidden; background RAF throttling is likely, not conclusively isolated",
+    "User asked to foreground panel for reliable performance review; reply pending",
+    "New foliage visual review pending",
+    "Realism, reel voices and final complete-day quality validation remain incomplete"
+  ]
+}

@@ -1,28 +1,28 @@
-import {CrowdFlow} from './crowd-flow.js?v=18';
-import {stagedCameraFrame} from './staged-camera.js?v=18';
-import {updateWorldPhysicalState} from './living-world.js?v=18';
-import {projectActorIntent} from './actor-intentions.js?v=18';
-import {createPerformance,advancePerformance,cancelPerformance,samplePerformance} from './scene-performance.js?v=18';
-import {StreetLife} from './street-life.js?v=18';
-import {StreetAudio} from './street-audio.js?v=18';
-import {FrameClock} from './frame-clock.js?v=18';
-import {DESTINATIONS,createDestinationState,performDestination} from './destinations.js?v=18';
-import {TransitClient,boardingApproach} from './transit-client.js?v=18';
-import {DayPresentation} from './day-presentation.js?v=18';
-import {DayClient,currentSceneBeat} from './day-client.js?v=18';
-import {expandWorld} from './world-expansion.js?v=18';
-import {districtAt,DISTRICTS} from './districts.js?v=18';
-import {saveSession,loadSession,clearSession} from './save-game.js?v=18';
-import {canReachInteraction,buildInteractionCandidates} from './interactions.js?v=18';
-import {drawMinimap} from './minimap.js?v=18';
-import {campaignSummary} from './campaign.js?v=18';
-import {loadCharacters,makeCharacter,animateCharacter,CARRY_POSES} from './characters.js?v=18';
-import {THREE,buildWorld,cube,ball,cylinder,sign,mat} from './world.js?v=18';
-import {Simulation,clamp,dist,steer,findPath,separateBodies,verticalStep,supportHeight,overlapsXZ,nearestFreePoint} from './simulation.js?v=18';
-import {createSocialState,socialInteraction,socialCatalogue} from './social.js?v=18';
-import {HINGLISH} from './hinglish.js?v=18';
-import {Soundtrack} from './audio.js?v=18';
-import {enhanceEnvironment} from './environment-detail.js?v=18';
+import {CrowdFlow} from './crowd-flow.js?v=19';
+import {stagedCameraFrame} from './staged-camera.js?v=19';
+import {updateWorldPhysicalState} from './living-world.js?v=19';
+import {projectActorIntent} from './actor-intentions.js?v=19';
+import {createPerformance,advancePerformance,cancelPerformance,samplePerformance} from './scene-performance.js?v=19';
+import {StreetLife} from './street-life.js?v=19';
+import {StreetAudio} from './street-audio.js?v=19';
+import {FrameClock} from './frame-clock.js?v=19';
+import {DESTINATIONS,createDestinationState,performDestination} from './destinations.js?v=19';
+import {TransitClient,boardingApproach} from './transit-client.js?v=19';
+import {DayPresentation} from './day-presentation.js?v=19';
+import {DayClient,currentSceneBeat} from './day-client.js?v=19';
+import {expandWorld} from './world-expansion.js?v=19';
+import {districtAt,DISTRICTS} from './districts.js?v=19';
+import {saveSession,loadSession,clearSession} from './save-game.js?v=19';
+import {canReachInteraction,buildInteractionCandidates} from './interactions.js?v=19';
+import {drawMinimap} from './minimap.js?v=19';
+import {campaignSummary} from './campaign.js?v=19';
+import {loadCharacters,makeCharacter,animateCharacter,CARRY_POSES} from './characters.js?v=19';
+import {THREE,buildWorld,cube,ball,cylinder,sign,mat} from './world.js?v=19';
+import {Simulation,clamp,dist,steer,findPath,separateBodies,verticalStep,supportHeight,overlapsXZ,nearestFreePoint} from './simulation.js?v=19';
+import {createSocialState,socialInteraction,socialCatalogue} from './social.js?v=19';
+import {HINGLISH} from './hinglish.js?v=19';
+import {Soundtrack} from './audio.js?v=19';
+import {enhanceEnvironment} from './environment-detail.js?v=19';
 const $=s=>document.querySelector(s);let world,sim;const sound=new Soundtrack();let mode='loading',keys={},yaw=0,pitch=.35,zoom=8.5,mouse=false,lastMouse,muted=false,last=0,activeTab='stories';let game,player,npcs=[],items=[],talk=null,particles=[],bubbles=[],toastTime=0,stepTime=0,lastUI=0,poseTime=0,photoTime=0,beatGame=null,currentPrompt=null,autoWalk=null;let pointerMoved=false,selectedAction=null,actionSignature='',mapFrame=null,trackedStory='sound',navTarget=null,saveClock=0;
 let street=null;const streetAudio=new StreetAudio(sound);let transit=null;const frameClock=new FrameClock();let frameNumber=0,pathFrame=-1,diagnostics=false,frameCosts={simulation:0,render:0};
 let shopPerformance=null,shopProp=null,shopBeatKey=null;
@@ -211,5 +211,5 @@ function setupLivingDay(){
  const used=new Set(npcs.map(n=>n.id));for(const [i,a] of Object.values(day.state.actors).entries()){if(used.has(a.id)){const n=npcs.find(n=>n.id===a.id);n.livingActor=true;n.hidden=false;const d=DISTRICTS.find(d=>d.id===a.district)||DISTRICTS[0],spot=nearestFreePoint({x:d.x+(i%3)*2,z:d.z+2},world.obstacles);if(spot){Object.assign(n,spot);n.home={...spot};n.model.position.set(n.x,0,n.z);}continue;}const d=DISTRICTS.find(d=>d.id===a.district)||DISTRICTS[0],spot=nearestFreePoint({x:d.x+(i%3)*2,z:d.z+2},world.obstacles)||d;const n=npc(a.id,a.name.toUpperCase(),spot.x,spot.z,{gender:['asha','journalist'].includes(a.id)?'female':'male',color:['#a3b594','#9b6e81','#b99b61'][i%3],dayActor:true,livingActor:true});n.ring=ring(n.x,n.z,'#d6ee9b');}
  for(let i=0;i<30;i++){const d=DISTRICTS[1+i%(DISTRICTS.length-1)],spot=nearestFreePoint({x:d.x+(i%5-2)*2,z:d.z+(i%3-1)*3},world.obstacles);if(spot)npc('arrival'+i,['A NEIGHBOUR','A VOLUNTEER','A STUDENT'][i%3],spot.x,spot.z,{ambient:true,dayArrival:true,hidden:true,gender:i%3?'male':'female'});}
 }
-function updateLivingActors(dt){if(!day)return;dayActorClock+=dt;if(dayActorClock<1)return;dayActorClock=0,crowdFlow=null,crowdWorld=null;if(crowdWorld!==day.state){crowdWorld=day.state;crowdFlow=new CrowdFlow({obstacles:world.obstacles,districts:DISTRICTS,seed:day.state.seed});}crowdFlow.update({bodies:npcs,state:day.state,player:sim.player,isVisible:p=>{const q=new THREE.Vector3(p.x,1,p.z).project(world.camera);return q.z>=-1&&q.z<=1&&Math.abs(q.x)<1.15&&Math.abs(q.y)<1.15;}});const positions=[...npcs,{id:'player',...sim.player}];for(const n of npcs){if(n.dayArrival)continue;if(!n.livingActor)continue;if((game.playTime<20&&['mira','kabir'].includes(n.id))||n.streetGestureTime>0){n.dayTarget=null;continue;}const a=day.state.actors[n.id];if(!a)continue;const intent=projectActorIntent(a,day.state,{districts:DISTRICTS,positions,locations:{supply:{water:{x:-69,z:5},rest:{x:-73,z:19}},backstreet:{work:{x:-55,z:82},rest:{x:-42,z:71}},press:{verify:{x:67,z:-31}},court:{verify:{x:67,z:46}}}});n.presentationIntent=intent;n.dayTarget=nearestFreePoint(n.sceneTarget||intent.target,world.obstacles,{radius:.5,maxRadius:5})||{x:n.x,z:n.z};const arrived=dist(n,n.dayTarget)<1.9;n.intentGesture=arrived?intent.gesture:null;if(arrived&&intent.lookAt&&!n.sceneTarget){n.yaw=Math.atan2(intent.lookAt.x-n.x,intent.lookAt.z-n.z);n.model.rotation.y=n.yaw;}}}
+function updateLivingActors(dt){if(!day)return;dayActorClock+=dt;if(dayActorClock<1)return;dayActorClock=0;if(crowdWorld!==day.state){crowdWorld=day.state;crowdFlow=new CrowdFlow({obstacles:world.obstacles,districts:DISTRICTS,seed:day.state.seed});}crowdFlow.update({bodies:npcs,state:day.state,player:sim.player,isVisible:p=>{const q=new THREE.Vector3(p.x,1,p.z).project(world.camera);return q.z>=-1&&q.z<=1&&Math.abs(q.x)<1.15&&Math.abs(q.y)<1.15;}});const positions=[...npcs,{id:'player',...sim.player}];for(const n of npcs){if(n.dayArrival)continue;if(!n.livingActor)continue;if((game.playTime<20&&['mira','kabir'].includes(n.id))||n.streetGestureTime>0){n.dayTarget=null;continue;}const a=day.state.actors[n.id];if(!a)continue;const intent=projectActorIntent(a,day.state,{districts:DISTRICTS,positions,locations:{supply:{water:{x:-69,z:5},rest:{x:-73,z:19}},backstreet:{work:{x:-55,z:82},rest:{x:-42,z:71}},press:{verify:{x:67,z:-31}},court:{verify:{x:67,z:46}}}});n.presentationIntent=intent;n.dayTarget=nearestFreePoint(n.sceneTarget||intent.target,world.obstacles,{radius:.5,maxRadius:5})||{x:n.x,z:n.z};const arrived=dist(n,n.dayTarget)<1.9;n.intentGesture=arrived?intent.gesture:null;if(arrived&&intent.lookAt&&!n.sceneTarget){n.yaw=Math.atan2(intent.lookAt.x-n.x,intent.lookAt.z-n.z);n.model.rotation.y=n.yaw;}}}
 (async()=>{try{world=await buildWorld($('#scene'),name=>$('#loadtext').textContent='Preparing '+name.replaceAll('-',' ')+'…');await enhanceEnvironment(THREE,world);expansion=expandWorld(world);await loadCharacters(name=>$('#loadtext').textContent='Preparing '+name+' characters…');setup();setupLivingDay();setupDestinations();setupStreet();transit=new TransitClient({world,hooks:{toast,position:()=>sim.player,walk:walkTo,canYield:body=>npcs.includes(body)||sim.police.includes(body),onYield:(body,bus,target)=>{body.busYieldTarget=target;body.busYieldUntil=sim.time+8;},bodies:()=>[...npcs.filter(n=>!n.hidden),...sim.police,...(transit?.aboard?[]:[sim.player])],onBoard:p=>{autoWalk=null;navTarget=null;Object.assign(sim.player,p,{vx:0,vz:0,vy:0});},onExit:p=>{Object.assign(sim.player,p,{vx:0,vz:0,vy:0,grounded:true});checkpoint();},onChange:()=>checkpoint()}});setupInputs();$('#loading').classList.add('hidden');showTitle();requestAnimationFrame(loop);}catch(e){console.error(e);$('#loadtext').textContent='The 3D scene could not start. WebGL 2 is required. '+e.message;const b=document.createElement('button');b.textContent='Try again';b.onclick=()=>location.reload();$('#loading').appendChild(b);}})();
