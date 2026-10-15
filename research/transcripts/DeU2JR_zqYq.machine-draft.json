@@ -1,0 +1,6 @@
+{
+  "method": "Local faster-whisper-small CPU int8, Hindi forced, beam 5, VAD; machine draft not human/audio verified",
+  "language_probability": 1,
+  "duration": 30.164125,
+  "segments": []
+}

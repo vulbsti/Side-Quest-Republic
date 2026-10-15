@@ -1,4 +1,4 @@
-import {SHOP_SOLIDS,FORECOURT_SOLIDS,URBAN_SOLIDS} from './destinations.js?v=12';
+import {SHOP_SOLIDS,FORECOURT_SOLIDS,URBAN_SOLIDS} from './destinations.js?v=15';
 /** Fictionalised Delhi-inspired geography; not a surveyed reproduction. */
 export const WORLD_BOUNDS=Object.freeze({minX:-90,maxX:90,minZ:-85,maxZ:100,x:[-90,90],z:[-85,100]});
 export const DISTRICTS=Object.freeze([
@@ -28,6 +28,11 @@ export const CONNECTION_ROUTES=Object.freeze([
 ]);
 /** Every solid expansion object is registered here so tests and rendering agree. */
 export const EXPANSION_SOLIDS=Object.freeze([
+ // Existing core furniture rendered in world.js, previously missing collision.
+ ...[-36,-12,12,36].flatMap(x=>[-40,39].map(z=>({id:`coreLamp:${x}:${z}`,x,z,w:.24,d:.24,h:5}))),
+ ...[-5,5].map(x=>({id:`stageBannerPost:${x}`,x,z:-16,w:.12,d:.12,h:4})),
+ {id:'fountainPedestal',x:0,z:24,w:1.8,d:1.8,h:1.45,base:.5},
+ {id:'fountainUpperBowl',x:0,z:24,w:2.6,d:2.6,h:1.59,base:1.41},
  ...[3,19].flatMap((z,i)=>[
   {id:`aidTent${i}Back`,x:-74,z:z-4,w:10,d:.12,h:2.85,base:.15},
   {id:`aidTent${i}West`,x:-79,z,w:.12,d:8,h:2.85,base:.15},

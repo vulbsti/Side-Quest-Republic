@@ -1,0 +1,91 @@
+{
+  "researched_on": "2026-10-16",
+  "scope": "Local downloaded public reel files; no game asset admission or publishing",
+  "analysis_state": "Two files and audio streams verified. No reliable spoken transcript obtained; exact speech, delivery and music listening remain unverified.",
+  "audio_heard": false,
+  "sources": [
+    {
+      "id": "DbNVvp1pU9l",
+      "url": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "local_file": "research/media/DbNVvp1pU9l.mp4",
+      "sha256": "28682d7f553b4c743796a7f1c6aa4cbc9982d002eea278ceb21301f06d91c2c8",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "44100",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "119.788889",
+          "size": "39380366"
+        }
+      },
+      "exact_spoken_text": null,
+      "candidate_snippets": [],
+      "delivery": null,
+      "music_role": null,
+      "in_game_cue_placement": null,
+      "original_recording_owner": "Not established; publisher may be reposting",
+      "redistribution_permission": "Not established",
+      "use": "Research reference; local availability does not establish publication permission"
+    },
+    {
+      "id": "DeU2JR_zqYq",
+      "url": "https://www.instagram.com/peeinghuman/reel/DeU2JR_zqYq/",
+      "local_file": "research/media/DeU2JR_zqYq.mp4",
+      "sha256": "711b062f58f9ada00c08b66db6ed6ebe7c7d2f5cbea75e6ab3fd0ddf2b3342b4",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 1280
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "44100",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "30.252744",
+          "size": "4405634"
+        }
+      },
+      "exact_spoken_text": null,
+      "candidate_snippets": [],
+      "delivery": null,
+      "music_role": null,
+      "in_game_cue_placement": null,
+      "original_recording_owner": "Not established; publisher may be reposting",
+      "redistribution_permission": "Not established",
+      "use": "Research reference; local availability does not establish publication permission",
+      "waveform_measurement": {
+        "mean_volume_db": -16.1,
+        "max_volume_db": -0.6,
+        "measurement": "ffmpeg volumedetect full track; not a listening judgement",
+        "decoded_16khz_mono_samples": 482626,
+        "decoded_rms": 0.15293285
+      }
+    }
+  ],
+  "tooling": {
+    "asr": "Temporary isolated /tmp/reel-asr-venv; faster-whisper-small multilingual cached model; CPU int8",
+    "asr_limit": "Detention reel returned zero segments with both VAD and no-VAD beam5 attempts despite valid non-silent decoded PCM. 10-second beam1 fallback and 119-second question reel inference stalled for several minutes and were interrupted. All owned inference processes are stopped; no further retry.",
+    "system_changes": "No system package installation; no paid service, generated voice, or private upload",
+    "runtime_versions": "{'faster-whisper': '1.2.1', 'ctranslate2': '4.8.3', 'av': '16.1.0', 'onnxruntime': '1.31.0'}"
+  }
+}

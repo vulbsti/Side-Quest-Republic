@@ -7,7 +7,7 @@ import {DISTRICTS,STORY_ANCHORS,EXPANSION_SOLIDS} from './dist/districts.js';
 // Execute the real buildWorld collision-registration code with inert rendering
 // objects. This tests actual obstacle placements, not a copied geometry fixture.
 // It deliberately does NOT claim to validate rendered meshes or WebGL.
-function node(){const target=function(){};let proxy;proxy=new Proxy(target,{get(t,k){if(k==='then')return undefined;if(k==='clone')return ()=>node();if(k==='traverse'||k==='add'||k==='set'||k==='setScalar'||k==='setSize'||k==='setPixelRatio')return ()=>{};if(k==='loadAsync')return async()=>({scene:node()});return t[k]??(t[k]=node());},set(t,k,v){t[k]=v;return true;},apply(){return node();},construct(){return node();}});return proxy;}
+function node(){const target=function(){};let proxy;proxy=new Proxy(target,{get(t,k){if(k==='then')return undefined;if(k==='clone')return ()=>node();if(k==='traverse'||k==='add'||k==='set'||k==='setScalar'||k==='setSize'||k==='setPixelRatio')return ()=>{};if(k==='loadAsync')return async()=>({scene:node()});return t[k]??(t[k]=node());},set(t,k,v){Object.defineProperty(t,k,{value:v,writable:true,configurable:true});return true;},apply(){return node();},construct(){return node();}});return proxy;}
 const source=await fs.readFile(new URL('./dist/world.js',import.meta.url),'utf8');
 const start=source.indexOf('export async function buildWorld('),end=source.indexOf('\nfunction mergeStatic(',start);
 assert(start>=0&&end>start,'world builder remains recognisable; update harness if refactored');
@@ -15,7 +15,16 @@ const context={THREE:node(),GLTFLoader:node(),devicePixelRatio:1,innerWidth:1280
 vm.createContext(context);vm.runInContext(source.slice(start,end).replace('export async function','async function')+'\nthis.builder=buildWorld;',context);
 const world=await context.builder({appendChild(){}},()=>{});
 assert(world.obstacles.length>=90,'real core obstacle registration executed');
-const obstacles=[...world.obstacles,...EXPANSION_SOLIDS];
+// Execute the expansion builder too: procedural signposts were previously invisible
+// to tests which only concatenated EXPANSION_SOLIDS.
+const coreObstacleCount=world.obstacles.length;
+const expansionSource=await fs.readFile(new URL('./dist/world-expansion.js',import.meta.url),'utf8');
+const expansionData=await import('./dist/destinations.js');
+Object.assign(context,expansionData,{T:node(),DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES:[],EXPANSION_SOLIDS,consolidate:()=>{}});
+const expansionStart=expansionSource.indexOf('export function expandWorld('),expansionEnd=expansionSource.indexOf('\nfunction consolidate(',expansionStart);
+vm.runInContext(expansionSource.slice(expansionStart,expansionEnd).replace('export function','function')+'\nthis.expand=expandWorld;',context);
+world.camera.far=300;context.expand(world);
+const obstacles=[...world.obstacles];
 const spawn=new Simulation(obstacles).player;
 const failures=[];
 const targets=[...DISTRICTS.map(d=>({id:`district:${d.id}`,...d})),...Object.entries(STORY_ANCHORS).map(([id,p])=>({id:`anchor:${id}`,...p}))];
@@ -30,5 +39,5 @@ for(const target of targets){
 for(const a of DISTRICTS)for(const b of DISTRICTS){if(a.id===b.id)continue;if(!findPath(a,b,obstacles).length)failures.push(`disconnected district ${a.id} -> ${b.id}`);}
 for(const e of DAY_ENCOUNTERS){const dest=e.location;assert(dest&&Number.isFinite(dest.x)&&Number.isFinite(dest.z),e.id+': explicit location');const free=nearestFreePoint(dest,obstacles,{radius:.65,maxRadius:8});const path=free&&findPath(spawn,free,obstacles);if(!path?.length){failures.push(`scene:${e.id}: no actual-client route to ${JSON.stringify(free)}`);continue;}const last=path.at(-1);if(Math.hypot(last.x-dest.x,last.z-dest.z)>=8)failures.push(`scene:${e.id}: route does not reach interaction range`);}
 assert.deepEqual(failures,[],'all real-core plus expansion routes are collision-clear');
-console.log(`World routes PASS: ${world.obstacles.length} live core obstacles + ${EXPANSION_SOLIDS.length} expansion solids; ${targets.length} spawn routes and ${DISTRICTS.length*(DISTRICTS.length-1)} district routes; ${DAY_ENCOUNTERS.length} scene approaches within interaction distance.`);
+console.log(`World routes PASS: ${coreObstacleCount} live core obstacles + ${world.obstacles.length-coreObstacleCount} actual expansion obstacles; ${targets.length} spawn routes and ${DISTRICTS.length*(DISTRICTS.length-1)} district routes; ${DAY_ENCOUNTERS.length} scene approaches within interaction distance.`);
 export {obstacles as testedWorldObstacles};

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=12';
-import { GLTFLoader } from './vendor/GLTFLoader.js?v=12';
+import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=15';
+import { GLTFLoader } from './vendor/GLTFLoader.js?v=15';
 export {THREE};
 const M={},G={};
 export function mat(c,roughness=.8){const k=c+'_'+roughness;return M[k]??=new THREE.MeshStandardMaterial({color:c,roughness});}

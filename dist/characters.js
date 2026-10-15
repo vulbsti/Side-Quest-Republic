@@ -1,6 +1,6 @@
-import {animationInterval} from './frame-clock.js?v=12';
+import {animationInterval} from './frame-clock.js?v=15';
 import * as THREE from 'three';
-import {GLTFLoader} from './vendor/GLTFLoader.js?v=12';
+import {GLTFLoader} from './vendor/GLTFLoader.js?v=15';
 const GESTURE={phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
 const models={}, loader=new GLTFLoader();let pending,serial=0;
 /** Loads three textured, skinned MakeHuman characters. Call before makeCharacter. */
@@ -25,19 +25,51 @@ export function makeCharacter({color='#a58d72',pants,skin,police=false,backpack=
  body.traverse(o=>{if(!o.isMesh)return;if(o.isSkinnedMesh){o.computeBoundingSphere();if(o.boundingSphere){o.boundingSphere.radius=Math.max(o.boundingSphere.radius*1.65,o.boundingSphere.radius+1.4/scale);o.frustumCulled=true;}}else{o.geometry.computeBoundingSphere();o.frustumCulled=true;}});
  root.userData={phone,body,baseY:body.position.y,head:bones.Head,bones,mixer,actions,lastTime:null,phase:Math.random()*6,kind,animation:'Idle',gaitPhase:animationPhase,isSkinnedHuman:true};return root;
 }
+// Solve in world space: these GLBs use +Y down each limb, with rotated
+// shoulder frames. Global-looking Euler X offsets do not mean elbow flexion.
+function reachArm(root,side,handTarget,poleTarget){
+ const d=root.userData,b=d.bones,upper=b[side+'Arm'],lower=b[side+'ForeArm'],hand=b[side+'Hand'];if(!upper||!lower||!hand)return;
+ root.updateMatrixWorld(true);
+ const shoulder=upper.getWorldPosition(new THREE.Vector3()),elbow=lower.getWorldPosition(new THREE.Vector3()),wrist=hand.getWorldPosition(new THREE.Vector3());
+ const target=root.localToWorld(new THREE.Vector3(...handTarget)),pole=root.localToWorld(new THREE.Vector3(...poleTarget));
+ const a=shoulder.distanceTo(elbow),c=elbow.distanceTo(wrist),axis=target.clone().sub(shoulder),length=THREE.MathUtils.clamp(axis.length(),Math.abs(a-c)+.001,a+c-.002);axis.normalize();
+ const along=(a*a-c*c+length*length)/(2*length),height=Math.sqrt(Math.max(0,a*a-along*along));
+ const bend=pole.sub(shoulder);bend.addScaledVector(axis,-bend.dot(axis)).normalize();
+ const desiredElbow=shoulder.clone().addScaledVector(axis,along).addScaledVector(bend,height),desiredWrist=shoulder.clone().addScaledVector(axis,length);
+ const upperBase=upper.quaternion.clone(),lowerBase=lower.quaternion.clone();
+ function aim(bone,child,destination){
+  const origin=bone.getWorldPosition(new THREE.Vector3()),from=child.getWorldPosition(new THREE.Vector3()).sub(origin).normalize(),to=destination.clone().sub(origin).normalize();
+  const world=bone.getWorldQuaternion(new THREE.Quaternion()).premultiply(new THREE.Quaternion().setFromUnitVectors(from,to));
+  bone.quaternion.copy(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(world));bone.updateMatrixWorld(true);
+ }
+ aim(upper,lower,desiredElbow);aim(lower,hand,desiredWrist);
+ d.poseOffsets[side+'Arm'].target.copy(upperBase).invert().multiply(upper.quaternion).normalize();
+ d.poseOffsets[side+'ForeArm'].target.copy(lowerBase).invert().multiply(lower.quaternion).normalize();
+ upper.quaternion.copy(upperBase);lower.quaternion.copy(lowerBase);root.updateMatrixWorld(true);
+}
 export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=false,vy=0,turn=0,talking=false,seated=false,distance=0,visible=true,important=false,gesture=''}={}){
  const d=root.userData;if(!d?.mixer)return;const elapsed=d.lastTime===null?1/60:Math.max(0,t-d.lastTime);if(d.lastTime!==null&&elapsed<animationInterval(distance,visible,important)&&d.wasSeated===seated&&d.lastGesture===gesture)return;const dt=Math.min(.25,elapsed);d.lastTime=t;d.wasSeated=seated;d.lastGesture=gesture;
  let target=airborne?'Jump':pose&&!gesture?'Wave':carry?'Carry':speed>2.8?'Run':speed>.12?'Walk':'Idle';if(!d.actions[target])target='Idle';
  d.gaitPhase=(d.gaitPhase+dt*(speed>.12?speed/(speed>2.8?2.6:1.25):0))%1;
  for(const [name,a] of (d.actionEntries??=Object.entries(d.actions))){const w=name===target?1:0;a.setEffectiveWeight(THREE.MathUtils.damp(a.getEffectiveWeight(),w,12,dt));if(['Walk','Run','Carry'].includes(name)){a.time=d.gaitPhase*a.getClip().duration;a.setEffectiveTimeScale(0);}else a.setEffectiveTimeScale(1);}
 
- d.mixer.update(dt);d.animation=target;if(seated){for(const k of ['LeftUpLeg','RightUpLeg'])if(d.bones[k])d.bones[k].rotation.x=-1.4;for(const k of ['LeftLeg','RightLeg'])if(d.bones[k])d.bones[k].rotation.x=1.3;d.body.position.y=d.baseY-.38;}else d.body.position.y=d.baseY;
+ // Mixer bindings can skip unchanged values and clips omit some bones. Restore
+ // the last authored pose before evaluation so procedural poses never feed back.
+ const layers=d.poseLayers??=Object.entries(d.bones).map(([key,bone])=>({key,bone,base:bone.quaternion.clone(),offset:new THREE.Quaternion(),target:new THREE.Quaternion(),rotation:new THREE.Euler()}));
+ for(const layer of layers)layer.bone.quaternion.copy(layer.base);
+ d.mixer.update(dt);
+ for(const layer of layers)layer.base.copy(layer.bone.quaternion);
+ d.animation=target;
+ const offsets=d.poseOffsets??=Object.fromEntries(layers.map(layer=>[layer.key,layer]));
+ for(const layer of layers)layer.rotation.set(0,0,0);
+ const posedHead=offsets.Head;
+ if(seated){for(const k of ['LeftUpLeg','RightUpLeg'])if(d.bones[k])d.bones[k].rotation.x=-1.4;for(const k of ['LeftLeg','RightLeg'])if(d.bones[k])d.bones[k].rotation.x=1.3;d.body.position.y=d.baseY-.38;}else d.body.position.y=d.baseY;
  // Small conversational head motion is layered after the recorded skeletal pose.
- if(talking&&d.head)d.head.rotation.x+=Math.sin(t*3+d.phase)*.035;
- if(d.bones.Spine2)d.bones.Spine2.rotation.z+=THREE.MathUtils.clamp(turn,-1,1)*.07;
- // Additive, bounded street performances; mixers reset authored bone poses first.
+ if(talking&&posedHead)posedHead.rotation.x+=Math.sin(t*3+d.phase)*.035;
+ if(offsets.Spine2)offsets.Spine2.rotation.z+=THREE.MathUtils.clamp(turn,-1,1)*.07;
+ // Bounded local quaternion offsets blend in and recover smoothly to identity.
  // Arms are in the MakeHuman/Mixamo local convention. Do not alter pelvis/legs.
- const b=d.bones,ra=b.RightArm,la=b.LeftArm,rf=b.RightForeArm,lf=b.LeftForeArm,head=b.Head,sp=b.Spine2;
+ const b=offsets,ra=b.RightArm,la=b.LeftArm,rf=b.RightForeArm,lf=b.LeftForeArm,head=b.Head,sp=b.Spine2;
  const g=gesture||'',phoneGesture=GESTURE.phone.test(g),beat=Math.sin(t*3+d.phase);
  d.phone.visible=phoneGesture;
  if(phoneGesture){if(ra){ra.rotation.z-=.35;ra.rotation.x-=.35;}if(rf)rf.rotation.x-=1.15;if(head)head.rotation.x+=GESTURE.offer.test(g)?-.04:.18;if(g.includes('offer')&&ra)ra.rotation.x-=.3;}
@@ -49,5 +81,16 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  else if(GESTURE.wave.test(g)){if(ra){ra.rotation.z-=1.4;ra.rotation.x-=.25;}if(rf){rf.rotation.x-=.8;rf.rotation.z+=.12*beat;}}
  else if(GESTURE.mic.test(g)){if(ra)ra.rotation.x-=.45;if(rf)rf.rotation.x-=1.35;if(head)head.rotation.x-=.03;}
  else if(GESTURE.rest.test(g)){if(sp)sp.rotation.x+=.06;if(head)head.rotation.x+=.1;}
+
+ for(const layer of layers)layer.target.setFromEuler(layer.rotation);
+ if(phoneGesture)reachArm(root,'Right',[-.16,1.40,.34],[-.42,1.12,.18]);
+ else if(GESTURE.shrug.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.43,1.39,.28],[sign*.51,1.12,.08]);
+ else if(GESTURE.point.test(g))reachArm(root,'Right',[-.20,1.38,.46],[-.40,1.18,.21]);
+ else if(GESTURE.wave.test(g))reachArm(root,'Right',[-.40,1.69,.13+.035*beat],[-.52,1.43,.07]);
+ const blend=1-Math.exp(-10*dt);
+ for(const layer of layers){
+  layer.offset.slerp(layer.target,blend);
+  layer.bone.quaternion.multiply(layer.offset).normalize();
+ }
 
 }
