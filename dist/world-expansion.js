@@ -1,18 +1,20 @@
-import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=16';
-import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=16';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=16';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=16';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=17';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=17';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=17';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=17';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);
  const dynamicGroups={barricades:new T.Group(),arrivalFlags:new T.Group(),lamps:new T.Group(),clockHands:new T.Group()};
  for(const [id,g]of Object.entries(dynamicGroups)){g.name=`Expansion ${id}`;scene.add(g);}
- let pavement,plaster;scene.traverse(o=>{if(!o.isMesh||Array.isArray(o.material))return;const path=o.material.map?.image?.src||'';if(path.includes('cobblestone'))pavement??=o.material;if(path.includes('plastered'))plaster??=o.material;});
- const stone=plaster||mat('#ddd6c5'),pave=mat('#bdb8aa');
+ let pavement,plaster,asphalt,sandstone;scene.traverse(o=>{if(!o.isMesh||Array.isArray(o.material))return;const path=o.material.map?.image?.src||'';if(path.includes('cobblestone'))pavement??=o.material;if(path.includes('plastered'))plaster??=o.material;if(path.includes('asphalt'))asphalt??=o.material;if(path.includes('sandstone'))sandstone??=o.material;});
+ const stone=plaster?plaster.clone():mat('#ddd6c5'),pave=mat('#bdb8aa');stone.userData={...stone.userData,worldScale:2.7};const masonry=sandstone?sandstone.clone():mat('#b9aa8e');masonry.userData={...masonry.userData,worldScale:1.8};
  function ground(w,d,x,z,color){const m=color?mat(color):pave;const o=cube(w,.12,d,m,x,-.09,z,staticGroup);if(pavement&&!['#797e74','#8b936c'].includes(color)){o.material=pavement.clone();if(color)o.material.color.set(color);const map=pavement.map.clone();map.repeat.set(w/2.6,d/2.6);map.needsUpdate=true;o.material.map=map;o.material.normalMap=null;}return o;}
+ function road(w,d,x,z){const o=cube(w,.025,d,asphalt||mat('#686b62'),x,.01,z,staticGroup);if(asphalt){o.material=asphalt.clone();o.material.map=asphalt.map.clone();o.material.map.repeat.set(w/3.4,d/3.4);o.material.normalMap=null;}return o;}
  // Four adjoining ground strips avoid z-fighting with the original 125 x 150 plaza.
  ground(27.5,185,-76.25,7.5);ground(27.5,185,76.25,7.5);ground(125,10,0,-80);ground(125,25,0,87.5);
  ground(28,40,-64,12,'#b5b1a0');ground(27,37,64,-30,'#b3b5ad');ground(29,38,64,45,'#c6bdab');ground(51,29,-55,68,'#b9aa92');ground(45,17,0,-67,'#8b936c');
+ road(7.5,133.5,-60,-10.25);road(13,19,-56,66);road(7.5,133.5,60,-10.25);road(13,19,64,66);
  function label(text,x,z,w=8,bg='#284e45',y=3.2){const s=sign(text,w,.8,bg,'#fff2ce');s.material.side=T.FrontSide;s.position.set(x,y,z+.012);const back=s.clone();back.rotation.y=Math.PI;back.position.set(x,y,z-.012);staticGroup.add(s,back);obstacles.push({id:`expansion-sign:${text}`,x,z,w,d:.16,base:y-.4,h:y+.4,expansion:true});return s;}
  function pole(x,z,h=3.2){cylinder(.055,.075,h,'#475b50',x,h/2,z,staticGroup,8);obstacles.push({id:`expansion-pole:${x}:${z}`,x,z,w:.15,d:.15,h,expansion:true});}
  for(const d of DISTRICTS.filter(d=>['supply','press','court','backstreet','assembly'].includes(d.id))){const [x,z]=({supply:[-76,30],press:[74,-42],court:[76,58],backstreet:[-42,60],assembly:[0,-70]})[d.id];label(d.name.toUpperCase(),x,z,9);pole(x-4.5,z);pole(x+4.5,z);}
@@ -36,8 +38,12 @@ export function expandWorld(world){
  label('CIVIC LIAISON / PUBLIC WAITING',76,56,12,'#736046',4.2);
  for(const z of [37,51]){cube(3,.12,.7,'#8b7354',64,.65,z,staticGroup);for(const x of [63,65])cube(.12,.6,.6,'#4b584d',x,.3,z,staticGroup);}
  // Open shop doorways and detailed interiors use the exact same solid data as navigation.
- for(const solid of SHOP_SOLIDS){const bottom=solid.base||0;cube(solid.w,solid.h-bottom,solid.d,solid.id.endsWith('Counter')?'#917053':solid.id.endsWith('Shelf')?'#6a6a50':stone,solid.x,(solid.h+bottom)/2,solid.z,staticGroup);}
- for(const shop of SHOP_LAYOUT){const x=shop.x;ground(7.7,7.7,x,84,'#c5bdab');cube(7.3,.22,2.2,shop.color,x,3.6,79.1,staticGroup);label(shop.name,x,78.9,6.8,'#37554c',3.1);cube(1.6,1.3,.15,'#3f5555',x,5.2,79.88,staticGroup);
+ for(const solid of SHOP_SOLIDS){const bottom=solid.base||0;
+  if(solid.id.endsWith('Shelf')){for(const dx of [-solid.w/2,solid.w/2])cube(.06,solid.h,solid.d,'#78766a',solid.x+dx,solid.h/2,solid.z,staticGroup);cube(solid.w,solid.h,.05,'#817e6d',solid.x,solid.h/2,solid.z+.3,staticGroup);for(const y of [.12,.72,1.32,1.9])cube(solid.w,.055,solid.d,'#a7a18c',solid.x,y,solid.z,staticGroup);}
+  else if(solid.id.endsWith('Counter')){cube(solid.w,.075,solid.d,'#b7ae94',solid.x,solid.h-.037,solid.z,staticGroup);for(const dz of [-.85,.85]){cube(.95,.86,.055,'#806e55',solid.x,.45,solid.z+dz,staticGroup);cube(.9,.055,1.65,'#655c4a',solid.x,.08,solid.z,staticGroup);}for(const z of [solid.z-.55,solid.z+.55]){cube(.035,.7,.95,'#9c8766',solid.x-.49,.49,z,staticGroup);cube(.055,.08,.17,'#b4b3a4',solid.x-.52,.7,z,staticGroup);}}
+  else cube(solid.w,solid.h-bottom,solid.d,stone,solid.x,(solid.h+bottom)/2,solid.z,staticGroup);
+ }
+ for(const shop of SHOP_LAYOUT){const x=shop.x;const floor=ground(7.7,7.7,x,84,'#c5bdab');floor.material=masonry;floor.position.y=-.025;cube(7.3,.22,2.2,shop.color,x,3.6,79.1,staticGroup);label(shop.name,x,78.9,6.8,'#37554c',3.1);cube(1.6,1.3,.15,'#3f5555',x,5.2,79.88,staticGroup);
   // Recessed frontage, painted skirting and lintels break the slab into actual units.
   for(const dx of [-2.8,2.8]){cube(1.65,2.3,.08,shop.color,x+dx,1.3,80.15,staticGroup);for(let sl=0;sl<9;sl++)cube(1.55,.035,.1,'#555c52',x+dx,.35+sl*.23,80.2,staticGroup);}
   cube(7.55,.22,.12,'#817866',x,.14,87.8,staticGroup);
@@ -62,7 +68,7 @@ export function expandWorld(world){
  for(const shop of SHOP_LAYOUT){const x=shop.x;
   for(let i=0;i<12;i++)cube(.3,.035,1.9,shop.color,x-3.3+i*.6,3.42,78.6,staticGroup);
   // A side display leaves the central aisle and the counter approach clear.
-  furnished(shop.id+'-sidecase',.48,2.45,3.6,'#74644f',x-3.45,1.225,84.8);obstacles.push({id:'market-detail:'+shop.id+'-stock',x:x-3.07,z:84.8,w:.3,d:3.6,h:2.6,expansion:true});
+  obstacles.push({id:'market-detail:'+shop.id+'-sidecase',x:x-3.45,z:84.8,w:.48,d:3.6,h:2.45,expansion:true});cube(.045,2.45,3.6,'#6b6d60',x-3.67,1.225,84.8,staticGroup);for(const z of [83,86.6])cube(.48,2.45,.045,'#898474',x-3.45,1.225,z,staticGroup);for(const y of [.1,.8,1.5,2.4])cube(.48,.045,3.6,'#ada58e',x-3.45,y,84.8,staticGroup);obstacles.push({id:'market-detail:'+shop.id+'-stock',x:x-3.07,z:84.8,w:.3,d:3.6,h:2.6,expansion:true});
   for(let row=0;row<3;row++)for(let n=0;n<7;n++){
    const z=83.4+n*.43,y=.45+row*.7;
    if(shop.id==='kirana'||shop.id==='chai'){cylinder(.12,.12,.28,['#b6a16a','#a96342','#80937a'][n%3],x-3.13,y,z,staticGroup,8);cube(.035,.1,.15,'#e6d7b7',x-2.99,y,z,staticGroup);}
@@ -76,9 +82,17 @@ export function expandWorld(world){
   const tag={print:'XEROX • PRINT • LAMINATE',kirana:'COLD DRINKS / MRP ONLY',repair:'PUNCTURE / AIR / REPAIRS',chai:'ADRAK • ELAICHI • BISCUIT',charge:'CHARGING / REPAIR / CABLES'}[shop.id];
   label(tag,x,87.75,5.2,shop.color,2.8);
   if(shop.id==='print'){cube(.8,.52,.75,'#d3cfc0',x+2.4,1.27,85.3,staticGroup);cube(.65,.08,.42,'#535e58',x+2.4,1.57,85.3,staticGroup);for(let j=0;j<5;j++)cube(.8,.035,.55,'#ece3ce',x+2.4,1.05+j*.04,83.8,staticGroup);}
-  if(shop.id==='kirana'){furnished('kirana-cooler',1.05,1.9,1.1,'#748b83',x+2.95,.95,86.65);cube(.86,1.5,.025,'#364f50',x+2.95,1.1,86.08,staticGroup);for(let j=0;j<6;j++)cylinder(.055,.055,.25,['#b2884e','#7c9d80'][j%2],x+2.65+j*.12,.62,86.04,staticGroup,6);}
+  if(shop.id==='kirana'){const cx=x+2.95,cz=86.65;obstacles.push({id:'market-detail:kirana-cooler',x:cx,z:cz,w:1.05,d:1.1,h:1.9,expansion:true});for(const dx of [-.49,.49])cube(.065,1.9,1.1,'#b7c0b5',cx+dx,.95,cz,staticGroup);cube(.95,1.9,.07,'#bbc4b6',cx,.95,cz+.5,staticGroup);cube(1.05,.19,1.1,'#55776b',cx,1.805,cz,staticGroup);cube(1.05,.16,1.1,'#6e7e73',cx,.08,cz,staticGroup);for(const y of [.35,.82,1.29]){cube(.95,.035,.9,'#c3c9b6',cx,y,cz,staticGroup);for(let j=0;j<5;j++){cylinder(.065,.065,.26,['#b08245','#8da07a','#b7784c'][j%3],cx-.35+j*.17,y+.16,cz-.3,staticGroup,10);cylinder(.025,.025,.06,'#d5c898',cx-.35+j*.17,y+.32,cz-.3,staticGroup,8);}}cube(.045,.55,.06,'#b6b9a6',cx+.38,1.02,cz-.57,staticGroup);for(let k=0;k<6;k++)cube(.7,.012,.025,'#3f5549',cx,.035+k*.017,cz-.56,staticGroup);}
   if(shop.id==='chai'){furnished('chai-washing-basin',1.0,.95,1.1,'#999f94',x+2.9,.475,86.7);cube(.7,.045,.7,'#465f59',x+2.9,.96,86.7,staticGroup);cube(.05,.4,.05,'#aab6ae',x+3.2,1.14,86.9,staticGroup);}
   if(shop.id==='repair'){
+   // A full, correctly scaled repair cycle: spoke wheels, triangular tube
+   // frame, fork, saddle, crank and handlebars. It stays beside the entry aisle.
+   const bx=x-2.15,bz=81.55;
+   obstacles.push({id:'market-detail:repair-cycle',x:bx+.05,z:bz,w:2.1,d:.65,h:1.3,expansion:true});
+   function tube(a,b,r,color){const av=new T.Vector3(...a),bv=new T.Vector3(...b),v=bv.clone().sub(av),m=cylinder(r,r,Math.hypot(b[0]-a[0],b[1]-a[1],b[2]-a[2]),color,0,0,0,staticGroup,8);m.position.copy(av.add(bv).multiplyScalar(.5));m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),v.normalize());return m;}
+   const rear=[bx-.55,.37,bz],front=[bx+.65,.37,bz],crank=[bx-.05,.37,bz],saddle=[bx-.18,.94,bz],head=[bx+.48,.94,bz];
+   for(const wheel of [rear,front]){const tyre=new T.Mesh(new T.TorusGeometry(.34,.037,8,28),mat('#303b34'));tyre.position.set(...wheel);staticGroup.add(tyre);const rim=new T.Mesh(new T.TorusGeometry(.3,.012,6,28),mat('#b4b5a2'));rim.position.set(...wheel);staticGroup.add(rim);for(let n=0;n<12;n++){const a=n*Math.PI/6;tube(wheel,[wheel[0]+Math.cos(a)*.3,wheel[1]+Math.sin(a)*.3,bz],.004,'#adaf9d');}}
+   for(const [a,b]of[[rear,saddle],[rear,crank],[crank,saddle],[saddle,head],[head,crank],[head,front]])tube(a,b,.023,'#547b6c');tube(saddle,[saddle[0],1.05,bz],.018,'#a5ad9b');cube(.25,.055,.15,'#3c463b',saddle[0],1.08,bz,staticGroup);tube(head,[bx+.48,1.16,bz],.017,'#a5ad9b');tube([bx+.48,1.16,bz-.24],[bx+.48,1.16,bz+.24],.019,'#a5ad9b');tube([crank[0]-.1,.3,bz-.16],[crank[0]+.1,.44,bz+.16],.015,'#a5ad9b');cube(.14,.035,.1,'#4d584c',crank[0]-.1,.3,bz-.2,staticGroup);
    // Wheels hang on the sidecase, not as invisible obstacles in the walking aisle.
    for(const z of [83.4,85.1]){const tyre=new T.Mesh(new T.TorusGeometry(.48,.065,6,20),mat('#373d38'));tyre.rotation.y=Math.PI/2;tyre.position.set(x-3.12,2.05,z);staticGroup.add(tyre);for(let n=0;n<8;n++){const spoke=cube(.025,.88,.025,'#9b9d8d',x-3.12,2.05,z,staticGroup);spoke.rotation.x=n*Math.PI/8;}}
   }
@@ -131,4 +145,4 @@ export function expandWorld(world){
  }
  return {destinations:DESTINATIONS,districts:DISTRICTS,anchors:STORY_ANCHORS,connections:CONNECTION_ROUTES,dynamicGroups,update};
 }
-function consolidate(group){group.updateMatrixWorld(true);const batches=new Map();group.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone();g.applyMatrix4(o.matrixWorld);const arr=batches.get(o.material)||[];arr.push(g.index?g.toNonIndexed():g);batches.set(o.material,arr);});group.clear();for(const [material,geos]of batches){const geometry=mergeGeometries(geos,false);if(geometry){const mesh=new T.Mesh(geometry,material);mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}geos.forEach(g=>g.dispose());}}
+function consolidate(group){group.updateMatrixWorld(true);const batches=new Map();group.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone();g.applyMatrix4(o.matrixWorld);const scale=o.material.userData?.worldScale;if(scale){const p=g.attributes.position,n=g.attributes.normal,uv=new Float32Array(p.count*2);for(let i=0;i<p.count;i++){const ax=Math.abs(n.getX(i)),ay=Math.abs(n.getY(i)),az=Math.abs(n.getZ(i));uv[i*2]=(ay>=ax&&ay>=az?p.getX(i):ax>az?p.getZ(i):p.getX(i))/scale;uv[i*2+1]=(ay>=ax&&ay>=az?p.getZ(i):p.getY(i))/scale;}g.setAttribute('uv',new T.BufferAttribute(uv,2));}const arr=batches.get(o.material)||[];arr.push(g.index?g.toNonIndexed():g);batches.set(o.material,arr);});group.clear();for(const [material,geos]of batches){const geometry=mergeGeometries(geos,false);if(geometry){const mesh=new T.Mesh(geometry,material);mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}geos.forEach(g=>g.dispose());}}

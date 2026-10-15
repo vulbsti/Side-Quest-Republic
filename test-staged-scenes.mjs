@@ -13,3 +13,9 @@ let prepared=0,toasted=0,opened=0;const waiting=Object.create(DayClient.prototyp
 console.log('PASS: missing cast requests approach, keeps street active, and grants no reward');
 let commits=0;client.selected=e.id;client.sceneRun={encounterId:e.id,phase:'response',index:0,choiceId:e.choices[0].id};client.beatElapsed=0;client.commitChoice=(id,choice)=>{commits++;assert.ok(actWorld(state,id,choice).ok);client.sceneRun=null;};client.nextBeat();assert.equal(commits,0,'cannot skip the first response frame');client.beatElapsed=10;for(let i=0;i<e.choices[0].responseBeats.length-1;i++){client.nextBeat();assert.equal(commits,0,'intermediate response is not success');}client.nextBeat();assert.equal(commits,1);assert.equal(state.resolved[e.id].choiceId,e.choices[0].id);
 console.log('PASS: only final performed response commits the chosen world action');
+
+// Closing an open menu releases old cast targets, so prepare must happen afterwards.
+for (const method of ['follow','begin']) {
+ let target=null;const c=Object.create(DayClient.prototype);Object.assign(c,{opened:true,encounter:()=>e,available:()=>[e],distance:()=>0,location:()=>({x:3,z:4}),close(){target=null;this.opened=false;},hooks:{castReady:()=>false,prepare:()=>target=e.id,walk:()=>{},toast:()=>{}}});
+ c[method](e.id);assert.equal(target,e.id,method+' preserves approaching cast after menu dismissal');
+}

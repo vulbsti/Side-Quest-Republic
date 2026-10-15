@@ -1,0 +1,38 @@
+{
+  "state": "Frozen for root integration; no commit or deployment performed",
+  "installed": {
+    "clips": [
+      "dist/assets/audio/recorded-small-bell.mp3",
+      "dist/assets/audio/recorded-metal-tap.mp3"
+    ],
+    "manifest": "dist/assets/audio/recorded-manifest.json",
+    "cues": {
+      "bell": "small-bell",
+      "rim": "metal-tap"
+    },
+    "validation": "Manifest validator returned no issues; all paths exist; durations and SHA256 recorded; listening QA remains root responsibility"
+  },
+  "reel_candidates": {
+    "source": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+    "cuts": [
+      {
+        "path": "research/audio-candidate-photo-help.mp3",
+        "source_range_seconds": [
+          66.7,
+          70.6
+        ]
+      },
+      {
+        "path": "research/audio-candidate-good-people.mp3",
+        "source_range_seconds": [
+          76.8,
+          82.3
+        ]
+      }
+    ],
+    "metadata": "research/audio-reel-candidates-2026-10-16.json",
+    "state": "Machine suggestions for targeted listening only; no verified spoken words or delivery; no reel clips installed in game"
+  },
+  "remote": "uxserver temporary venv and fresh turbo model under /tmp/sqr-audio; no active inference remains",
+  "next_useful_move": "Listen to two targeted research cuts; confirm wording, clean boundaries and appropriate context; only then admit short reel cue if useful"
+}

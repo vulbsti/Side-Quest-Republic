@@ -1,0 +1,41 @@
+{
+  "sources": [
+    {
+      "id": "small-bell",
+      "kind": "cue",
+      "src": "assets/audio/recorded-small-bell.mp3",
+      "title": "bell1.wav",
+      "artist": "Tairblenn",
+      "sourceUrl": "https://freesound.org/people/Tairblenn/sounds/549898/",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "approvedForUse": true,
+      "durationSeconds": 2.45551,
+      "attribution": "bell1.wav \u2014 Tairblenn via Freesound; CC0 1.0.",
+      "sha256": "d653f19b00c8ba73d4bda34ac18335217ccd8c3079ce85a439d29dd1e44dcacb",
+      "modifications": "Unmodified public high-quality MP3 preview. Runtime gain and spatial panning may apply."
+    },
+    {
+      "id": "metal-tap",
+      "kind": "cue",
+      "src": "assets/audio/recorded-metal-tap.mp3",
+      "title": "Metal Tap",
+      "artist": "BenjaminNelan",
+      "sourceUrl": "https://freesound.org/people/BenjaminNelan/sounds/410363/",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "approvedForUse": true,
+      "durationSeconds": 0.261224,
+      "attribution": "Metal Tap \u2014 BenjaminNelan via Freesound; CC0 1.0.",
+      "sha256": "9441af7531aa8247641660f51f3e9fdbfaac96a50f73cbe5b25faa6eb87a03eb",
+      "modifications": "Unmodified public high-quality MP3 preview. Runtime gain and spatial panning may apply."
+    }
+  ],
+  "verification": "Primary-source CC0 statements verified; decoded MP3 streams and durations verified. Listening quality not assessed by this agent. Source descriptions are not listening claims.",
+  "rejected": [
+    {
+      "sourceUrl": "https://freesound.org/people/IENBA/sounds/653920/",
+      "reason": "Spanish indoor chatter is a poor match for Indian street; not installed"
+    }
+  ]
+}

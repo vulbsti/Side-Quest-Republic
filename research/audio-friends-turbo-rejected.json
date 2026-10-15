@@ -1,0 +1,171 @@
+{
+  "model": "mobiuslabsgmbh/faster-whisper-large-v3-turbo",
+  "runtime": "uxserver CUDA float16",
+  "machineDraft": true,
+  "audioHeard": false,
+  "segments": [
+    {
+      "start": 1.379999999999999,
+      "end": 28.42,
+      "text": " अरोग्णरी तब जरोगा, को चाना, क fertig कि बारूदी जस लोगां, जरोगानन चाना, क्या क्या है कि साथी कि अरोगry नứng एliुखn Clark",
+      "avg_logprob": -2.089198031955295,
+      "no_speech_prob": 0.0,
+      "words": [
+        {
+          "start": 1.379999999999999,
+          "end": 2.42,
+          "word": " अरोग्णरी",
+          "probability": 0.21941930597478693
+        },
+        {
+          "start": 2.42,
+          "end": 2.44,
+          "word": " तब",
+          "probability": 0.19377899169921875
+        },
+        {
+          "start": 2.44,
+          "end": 2.5,
+          "word": " जरोगा,",
+          "probability": 0.4253627232142857
+        },
+        {
+          "start": 2.58,
+          "end": 2.96,
+          "word": " को",
+          "probability": 0.106658935546875
+        },
+        {
+          "start": 2.96,
+          "end": 3.12,
+          "word": " चाना,",
+          "probability": 0.25816650390625
+        },
+        {
+          "start": 3.12,
+          "end": 5.06,
+          "word": " क",
+          "probability": 0.62158203125
+        },
+        {
+          "start": 5.06,
+          "end": 5.16,
+          "word": " fertig",
+          "probability": 2.0265579223632812e-06
+        },
+        {
+          "start": 5.16,
+          "end": 5.16,
+          "word": " कि",
+          "probability": 0.12957763671875
+        },
+        {
+          "start": 5.16,
+          "end": 5.16,
+          "word": " बारूदी",
+          "probability": 0.32866499159071183
+        },
+        {
+          "start": 5.16,
+          "end": 5.16,
+          "word": " जस",
+          "probability": 0.1803614298502604
+        },
+        {
+          "start": 5.16,
+          "end": 5.52,
+          "word": " लोगां,",
+          "probability": 0.33574131556919645
+        },
+        {
+          "start": 5.52,
+          "end": 6.64,
+          "word": " जरोगानन",
+          "probability": 0.48435041639539933
+        },
+        {
+          "start": 6.64,
+          "end": 7.16,
+          "word": " चाना,",
+          "probability": 0.49730224609375
+        },
+        {
+          "start": 7.46,
+          "end": 8.58,
+          "word": " क्या",
+          "probability": 0.47693634033203125
+        },
+        {
+          "start": 8.58,
+          "end": 8.58,
+          "word": " क्या",
+          "probability": 0.51416015625
+        },
+        {
+          "start": 8.58,
+          "end": 8.58,
+          "word": " है",
+          "probability": 0.34619140625
+        },
+        {
+          "start": 8.58,
+          "end": 14.02,
+          "word": " कि",
+          "probability": 0.220611572265625
+        },
+        {
+          "start": 14.02,
+          "end": 14.78,
+          "word": " साथी",
+          "probability": 0.2178314208984375
+        },
+        {
+          "start": 14.78,
+          "end": 15.8,
+          "word": " कि",
+          "probability": 0.28631591796875
+        },
+        {
+          "start": 15.8,
+          "end": 26.68,
+          "word": " अरोगry",
+          "probability": 0.5305708050727844
+        },
+        {
+          "start": 26.68,
+          "end": 28.02,
+          "word": " नứng",
+          "probability": 0.15617928902308145
+        },
+        {
+          "start": 28.02,
+          "end": 28.42,
+          "word": " एliुखn",
+          "probability": 0.13462764024734497
+        },
+        {
+          "start": 28.42,
+          "end": 28.42,
+          "word": " Clark",
+          "probability": 1.1682510375976562e-05
+        }
+      ]
+    },
+    {
+      "start": 28.42,
+      "end": 30.0,
+      "text": " झाल",
+      "avg_logprob": -0.49972098214285715,
+      "no_speech_prob": 0.0,
+      "words": [
+        {
+          "start": 28.42,
+          "end": 30.0,
+          "word": " झाल",
+          "probability": 0.67742919921875
+        }
+      ]
+    }
+  ],
+  "seconds": 4.563634321995778
+}

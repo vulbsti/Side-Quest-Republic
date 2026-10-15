@@ -1,5 +1,5 @@
-import {THREE as T,cube,cylinder,sign} from './world.js?v=16';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=16';
+import {THREE as T,cube,cylinder,sign} from './world.js?v=17';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=17';
 
 /** Original short-wheelbase city shuttle. Metres; +Z is the front.
  * Body and open door stay inside the 2.5 x 8.5 m physical envelope.
@@ -53,10 +53,10 @@ export function buildShuttleModel(bus){
  for(const z of [2.35,3.05]){cube(.075,1.98,.66,black,1.2,1.78,z,door);cube(.085,1.08,.54,glass,1.205,2.02,z,door);cube(.09,.48,.54,paint,1.205,1.15,z,door);}
  cube(.42,.12,1.3,black,1.02,.53,2.7,fixed);cube(.3,.05,1.2,'#c2b45f',1.1,.61,2.7,fixed);
  const wheels=[];for(const x of [-1.08,1.08])for(const z of [-2.75,1.3]){const w=new T.Group();w.position.set(x,.49,z);g.add(w);const tire=cylinder(.49,.49,.23,rubber,0,0,0,w,32);tire.rotation.z=Math.PI/2;for(const side of [-1,1]){const hub=cylinder(.25,.25,.025,steel,side*.125,0,0,w,24);hub.rotation.z=Math.PI/2;for(let i=0;i<8;i++){const a=i*Math.PI/4;const bolt=cylinder(.025,.025,.028,black,side*.145,Math.cos(a)*.17,Math.sin(a)*.17,w,8);bolt.rotation.z=Math.PI/2;}}wheels.push(w);}
- for(const seat of bus.seats){box(.61,.14,.61,seatMat,seat.x,1.14,seat.z);box(.61,.65,.14,seatMat,seat.x,1.48,seat.z-.25);for(const x of [-.2,.2])cylinder(.025,.025,.32,steel,seat.x+x,.93,seat.z,fixed,8);}
- for(const z of [-2,0,2])cylinder(.023,.023,1.9,'#cbb361',-.34,1.76,z,fixed,10);
- const rail=cylinder(.023,.023,6.2,'#cbb361',-.34,2.68,0,fixed,10);rail.rotation.x=Math.PI/2;
- for(const z of [-2.7,-1.6,-.5,.6,1.6]){const strap=new T.Mesh(new T.TorusGeometry(.075,.015,6,12),black);strap.position.set(-.34,2.45,z);fixed.add(strap);}
+ for(const seat of bus.seats){box(.53,.14,.61,seatMat,seat.x,1.14,seat.z);box(.53,.65,.14,seatMat,seat.x,1.48,seat.z-.25);for(const x of [-.2,.2])cylinder(.025,.025,.32,steel,seat.x+x,.93,seat.z,fixed,8);}
+ for(const z of [-2,0,2])cylinder(.023,.023,1.9,'#cbb361',-.43,1.76,z,fixed,10);
+ const rail=cylinder(.023,.023,6.2,'#cbb361',-.43,2.68,0,fixed,10);rail.rotation.x=Math.PI/2;
+ for(const z of [-2.7,-1.6,-.5,.6,1.6]){const strap=new T.Mesh(new T.TorusGeometry(.075,.015,6,12),black);strap.position.set(-.43,2.45,z);fixed.add(strap);}
  box(.55,.16,.58,seatMat,-.65,1.13,3.35);box(.55,.7,.12,seatMat,-.65,1.49,3.1);
  box(1.5,.32,.5,black,-.18,1.45,3.83);const steering=new T.Mesh(new T.TorusGeometry(.2,.024,8,24),black);steering.rotation.x=-.65;steering.position.set(-.65,1.72,3.68);fixed.add(steering);
  for(const z of [-2.3,1.1])cube(.9,.035,.14,new T.MeshStandardMaterial({color:'#ebead9',emissive:'#ebe0a3',emissiveIntensity:.25}),0,2.7,z,fixed);

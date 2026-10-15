@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
+import {Vector3} from './dist/vendor/three.module.js';
 import {findPath,overlapsXZ,Simulation,nearestFreePoint} from './dist/simulation.js';
 import {DAY_ENCOUNTERS} from './dist/day-content.js';
 import {DISTRICTS,STORY_ANCHORS,EXPANSION_SOLIDS} from './dist/districts.js';
@@ -21,6 +22,7 @@ const coreObstacleCount=world.obstacles.length;
 const expansionSource=await fs.readFile(new URL('./dist/world-expansion.js',import.meta.url),'utf8');
 const expansionData=await import('./dist/destinations.js');
 Object.assign(context,expansionData,{T:node(),DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES:[],EXPANSION_SOLIDS,consolidate:()=>{}});
+context.T.Vector3=Vector3; // actual vector math for detailed tube/frame geometry
 const expansionStart=expansionSource.indexOf('export function expandWorld('),expansionEnd=expansionSource.indexOf('\nfunction consolidate(',expansionStart);
 vm.runInContext(expansionSource.slice(expansionStart,expansionEnd).replace('export function','function')+'\nthis.expand=expandWorld;',context);
 world.camera.far=300;context.expand(world);

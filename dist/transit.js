@@ -42,8 +42,14 @@ export function chooseSeat(state,seatId){const p=state.player,b=state.buses.find
 }
 export function moveInCabin(state,dx,dz){const p=state.player;if(p.mode!=='standing'||!finite(dx)||!finite(dz))return {ok:false,reason:'Stand before moving'};
  const length=Math.hypot(dx,dz),scale=length>.35?.35/length:1;
- // Aisle is reserved for walking; seats are approached with chooseSeat.
- p.local.x=clamp(p.local.x+dx*scale,-.28,.28);p.local.z=clamp(p.local.z+dz*scale,-3.35,3.35);return {ok:true,local:clone(p.local)};
+ const bus=state.buses.find(b=>b.id===p.busId),radius=.36;
+ // Match rendered seat cushions/backrests and the driver's seat. Walk through
+ // the aisle, never through occupied or empty seating furniture.
+ const furniture=[...(bus?.seats||[]).flatMap(s=>[{x:s.x,z:s.z,w:.53,d:.61},{x:s.x,z:s.z-.25,w:.53,d:.14}]),{x:-.65,z:3.35,w:.55,d:.58}];
+ const penetration=point=>furniture.reduce((sum,o)=>sum+Math.max(0,radius-Math.hypot(point.x-clamp(point.x,o.x-o.w/2,o.x+o.w/2),point.z-clamp(point.z,o.z-o.d/2,o.z+o.d/2))),0);
+ const steps=Math.max(1,Math.ceil(length*scale/.08));
+ for(let i=0;i<steps;i++)for(const axis of ['x','z']){const next={...p.local};next[axis]=clamp(next[axis]+(axis==='x'?dx:dz)*scale/steps,axis==='x'?-.66:-3.35,axis==='x'?.66:3.2);const overlap=penetration(next);if(overlap<.00001||overlap<penetration(p.local)-.00001)p.local=next;}
+ return {ok:true,local:clone(p.local)};
 }
 export function requestDeparture(state,busId){const b=state.buses.find(b=>b.id===busId);if(!b)return {ok:false,reason:'Unknown bus'};
  if(b.recovery)return {ok:false,reason:'Driver is checking the blocked road. You can exit at the door.'};if(b.status!=='stopped')return {ok:false,reason:'Already moving'};if(state.player.busId===busId&&state.player.mode==='boarding')return {ok:false,reason:'Passenger boarding'};

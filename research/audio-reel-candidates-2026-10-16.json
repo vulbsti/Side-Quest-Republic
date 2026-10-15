@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-16",
+  "method": "Fresh large-v3-turbo model on authorized uxserver RTX2070 CUDAfloat16; stdlib16kmonoWAV→numpy bypassed PyAV19 incompatibility; beam3/noVAD/wordtimestamps",
+  "runtime_result": "Completed both sources in bounded180s invocation. Friends transcript rejected; question transcript has coherent islands surrounded by severe ASR errors.",
+  "audio_heard": false,
+  "candidates": [
+    {
+      "path": "research/audio-candidate-photo-help.mp3",
+      "sourceUrl": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "source_window_seconds": [
+        66.7,
+        70.6
+      ],
+      "asr_window_seconds": [
+        66.92,
+        70.28
+      ],
+      "machine_hypothesis": "अगर मैंने उनके फोटो निकाल तो आप मेरी मदद करेंगे ना उनको पकड़वाने में",
+      "avg_logprob": -0.19,
+      "meaning_hypothesis": "Asks the officers to help identify someone from photographs",
+      "delivery_verified": false,
+      "potential_cue": "Polite request for help after collecting evidence; requires listening and context check before game admission"
+    },
+    {
+      "path": "research/audio-candidate-good-people.mp3",
+      "sourceUrl": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "source_window_seconds": [
+        76.8,
+        82.3
+      ],
+      "asr_window_seconds": [
+        77,
+        82
+      ],
+      "machine_hypothesis_short": "आप तो अच्छे लोग लग रहे हैं",
+      "avg_logprob": -0.28,
+      "meaning_hypothesis": "Polite compliment followed by discussion of being struck",
+      "delivery_verified": false,
+      "potential_cue": "An uncertain social approach to an authority figure; full context must be reviewed"
+    }
+  ],
+  "admission": "Candidate cuts remain in research only. No reel voice mapping installed without listening verification. Original recording owner/third-party soundtrack ownership not established."
+}

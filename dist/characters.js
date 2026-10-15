@@ -1,6 +1,6 @@
-import {animationInterval} from './frame-clock.js?v=16';
+import {animationInterval} from './frame-clock.js?v=17';
 import * as THREE from 'three';
-import {GLTFLoader} from './vendor/GLTFLoader.js?v=16';
+import {GLTFLoader} from './vendor/GLTFLoader.js?v=17';
 const GESTURE={phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
 const models={}, loader=new GLTFLoader();let pending,serial=0;
 /** Loads three textured, skinned MakeHuman characters. Call before makeCharacter. */
@@ -27,8 +27,9 @@ export function makeCharacter({color='#a58d72',pants,skin,police=false,backpack=
 }
 // Solve in world space: these GLBs use +Y down each limb, with rotated
 // shoulder frames. Global-looking Euler X offsets do not mean elbow flexion.
-function reachArm(root,side,handTarget,poleTarget){
- const d=root.userData,b=d.bones,upper=b[side+'Arm'],lower=b[side+'ForeArm'],hand=b[side+'Hand'];if(!upper||!lower||!hand)return;
+function reachArm(root,side,handTarget,poleTarget){return reachLimb(root,side+'Arm',side+'ForeArm',side+'Hand',handTarget,poleTarget);}
+function reachLimb(root,upperName,lowerName,endName,handTarget,poleTarget){
+ const d=root.userData,b=d.bones,upper=b[upperName],lower=b[lowerName],hand=b[endName];if(!upper||!lower||!hand)return;
  root.updateMatrixWorld(true);
  const shoulder=upper.getWorldPosition(new THREE.Vector3()),elbow=lower.getWorldPosition(new THREE.Vector3()),wrist=hand.getWorldPosition(new THREE.Vector3());
  const target=root.localToWorld(new THREE.Vector3(...handTarget)),pole=root.localToWorld(new THREE.Vector3(...poleTarget));
@@ -43,13 +44,21 @@ function reachArm(root,side,handTarget,poleTarget){
   bone.quaternion.copy(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(world));bone.updateMatrixWorld(true);
  }
  aim(upper,lower,desiredElbow);aim(lower,hand,desiredWrist);
- d.poseOffsets[side+'Arm'].target.copy(upperBase).invert().multiply(upper.quaternion).normalize();
- d.poseOffsets[side+'ForeArm'].target.copy(lowerBase).invert().multiply(lower.quaternion).normalize();
+ d.poseOffsets[upperName].target.copy(upperBase).invert().multiply(upper.quaternion).normalize();
+ d.poseOffsets[lowerName].target.copy(lowerBase).invert().multiply(lower.quaternion).normalize();
  upper.quaternion.copy(upperBase);lower.quaternion.copy(lowerBase);root.updateMatrixWorld(true);
 }
+// Item geometry origins are intentionally below their visible centres.
+export const CARRY_POSES=Object.freeze({
+ water:{position:[0,.97,.38],hands:[[.35,1.18,.38],[-.35,1.18,.38]]},
+ speaker:{position:[0,.59,.36],hands:[[.395,1.18,.36],[-.395,1.18,.36]]},
+ phone:{position:[-.18,1.17,.38],hands:[null,[-.18,1.27,.38]]},
+ key:{position:[-.18,.94,.40],hands:[null,[-.18,1.14,.40]]}
+});
+function aimChild(root,bone,child,direction){if(!bone||!child)return;root.updateMatrixWorld(true);const from=child.getWorldPosition(new THREE.Vector3()).sub(bone.getWorldPosition(new THREE.Vector3())).normalize(),to=new THREE.Vector3(...direction).transformDirection(root.matrixWorld);const world=bone.getWorldQuaternion(new THREE.Quaternion()).premultiply(new THREE.Quaternion().setFromUnitVectors(from,to));bone.quaternion.copy(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(world));root.updateMatrixWorld(true);}
 export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=false,vy=0,turn=0,talking=false,seated=false,distance=0,visible=true,important=false,gesture=''}={}){
- const d=root.userData;if(!d?.mixer)return;const elapsed=d.lastTime===null?1/60:Math.max(0,t-d.lastTime);if(d.lastTime!==null&&elapsed<animationInterval(distance,visible,important)&&d.wasSeated===seated&&d.lastGesture===gesture)return;const dt=Math.min(.25,elapsed);d.lastTime=t;d.wasSeated=seated;d.lastGesture=gesture;
- let target=airborne?'Jump':pose&&!gesture?'Wave':carry?'Carry':speed>2.8?'Run':speed>.12?'Walk':'Idle';if(!d.actions[target])target='Idle';
+ const d=root.userData;if(!d?.mixer)return;const elapsed=d.lastTime===null?1/60:Math.max(0,t-d.lastTime);if(d.lastTime!==null&&elapsed<animationInterval(distance,visible,important)&&d.wasSeated===seated&&d.lastGesture===gesture&&d.wasCarry===carry)return;const dt=Math.min(.25,elapsed);d.lastTime=t;d.wasSeated=seated;d.wasCarry=carry;d.lastGesture=gesture;
+ let target=seated?'Idle':airborne?'Jump':pose&&!gesture?'Wave':carry&&speed>.12?'Carry':speed>2.8?'Run':speed>.12?'Walk':'Idle';if(!d.actions[target])target='Idle';
  d.gaitPhase=(d.gaitPhase+dt*(speed>.12?speed/(speed>2.8?2.6:1.25):0))%1;
  for(const [name,a] of (d.actionEntries??=Object.entries(d.actions))){const w=name===target?1:0;a.setEffectiveWeight(THREE.MathUtils.damp(a.getEffectiveWeight(),w,12,dt));if(['Walk','Run','Carry'].includes(name)){a.time=d.gaitPhase*a.getClip().duration;a.setEffectiveTimeScale(0);}else a.setEffectiveTimeScale(1);}
 
@@ -63,7 +72,7 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  const offsets=d.poseOffsets??=Object.fromEntries(layers.map(layer=>[layer.key,layer]));
  for(const layer of layers)layer.rotation.set(0,0,0);
  const posedHead=offsets.Head;
- if(seated){for(const k of ['LeftUpLeg','RightUpLeg'])if(d.bones[k])d.bones[k].rotation.x=-1.4;for(const k of ['LeftLeg','RightLeg'])if(d.bones[k])d.bones[k].rotation.x=1.3;d.body.position.y=d.baseY-.38;}else d.body.position.y=d.baseY;
+ d.body.position.y=d.baseY;root.updateMatrixWorld(true);if(seated){const hip=root.worldToLocal(d.bones.LeftUpLeg.getWorldPosition(new THREE.Vector3()));d.body.position.y+=.52-hip.y;root.updateMatrixWorld(true);}
  // Small conversational head motion is layered after the recorded skeletal pose.
  if(talking&&posedHead)posedHead.rotation.x+=Math.sin(t*3+d.phase)*.035;
  if(offsets.Spine2)offsets.Spine2.rotation.z+=THREE.MathUtils.clamp(turn,-1,1)*.07;
@@ -87,10 +96,14 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  else if(GESTURE.shrug.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.43,1.39,.28],[sign*.51,1.12,.08]);
  else if(GESTURE.point.test(g))reachArm(root,'Right',[-.20,1.38,.46],[-.40,1.18,.21]);
  else if(GESTURE.wave.test(g))reachArm(root,'Right',[-.40,1.69,.13+.035*beat],[-.52,1.43,.07]);
+ if(seated){for(const [side,sign]of [['Left',1],['Right',-1]]){reachLimb(root,side+'UpLeg',side+'Leg',side+'Foot',[sign*.16,.11,.43],[sign*.16,.51,.65]);if(!gesture&&!carry)reachArm(root,side,[sign*.19,.68,.29],[sign*.30,.79,.10]);}}
+ const carryPose=carry?CARRY_POSES[typeof carry==='string'?carry:'water']:null;
+ if(carryPose)for(const [index,side,sign]of [[0,'Left',1],[1,'Right',-1]])if(carryPose.hands[index])reachArm(root,side,carryPose.hands[index],[sign*.42,1.03,.12]);
  const blend=1-Math.exp(-10*dt);
  for(const layer of layers){
-  layer.offset.slerp(layer.target,blend);
+  layer.offset.slerp(layer.target,seated&&/UpLeg|^LeftLeg$|^RightLeg$/.test(layer.key)?1:blend);
   layer.bone.quaternion.multiply(layer.offset).normalize();
  }
-
+ if(seated)for(const side of ['Left','Right'])aimChild(root,d.bones[side+'Foot'],d.bones[side+'ToeBase'],[0,-.035,.15]);
+ if(carryPose)for(const [index,side]of [[0,'Left'],[1,'Right']])if(carryPose.hands[index]){aimChild(root,d.bones[side+'Hand'],d.bones[side+'HandMiddle1'],[0,-.12,1]);for(const finger of ['Index','Middle','Ring','Pinky'])for(let j=1;j<=3;j++){const bone=d.bones[side+'Hand'+finger+j];if(!bone)continue;const axis=new THREE.Vector3(1,0,0).transformDirection(root.matrixWorld).applyQuaternion(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert());bone.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(axis,j===1?.22:.48));bone.updateMatrixWorld(true);}}
 }

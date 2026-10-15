@@ -1,0 +1,31 @@
+{
+  "milestone": "v17 physical interactions and story lifecycle",
+  "base_commit": "69bd70c49d8fec8f6aecd83da877b98aa1e1b21f",
+  "quality_pass": false,
+  "changes": [
+    "World-space seated legs and item-specific carry grips integrated in pickup and restore",
+    "Cabin seat collisions and physically traversable aisle",
+    "Cast prepare-after-close and expired/abandoned reservation release",
+    "Physical arrival/locality receipts gate help calming verification and duty effects",
+    "Detailed market fixtures, bicycle and surface texture scale",
+    "Existing CC0 bell and metal tap recordings; synthetic speech removed",
+    "Performed actors turn toward speaker and player speech gestures animate"
+  ],
+  "verified": [
+    "Actual female/male/officer GLB pose regressions",
+    "All six available bus seats and return to door with swept collision",
+    "Cast lifecycle and staged consequence tests",
+    "Physical receipt freshness/locality/restore tests",
+    "Recorded audio manifest and no synthetic fallback tests",
+    "Full baseline suite run: single obsolete presentation-enabled assertion corrected and rerun passed",
+    "Local browser: fresh start, opening banter, walk to CP, assembled cast and tuition scene response started"
+  ],
+  "remaining": [
+    "Full final-revision natural playthrough and audible review",
+    "Photorealism target unmet; procedural assets remain visible",
+    "Reel speech candidates require listening verification and provenance before admission",
+    "Crowd arrivals still pop in; physical crowd dispersal not implemented",
+    "Full narrative immersion and cinematic framing not certified"
+  ],
+  "research_note": "ASR output is explicitly draft or rejected, not verified quotation. Listening cuts are local ignored research files."
+}
