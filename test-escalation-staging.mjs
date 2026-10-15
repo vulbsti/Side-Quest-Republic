@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {stageEscalation,cohortFor} from './dist/escalation-staging.js';
+import {stageEscalation,cohortFor,CROWD_CAPACITY} from './dist/escalation-staging.js';
 import {deriveEscalation} from './dist/escalation-director.js';
 import {createLivingWorld} from './dist/living-world.js';
 import {DAY_ACTORS,DAY_DISTRICTS,DAY_ENCOUNTERS} from './dist/day-content.js';
@@ -8,8 +8,8 @@ import {CrowdFlow,CROWD_GATEWAYS} from './dist/crowd-flow.js';
 import {findPath,nearestFreePoint,steer,dist,overlapsXZ} from './dist/simulation.js';
 import {DISTRICTS} from './dist/districts.js';
 import {testedWorldObstacles as obstacles} from './test-world-routes.mjs';
-const bodies=()=>Array.from({length:30},(_,i)=>({id:`arrival${i}`,dayArrival:true,hidden:true,x:0,z:0,y:0,radius:.36,height:1.8}));
-assert.deepEqual([0,17,18,21,22,27,28,29].map(cohortFor),['assembly','assembly','volunteers','volunteers','police','police','fictional-forum','fictional-forum']);
+const bodies=()=>Array.from({length:CROWD_CAPACITY},(_,i)=>({id:`arrival${i}`,dayArrival:true,hidden:true,x:0,z:0,y:0,radius:.36,height:1.8}));
+assert.deepEqual([0,35,36,43,44,55,56,59].map(cohortFor),['assembly','assembly','volunteers','volunteers','police','police','fictional-forum','fictional-forum']);
 const world=createLivingWorld(15426,{actors:DAY_ACTORS,districts:DAY_DISTRICTS,encounters:DAY_ENCOUNTERS});
 for(const d of DISTRICTS)world.districts[d.id]??={name:d.name,tension:5,density:5,access:100,supplies:50,solidarity:50};
 const failures=[],journeys=new Set();let walked=0;
@@ -22,8 +22,8 @@ for(const time of [0,210,450,730,1050]){
   for(const d of Object.values(world.districts))Object.assign(d,{tension:5,density:5,access:100});
   Object.assign(world.districts[hotspot],{tension:85,density:85,access:40});
   const plan=deriveEscalation(world),pool=bodies(),staging=stageEscalation(plan,pool);
-  assert(staging.desiredCount<=30&&staging.desiredCount>=0);
-  assert.equal(staging.allowed.filter(id=>cohortFor(Number(id.replace('arrival','')))==='police').length,Math.min(6,plan.police.reinforcements));
+  assert(staging.desiredCount<=CROWD_CAPACITY&&staging.desiredCount>=0);
+  assert.equal(staging.allowed.filter(id=>cohortFor(Number(id.replace('arrival','')))==='police').length,Math.min(12,plan.police.reinforcements));
   if(time<210)assert(!staging.allowed.some(id=>cohortFor(Number(id.replace('arrival','')))==='police'),'reinforcements must not pre-spawn');
   const forum=plan.groups.find(g=>g.id==='fictional-forum');assert.equal(forum.identityVisible,false);
   for(const [id,order] of Object.entries(staging.directives)){

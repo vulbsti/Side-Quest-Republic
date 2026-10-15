@@ -1,4 +1,4 @@
-import {DISTRICTS} from './districts.js?v=22';
+import {DISTRICTS} from './districts.js?v=23';
 /** Spatial dramatic direction, not a second physics engine.
  * Pure deriveEscalation(world, previous?) consumes actual living-world event receipts.
  * Persist the returned object with the save. `groups` are desired destinations and

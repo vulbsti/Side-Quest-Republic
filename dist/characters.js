@@ -1,7 +1,7 @@
-import {animationInterval} from './frame-clock.js?v=22';
+import {animationInterval} from './frame-clock.js?v=23';
 import * as THREE from 'three';
-import {GLTFLoader} from './vendor/GLTFLoader.js?v=22';
-const GESTURE={push:/push|shove/,phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
+import {GLTFLoader} from './vendor/GLTFLoader.js?v=23';
+const GESTURE={charge:/lathi-charge|baton-warning/,push:/push|shove/,phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
 const models={}, loader=new GLTFLoader();let pending,serial=0;
 /** Loads three textured, skinned MakeHuman characters. Call before makeCharacter. */
 export function loadCharacters(onProgress=()=>{}){return pending??=Promise.all(['male','female','officer'].map(async(name)=>{models[name]=await loader.loadAsync(new URL(`./assets/humans/${name}.glb`,import.meta.url).href);onProgress(name);return name;}));}
@@ -15,6 +15,7 @@ export function makeCharacter({color='#a58d72',pants,skin,police=false,backpack=
  body.traverse(o=>{if(o.isBone)bones[o.name.replace(/mixamorig:?/,'')]=o;if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;o.material=o.material.clone();const m=o.material,n=m.name.toLowerCase();m.roughness=Math.max(.65,m.roughness??.8);if(n.includes('eyebrow')||n.includes('short02')||n.includes('ponytail')){m.transparent=false;m.alphaTest=.45;m.side=THREE.DoubleSide;m.depthWrite=true;}else{m.transparent=false;m.alphaTest=0;m.depthWrite=true;}if(n.includes('body'))m.color.multiply(new THREE.Color(skin||'#d8b79b'));if(n.includes('civilianclothing'))garmentTint(m,color);if(n.includes('shoes')&&police)m.color.set('#35332c');}});
  const mixer=new THREE.AnimationMixer(body),actions={},animationPhase=Math.random();for(const clip of source.animations){const name=clip.name.split('.')[0];actions[name]=mixer.clipAction(clip).setEffectiveWeight(name==='Idle'?1:0).play();actions[name].time=animationPhase*clip.duration;}
  const phone=new THREE.Mesh(new THREE.BoxGeometry(.068,.13,.009),new THREE.MeshStandardMaterial({color:'#152024',roughness:.32}));phone.visible=false;phone.castShadow=true;if(bones.RightHand){bones.RightHand.add(phone);phone.position.set(0,.055,0);}else root.add(phone);
+ let baton=null;if(police){baton=accessory(root,bones.RightHand,new THREE.CylinderGeometry(.018,.024,.78,10),new THREE.MeshStandardMaterial({color:'#79552e',roughness:.8}),[-.43,.80,.07]);baton.visible=false;}
  const khaki=new THREE.MeshStandardMaterial({color:'#8f7954',roughness:.85});
  if(police||hat){const y=kind==='female'?1.69:1.80;accessory(root,bones.Head,new THREE.CylinderGeometry(.103,.115,.065,20),khaki,[0,y-.005,0],[1,1,1.12]);accessory(root,bones.Head,new THREE.SphereGeometry(.11,16,8),khaki,[0,y-.035,.09],[1,.13,.8]);}
  if(backpack){const pack=new THREE.MeshStandardMaterial({color:'#37494a',roughness:.92});accessory(root,bones.Spine2,roundedPack(),pack,[0,1.27,-.17]);}
@@ -23,7 +24,7 @@ export function makeCharacter({color='#a58d72',pants,skin,police=false,backpack=
  // sphere would be transformed twice. Refresh is unnecessary for in-place clips.
  body.updateMatrixWorld(true);
  body.traverse(o=>{if(!o.isMesh)return;if(o.isSkinnedMesh){o.computeBoundingSphere();if(o.boundingSphere){o.boundingSphere.radius=Math.max(o.boundingSphere.radius*1.65,o.boundingSphere.radius+1.4/scale);o.frustumCulled=true;}}else{o.geometry.computeBoundingSphere();o.frustumCulled=true;}});
- root.userData={phone,body,baseY:body.position.y,head:bones.Head,bones,mixer,actions,lastTime:null,phase:Math.random()*6,kind,animation:'Idle',gaitPhase:animationPhase,isSkinnedHuman:true};return root;
+ root.userData={phone,baton,body,baseY:body.position.y,head:bones.Head,bones,mixer,actions,lastTime:null,phase:Math.random()*6,kind,animation:'Idle',gaitPhase:animationPhase,isSkinnedHuman:true};return root;
 }
 // Solve in world space: these GLBs use +Y down each limb, with rotated
 // shoulder frames. Global-looking Euler X offsets do not mean elbow flexion.
@@ -80,7 +81,7 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  // Arms are in the MakeHuman/Mixamo local convention. Do not alter pelvis/legs.
  const b=offsets,ra=b.RightArm,la=b.LeftArm,rf=b.RightForeArm,lf=b.LeftForeArm,head=b.Head,sp=b.Spine2;
  const g=gesture||'',phoneGesture=GESTURE.phone.test(g),beat=Math.sin(t*3+d.phase);
- d.phone.visible=phoneGesture;
+ d.phone.visible=phoneGesture;if(d.baton)d.baton.visible=GESTURE.charge.test(g);
  if(phoneGesture){if(ra){ra.rotation.z-=.35;ra.rotation.x-=.35;}if(rf)rf.rotation.x-=1.15;if(head)head.rotation.x+=GESTURE.offer.test(g)?-.04:.18;if(g.includes('offer')&&ra)ra.rotation.x-=.3;}
  else if(GESTURE.shrug.test(g)){if(ra)ra.rotation.z-=.35;if(la)la.rotation.z+=.35;if(rf)rf.rotation.x-=.7;if(lf)lf.rotation.x-=.7;if(head)head.rotation.z+=.07;}
  else if(GESTURE.point.test(g)){if(ra){ra.rotation.x-=1.05;ra.rotation.z-=.2;}if(rf)rf.rotation.x-=.15;if(head)head.rotation.y-=.12;}
@@ -92,7 +93,8 @@ export function animateCharacter(root,speed,t,{carry=false,pose=false,airborne=f
  else if(GESTURE.rest.test(g)){if(sp)sp.rotation.x+=.06;if(head)head.rotation.x+=.1;}
 
  for(const layer of layers)layer.target.setFromEuler(layer.rotation);
- if(GESTURE.push.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.22,1.38,.46],[sign*.38,1.07,.20]);
+ if(GESTURE.charge.test(g)){const swing=(1+Math.sin(t*5+d.phase))*.5;reachArm(root,'Right',[-.32,1.49+swing*.13,.20+swing*.16],[-.48,1.29,.10]);reachArm(root,'Left',[.25,1.25,.28],[.43,1.10,.08]);}
+ else if(GESTURE.push.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.22,1.38,.46],[sign*.38,1.07,.20]);
  else if(phoneGesture)reachArm(root,'Right',[-.16,1.40,.34],[-.42,1.12,.18]);
  else if(GESTURE.shrug.test(g))for(const [side,sign]of [['Right',-1],['Left',1]])reachArm(root,side,[sign*.43,1.39,.28],[sign*.51,1.12,.08]);
  else if(GESTURE.point.test(g))reachArm(root,'Right',[-.20,1.38,.46],[-.40,1.18,.21]);
