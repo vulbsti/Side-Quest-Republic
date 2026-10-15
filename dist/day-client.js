@@ -1,6 +1,6 @@
-import {createLivingWorld,advanceWorld,actWorld,getAvailableEncounters,inspectActor,summarizeWorld,validateWorld,recordWorldAction,restoreWorld} from './living-world.js?v=17';
-import {DAY_ENCOUNTERS,DAY_ACTORS,DAY_DISTRICTS} from './day-content.js?v=17';
-import {DISTRICTS,WORLD_BOUNDS} from './districts.js?v=17';
+import {createLivingWorld,advanceWorld,actWorld,getAvailableEncounters,inspectActor,summarizeWorld,validateWorld,recordWorldAction,restoreWorld} from './living-world.js?v=18';
+import {DAY_ENCOUNTERS,DAY_ACTORS,DAY_DISTRICTS} from './day-content.js?v=18';
+import {DISTRICTS,WORLD_BOUNDS} from './districts.js?v=18';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const CONTENT={encounters:DAY_ENCOUNTERS,actors:DAY_ACTORS,districts:DAY_DISTRICTS};
 const KEY='sqr.living-day.v1';

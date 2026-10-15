@@ -1,7 +1,7 @@
-import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=17';
-import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=17';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=17';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=17';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=18';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=18';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=18';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=18';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);

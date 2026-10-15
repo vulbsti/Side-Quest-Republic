@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {stagedCameraFrame,cameraSegmentClear} from './dist/staged-camera.js';
+const player={id:'player',x:0,z:2,yaw:Math.PI},npc={id:'asha',x:0,z:0,yaw:0};
+let frame=stagedCameraFrame({player,cast:[npc],actorId:'asha',speakerId:'asha'});assert(frame.position.z>npc.z,'camera sees speaker front');assert.equal(frame.shot,'speaker');
+frame=stagedCameraFrame({player,cast:[npc],speakerId:'player'});assert(frame.position.z<player.z,'player speaking gets frontal camera');assert.equal(frame.speakerId,'player');
+frame=stagedCameraFrame({player,cast:[npc],phase:'choice'});assert.equal(frame.shot,'two-shot');assert.equal(frame.lookAt.z,1);assert(Math.abs(frame.position.x)>2);
+const wall={x:0,z:2.5,w:3,d:.2,h:3};frame=stagedCameraFrame({player,cast:[npc],obstacles:[wall]});assert(frame);assert(cameraSegmentClear(frame.position,frame.lookAt,[wall]));
+const alley=[{x:-1.1,z:0,w:.2,d:12,h:3},{x:1.1,z:0,w:.2,d:12,h:3}];frame=stagedCameraFrame({player,cast:[npc],phase:'choice',obstacles:alley});assert(frame,'narrow alley has a nearer longitudinal framing');assert(cameraSegmentClear(frame.position,frame.lookAt,alley));assert(Math.abs(frame.position.x)<.83);
+const prev={position:{x:0,y:1.6,z:-3}};frame=stagedCameraFrame({player,cast:[npc],previous:prev,obstacles:[{x:1.1,z:0,w:.2,d:2,h:3}]});assert(frame);assert(cameraSegmentClear(prev.position,frame.position,[{x:1.1,z:0,w:.2,d:2,h:3}]),'renderer smoothing segment cannot cross wall');
+assert(stagedCameraFrame({player,cast:[],speakerId:'missing'}),'missing NPC safely falls back to player');assert.equal(stagedCameraFrame({cast:[]}),null);assert.equal(stagedCameraFrame({player,cast:[npc],obstacles:[{x:0,z:0,w:20,d:20,h:10}]}),null,'impossible room returns null rather than clipping');
+assert(cameraSegmentClear({x:0,y:1.6,z:-2},{x:0,y:1.6,z:2},[{x:0,z:0,w:2,d:2,h:.7}]),'bench below eye line is not a wall');assert(!cameraSegmentClear({x:0,y:1.6,z:-2},{x:0,y:1.6,z:2},[{x:0,z:0,w:2,d:.1,h:3}]),'thin wall blocks swept camera');
+console.log('PASS: frontal NPC/player, choice two-shot, blocked wall, narrow alley, collision-safe smoothing, missing actors and impossible-frame fallback');
