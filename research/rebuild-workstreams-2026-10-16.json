@@ -1,0 +1,57 @@
+{
+  "baseline": "5d030b2af68703d17491085f0174d4875b0dfd5f",
+  "workstreams": [
+    {
+      "owner": "transit_recovery",
+      "scope": "Transit recovery, save migration, seating and camera",
+      "status": "implemented; regression tested; full production route replay pending"
+    },
+    {
+      "owner": "market_density",
+      "scope": "Furnished interiors, covered arcade, courtyard and readable signs",
+      "status": "implemented within existing world bounds; access and route tested"
+    },
+    {
+      "owner": "performed_encounters",
+      "scope": "24 timed day scenes, 100 branches, three performed shop encounters",
+      "status": "implemented; root integrated shop props and camera; kirana browser tested"
+    },
+    {
+      "owner": "transit_recovery + root",
+      "scope": "Physical expression of actor intentions",
+      "status": "implemented and integrated; full crowd experience not signed off"
+    },
+    {
+      "owner": "market_density",
+      "scope": "Travel-aware seeded journeys",
+      "status": "724m four-district journey; eight scenes played, sixteen missed naturally; cast proxies are not complete live crowd simulation"
+    },
+    {
+      "owner": "root",
+      "scope": "Recorded reel audio preparation and integration",
+      "status": "blocked on reliable identification and timing; bounded float32 ASR returned unusable text; no reel speech admitted"
+    }
+  ],
+  "verification": {
+    "automated_suites": 27,
+    "local_browser": [
+      "Kirana setup advances into choice",
+      "Response sequence completes and reward increases",
+      "Corrected Meena model and camera framing",
+      "Shop shelves and cooler visible",
+      "No runtime errors in inspected local session"
+    ],
+    "limitations": [
+      "QA scene button positions player for focused staging review; not a full natural playthrough",
+      "Not photoreal; world boundary unchanged",
+      "No new recorded voices or cues",
+      "Whole-game quality bar not yet passed"
+    ]
+  },
+  "next": [
+    "Review all performed day scenes with real cast travel",
+    "Install verified existing recorded voices and sound cues",
+    "Full fresh and resumed browser playthrough, both shuttle routes",
+    "Iterate assets and streets against visual references"
+  ]
+}

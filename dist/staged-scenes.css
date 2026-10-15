@@ -19,3 +19,5 @@
 @media(max-width:600px){#dayPanel[data-view="scene"]{inset:auto 8px max(8px,env(safe-area-inset-bottom)) 8px;width:auto;max-height:57vh}#dayPanel[data-view="scene"] #dayBody{padding:10px 14px;max-height:calc(57vh - 45px)}#dayPanel[data-view="scene"] .day-choices{grid-template-columns:1fr}#dayPanel[data-view="scene"] h1{font-size:23px}}
 
 #chapter{width:250px;padding:18px 20px}#chapter h2{font-size:23px}#chapter p{font-size:12px;line-height:1.5}#chapterProgress{font-size:10px}#objectiveSub{font-size:10px}#controls{opacity:.75}.sound-controls{display:grid;gap:18px;text-align:left;margin:24px 0}.sound-controls label{display:flex;gap:12px;align-items:center}.sound-controls select{max-width:320px;padding:9px;background:#284b40;color:#fff5dc}#nearbyActions button{max-width:330px;text-align:left}@media(max-width:700px){#chapter{width:210px;padding:12px}#chapter h2{font-size:19px}#chapter p{display:none}}
+
+body.performing #chapter,body.performing #wanted,body.performing #lower,body.performing #dayRibbon,body.performing #carry,body.performing #toast{visibility:hidden}

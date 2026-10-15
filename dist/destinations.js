@@ -1,3 +1,4 @@
+import {SHOP_PERFORMANCES} from './scene-performance.js';
 /** Original neighbourhood scenes; no real retailer or person is impersonated. */
 export const SHOP_LAYOUT=Object.freeze([
  {id:'print',name:'PHOTO / PRINT',x:-71,z:84,color:'#ad654a'},
@@ -86,6 +87,7 @@ export const DESTINATIONS=Object.freeze([
  {id:'recover',label:'Admit you have survived entirely on chai and confidence',line:'“Confidence ka ORS nahi aata.” Geeta hands you water and directs your speech toward the empty chair.',effects:{stamina:25,aura:-2,fatigue:-8},flag:'chai_confession',callback:'Geeta spots you later and silently raises a water bottle. You nod like a student caught without homework.',callbackEffects:{trust:2}},
  {id:'privacy',label:'Ask if resting counts toward your daily step goal',line:'Geeta considers it. “Aankh band karke calculate karo.” You take the hint and a short break.',effects:{stamina:18,aura:2,fatigue:-6},flag:'rest_statistics',callback:'A friend asks how many steps you got. “Emotionally? Bohot.” The joke is unfortunately now yours.',callbackEffects:{aura:2}}]}
 ]);
+for(const d of DESTINATIONS)if(SHOP_PERFORMANCES[d.id])d.performance=SHOP_PERFORMANCES[d.id];
 export function createDestinationState(){return {version:1,completed:[],visits:{},pending:[],callbackHistory:[]};}
 export function performDestination(state,id,actionId){
  const destination=DESTINATIONS.find(d=>d.id===id),action=destination?.actions.find(a=>a.id===actionId);

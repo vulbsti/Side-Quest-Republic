@@ -1,7 +1,7 @@
-import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=15';
-import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=15';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=15';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=15';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=16';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=16';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=16';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=16';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);
@@ -13,7 +13,7 @@ export function expandWorld(world){
  // Four adjoining ground strips avoid z-fighting with the original 125 x 150 plaza.
  ground(27.5,185,-76.25,7.5);ground(27.5,185,76.25,7.5);ground(125,10,0,-80);ground(125,25,0,87.5);
  ground(28,40,-64,12,'#b5b1a0');ground(27,37,64,-30,'#b3b5ad');ground(29,38,64,45,'#c6bdab');ground(51,29,-55,68,'#b9aa92');ground(45,17,0,-67,'#8b936c');
- function label(text,x,z,w=8,bg='#284e45',y=3.2){const s=sign(text,w,.8,bg,'#fff2ce');s.position.set(x,y,z);staticGroup.add(s);obstacles.push({id:`expansion-sign:${text}`,x,z,w,d:.16,base:y-.4,h:y+.4,expansion:true});return s;}
+ function label(text,x,z,w=8,bg='#284e45',y=3.2){const s=sign(text,w,.8,bg,'#fff2ce');s.material.side=T.FrontSide;s.position.set(x,y,z+.012);const back=s.clone();back.rotation.y=Math.PI;back.position.set(x,y,z-.012);staticGroup.add(s,back);obstacles.push({id:`expansion-sign:${text}`,x,z,w,d:.16,base:y-.4,h:y+.4,expansion:true});return s;}
  function pole(x,z,h=3.2){cylinder(.055,.075,h,'#475b50',x,h/2,z,staticGroup,8);obstacles.push({id:`expansion-pole:${x}:${z}`,x,z,w:.15,d:.15,h,expansion:true});}
  for(const d of DISTRICTS.filter(d=>['supply','press','court','backstreet','assembly'].includes(d.id))){const [x,z]=({supply:[-76,30],press:[74,-42],court:[76,58],backstreet:[-42,60],assembly:[0,-70]})[d.id];label(d.name.toUpperCase(),x,z,9);pole(x-4.5,z);pole(x+4.5,z);}
  for(const o of EXPANSION_SOLIDS)obstacles.push({...o,expansion:true});
@@ -51,6 +51,49 @@ export function expandWorld(world){
   if(shop.id==='chai'){cylinder(.22,.3,.5,'#b1b7b1',x+2.4,1.25,84.4,staticGroup,14);for(let j=0;j<3;j++)cylinder(.08,.06,.16,'#c59b72',x+2.4,1.1,83.7+j*.2,staticGroup,10);}
   if(shop.id==='charge'){for(let j=0;j<4;j++)cube(.18,.025,.32,'#314e50',x+2.4,1.03,83.8+j*.4,staticGroup);}
  }
+ // A continuous arcade and furnished rooms turn the lane into places to enter.
+ // Every new freestanding furnishing registers its visible envelope; wall-mounted
+ // micro-details stay inside an existing shelf/counter/wall collision envelope.
+ function furnished(id,w,h,d,color,x,y,z,walkable=false){const m=cube(w,h,d,color,x,y,z,staticGroup);obstacles.push({id:'market-detail:'+id,x,z,w,d,base:Math.max(0,y-h/2),h:y+h/2,walkable,expansion:true});return m;}
+ furnished('arcade-roof',40,.14,2.7,'#a08d6d',-55,3.55,78.65);
+ for(let x=-75;x<=-35;x+=8){furnished('arcade-column:'+x,.18,3.55,.18,'#687969',x,1.775,79.35);furnished('arcade-foot:'+x,.38,.12,.38,'#8f8b79',x,.06,79.35);}
+ // Drain gratings and joints follow the shop edge rather than cutting the bus lane.
+ for(let x=-74;x<-35;x+=1){cube(.8,.018,.23,'#555d54',x,.012,78.9,staticGroup);for(let j=0;j<4;j++)cube(.035,.02,.24,'#a5a293',x-.3+j*.2,.025,78.9,staticGroup);}
+ for(const shop of SHOP_LAYOUT){const x=shop.x;
+  for(let i=0;i<12;i++)cube(.3,.035,1.9,shop.color,x-3.3+i*.6,3.42,78.6,staticGroup);
+  // A side display leaves the central aisle and the counter approach clear.
+  furnished(shop.id+'-sidecase',.48,2.45,3.6,'#74644f',x-3.45,1.225,84.8);obstacles.push({id:'market-detail:'+shop.id+'-stock',x:x-3.07,z:84.8,w:.3,d:3.6,h:2.6,expansion:true});
+  for(let row=0;row<3;row++)for(let n=0;n<7;n++){
+   const z=83.4+n*.43,y=.45+row*.7;
+   if(shop.id==='kirana'||shop.id==='chai'){cylinder(.12,.12,.28,['#b6a16a','#a96342','#80937a'][n%3],x-3.13,y,z,staticGroup,8);cube(.035,.1,.15,'#e6d7b7',x-2.99,y,z,staticGroup);}
+   else cube(.18,.27,.3,['#637d7a','#ac7355','#cab384'][n%3],x-3.12,y,z,staticGroup);
+  }
+  // Shelved packets and bottles give each shop a recognizable stock silhouette.
+  for(let row=0;row<2;row++)for(let n=0;n<10;n++){const y=.55+row*.65;cube(.35,.38,.26,['#c38a4d','#6c8d7d','#b5543e','#e0c596'][n%4],x-2.25+n*.5,y,86.9,staticGroup);cube(.18,.07,.02,'#eee0c2',x-2.25+n*.5,y,86.76,staticGroup);}
+  cube(2.8,.035,.03,'#c6bba2',x+2.2,3.1,80.18,staticGroup);
+  cube(.45,.7,.12,'#797c70',x+3.4,2.25,80.18,staticGroup);
+  // Interior signs face the arriving player; exterior side also reads normally.
+  const tag={print:'XEROX • PRINT • LAMINATE',kirana:'COLD DRINKS / MRP ONLY',repair:'PUNCTURE / AIR / REPAIRS',chai:'ADRAK • ELAICHI • BISCUIT',charge:'CHARGING / REPAIR / CABLES'}[shop.id];
+  label(tag,x,87.75,5.2,shop.color,2.8);
+  if(shop.id==='print'){cube(.8,.52,.75,'#d3cfc0',x+2.4,1.27,85.3,staticGroup);cube(.65,.08,.42,'#535e58',x+2.4,1.57,85.3,staticGroup);for(let j=0;j<5;j++)cube(.8,.035,.55,'#ece3ce',x+2.4,1.05+j*.04,83.8,staticGroup);}
+  if(shop.id==='kirana'){furnished('kirana-cooler',1.05,1.9,1.1,'#748b83',x+2.95,.95,86.65);cube(.86,1.5,.025,'#364f50',x+2.95,1.1,86.08,staticGroup);for(let j=0;j<6;j++)cylinder(.055,.055,.25,['#b2884e','#7c9d80'][j%2],x+2.65+j*.12,.62,86.04,staticGroup,6);}
+  if(shop.id==='chai'){furnished('chai-washing-basin',1.0,.95,1.1,'#999f94',x+2.9,.475,86.7);cube(.7,.045,.7,'#465f59',x+2.9,.96,86.7,staticGroup);cube(.05,.4,.05,'#aab6ae',x+3.2,1.14,86.9,staticGroup);}
+  if(shop.id==='repair'){
+   // Wheels hang on the sidecase, not as invisible obstacles in the walking aisle.
+   for(const z of [83.4,85.1]){const tyre=new T.Mesh(new T.TorusGeometry(.48,.065,6,20),mat('#373d38'));tyre.rotation.y=Math.PI/2;tyre.position.set(x-3.12,2.05,z);staticGroup.add(tyre);for(let n=0;n<8;n++){const spoke=cube(.025,.88,.025,'#9b9d8d',x-3.12,2.05,z,staticGroup);spoke.rotation.x=n*Math.PI/8;}}
+  }
+ }
+ // An open-air neighbour court beside the arcade: walk in from north or west,
+ // choose a seat, or continue to the shop doors. The scene anchor stays free.
+ ground(13,8,-43,72.5,'#a9a08a').position.y=-.055;
+ furnished('court-seat-east',.65,.46,2.5,'#8e7660',-38.8,.23,72,true);
+ furnished('court-seat-south',2.6,.46,.65,'#8e7660',-43,.23,75.4,true);
+ for(const x of [-48.7,-37.5]){furnished('court-planter:'+x,1.0,.6,1.0,'#a47857',x,.3,75.7);for(let n=0;n<5;n++){const leaf=cube(.1,.8,.36,'#607653',x+(n-2)*.12,1,75.7,staticGroup);leaf.rotation.z=(n-2)*.25;}}
+ furnished('court-table',1.0,.66,.8,'#968064',-41.6,.33,72.7);
+ cylinder(.1,.07,.18,'#c19968',-41.6,.75,72.7,staticGroup,10);
+ // High-level service details connect the facades into one occupied street.
+ for(let x=-74;x<-36;x+=2){cube(2.05,.035,.035,'#414b43',x,6.35,79.68,staticGroup);cube(.035,.45,.035,'#414b43',x,6.12,79.68,staticGroup);}
+ for(let x=-70;x<=-38;x+=8){cube(1.4,.6,.35,'#999d8e',x,5.9,79.7,staticGroup);for(let k=0;k<5;k++)cube(1.15,.035,.03,'#596b62',x,5.7+k*.09,79.5,staticGroup);}
  // A second market loop gives the southern square its own silhouette and activities.
  ground(64,21,8,84,'#c1ad8e');ground(14,8,22,80,'#b98d72');
  for(const solid of URBAN_SOLIDS){const bottom=solid.base||0;cube(solid.w,solid.h-bottom,solid.d,solid.color,solid.x,(solid.h+bottom)/2,solid.z,staticGroup);}

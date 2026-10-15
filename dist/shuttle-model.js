@@ -1,5 +1,5 @@
-import {THREE as T,cube,cylinder,sign} from './world.js?v=15';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=15';
+import {THREE as T,cube,cylinder,sign} from './world.js?v=16';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=16';
 
 /** Original short-wheelbase city shuttle. Metres; +Z is the front.
  * Body and open door stay inside the 2.5 x 8.5 m physical envelope.

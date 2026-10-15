@@ -1,3 +1,4 @@
+import {stageDayEncounters,normalizeSceneTiming} from './staged-scenes.js';
 // Original authored fiction. Performance beats are invented, not reel transcriptions.
 export const DAY_ACTORS = [
   {
@@ -4539,4 +4540,6 @@ export const DAY_ENCOUNTERS = [
     ]
   }
 ];
+stageDayEncounters(DAY_ENCOUNTERS);
+normalizeSceneTiming(DAY_ENCOUNTERS);
 export default DAY_ENCOUNTERS;
