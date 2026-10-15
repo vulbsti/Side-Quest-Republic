@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+import {createLivingWorld,advanceWorld,actWorld,restoreWorld,serializeWorld} from './dist/living-world.js';
+const source=readFileSync('dist/main.js','utf8');const ctx={mode:'day',day:{sceneRun:{} }};vm.createContext(ctx);vm.runInContext(source.slice(source.indexOf('function worldRunning()'),source.indexOf('function worldStep(')),ctx);assert.equal(ctx.worldRunning(),true);ctx.day.sceneRun=null;assert.equal(ctx.worldRunning(),false);ctx.mode='play';assert.equal(ctx.worldRunning(),true);ctx.mode='pause';assert.equal(ctx.worldRunning(),false);
+const s=createLivingWorld(123,[{id:'reserved',district:'jantar',start:0,end:10,actorId:'mira',choices:[{id:'help',effects:{aid:2}}]},{id:'elsewhere',district:'cp',start:0,end:12,choices:[]}]);s.activeEncounter='reserved';advanceWorld(s,100);assert.equal(s.resolved.elsewhere.status,'missed');assert.equal(s.resolved.reserved,undefined);assert.ok(s.scheduleDone.includes('arrivals'),'independent day advances during a scene');assert.equal(restoreWorld(serializeWorld(s)).activeEncounter,undefined,'reload cannot retain a phantom reservation');const result=actWorld(s,'reserved','help',{district:'connector'});assert.equal(result.ok,true);assert.equal(result.event.district,'connector','relocated scene writes its actual district');
+console.log('PASS live scene clock, independent arrivals/expiry, scoped reservation, restore release and actual consequence district');

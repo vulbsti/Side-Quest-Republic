@@ -1,0 +1,32 @@
+{
+  "version": 21,
+  "quality_pass": false,
+  "changes": [
+    "Spatial escalation director selects and persists confrontation hotspot from local receipts and conditions",
+    "30 existing arrival slots assigned assembly, volunteer, reinforcement and unmarked fictional forum roles",
+    "Crowds physically reroute with bounded pathfinding and scene ownership",
+    "Performed scenes continue world clock with scoped expiry reservation",
+    "Finale/injury/negotiation scenes and consequence records use actual hotspot",
+    "Removed abstract fast-forward without physical simulation",
+    "Fixed crowd route corner cutting and blocked destination projection",
+    "Original Hinglish ambient reactions change by phase; no sourced dialogue claim"
+  ],
+  "verified": [
+    "140 unique physically steered cohort routes on actual map",
+    "420 simulated second arrival dispatcher journey",
+    "900 simulated second bus geometry clearance",
+    "Four whole-day choice policies",
+    "Spatial local receipt causality and witnessed-only police focus",
+    "Scene reservation, relocated consequence district and restored reservation release",
+    "Crowd priority, no teleportation, deterministic flow",
+    "Camera and audio-control regressions"
+  ],
+  "remaining": [
+    "Covert provocation and target-specific police intervention are not yet embodied incidents",
+    "Police focus receipts not yet connected to pursuit of NPCs",
+    "RSF-specific assets and behaviour not implemented",
+    "Large-scale convincing crowd performance and visual density not signed off",
+    "No new verified reel voices or audible mix review",
+    "Browser loaded local preview with no logged errors but scene interaction timed out; full-day visual validation incomplete"
+  ]
+}

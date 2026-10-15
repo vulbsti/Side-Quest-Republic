@@ -1,7 +1,7 @@
-import {buildShuttleModel} from './shuttle-model.js?v=20';
-import {THREE,cube,cylinder,sign} from './world.js?v=20';
-import {makeCharacter,animateCharacter} from './characters.js?v=20';
-import {createTransit,updateTransit,boardBus,chooseSeat,moveInCabin,requestDeparture,requestStop,disembarkBus,cabinToWorld,busDoorWorld,serializeTransit,restoreTransit} from './transit.js?v=20';
+import {buildShuttleModel} from './shuttle-model.js?v=21';
+import {THREE,cube,cylinder,sign} from './world.js?v=21';
+import {makeCharacter,animateCharacter} from './characters.js?v=21';
+import {createTransit,updateTransit,boardBus,chooseSeat,moveInCabin,requestDeparture,requestStop,disembarkBus,cabinToWorld,busDoorWorld,serializeTransit,restoreTransit} from './transit.js?v=21';
 export function boardingApproach(bus){const c=Math.cos(bus.yaw),s=Math.sin(bus.yaw);return {x:bus.x+2.05*c+2.7*s,z:bus.z-2.05*s+2.7*c,label:bus.name+' open door'};}
 export function stopStatus(bus){return bus.recovery?'Recovery stop: '+(bus.blockedReason||'road blocked')+' · door open':bus.obstructed?'Waiting: '+(bus.blockedReason||'road obstructed'):bus.status==='moving'?'Bus is on its route':'Doors open · departs in '+Math.ceil(bus.dwellRemaining)+'s';}
 const KEY='sidequest-transit-v1';

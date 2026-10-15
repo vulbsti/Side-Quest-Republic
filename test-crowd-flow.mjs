@@ -23,3 +23,51 @@ const replay=()=>{const p=bodies(),f=new CrowdFlow({obstacles,districts:DISTRICT
 console.log('Crowd flow PASS: bounded deterministic entries, visible-gateway deferral, density distribution, actual-map paths, no visible teleport, physical dispersal and unseen-only hiding.');
 
 const recruited=bodies(),social=new CrowdFlow({obstacles,districts:DISTRICTS});social.update({bodies:recruited,state:{...state,time:600,flags:{}},player});const follower=recruited.find(b=>!b.hidden);follower.follow=true;social.update({bodies:recruited,state:{...state,time:602,flags:{}},player});assert.equal(follower.dayTarget,null,'crowd target must yield to explicit follow');assert.equal(social.inspect(follower.id).status,'engaged');
+
+// Hotspot orders reroute present people without relocating them; unchanged
+// targets retain the same route object instead of pathfinding every update.
+const moving=Array.from({length:6},(_,i)=>({id:`unit-${i}`,dayArrival:true,hidden:false,x:i,z:0,radius:.4}));
+const reactive=new CrowdFlow({districts:[{id:'west',x:-20,z:0},{id:'east',x:20,z:0}],gateways:[{x:0,z:60}]});
+const rs={time:1,phase:'morning',districts:{west:{density:50,access:100},east:{density:10,access:100}}};
+const orders=Object.fromEntries(moving.map(b=>[b.id,{target:{x:20,z:5},district:'east',activity:'protect-passage',speed:3}]));
+reactive.update({bodies:moving,state:rs,directives:orders,desiredCount:6});
+assert.equal(moving.filter(b=>b.crowdObjective==='protect-passage'&&b.dayPath).length,2,'at most two existing actors replanned per update');
+for(let t=2;t<=4;t++)reactive.update({bodies:moving,state:{...rs,time:t},directives:orders,desiredCount:6});
+assert(moving.every(b=>b.dayTarget.x===20&&b.dayTarget.z===5));
+assert(moving.every((b,i)=>b.x===i&&b.z===0),'directives never teleport visible actors');
+const route=moving[0].dayPath;
+reactive.update({bodies:moving,state:{...rs,time:10},directives:orders,desiredCount:6});
+assert.equal(moving[0].dayPath,route,'unchanged order preserves existing route');
+assert.equal(moving[0].crowdSpeed,3);
+orders['unit-0']={target:{x:-20,z:5},district:'west',activity:'regroup',speed:2};
+reactive.update({bodies:moving,state:{...rs,time:11},directives:orders,desiredCount:6});
+assert.equal(moving[0].dayTarget.x,-20,'changed hotspot yields a new physical route');
+assert.equal(moving[0].crowdObjective,'regroup');
+moving[0].sceneTarget={x:2,z:2};
+reactive.update({bodies:moving,state:{...rs,time:12},directives:orders,desiredCount:6});
+assert.equal(reactive.inspect('unit-0').status,'engaged');assert.equal(moving[0].dayTarget,null);assert.equal(moving[0].crowdObjective,null);
+moving[0].sceneTarget=null;delete orders['unit-0'];
+reactive.update({bodies:moving,state:{...rs,time:18},directives:orders,desiredCount:6});
+assert.equal(moving[0].crowdObjective,null,'released directive returns to ambient ownership');
+assert.equal(moving[0].crowdSpeed,null);
+const early=bodies(),earlyFlow=new CrowdFlow({districts:[{id:'east',x:20,z:0}],gateways:[{x:60,z:0}]});
+earlyFlow.update({bodies:early,state:{time:0,districts:{east:{density:0,access:100}}},player:{x:0,z:0},desiredCount:100,directives:{arrival0:{target:{x:20,z:0},district:'east',activity:'arrive'}}});
+assert.equal(early.filter(b=>!b.hidden).length,1,'explicit cohort count permits an early physical gateway arrival');
+assert.equal(early[0].x,60);assert.equal(early[0].dayTarget.x,20);
+console.log('Crowd directives PASS: bounded replanning, no teleport, live hotspots, scene priority, route reuse, released ownership and early entry.');
+const ambientBody={id:'ambient',dayArrival:true,hidden:false,x:0,z:0};
+const ambient=new CrowdFlow({districts:[{id:'west',x:-20,z:0},{id:'east',x:20,z:0}]});
+ambient.update({bodies:[ambientBody],state:{time:20,districts:{west:{density:100},east:{density:0}}},desiredCount:1});
+assert.equal(ambient.inspect('ambient').district,'west');
+ambient.update({bodies:[ambientBody],state:{time:40,districts:{west:{density:0},east:{density:100}}},desiredCount:1});
+assert.equal(ambient.inspect('ambient').district,'east','ambient people physically retarget when local conditions shift');
+assert.equal(ambientBody.x,0);
+const obstacleFlow=new CrowdFlow({obstacles:[{x:5,z:5,w:2,d:2,h:2}],districts:[{id:'east',x:10,z:10}]});
+const obstacleBody={id:'arrival0',dayArrival:true,hidden:false,x:0,z:0};
+const blockedOrder={arrival0:{target:{x:5,z:5},district:'east',activity:'hold'}};
+obstacleFlow.update({bodies:[obstacleBody],state:{time:10},directives:blockedOrder,desiredCount:1});
+assert(obstacleBody.dayPath?.length,'occupied directive is projected to walkable space for existing actors');
+assert(dist(obstacleBody.dayTarget,blockedOrder.arrival0.target)>.4);
+const repairedPath=obstacleBody.dayPath;
+obstacleFlow.update({bodies:[obstacleBody],state:{time:20},directives:blockedOrder,desiredCount:1});
+assert.equal(obstacleBody.dayPath,repairedPath,'raw directive remembered so projected destination does not cause repath spam');
