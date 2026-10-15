@@ -1,11 +1,11 @@
-# Side Quest Republic
+# Side Quest Republic — One Delhi Afternoon
 
-A playable three-minute canvas game inspired by reporting on Jantar Mantar protest humour. Open `dist/index.html` or serve `dist` with any static server. No build dependencies. Optional Google Fonts fall back to system fonts.
+Full-browser 3D social mischief demo, built with vendored Three.js and original Blender assets. Serve `dist` over HTTP (`python3 -m http.server 4173 --directory dist`). WebGL 2 required; no build/install step. Google Fonts are optional.
 
-WASD/arrows move, Shift sprints, E interacts, P/Escape pauses. Click/tap destinations to walk and open encounters. Touch direction buttons supported. Complete four encounters, reach 40 helpfulness and 35 aura, then visit the Metro. 100 risk ends the run; time expiry and early departure give partial endings. Choices and the notebook pause time. Best score is stored locally.
+WASD/arrows move; Shift runs; Space jumps; drag rotates the camera; wheel zooms. E interacts, Q drops the carried object, G performs, F takes a landmark photo. J opens stories, directions, memories and sources. Escape pauses. Touch controls and click-to-walk are provided; desktop is the primary target.
 
-The in-game Field notes link five sources and distinguish reporting from invention. July and October reports concern different protests. Viral-clip reporting does not independently authenticate each event. Map, dialogue, numerical risk, rewards, characters and outcomes are fictional; the key is an arcade prop.
+Three stories can be played in any order: borrow and return Ravi's speaker after a crowd performance, take Kabir's career question to Officer Sharma, and reunite Nikhil with his lost phone. Additional water deliveries, costumes, photographs, key incident, police pursuits and recoverable capture feed the afternoon recap. Objects remain where dropped. Leave at the Metro whenever ready. Progress is session-only; reloading starts over.
 
-Verification: `node test.cjs` checks balanced victory, detention, timeout, pause, timer rollover, movement, tap navigation, unique cardio reward and tea-break cost. This harness stubs the DOM and is not visual evidence. Browser layout inspected separately. No physical-device or audio-listening QA claimed.
+Police use notice, chase, last-seen search and patrol states with line-of-sight checks. The original WebAudio soundtrack changes with suspicion, chase and performance. This is a compact stylized interpretation of CP/Jantar Mantar, not a measured replica, photogrammetry, or realistic policing simulation. The bus is a stationary story prop. Reported inspiration is distinguished from invented characters, dialogue, rewards and outcomes in Field notes. References/model provenance: `assets-src/ASSETS.md`.
 
-Prototype boundary: eight one-time encounters and a Metro exit, not a policing simulation or an accurate geographic map. Next useful move: play feedback on pacing and more authored movement challenges.
+Validation: `node test-3d.mjs` checks collision, occlusion, A* navigation, movement, sprint/stamina, jump/landing and police detection/capture. These are logic tests, not proof of visual quality. Browser smoke review covers 3D loading, camera/movement, journal and conversations. Full route completion and audio listening remain separate acceptance checks. Original 2D prototype retained in `archive/v1`.
