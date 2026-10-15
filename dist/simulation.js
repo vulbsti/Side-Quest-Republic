@@ -1,13 +1,68 @@
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
-export function moveWithCollisions(entity,dx,dz,obstacles,radius=.35){for(const axis of ['x','z']){const delta=axis==='x'?dx:dz;if(!delta)continue;const old=entity[axis];entity[axis]+=delta;entity[axis]=clamp(entity[axis],-47,53);if(axis==='z')entity.z=clamp(entity.z,-45,57);for(const o of obstacles){if((entity.y||0)>o.h+.1)continue;const nearestX=clamp(entity.x,o.x-o.w/2,o.x+o.w/2),nearestZ=clamp(entity.z,o.z-o.d/2,o.z+o.d/2);if(Math.hypot(entity.x-nearestX,entity.z-nearestZ)<radius){entity[axis]=old;break;}}}return entity;}
+// Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
+export function overlapsXZ(e,o,r=e.radius??.36){
+ const nx=clamp(e.x,o.x-o.w/2,o.x+o.w/2),nz=clamp(e.z,o.z-o.d/2,o.z+o.d/2);
+ return Math.hypot(e.x-nx,e.z-nz)<r-.00001;
+}
+export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??.36){
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
+ for(let i=0;i<steps;i++)for(const axis of ['x','z']){
+  const delta=(axis==='x'?dx:dz)/steps;if(!delta)continue;
+  const old=entity[axis];entity[axis]=clamp(old+delta,axis==='x'?-47:-45,axis==='x'?53:57);
+  for(const o of obstacles){const feet=entity.y||0,top=o.h,bottom=o.base||0;
+   if(feet>=top-.025||feet+(entity.height||1.8)<=bottom+.01)continue;
+   if(overlapsXZ(entity,o,radius)){entity[axis]=old;break;}
+  }
+ }
+ return entity;
+}
+export function supportHeight(entity,obstacles,ceiling=Infinity){
+ let y=0;const r=(entity.radius??.36)*.65;
+ for(const o of obstacles)if(o.walkable!==false&&o.h<=ceiling+.025&&overlapsXZ(entity,o,r))y=Math.max(y,o.h);
+ return y;
+}
+export function verticalStep(entity,dt,obstacles,jump=false){
+ const oldY=entity.y||0,ground=supportHeight(entity,obstacles,oldY);
+ entity.grounded=Math.abs(oldY-ground)<.04&&(entity.vy||0)<=0;
+ if(jump&&entity.grounded&&(entity.stamina??100)>10){entity.vy=7.6;entity.grounded=false;entity.stamina=(entity.stamina??100)-9;entity.jumpStarted=true;}
+ else entity.jumpStarted=false;
+ entity.vy=(entity.vy||0)-18*dt;
+ let next=oldY+entity.vy*dt;
+ if(entity.vy>0){for(const o of obstacles){const base=o.base||0;if(base>=oldY+(entity.height||1.8)-.00001&&base<=next+(entity.height||1.8)&&overlapsXZ(entity,o)){next=base-(entity.height||1.8);entity.vy=0;}}}
+ const floor=supportHeight(entity,obstacles,oldY);
+ entity.landed=false;
+ if(next<=floor&&entity.vy<=0){entity.landed=entity.vy< -2;entity.impact=-entity.vy;next=floor;entity.vy=0;entity.grounded=true;}
+ else entity.grounded=false;
+ entity.y=Math.max(0,next);
+}
+// Iterative personal-space contacts; corrections also obey static collisions.
+export function separateBodies(bodies,obstacles,iterations=5){
+ const active=bodies.filter(b=>!b.hidden);
+ for(let pass=0;pass<iterations;pass++)for(let i=0;i<active.length;i++)for(let j=i+1;j<active.length;j++){
+  const a=active[i],b=active[j];if((a.y||0)>=(b.y||0)+(b.height||1.8)||(b.y||0)>=(a.y||0)+(a.height||1.8))continue;
+  let dx=b.x-a.x,dz=b.z-a.z,d=Math.hypot(dx,dz),min=(a.radius??.36)+(b.radius??.36);
+  if(d>=min)continue;if(d<.0001){dx=(i%2?1:-1);dz=.3;d=Math.hypot(dx,dz);}
+  const nx=dx/d,nz=dz/d,depth=min-Math.hypot(b.x-a.x,b.z-a.z)+.001;
+  const wa=a.anchored?0:1,wb=b.anchored?0:1,sum=wa+wb;if(!sum)continue;
+  const ax=a.x,az=a.z,bx=b.x,bz=b.z;
+  moveWithCollisions(a,-nx*depth*wa/sum,-nz*depth*wa/sum,obstacles);
+  moveWithCollisions(b,nx*depth*wb/sum,nz*depth*wb/sum,obstacles);
+  // If a wall blocks one share, ask the other body to absorb the unused
+  // displacement. Otherwise two touching bodies remain visibly intersecting.
+  const movedA=(ax-a.x)*nx+(az-a.z)*nz,movedB=(b.x-bx)*nx+(b.z-bz)*nz;
+  const missingA=Math.max(0,depth*wa/sum-movedA),missingB=Math.max(0,depth*wb/sum-movedB);
+  if(wb&&missingA>.00001)moveWithCollisions(b,nx*missingA,nz*missingA,obstacles);
+  if(wa&&missingB>.00001)moveWithCollisions(a,-nx*missingB,-nz*missingB,obstacles);
+ }
+}
 export function visible(a,b,obstacles){const d=dist(a,b);for(let s=1;s<Math.ceil(d*2);s++){const t=s/Math.ceil(d*2),x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;for(const o of obstacles)if(o.h>1.65&&x>o.x-o.w/2&&x<o.x+o.w/2&&z>o.z-o.d/2&&z<o.z+o.d/2)return false;}return true;}
 export function steer(entity,target,speed,dt,obstacles){const d=dist(entity,target);if(d<.15)return 0;const old={x:entity.x,z:entity.z};const dx=(target.x-entity.x)/d,dz=(target.z-entity.z)/d;moveWithCollisions(entity,dx*speed*dt,dz*speed*dt,obstacles,.4);if(dist(old,entity)<speed*dt*.3){const side=entity.side||1;moveWithCollisions(entity,-dz*side*speed*dt,dx*side*speed*dt,obstacles,.4);entity.stuck=(entity.stuck||0)+dt;if(entity.stuck>1.1){entity.side=-side;entity.stuck=0;}}else entity.stuck=0;return dist(old,entity)/Math.max(dt,.001);}
 export class Simulation{
 constructor(obstacles=[]){this.obstacles=obstacles;this.reset();}
-reset(){this.time=0;this.player={x:-7,z:34,y:0,vy:0,vx:0,vz:0,yaw:Math.PI,stamina:100};this.heat=0;this.aura=0;this.trust=0;this.mischief=0;this.noise=0;this.pursuit=false;this.catches=0;this.cooldown=0;this.chases=0;this.escaped=0;this.sprinting=false;this.distance=0;this.police=[{x:9,z:16,home:{x:9,z:16},state:'patrol',phase:0},{x:28,z:-7,home:{x:28,z:-7},state:'patrol',phase:2},{x:-12,z:-4,home:{x:-12,z:-4},state:'patrol',phase:4},{x:9,z:-30,home:{x:9,z:-30},state:'patrol',phase:6}].map((p,i)=>({...p,y:0,yaw:0,seen:0,search:0,speed:0,side:i%2?1:-1,last:{x:p.x,z:p.z}}));}
+reset(){this.time=0;this.player={x:-7,z:34,y:0,vy:0,vx:0,vz:0,yaw:Math.PI,stamina:100,radius:.36,height:1.8,grounded:true};this.heat=0;this.aura=0;this.trust=0;this.mischief=0;this.noise=0;this.pursuit=false;this.catches=0;this.cooldown=0;this.chases=0;this.escaped=0;this.sprinting=false;this.distance=0;this.police=[{x:9,z:16,home:{x:9,z:16},state:'patrol',phase:0},{x:28,z:-7,home:{x:28,z:-7},state:'patrol',phase:2},{x:-12,z:-4,home:{x:-12,z:-4},state:'patrol',phase:4},{x:9,z:-30,home:{x:9,z:-30},state:'patrol',phase:6}].map((p,i)=>({...p,y:0,yaw:0,seen:0,search:0,speed:0,side:i%2?1:-1,last:{x:p.x,z:p.z}}));}
 provoke(amount=20){this.heat=clamp(this.heat+amount);this.noise=4;}
-step(dt,input={}){this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);this.noise=Math.max(0,this.noise-dt);const p=this.player;let dx=input.x||0,dz=input.z||0,l=Math.hypot(dx,dz);if(l>1){dx/=l;dz/=l;}const moving=l>.05;this.sprinting=!!input.sprint&&p.stamina>2&&moving&&!input.heavy;const speed=this.sprinting?8.1:input.heavy?3.4:4.7;const damping=1-Math.exp(-dt*(moving?14:18));p.vx+=(dx*speed-p.vx)*damping;p.vz+=(dz*speed-p.vz)*damping;const old={x:p.x,z:p.z};moveWithCollisions(p,p.vx*dt,p.vz*dt,this.obstacles);this.distance+=dist(p,old);if(moving)p.yaw=Math.atan2(dx,dz);if(input.jump&&p.y<=.001&&p.stamina>10){p.vy=7.6;p.stamina-=9;}p.vy-=18*dt;p.y=Math.max(0,p.y+p.vy*dt);if(!p.y)p.vy=0;p.stamina=clamp(p.stamina+(this.sprinting?-19:13)*dt);
+step(dt,input={}){this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);this.noise=Math.max(0,this.noise-dt);const p=this.player;let dx=input.x||0,dz=input.z||0,l=Math.hypot(dx,dz);if(l>1){dx/=l;dz/=l;}const moving=l>.05;this.sprinting=!!input.sprint&&p.stamina>2&&moving&&!input.heavy;const speed=this.sprinting?8.1:input.heavy?3.4:4.7;const damping=1-Math.exp(-dt*(moving?14:18));p.vx+=(dx*speed-p.vx)*damping;p.vz+=(dz*speed-p.vz)*damping;const old={x:p.x,z:p.z};moveWithCollisions(p,p.vx*dt,p.vz*dt,this.obstacles);this.distance+=dist(p,old);if(moving)p.yaw=Math.atan2(dx,dz);verticalStep(p,dt,this.obstacles,input.jump);p.stamina=clamp(p.stamina+(this.sprinting?-19:13)*dt);
 let pursuit=false,caught=false;for(let i=0;i<this.police.length;i++){const cop=this.police[i],d=dist(cop,p);const line=d<21&&visible(cop,p,this.obstacles);const facing=Math.cos(Math.atan2(p.x-cop.x,p.z-cop.z)-cop.yaw)>.15;const detects=line&&(facing||d<4||this.noise>0)&&this.heat>16&&this.cooldown<=0;if(cop.state==='patrol'){const dest={x:cop.home.x+Math.sin(this.time*.16+cop.phase)*5,z:cop.home.z+Math.cos(this.time*.13+cop.phase)*4};cop.speed=steer(cop,dest,1.2,dt,this.obstacles);cop.yaw=Math.atan2(dest.x-cop.x,dest.z-cop.z);if(detects&&d<12){cop.state='notice';cop.seen=.05;}}
 else if(cop.state==='notice'){cop.speed=0;cop.yaw=Math.atan2(p.x-cop.x,p.z-cop.z);cop.seen+=detects?dt*(this.heat>55?1.3:.7):-dt;if(cop.seen>1){cop.state='chase';cop.search=7;if(!this.pursuit)this.chases++;}else if(cop.seen<0)cop.state='patrol';}
 else if(cop.state==='chase'){pursuit=true;if(line){cop.last={x:p.x,z:p.z};cop.search=6;}else cop.search-=dt;const dest=line?p:cop.last;cop.yaw=Math.atan2(dest.x-cop.x,dest.z-cop.z);cop.speed=steer(cop,dest,5.6+(this.heat>75?.45:0),dt,this.obstacles);if(d<.85&&p.y<.75&&this.cooldown<=0)caught=true;if(cop.search<=0||d>27){cop.state='search';cop.search=5;}}

@@ -1,0 +1,83 @@
+[
+  {
+    "asset": "asphalt_02",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_diff_1k.jpg",
+    "file": "asphalt_02_diff_1k.jpg",
+    "bytes": 731707,
+    "sha256": "1aa5ce99f58a625c71d48cfc3e68b65ca85ccb00f39e045c0a928608a0ea25ed",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "asphalt_02",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_nor_gl_1k.jpg",
+    "file": "asphalt_02_nor_gl_1k.jpg",
+    "bytes": 1240122,
+    "sha256": "42a1c381b53204e83a982db2864479a30bc127bbdeebb1006f8ee51bff099df3",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "plastered_wall",
+    "source": "https://polyhaven.com/a/plastered_wall",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plastered_wall/plastered_wall_diff_1k.jpg",
+    "file": "plastered_wall_diff_1k.jpg",
+    "bytes": 617080,
+    "sha256": "73312ebb6eabc8e0a55addd8a82a8924bcd1e717b9488a887cc77f14b6ea554e",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "plastered_wall",
+    "source": "https://polyhaven.com/a/plastered_wall",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plastered_wall/plastered_wall_nor_gl_1k.jpg",
+    "file": "plastered_wall_nor_gl_1k.jpg",
+    "bytes": 1072153,
+    "sha256": "504e1f7baf4b68714c64b6670e7954bebe99efe31c49f7ce5a2089e4b76023b5",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "sandstone_blocks_05",
+    "source": "https://polyhaven.com/a/sandstone_blocks_05",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sandstone_blocks_05/sandstone_blocks_05_diff_1k.jpg",
+    "file": "sandstone_blocks_05_diff_1k.jpg",
+    "bytes": 635678,
+    "sha256": "d17c322d9e793ab9fc198948a34f2632595560471ff8714f2b0e052bc75c9ee3",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "sandstone_blocks_05",
+    "source": "https://polyhaven.com/a/sandstone_blocks_05",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sandstone_blocks_05/sandstone_blocks_05_nor_gl_1k.jpg",
+    "file": "sandstone_blocks_05_nor_gl_1k.jpg",
+    "bytes": 1224895,
+    "sha256": "ab42361855310d8de9b11470c6b21e512c9926decd5548dc9e9d72bd6cc06f3e",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "cobblestone_floor_08",
+    "source": "https://polyhaven.com/a/cobblestone_floor_08",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cobblestone_floor_08/cobblestone_floor_08_diff_1k.jpg",
+    "file": "cobblestone_floor_08_diff_1k.jpg",
+    "bytes": 585727,
+    "sha256": "ec131f7a99a1e7f9df25d4725609c55a6dad1df487630685e9a66ecbf41ec33a",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "cobblestone_floor_08",
+    "source": "https://polyhaven.com/a/cobblestone_floor_08",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cobblestone_floor_08/cobblestone_floor_08_nor_gl_1k.jpg",
+    "file": "cobblestone_floor_08_nor_gl_1k.jpg",
+    "bytes": 1002410,
+    "sha256": "26bfff70b266a4e86983814c7e56a9b48daf93cd34dcdc16a5db13e4fabcfbb6",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+    "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+    "file": "kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+    "bytes": 1435119,
+    "sha256": "fd94c84997b8a3c353b62c2125a9b44e19509956986a126e472684432a02d798",
+    "license": "CC0-1.0"
+  }
+]

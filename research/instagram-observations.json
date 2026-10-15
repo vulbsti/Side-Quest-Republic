@@ -1,0 +1,17 @@
+{
+  "observed_on": "2026-10-15",
+  "method": "Root agent read visible comments through the user-authorized signed-in Chrome Instagram session. No interaction with likes, follows, messages or posting.",
+  "samples": [{
+    "url": "https://www.instagram.com/reels/DeGYClxTsXK/",
+    "publisher": "indiebuzzofficial",
+    "caption_claim": "Woman takes bus ignition key; driver laughs. Caption says video shared October 3, 2026; original creator unknown.",
+    "caption_is_not_independent_verification": true,
+    "comment_count_displayed": 16,
+    "comment_age_displayed": "1 w",
+    "comments_excerpted_anonymously": ["Absolute cinema", "Wo stree hai, kuch bhi kar sakti hai 😂", "This is jantar mantar entertainment 2.0😂😂", "Funny huh? In what logic?"],
+    "other_reactions_paraphrased": ["Several laughing emoji responses", "One commenter argues the action obstructs official duties", "Others criticize the behavior or the decision to record it"],
+    "representative_sample": false,
+    "video_audio_verified": false,
+    "game_inference": "Spectators should have different reactions: peer aura is distinct from bystander trust and police attention. A funny edit does not prove an event had no consequences."
+  }]
+}

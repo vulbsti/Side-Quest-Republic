@@ -1,0 +1,114 @@
+{
+  "researched_on": "2026-10-15",
+  "method": "Public reporting plus root agent visible Instagram caption and comment observations; video audio not verified",
+  "browser_limit": "Child agent access rejected; root agent successfully read the authorized signed-in Instagram session",
+  "incidents": [
+    {
+      "id": "friends-bus",
+      "location": "Jantar Mantar, Delhi",
+      "event_date": null,
+      "publication_date": "2026-10-06",
+      "status": "reported and corroborated, video not viewed",
+      "summary": "Man requests detention to join friends, then requests release after friends apparently escape",
+      "source": "https://www.ndtv.com/india-news/jantar-mantar-protest-bus-key-dash-to-detain-me-please-how-protesters-outfoxed-delhi-cops-12144526",
+      "corroboration": "https://english.varthabharati.in/india/delhi-sir-mujhe-bhi-detain-kar-lo-mere-dost-andar-hai-protesters-bus-takes-hilarious-twist-at-jantar-mantar-2280407",
+      "clip_lead": "https://www.instagram.com/reel/DeGcEyuhznq/",
+      "exact_audio_verified": false,
+      "direct_access_check": "Root agent found linked reel unavailable in authorized signed-in session on 2026-10-15; incident remains secondary reporting"
+    },
+    {
+      "id": "bus-keys",
+      "location": "Jantar Mantar, Delhi",
+      "event_date": null,
+      "publication_date": "2026-10-06",
+      "status": "reported, video not viewed",
+      "summary": "Woman takes detention-bus keys; relationship to separate bus-pushing clip unestablished",
+      "source": "https://www.ndtv.com/india-news/jantar-mantar-protest-bus-key-dash-to-detain-me-please-how-protesters-outfoxed-delhi-cops-12144526",
+      "clip_lead": "https://www.instagram.com/reel/DeGYClxTsXK/",
+      "exact_audio_verified": false,
+      "direct_access_check": "Root read caption and visible comments; caption says shared October 3, original creator unknown; video audio not verified"
+    },
+    {
+      "id": "water-request",
+      "location": "Patna, Bihar",
+      "event_date": null,
+      "publication_date": "2026-07-23",
+      "strict_last_two_months": false,
+      "status": "reported and corroborated, video not viewed",
+      "summary": "Students reportedly request water spray in heat and dance afterward",
+      "source": "https://www.freepressjournal.in/amp/viral/protest-hai-ya-holi-party-patna-student-protesters-ask-police-for-water-cannon-amid-heat-dance-in-the-spray-video",
+      "corroboration": "https://timesofindia.indiatimes.com/india/water-cannon-tug-of-war-and-a-stolen-gate-patna-neet-protest-goes-viral/articleshow/132577095.cms"
+    },
+    {
+      "id": "tear-gas-request",
+      "location": "Patna, Bihar",
+      "event_date": null,
+      "publication_date": "2026-08-01",
+      "status": "quotation in opinion article; audio not checked",
+      "quote_as_printed": "Koi tear gas ka intejaam nahi kiye? Water cannon hee chala dijiye.",
+      "source": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z"
+    },
+    {
+      "id": "tuition-call",
+      "event_date": null,
+      "status": "unverified user-provided lead",
+      "claim": "Officer asked to pretend to be tuition teacher for mother",
+      "source": null,
+      "do_not_present_as_fact": true
+    },
+    {
+      "id": "cute-uncle",
+      "event_date": null,
+      "status": "unverified user-provided lead",
+      "claim": "Uncle aap cute ho exchange",
+      "source": null,
+      "do_not_present_as_fact": true
+    }
+  ],
+  "reaction_sample": {
+    "representative": false,
+    "directly_observed": false,
+    "method": "Three comments quoted by Free Press Journal, selected by publisher and researcher, handles omitted",
+    "source": "https://www.freepressjournal.in/amp/viral/protest-hai-ya-holi-party-patna-student-protesters-ask-police-for-water-cannon-amid-heat-dance-in-the-spray-video",
+    "comments": [
+      "Tear gas experience k liye delhi aana padega dost.",
+      "Ye protest ho raha hai ya Holi ki party.",
+      "Patna protesters have good sense of humor."
+    ]
+  },
+  "original_fictional_dialogue_in": "RESEARCH.md",
+  "remaining_checks": [
+    "Watch clips and verify audible wording",
+    "Establish first uploader and filming dates",
+    "Inspect small visible comment sample through authorized browser",
+    "Find original tuition and cute-uncle clips"
+  ],
+  "instagram_observations": {
+    "observed_on": "2026-10-15",
+    "method": "Root agent read visible comments through the user-authorized signed-in Chrome Instagram session. No interaction with likes, follows, messages or posting.",
+    "samples": [
+      {
+        "url": "https://www.instagram.com/reels/DeGYClxTsXK/",
+        "publisher": "indiebuzzofficial",
+        "caption_claim": "Woman takes bus ignition key; driver laughs. Caption says video shared October 3, 2026; original creator unknown.",
+        "caption_is_not_independent_verification": true,
+        "comment_count_displayed": 16,
+        "comment_age_displayed": "1 w",
+        "comments_excerpted_anonymously": [
+          "Absolute cinema",
+          "Wo stree hai, kuch bhi kar sakti hai 😂",
+          "This is jantar mantar entertainment 2.0😂😂",
+          "Funny huh? In what logic?"
+        ],
+        "other_reactions_paraphrased": [
+          "Several laughing emoji responses",
+          "One commenter argues the action obstructs official duties",
+          "Others criticize the behavior or the decision to record it"
+        ],
+        "representative_sample": false,
+        "video_audio_verified": false,
+        "game_inference": "Spectators should have different reactions: peer aura is distinct from bystander trust and police attention. A funny edit does not prove an event had no consequences."
+      }
+    ]
+  }
+}
