@@ -1,3 +1,4 @@
+import {WORLD_BOUNDS as B} from './dist/districts.js';
 import assert from 'node:assert/strict';
 import {Simulation,moveWithCollisions,visible,findPath,verticalStep,supportHeight,separateBodies,overlapsXZ,nearestFreePoint} from './dist/simulation.js';
 const wall={x:0,z:0,w:2,d:8,h:3};let e={x:-2,z:0,y:0};for(let i=0;i<60;i++)moveWithCollisions(e,.05,0,[wall]);assert(e.x< -1.3,'wall collision');assert(!visible({x:-3,z:0},{x:3,z:0},[wall]),'occluded vision');assert(visible({x:-3,z:7},{x:3,z:7},[wall]));const path=findPath({x:-5,z:0},{x:5,z:0},[wall]);assert(path.length>0);assert(path.some(p=>Math.abs(p.z)>=6),'path around wall');let s=new Simulation([]);let z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1});assert(s.player.z<z-3);const walk=z-s.player.z;s=new Simulation([]);z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1,sprint:true});assert(z-s.player.z>walk);assert(s.player.stamina<100);for(let i=0;i<120;i++)s.step(1/60,{});assert.equal(s.player.stamina,100);
@@ -81,9 +82,9 @@ assert.deepEqual(trapped,{x:28,z:3},'spawn recovery is pure');
 assert.deepEqual(escapedSpawn,nearestFreePoint(trapped,[bus]),'spawn recovery is deterministic');
 assert.deepEqual(nearestFreePoint({x:0,z:0},[]),{x:0,z:0});
 assert.equal(nearestFreePoint({x:0,z:0},[{x:0,z:0,w:100,d:100,h:3}],{maxRadius:2}),null);
-for(const point of [{x:-47,z:0},{x:53,z:0},{x:0,z:-45},{x:0,z:57}]){
+for(const point of [{x:B.minX,z:0},{x:B.maxX,z:0},{x:0,z:B.minZ},{x:0,z:B.maxZ}]){
  const recovered=nearestFreePoint(point,[]);assert(recovered);
- assert(recovered.x>=-46.6&&recovered.x<=52.6&&recovered.z>=-44.6&&recovered.z<=56.6,'body stays inside map bounds');
+ assert(recovered.x>=B.minX+.4&&recovered.x<=B.maxX-.4&&recovered.z>=B.minZ+.4&&recovered.z<=B.maxZ-.4,'body stays inside map bounds');
 }
 assert.equal(nearestFreePoint({x:1000,z:0},[]),null);
 assert.equal(nearestFreePoint({x:0,z:0},[bus],{maxRadius:0})?.x,0);

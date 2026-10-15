@@ -1,3 +1,4 @@
+import {WORLD_BOUNDS as B} from './districts.js';
 /** Versioned local-only continuation. No scene objects or transient UI are saved.
  * serializeSession({game,sim,npcs,items,camera?}) -> plain snapshot (not JSON).
  * restoreData(JSON string | snapshot) -> sanitized snapshot, or null on bad envelope/version.
@@ -21,7 +22,7 @@ const id=v=>typeof v==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(v)&&!['__proto__',
 // Plain text only: protects existing journal HTML rendering from persisted markup.
 const text=(v,max=600)=>typeof v==='string'?v.replace(/[<>\u0000-\u001f\u007f]/g,'').slice(0,max):'';
 const angle=(v,d=0)=>{const n=num(v,d,-1e6,1e6);return n>=-Math.PI&&n<=Math.PI?n:Math.atan2(Math.sin(n),Math.cos(n));};
-function position(v={},defaults={x:0,y:0,z:0}){return {x:num(v.x,defaults.x,-47,53),y:num(v.y,defaults.y,0,30),z:num(v.z,defaults.z,-45,57)};}
+function position(v={},defaults={x:0,y:0,z:0}){return {x:num(v.x,defaults.x,B.minX,B.maxX),y:num(v.y,defaults.y,0,30),z:num(v.z,defaults.z,B.minZ,B.maxZ)};}
 function uniqueRecords(values,limit,fn){const seen=new Set(),out=[];for(const v of Array.isArray(values)?values:[]){if(out.length>=limit)break;if(!obj(v))continue;const key=id(v.id);if(!key||seen.has(key))continue;seen.add(key);out.push(fn(v,key));}return out;}
 function social(v={}){const h=obj(v.history)?v.history:{},history={};for(const key of socialIds)if(own(h,key)&&obj(h[key]))history[key]={time:num(h[key].time),count:Math.floor(num(h[key].count,1,1,1e6))};return {history,lastTime:num(v.lastTime),cooldownUntil:num(v.cooldownUntil),officerMood:['relaxed','amused','watchful','firm'].includes(v.officerMood)?v.officerMood:'relaxed'};}
 function clean(session){

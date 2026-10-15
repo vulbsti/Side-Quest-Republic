@@ -1,3 +1,4 @@
+import {WORLD_BOUNDS as B} from './districts.js';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
@@ -9,7 +10,7 @@ export function overlapsXZ(e,o,r=e.radius??.36){
 // this is a bounded search, not a continuous geometric nearest-point solver.
 export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={}){
  if(!Number.isFinite(position?.x)||!Number.isFinite(position?.z)||!Number.isFinite(radius)||radius<0||!Number.isFinite(maxRadius)||maxRadius<0)return null;
- const legal=p=>p.x>=-47+radius&&p.x<=53-radius&&p.z>=-45+radius&&p.z<=57-radius;
+ const legal=p=>p.x>=B.minX+radius&&p.x<=B.maxX-radius&&p.z>=B.minZ+radius&&p.z<=B.maxZ-radius;
  const free=p=>legal(p)&&!obstacles.some(o=>(o.h??0)>0&&(o.base||0)<1.8&&overlapsXZ(p,o,radius));
  const origin={x:position.x,z:position.z};
  if(free(origin))return origin;
@@ -29,7 +30,7 @@ export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??
  const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
  for(let i=0;i<steps;i++)for(const axis of ['x','z']){
   const delta=(axis==='x'?dx:dz)/steps;if(!delta)continue;
-  const old=entity[axis];entity[axis]=clamp(old+delta,axis==='x'?-47:-45,axis==='x'?53:57);
+  const old=entity[axis];entity[axis]=clamp(old+delta,axis==='x'?B.minX:B.minZ,axis==='x'?B.maxX:B.maxZ);
   for(const o of obstacles){const feet=entity.y||0,top=o.h,bottom=o.base||0;
    if(feet>=top-.025||feet+(entity.height||1.8)<=bottom+.01)continue;
    if(overlapsXZ(entity,o,radius)){entity[axis]=old;break;}
@@ -90,4 +91,4 @@ else if(cop.state==='search'){if(detects){cop.state='chase';cop.search=6;}else{c
 }
 if(this.pursuit&&!pursuit&&!caught){this.escaped++;this.aura+=12;this.heat=Math.max(0,this.heat-16);}this.pursuit=pursuit;this.heat=clamp(this.heat-(pursuit?0:this.police.some(c=>c.state==='notice')?.05:1.3)*dt);if(caught){this.catches++;this.cooldown=12;this.heat=0;this.pursuit=false;for(const c of this.police){c.state='patrol';c.seen=0;}return 'caught';}return null;}
 }
-export function findPath(start,end,obstacles,step=2){const k=(x,z)=>x+','+z;const snap=n=>Math.round(n/step);const sx=snap(start.x),sz=snap(start.z),ex=snap(end.x),ez=snap(end.z);const blocked=(x,z)=>x*step< -46||x*step>50||z*step< -44||z*step>55||obstacles.some(o=>Math.abs(x*step-o.x)<o.w/2+.55&&Math.abs(z*step-o.z)<o.d/2+.55);if(blocked(ex,ez))return [];const open=[{x:sx,z:sz,g:0,f:0}],seen=new Map([[k(sx,sz),0]]),parents=new Map();let finish=null;for(let it=0;open.length&&it<3500;it++){open.sort((a,b)=>a.f-b.f);const n=open.shift();if(n.x===ex&&n.z===ez){finish=n;break;}for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){const x=n.x+dx,z=n.z+dz;if(blocked(x,z)||(dx&&dz&&(blocked(n.x+dx,n.z)||blocked(n.x,n.z+dz)))||[.25,.5,.75].some(t=>blocked(n.x+dx*t,n.z+dz*t)))continue;const g=n.g+Math.hypot(dx,dz),key=k(x,z);if(g>=(seen.get(key)??Infinity))continue;seen.set(key,g);parents.set(key,k(n.x,n.z));open.push({x,z,g,f:g+Math.hypot(ex-x,ez-z)});}}if(!finish)return [];let key=k(ex,ez),path=[];while(key!==k(sx,sz)){const [x,z]=key.split(',').map(Number);path.unshift({x:x*step,z:z*step});key=parents.get(key);if(!key)return [];}path.push({x:end.x,z:end.z});return path;}
+export function findPath(start,end,obstacles,step=2){const k=(x,z)=>x+','+z;const snap=n=>Math.round(n/step);const sx=snap(start.x),sz=snap(start.z),ex=snap(end.x),ez=snap(end.z);const blocked=(x,z)=>x*step<B.minX+1||x*step>B.maxX-1||z*step<B.minZ+1||z*step>B.maxZ-1||obstacles.some(o=>Math.abs(x*step-o.x)<o.w/2+.55&&Math.abs(z*step-o.z)<o.d/2+.55);if(blocked(ex,ez))return [];const open=[{x:sx,z:sz,g:0,f:0}],seen=new Map([[k(sx,sz),0]]),parents=new Map();let finish=null;for(let it=0;open.length&&it<18000;it++){open.sort((a,b)=>a.f-b.f);const n=open.shift();if(n.x===ex&&n.z===ez){finish=n;break;}for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){const x=n.x+dx,z=n.z+dz;if(blocked(x,z)||(dx&&dz&&(blocked(n.x+dx,n.z)||blocked(n.x,n.z+dz)))||[.25,.5,.75].some(t=>blocked(n.x+dx*t,n.z+dz*t)))continue;const g=n.g+Math.hypot(dx,dz),key=k(x,z);if(g>=(seen.get(key)??Infinity))continue;seen.set(key,g);parents.set(key,k(n.x,n.z));open.push({x,z,g,f:g+Math.hypot(ex-x,ez-z)});}}if(!finish)return [];let key=k(ex,ez),path=[];while(key!==k(sx,sz)){const [x,z]=key.split(',').map(Number);path.unshift({x:x*step,z:z*step});key=parents.get(key);if(!key)return [];}path.push({x:end.x,z:end.z});return path;}
