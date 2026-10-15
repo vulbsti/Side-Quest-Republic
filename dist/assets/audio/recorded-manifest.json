@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "clips": [
+    {
+      "id": "monkeys",
+      "kind": "music",
+      "src": "assets/audio/monkeys-spinning-monkeys-kevin-macleod.mp3",
+      "title": "Monkeys Spinning Monkeys",
+      "artist": "Kevin MacLeod",
+      "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "approvedForUse": true,
+      "durationSeconds": 125.0743,
+      "attribution": "\u201cMonkeys Spinning Monkeys\u201d \u2014 Kevin MacLeod (incompetech.com). Licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/",
+      "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+      "modifications": "Original downloaded MP3 is unmodified. Runtime volume changes, excerpting, looping and crossfading may be applied by the game."
+    },
+    {
+      "id": "run-amok",
+      "kind": "music",
+      "src": "assets/audio/run-amok-kevin-macleod.mp3",
+      "title": "Run Amok",
+      "artist": "Kevin MacLeod",
+      "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400024",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "approvedForUse": true,
+      "durationSeconds": 107.102063,
+      "attribution": "\u201cRun Amok\u201d \u2014 Kevin MacLeod (incompetech.com). Licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/",
+      "sha256": "12ee736658e7aab114f57a8edb034e8dafce37e01bdacd788b486377c4bd4d24",
+      "modifications": "Original downloaded MP3 is unmodified. Runtime volume changes, excerpting, looping and crossfading may be applied by the game."
+    }
+  ],
+  "music": {
+    "calm": "monkeys",
+    "uneasy": "monkeys",
+    "tense": "run-amok"
+  },
+  "cues": {},
+  "voices": []
+}

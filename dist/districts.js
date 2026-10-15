@@ -1,3 +1,4 @@
+import {SHOP_SOLIDS,FORECOURT_SOLIDS,URBAN_SOLIDS} from './destinations.js?v=12';
 /** Fictionalised Delhi-inspired geography; not a surveyed reproduction. */
 export const WORLD_BOUNDS=Object.freeze({minX:-90,maxX:90,minZ:-85,maxZ:100,x:[-90,90],z:[-85,100]});
 export const DISTRICTS=Object.freeze([
@@ -13,10 +14,12 @@ export const DISTRICTS=Object.freeze([
 ]);
 export const STORY_ANCHORS=Object.freeze({
  aidCamp:{x:-60,z:12,district:'supply'},pressLane:{x:58,z:-30,district:'press'},negotiationCourt:{x:58,z:45,district:'court'},backstreet:{x:-55,z:65,district:'backstreet'},assemblyGarden:{x:0,z:-65,district:'assembly'},
- aidDesk:{x:-68,z:8,district:'supply'},waterStore:{x:-66,z:22,district:'supply'},pressDesk:{x:66,z:-28,district:'press'},interviewCorner:{x:63,z:-40,district:'press'},civicDesk:{x:66,z:42,district:'court'},deliveryBay:{x:-65,z:71,district:'backstreet'},arrivalGate:{x:21,z:-69,district:'assembly'},assemblyEast:{x:58,z:-65,district:'assembly'}
+ aidDesk:{x:-68,z:8,district:'supply'},waterStore:{x:-66,z:22,district:'supply'},pressDesk:{x:66,z:-28,district:'press'},interviewCorner:{x:63,z:-40,district:'press'},civicDesk:{x:66,z:42,district:'court'},deliveryBay:{x:-65,z:71,district:'backstreet'},arrivalGate:{x:21,z:-69,district:'assembly'},assemblyEast:{x:58,z:-65,district:'assembly'},marketGate:{x:-14,z:72,district:'metro'},marketLane:{x:8,z:83,district:'metro'},danceCourt:{x:22,z:80,district:'metro'},photoCorner:{x:34,z:86.5,district:'court'},voiceBooth:{x:4,z:42.5,district:'metro'}
 });
 /** Broad navigable loops around existing colonnades, not shortcuts through them. */
 export const CONNECTION_ROUTES=Object.freeze([
+ {id:'market-west',points:[{x:-14,z:49},{x:-14,z:65},{x:-14,z:79},{x:8,z:83}]},
+ {id:'market-east',points:[{x:8,z:83},{x:22,z:80},{x:34,z:78},{x:45,z:65},{x:58,z:45}]},
  {id:'west',points:[{x:-35,z:30},{x:-60,z:30},{x:-60,z:12}]},
  {id:'southwest',points:[{x:-60,z:30},{x:-60,z:47},{x:-55,z:65},{x:-20,z:65},{x:-14,z:49}]},
  {id:'east',points:[{x:39,z:20},{x:58,z:20},{x:58,z:45},{x:58,z:65},{x:15,z:65}]},
@@ -39,7 +42,9 @@ export const EXPANSION_SOLIDS=Object.freeze([
  {id:'pressTable',x:67,z:-31,w:4,d:1.2,h:.9},
  {id:'civicOffice',x:76,z:43,w:12,d:20,h:7},
  {id:'civicTable',x:67,z:46,w:4,d:1.2,h:.9},
- {id:'galiShops',x:-55,z:84,w:40,d:8,h:6.8},
+ ...SHOP_SOLIDS,
+ ...URBAN_SOLIDS,
+ ...FORECOURT_SOLIDS,
  {id:'deliveryCrates',x:-69,z:73,w:3,d:3,h:1.5},
  {id:'civicBenchA',x:64,z:37,w:3,d:.7,h:.72,walkable:true},
  {id:'civicBenchB',x:64,z:51,w:3,d:.7,h:.72,walkable:true},

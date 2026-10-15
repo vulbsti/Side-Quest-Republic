@@ -1,0 +1,27 @@
+{
+  "status": "Validated revision ready for publication; broader realism and recorded-voice targets remain incomplete",
+  "implementation": [
+    "12 playable destinations and 24 choices with delayed callbacks",
+    "Nine local street vignettes with interruptible choices and gestures",
+    "Two autonomous boardable shuttles, seats, aisle movement and NPC yielding",
+    "Fixed 60Hz simulation; distant animation throttling and conservative mesh culling",
+    "47 core Hinglish dialogue strings revised; Asha scene revised",
+    "Two existing Kevin MacLeod recordings with source and CC BY 4.0 credits; synthetic voice off by default"
+  ],
+  "verified": [
+    "20 automated suites pass at v12",
+    "Browser: fresh opening interjection and delayed aura payoff",
+    "Browser: route to voice-note booth, dialogue choice and payoff",
+    "Browser: entered print shop through doorway and selected wedding-font branch",
+    "Browser: completed Asha encounter and encounter count advanced",
+    "Browser: recorded music selected as Monkeys Spinning Monkeys, synthetic voice unchecked",
+    "Chrome v12: east shuttle boarding, aisle walking, seat 0-1, passenger line, departure, requested return stop, exit to grounded on-foot position 58.2,42.3"
+  ],
+  "remaining": [
+    "Recorded reel dialogue unavailable: Instagram video downloader timed out on media-source blob",
+    "Actual listening/taste judgment not established by tests",
+    "Visual assets remain stylized; not photoreal or perfect physics"
+  ],
+  "preview": "http://127.0.0.1:4324/",
+  "performance": "Visible IAB sample 31.8fps, 310 draws / 1.26M triangles after culling versus earlier 462 / 2.06M; later background browser tabs throttled near 1fps, not a foreground performance sign-off."
+}

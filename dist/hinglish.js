@@ -1,6 +1,6 @@
 /** Original fictional Hinglish dialogue. Exact English lookup keys; unknown lines fall back unchanged. */
 export const HINGLISH = Object.freeze({
-  "You made it! Over here. And please tell me you brought common sense.": "Aa gaye! Idhar. Thodi samajhdaari bhi laaye ho na? Yahan shortage hai.",
+  "You made it! Over here. And please tell me you brought common sense.": "Aa gaye! Idhar aa. Phone pe location bheji thi—haan, galat wali. Ab mil gaye na.",
   "That is not a souvenir.": "Woh chaabi hai. Yaadgaar samajh ke mat le jao.",
   "Bro has unlocked a side quest with actual consequences.": "Ab is side quest mein consequences bhi aa gaye. Wah.",
   "At least ASK before you launch your music career.": "Music career shuru karne se pehle poochh toh lo!",

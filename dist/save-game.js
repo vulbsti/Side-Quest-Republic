@@ -1,4 +1,6 @@
-import {WORLD_BOUNDS as B} from './districts.js';
+import {restoreDestinationState} from './destinations.js?v=12';
+import {restoreTransit} from './transit.js?v=12';
+import {WORLD_BOUNDS as B} from './districts.js?v=12';
 /** Versioned local-only continuation. No scene objects or transient UI are saved.
  * serializeSession({game,sim,npcs,items,camera?}) -> plain snapshot (not JSON).
  * restoreData(JSON string | snapshot) -> sanitized snapshot, or null on bad envelope/version.
@@ -11,7 +13,7 @@ export const SAVE_VERSION=1;
 export const SAVE_KEY='side-quest-republic.session.v1';
 const MAX_BYTES=1_000_000;
 const flags=['intro','speakerBorrowed','speakerDelivered','speakerReturned','performance','adviceComplete','buddyComplete','costume','keyTaken','keyReturned','endShown','stageRewarded','costumeWorn','sloganComplete','campaignFinished'];
-const counters=['rizz','crowd','advice','buddy','water','stunts','interactions','playTime','timeAtStage','poseCooldown','restCooldown','speakerNoise'];
+const counters=['rizz','crowd','advice','buddy','water','stunts','interactions','playTime','timeAtStage','poseCooldown','restCooldown','speakerNoise','waterStock'];
 const socialIds=['career','tuition','compliment','water','teargas','friends','slogan'];
 const own=(v,k)=>Object.prototype.hasOwnProperty.call(v,k);
 const obj=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -28,6 +30,9 @@ function social(v={}){const h=obj(v.history)?v.history:{},history={};for(const k
 function clean(session){
  const g=session.game,s=session.sim,p=obj(s.player)?s.player:{};const game={};
  for(const k of flags)game[k]=bool(g[k]);for(const k of counters)game[k]=num(g[k]);
+ game.waterStock=num(g.waterStock,6,0,6);
+ if(obj(g.transit))game.transit=restoreTransit(g.transit);
+ if(obj(g.destinations))game.destinations=restoreDestinationState(g.destinations);
  game.trackedStory=['sound','advice','buddy','water','crowd','costume','key','metro','mira'].includes(g.trackedStory)?g.trackedStory:null;
  game.photos=[...new Set((Array.isArray(g.photos)?g.photos:[]).filter(v=>typeof v==='string').map(v=>text(v,120)).filter(Boolean))].slice(0,100);
  game.memories=[];const titles=new Set();for(const m of Array.isArray(g.memories)?g.memories:[]){if(game.memories.length>=150)break;if(!obj(m))continue;const title=text(m.title,140);if(!title||titles.has(title))continue;titles.add(title);game.memories.push({title,text:text(m.text,1200),time:num(m.time)});}

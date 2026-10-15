@@ -1,10 +1,11 @@
-import {THREE as T,cube,cylinder,sign,mat} from './world.js';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=12';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=12';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=12';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=12';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);
- const dynamicGroups={barricades:new T.Group(),arrivalFlags:new T.Group(),lamps:new T.Group()};
+ const dynamicGroups={barricades:new T.Group(),arrivalFlags:new T.Group(),lamps:new T.Group(),clockHands:new T.Group()};
  for(const [id,g]of Object.entries(dynamicGroups)){g.name=`Expansion ${id}`;scene.add(g);}
  let pavement,plaster;scene.traverse(o=>{if(!o.isMesh||Array.isArray(o.material))return;const path=o.material.map?.image?.src||'';if(path.includes('cobblestone'))pavement??=o.material;if(path.includes('plastered'))plaster??=o.material;});
  const stone=plaster||mat('#ddd6c5'),pave=mat('#bdb8aa');
@@ -34,10 +35,32 @@ export function expandWorld(world){
  for(let z=36;z<=50;z+=3.5){cube(.12,2,1.8,'#344f52',69.95,4.5,z,staticGroup);cube(.2,.12,2,'#f1e7cd',69.85,3.5,z,staticGroup);}
  label('CIVIC LIAISON / PUBLIC WAITING',64,56,12,'#736046',3.2);
  for(const z of [37,51]){cube(3,.12,.7,'#8b7354',64,.65,z,staticGroup);for(const x of [63,65])cube(.12,.6,.6,'#4b584d',x,.3,z,staticGroup);}
- // Shopfronts all face the shared street, with delivery/loading space.
- cube(40,6.8,8,stone,-55,3.4,84,staticGroup);
- const shopNames=['PHOTO / PRINT','GALI KIRANA','CYCLE REPAIR','CHAI & NASHTA','PHONE CHARGE'];
- for(let i=0;i<5;i++){const x=-71+i*8;cube(6.8,3,.15,'#556d66',x,1.5,79.92,staticGroup);cube(7.3,.22,2.2,['#ad654a','#71877b','#bc9e64'][i%3],x,3.6,79.1,staticGroup);label(shopNames[i],x,78.9,6.8,'#37554c',3.1);for(let y=.4;y<3;y+=.3)cube(6.7,.03,.05,'#82958a',x,y,79.81,staticGroup);cube(1.6,1.3,.15,'#3f5555',x,5.2,79.88,staticGroup);}
+ // Open shop doorways and detailed interiors use the exact same solid data as navigation.
+ for(const solid of SHOP_SOLIDS){const bottom=solid.base||0;cube(solid.w,solid.h-bottom,solid.d,solid.id.endsWith('Counter')?'#917053':solid.id.endsWith('Shelf')?'#6a6a50':stone,solid.x,(solid.h+bottom)/2,solid.z,staticGroup);}
+ for(const shop of SHOP_LAYOUT){const x=shop.x;ground(7.7,7.7,x,84,'#c5bdab');cube(7.3,.22,2.2,shop.color,x,3.6,79.1,staticGroup);label(shop.name,x,78.9,6.8,'#37554c',3.1);cube(1.6,1.3,.15,'#3f5555',x,5.2,79.88,staticGroup);
+  label('AAO / OPEN',x,80.12,2.2,'#547463',2.65);
+  const glow=new T.MeshStandardMaterial({color:'#f4e7bd',emissive:'#e7cd92',emissiveIntensity:.5});cube(2,.05,.7,glow,x,3.72,84,staticGroup);
+  for(let i=0;i<7;i++){cube(.45,.35,.35,['#ac7955','#829278','#b5a66d'][i%3],x-2.1+i*.7,2.08,87.25,staticGroup);}
+  if(shop.id==='print'){cube(.65,.35,.65,'#d1d3c6',x+2.4,1.18,84.4,staticGroup);for(let j=0;j<3;j++)cube(.5,.025,.7,'#f5eedb',x+2.4,1.02+j*.03,85.2,staticGroup);}
+  if(shop.id==='chai'){cylinder(.22,.3,.5,'#b1b7b1',x+2.4,1.25,84.4,staticGroup,14);for(let j=0;j<3;j++)cylinder(.08,.06,.16,'#c59b72',x+2.4,1.1,83.7+j*.2,staticGroup,10);}
+  if(shop.id==='charge'){for(let j=0;j<4;j++)cube(.18,.025,.32,'#314e50',x+2.4,1.03,83.8+j*.4,staticGroup);}
+ }
+ // A second market loop gives the southern square its own silhouette and activities.
+ ground(64,21,8,84,'#c1ad8e');ground(14,8,22,80,'#b98d72');
+ for(const solid of URBAN_SOLIDS){const bottom=solid.base||0;cube(solid.w,solid.h-bottom,solid.d,solid.color,solid.x,(solid.h+bottom)/2,solid.z,staticGroup);}
+ for(const [text,x,z,w,bg,y]of[['GALI BAZAAR / ANDAR AAO',8,85,22,'#815f49',4.5],['SECOND-HAND / FIRST IMPRESSIONS',-8,87,7,'#56684d',2.8],['CHAAT: CONFIDENCE EXTRA',-23,75,5,'#927449',2.5],['EIGHT COUNTS. NO GUARANTEES.',22,83.5,10,'#9b695b',3.2],['MAIN CHARACTER',35,88.88,5.5,'#659c99',2.0],['VOICE NOTES / ONE MORE TAKE',4,41.85,4,'#76638b',2.6]])label(text,x,z,w,bg,y);
+ // Clock face, books, spice jars and floor marks are batched static details.
+ const face=new T.Mesh(new T.CircleGeometry(.85,24),new T.MeshStandardMaterial({color:'#f1dfb3',side:T.DoubleSide}));face.position.set(8,8,90.35);staticGroup.add(face);dynamicGroups.clockHands.position.set(8,8,90.3);const hourHand=new T.Group(),minuteHand=new T.Group();cube(.07,.45,.04,'#35483c',0,.2,0,hourHand);cube(.04,.7,.04,'#35483c',0,.3,-.03,minuteHand);dynamicGroups.clockHands.add(hourHand,minuteHand);
+ for(const x of [-16,-8,0,16,24,32])for(let i=0;i<9;i++)cube(.45,.18+(i%3)*.15,.6,['#6d7e6a','#a46b53','#c2a15e'][i%3],x-2.1+i*.5,1.2+(i%3)*.075,91,staticGroup);
+ for(let i=0;i<4;i++)cylinder(.15,.15,.4,['#b07b45','#a59151','#637753','#8e513e'][i],-23,1.4,74+i*.55,staticGroup,8);
+ for(let i=0;i<4;i++)cube(1.2,.015,.12,'#e8c99f',18+i*2.5,.03,79,staticGroup);
+ label('BAZAAR →',-14,67,5,'#705d43',2.6);label('← METRO / → CIVIC COURT',31,73,11,'#536f59',2.6);
+ // Bus bays are road-level; shelters sit outside the moving 3 x 8 metre vehicle corridor.
+ for(const stop of FORECOURTS){ground(4.2,12,stop.bus.x,stop.bus.z,'#797e74');ground(4.4,8,stop.x,stop.z,'#c8c2af');for(let i=-2;i<=2;i++)cube(.12,.015,1.1,'#e0c582',stop.bus.x+(stop.bus.x>0?-2:2),.04,stop.bus.z+i*2,staticGroup);
+  label('BUS / '+stop.name,stop.x,stop.z+2.5,4.5,'#356455',2.5);
+  for(const solid of FORECOURT_SOLIDS.filter(o=>o.id.startsWith(stop.id))){const bottom=solid.base||0;cube(solid.w,solid.h-bottom,solid.d,solid.id.endsWith('Bench')?'#8c7858':'#617c6b',solid.x,(solid.h+bottom)/2,solid.z,staticGroup);}
+ }
+ label('SERVICE COURTYARD / SABKA RAASTA',-47,76,10,'#7d6f50',3.1);
  for(let i=0;i<4;i++){cube(1.25,.75,1.25,'#b39764',-69+(i%2)*1.3,.375+Math.floor(i/2)*.75,73,staticGroup);}
  label('DELIVERIES / KEEP THE LANE CLEAR',-63,75,9,'#8c684a',2.5);
  for(const x of [-14,14]){cube(7,.6,3,'#b1a991',x,.3,-74,staticGroup);cube(6.6,.05,2.6,'#687b53',x,.62,-74,staticGroup);}
@@ -52,11 +75,11 @@ export function expandWorld(world){
  consolidate(staticGroup);
  world.camera.far=Math.max(world.camera.far,330);world.camera.updateProjectionMatrix();if(scene.fog){scene.fog.near=120;scene.fog.far=285;}
  const initialSun=world.sun?.intensity??2.45;let elapsed=0;
- function update(state={},dt=0){elapsed+=dt;const raw=state.phase?.id??state.phase??state.timeline?.phase??'morning';const phase=String(raw);const progress=phase.includes('evening')||phase.includes('climax')||phase.includes('aftermath')?1:phase.includes('afternoon')||phase.includes('rupture')?.65:phase.includes('midday')?.35:0;
+ function update(state={},dt=0){elapsed+=dt;const minutes=9*60+Math.max(0,Math.min(1200,Number(state.time)||0))/1200*540;hourHand.rotation.z=-minutes/720*Math.PI*2;minuteHand.rotation.z=-minutes/60*Math.PI*2;const raw=state.phase?.id??state.phase??state.timeline?.phase??'morning';const phase=String(raw);const progress=phase.includes('evening')||phase.includes('climax')||phase.includes('aftermath')?1:phase.includes('afternoon')||phase.includes('rupture')?.65:phase.includes('midday')?.35:0;
   if(world.sun){world.sun.intensity=T.MathUtils.lerp(initialSun,1.3,progress);world.sun.color.set(progress>.6?'#ffc999':'#fff3dd');world.sun.position.y=55-progress*32;}
   bulbs.forEach(b=>b.material.emissiveIntensity=.1+progress*1.8);dynamicGroups.barricades.userData.posture=progress>=.65?'reinforced':'parked';
   dynamicGroups.arrivalFlags.children.forEach((f,i)=>{f.rotation.y=Math.sin(elapsed*1.6+i)*.1;});
  }
- return {districts:DISTRICTS,anchors:STORY_ANCHORS,connections:CONNECTION_ROUTES,dynamicGroups,update};
+ return {destinations:DESTINATIONS,districts:DISTRICTS,anchors:STORY_ANCHORS,connections:CONNECTION_ROUTES,dynamicGroups,update};
 }
 function consolidate(group){group.updateMatrixWorld(true);const batches=new Map();group.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone();g.applyMatrix4(o.matrixWorld);const arr=batches.get(o.material)||[];arr.push(g.index?g.toNonIndexed():g);batches.set(o.material,arr);});group.clear();for(const [material,geos]of batches){const geometry=mergeGeometries(geos,false);if(geometry){const mesh=new T.Mesh(geometry,material);mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}geos.forEach(g=>g.dispose());}}

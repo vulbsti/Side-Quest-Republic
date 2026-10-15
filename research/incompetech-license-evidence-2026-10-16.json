@@ -1,0 +1,42 @@
+{
+  "retrieved": "2026-10-16",
+  "url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+  "catalogUrl": "https://incompetech.com/music/royalty-free/pieces.json",
+  "attributionTemplateHtml": "<b>Attribution Code</b><br>\n                                        <tt>\n                                            \"${escapeHtml(p.title || '')}\" Kevin MacLeod (incompetech.com)<br>\n                                            Licensed under Creative Commons: By Attribution 4.0 License<br>\n                                            http://creativecommons.org/licenses/by/4.0/\n                                        </tt>",
+  "catalogEntries": [
+    {
+      "title": "Run Amok",
+      "filename": "Run Amok.mp3",
+      "length": "00:01:47",
+      "instruments": "Strings, Tuba, Trumpet, Trombones, Marimba, Clarinet, Bassoon, English Horn, Oboe, Percussion",
+      "genre": "20",
+      "bpm": "148",
+      "description": "Super comedy action sequence. You'll know if you need this.",
+      "feel": "Action, Bouncy, Bright, Humorous",
+      "uploaded": "2014-05-19",
+      "isrc": "USUAN1400024",
+      "collection": "34",
+      "sheetmusic": null,
+      "video": null,
+      "itunes": null,
+      "filmmusicURL": null
+    },
+    {
+      "title": "Monkeys Spinning Monkeys",
+      "filename": "Monkeys Spinning Monkeys.mp3",
+      "length": "00:02:05",
+      "instruments": "Flutes, Violin, Viola, Cello",
+      "genre": "22",
+      "bpm": "144",
+      "description": "Loopable happy light fluffy piece with bright flutes and a bunch of pizzicato strings.",
+      "feel": "Bouncy, Bright, Humorous, Uplifting",
+      "uploaded": "2014-02-03",
+      "isrc": "USUAN1400011",
+      "collection": "34",
+      "sheetmusic": "Monkeys Spinning Monkeys - Piano Solo.pdf",
+      "video": "https://youtu.be/2eZVbrO6Z1M",
+      "itunes": null,
+      "filmmusicURL": null
+    }
+  ]
+}

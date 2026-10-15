@@ -1,0 +1,21 @@
+/* Keep the street and actors visible while an authored exchange is performed. */
+#dayPanel[data-view="scene"]{position:fixed;inset:auto 16px 14px auto;margin:0;width:min(690px,calc(100vw - 32px));max-width:690px;max-height:58vh;background:rgba(18,42,37,.94);color:#f5efd7;border:1px solid #b9c69b66;border-radius:18px;box-shadow:0 12px 60px #0005;backdrop-filter:blur(10px)}
+#dayPanel[data-view="scene"]::backdrop{background:linear-gradient(180deg,transparent 45%,#07171330);backdrop-filter:none}
+#dayPanel[data-view="scene"]>header{padding:9px 16px;border-bottom:1px solid #b9c69b33;min-height:0}
+#dayPanel[data-view="scene"]>header>div{display:none}
+#dayPanel[data-view="scene"] #closeDay{margin-left:auto;padding:5px 9px;background:transparent;font-size:12px}
+#dayPanel[data-view="scene"]>nav,#dayPanel[data-view="scene"]>footer{display:none}
+#dayPanel[data-view="scene"] #dayBody{padding:12px 20px 15px;max-height:calc(58vh - 48px);overflow-y:auto}
+#dayPanel[data-view="scene"] h1{font-size:clamp(22px,3vw,31px);margin:4px 0 10px;line-height:1.1}
+#dayPanel[data-view="scene"] blockquote{margin:10px 0 12px;padding:0;border:0;font-size:clamp(18px,2vw,24px)!important;color:#fff8dd}
+#dayPanel[data-view="scene"] .day-choices{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+#dayPanel[data-view="scene"] .day-choices button{text-align:left;padding:10px 12px;font-size:13px;background:#244f42;border:1px solid #b9c69b55;color:#fff5d6}
+#dayPanel[data-view="scene"] .scene-tools{display:flex;gap:8px;margin-top:12px}
+#dayPanel[data-view="scene"] .scene-tools button{font-size:12px;padding:6px 10px;background:transparent;border:1px solid #9aad8d55;color:#d4dfc5}
+#dayPanel[data-view="scene"] .fine{font-size:11px;margin:8px 0 0;color:#c1ceb2}
+#nextSceneBeat{padding:9px 16px;background:#dceca3;color:#172e25;border:0;border-radius:7px}
+#nextSceneBeat:disabled{opacity:.45;cursor:default}
+#dayVoiceChoice{max-width:190px;background:#244f42;color:#fff5d6;border:1px solid #9aad8d55;padding:7px;border-radius:6px}
+@media(max-width:600px){#dayPanel[data-view="scene"]{inset:auto 8px max(8px,env(safe-area-inset-bottom)) 8px;width:auto;max-height:57vh}#dayPanel[data-view="scene"] #dayBody{padding:10px 14px;max-height:calc(57vh - 45px)}#dayPanel[data-view="scene"] .day-choices{grid-template-columns:1fr}#dayPanel[data-view="scene"] h1{font-size:23px}}
+
+#chapter{width:250px;padding:18px 20px}#chapter h2{font-size:23px}#chapter p{font-size:12px;line-height:1.5}#chapterProgress{font-size:10px}#objectiveSub{font-size:10px}#controls{opacity:.75}.sound-controls{display:grid;gap:18px;text-align:left;margin:24px 0}.sound-controls label{display:flex;gap:12px;align-items:center}.sound-controls select{max-width:320px;padding:9px;background:#284b40;color:#fff5dc}#nearbyActions button{max-width:330px;text-align:left}@media(max-width:700px){#chapter{width:210px;padding:12px}#chapter h2{font-size:19px}#chapter p{display:none}}

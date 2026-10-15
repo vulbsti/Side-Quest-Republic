@@ -1,0 +1,116 @@
+{
+  "researched_on": "2026-10-16",
+  "request": "Existing recorded short Hindi/Hinglish comic reactions from protest reels",
+  "method": "Existing signed-in observation records plus public-source web queries; no browser control, no audio transcription capability used",
+  "summary": {
+    "verified_primary_spoken_recordings": 0,
+    "article_transcribed_short_excerpts": 2,
+    "game_assets_admitted": 0
+  },
+  "sources": [
+    {
+      "id": "live-reel-1",
+      "url": "https://www.instagram.com/peeinghuman/reel/DeU2JR_zqYq/",
+      "publisher": "peeinghuman",
+      "observed_caption": "Dosti > detention",
+      "caption_is_transcript": false,
+      "observation_record": "live-research-2026-10-16.json",
+      "current_web_fetch": "Internal error; audio not accessible through web tool",
+      "exact_spoken_text": null,
+      "timestamp": null,
+      "audio_heard": false,
+      "original_recording_owner": "Not established; visible publisher may be reposting",
+      "redistribution_permission": "Not established",
+      "download_route": "No verified authorised download/redistribution route; retain as source link pending original-owner clearance",
+      "use": "Reference only"
+    },
+    {
+      "id": "live-reel-2",
+      "url": "https://www.instagram.com/peeinghuman/reel/DbiQK6GMi_v/",
+      "publisher": "peeinghuman",
+      "observed_caption": "Part 2: BADDIES of RESISTANCE, caption identifies Jantar Mantar 20 July 2026",
+      "caption_is_transcript": false,
+      "observation_record": "live-research-2026-10-16.json",
+      "current_web_fetch": "Internal error; audio not accessible through web tool",
+      "exact_spoken_text": null,
+      "timestamp": null,
+      "audio_heard": false,
+      "original_recording_owner": "Not established; visible publisher may be reposting",
+      "redistribution_permission": "Not established",
+      "download_route": "No verified authorised download/redistribution route; retain as source link pending original-owner clearance",
+      "use": "Reference only"
+    },
+    {
+      "id": "live-reel-3",
+      "url": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "publisher": "peeinghuman",
+      "observed_caption": "Dalli police se ek zaroori sawaal",
+      "caption_is_transcript": false,
+      "observation_record": "live-research-2026-10-16.json",
+      "current_web_fetch": "Internal error; audio not accessible through web tool",
+      "exact_spoken_text": null,
+      "timestamp": null,
+      "audio_heard": false,
+      "original_recording_owner": "Not established; visible publisher may be reposting",
+      "redistribution_permission": "Not established",
+      "download_route": "No verified authorised download/redistribution route; retain as source link pending original-owner clearance",
+      "use": "Reference only"
+    },
+    {
+      "id": "detain-friends",
+      "url": "https://www.instagram.com/reel/DeGcEyuhznq/",
+      "publisher": "definedbharat.in per NDTV embed",
+      "original_recording_owner": "Not established",
+      "supporting_source": "https://english.varthabharati.in/india/delhi-sir-mujhe-bhi-detain-kar-lo-mere-dost-andar-hai-protesters-bus-takes-hilarious-twist-at-jantar-mantar-2280407",
+      "publication_date": "2026-10-05",
+      "reported_spoken_excerpt": "Uncle, hum teen log saath mein aaye the.",
+      "verification": "Exact short excerpt printed in publisher reporting; not independently heard or timed",
+      "timestamp": null,
+      "audio_heard": false,
+      "redistribution_permission": "Not established",
+      "use": "Reference only; source ownership and clean audio need verification"
+    },
+    {
+      "id": "patna-water-teargas",
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald; Jaideep Hardikar",
+      "publication_date": "2026-08-01",
+      "reported_spoken_excerpt": "Koi tear gas ka intejaam nahi kiye? Water cannon hee chala dijiye.",
+      "verification": "Article-transcribed quotation in opinion piece, attributed to Patna. No primary audio or timestamp verified.",
+      "location": "Patna, not Jantar Mantar",
+      "audio_heard": false,
+      "timestamp": null,
+      "original_recording_owner": "Not identified",
+      "redistribution_permission": "Not established",
+      "use": "Reference only"
+    },
+    {
+      "id": "phone-voice-cc0-candidate",
+      "url": "https://freesound.org/people/kalhan/sounds/656499/",
+      "publisher": "kalhan",
+      "publication_date": "2022-10-31",
+      "title": "PHONE VOICE MAHARASHTRA.wav",
+      "listed_license": "CC0",
+      "license_observation": "Freesound item explicitly displays Creative Commons 0 and commercial copy/modify/distribute permission.",
+      "description": "Cell phone utility recording, English/Hindi/Marathi tags; recorded in Mumbai.",
+      "public_preview_url": "https://cdn.freesound.org/previews/656/656499_2161107-hq.mp3",
+      "download_route": "Public MP3 preview discovered in source HTML; full WAV requires Freesound login.",
+      "audio_heard": false,
+      "exact_spoken_text": null,
+      "timestamp": null,
+      "fitness": "Not a protest reel or verified comic reaction; may include a recorded telecom announcement, whose underlying voice ownership is not established by the uploader label alone.",
+      "use": "Candidate not admitted; no game asset downloaded"
+    }
+  ],
+  "excluded_alternatives": [
+    {
+      "source": "Mozilla Common Voice Hindi",
+      "reason": "Scripted ASR speech rather than reel performance; current Data Collective pages also restrict dataset rehosting. Not an equivalent replacement."
+    },
+    {
+      "source": "Meme repost download sites",
+      "reason": "No original-owner or redistribution basis established; captions not treated as spoken transcripts."
+    }
+  ],
+  "production_next_step": "Obtain an original-owner-cleared copy of the chosen reel; listen and mark exact in/out times, identify any embedded music separately, preserve attribution/permission, then crop and normalise a short clip. Until then use source links only and do not label synthetic or procedural sound as the original recording."
+}

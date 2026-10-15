@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "verifiedOn": "2026-10-16",
+  "tracks": [
+    {
+      "id": "playful_street",
+      "title": "Monkeys Spinning Monkeys",
+      "artist": "Kevin MacLeod",
+      "artistUrl": "https://incompetech.com/",
+      "path": "assets/audio/monkeys-spinning-monkeys-kevin-macleod.mp3",
+      "sourcePage": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+      "downloadUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Monkeys%20Spinning%20Monkeys.mp3",
+      "isrc": "USUAN1400011",
+      "published": "2014-02-03",
+      "durationSeconds": 125.0743,
+      "bytes": 5005207,
+      "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+      "bpm": 144,
+      "instruments": "Flutes, Violin, Viola, Cello",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "\u201cMonkeys Spinning Monkeys\u201d \u2014 Kevin MacLeod (incompetech.com). Licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/",
+      "modifications": "Original downloaded MP3 is unmodified. Runtime volume changes, excerpting, looping and crossfading may be applied by the game.",
+      "fit": "Playful flute and pizzicato texture for small comic street encounters; avoid using underneath serious injury scenes.",
+      "evidence": {
+        "artistCatalog": "https://incompetech.com/music/royalty-free/pieces.json",
+        "licenseLocation": "Official track-page HTML attribution-code template, retrieved 2026-10-16, explicitly states Creative Commons By Attribution 4.0."
+      },
+      "validation": {
+        "downloaded": true,
+        "ffprobeReadable": true,
+        "listeningReview": "Pending in-game listening review by coordinator; selection grounded in the original artist descriptions and established track identity."
+      }
+    },
+    {
+      "id": "comic_chase",
+      "title": "Run Amok",
+      "artist": "Kevin MacLeod",
+      "artistUrl": "https://incompetech.com/",
+      "path": "assets/audio/run-amok-kevin-macleod.mp3",
+      "sourcePage": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400024",
+      "downloadUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Run%20Amok.mp3",
+      "isrc": "USUAN1400024",
+      "published": "2014-05-19",
+      "durationSeconds": 107.102063,
+      "bytes": 3429480,
+      "sha256": "12ee736658e7aab114f57a8edb034e8dafce37e01bdacd788b486377c4bd4d24",
+      "bpm": 148,
+      "instruments": "Strings, Tuba, Trumpet, Trombones, Marimba, Clarinet, Bassoon, English Horn, Oboe, Percussion",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "\u201cRun Amok\u201d \u2014 Kevin MacLeod (incompetech.com). Licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/",
+      "modifications": "Original downloaded MP3 is unmodified. Runtime volume changes, excerpting, looping and crossfading may be applied by the game.",
+      "fit": "Fast orchestral comedy-action for brief chases and slapstick motion; avoid presenting real suffering as a gag.",
+      "evidence": {
+        "artistCatalog": "https://incompetech.com/music/royalty-free/pieces.json",
+        "licenseLocation": "Official track-page HTML attribution-code template, retrieved 2026-10-16, explicitly states Creative Commons By Attribution 4.0."
+      },
+      "validation": {
+        "downloaded": true,
+        "ffprobeReadable": true,
+        "listeningReview": "Pending in-game listening review by coordinator; selection grounded in the original artist descriptions and established track identity."
+      }
+    }
+  ],
+  "rightsNotes": [
+    "Permissions verified from the original artist site, not an uploader or an assumption based on popularity.",
+    "The current artist track-page attribution template offers CC BY 4.0. Older third-party references mentioning 3.0 are not the basis used here.",
+    "Credit the artist and license in the game; do not imply endorsement.",
+    "These are existing tracks published in 2014, not newly generated game music. No human dialogue recording is included in this package."
+  ]
+}

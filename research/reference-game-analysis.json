@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-16",
+  "basis": "Analysis of root observation log live-research-2026-10-16.json. This analyst did not perform an additional browser session.",
+  "reference": {
+    "game": "https://mantarjantar.com/",
+    "tested_mode": "Practice offline",
+    "not_verified": [
+      "Multiplayer",
+      "Full round completion",
+      "All advertised actions",
+      "Audio quality"
+    ]
+  },
+  "observed_design": [
+    {
+      "observation": "Contextual TV interview was exercised; points and crowd changed.",
+      "inference": "A legible action can create a consequence immediately, without a long mission introduction.",
+      "adaptation": "Make an encounter discoverable through a short nearby action; let the response visibly change the surrounding scene.",
+      "not_supported": "This does not establish how every score or crowd mechanic works."
+    },
+    {
+      "observation": "Traffic, NPC crowds, timed reinforcement waves and an event ledger continued in the observed offline session.",
+      "inference": "Parallel visible motion and events can make idle time feel consequential.",
+      "adaptation": "Show arrivals, announcements and movement in the street; social-state changes should affect people the player can see.",
+      "not_supported": "A brief observation does not establish a deep agent simulation underneath."
+    },
+    {
+      "observation": "Mouse movement, contextual clicks, destination compass, minimap, hide locations and a bus stop were present.",
+      "inference": "Clear navigational cues and short action paths reduce the gap between an idea and trying it.",
+      "adaptation": "Keep one obvious immediate verb nearby; use detailed dialogue only for encounters that need it."
+    },
+    {
+      "observation": "A satirical news ticker was visible.",
+      "inference": "The presentation can reinterpret what happens while ordinary play continues.",
+      "adaptation": "Use a selective, fallible feed reacting to recorded events; do not make it an omniscient statement of truth."
+    },
+    {
+      "observation": "An automatic fast-graphics fallback message appeared.",
+      "inference": "The reference anticipates variable hardware.",
+      "adaptation": "Offer a visible performance preset that preserves interaction clarity and the same world rules."
+    }
+  ],
+  "reaction_analysis": [
+    {
+      "source": "https://www.instagram.com/bugswriter/reel/DehgRPtSt6M/",
+      "observed_paraphrase": "A commenter reports being detained while dancing. Others ask for updates, downloads, accounts and familiar political figures.",
+      "inference": "At least some viewers describe memorable collisions between activities, not merely mission completion.",
+      "design_test": "Can a player retell an unscripted-looking interaction in one sentence using their own actions?",
+      "limit": "Self-reported platform comments; no representative retention or engagement evidence."
+    },
+    {
+      "source": "https://www.instagram.com/peeinghuman/reel/DeU2JR_zqYq/",
+      "observed_paraphrase": "Caption prioritises friendship over detention; visible comments compare the officer to a bus conductor and invoke backbencher behaviour. One commenter claims a very short acquaintance joined them. Serious criticism also appears.",
+      "inference": "Belonging can motivate a ridiculous request sincerely; procedural confusion supplies the comic reversal.",
+      "adaptation": "Let a character commit to a new friend with disproportionate confidence, then struggle with basic location logistics.",
+      "limit": "No verified spoken transcript; the acquaintance claim remains a commenter claim."
+    },
+    {
+      "source": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "observed_paraphrase": "Comments describe recording-glasses role reversal, apparent innocence, amusement and political anger.",
+      "inference": "A literal, polite question may change who must explain themselves.",
+      "adaptation": "Give a character a specific awkward question and allow the recipient to answer, evade or become distracted.",
+      "limit": "The exact question and tone were not audio-verified."
+    },
+    {
+      "source": "https://www.instagram.com/peeinghuman/reel/DbiQK6GMi_v/",
+      "observed_paraphrase": "Playful series title accompanies comments focused on distress, remembrance and accountability.",
+      "inference": "Meme packaging is insufficient evidence that the underlying experience was funny.",
+      "adaptation": "Allow audience disagreement and serious local context to alter whether a joke lands.",
+      "limit": "Do not turn comment claims into verified descriptions of events."
+    }
+  ],
+  "publisher_profile": {
+    "name": "Suraj Kushwah",
+    "handle": "bugswriter",
+    "sources": [
+      "https://bugswriter.com/jantar-mantar-game/",
+      "https://bugswriter.com/",
+      "https://www.instagram.com/bugswriter/"
+    ],
+    "observed_self_descriptions": [
+      "Personal game project",
+      "Computer enthusiast and Linux YouTuber",
+      "Game page describes DevOps work at OnePlay",
+      "Main site describes software engineering and founding Bugswriter.ai"
+    ],
+    "employment_independently_verified": false,
+    "stated_creative_position": "Game page frames the experience as chaos without telling players what to think.",
+    "stated_taste": "Main site names Morrowind among favourite games.",
+    "inference": "The public framing suggests comfort with player-led experimentation and emergent anecdotes.",
+    "inference_limits": [
+      "Do not infer the publisher’s politics, private motives or complete design process.",
+      "Do not claim Morrowind directly determined any specific mechanic without a statement from the creator."
+    ]
+  },
+  "our_current_gap": "The current build has more structured dialogue and an inspector, but interface depth can still exceed the visible depth of street behaviour. Adding words does not replace actors performing the consequences.",
+  "priority_changes": [
+    {
+      "priority": 1,
+      "change": "Immediate local affordance",
+      "acceptance": "Within seconds of approaching a person, the player sees a short useful action without opening a full journal."
+    },
+    {
+      "priority": 2,
+      "change": "Performed consequences",
+      "acceptance": "A handover moves an object, a reunion brings people together, and an interruption changes the action before rewards commit."
+    },
+    {
+      "priority": 3,
+      "change": "Visible independent events",
+      "acceptance": "Watching without input reveals a meaningful arrival, announcement or disagreement, with actors responding locally."
+    },
+    {
+      "priority": 4,
+      "change": "Comic character fallibility",
+      "acceptance": "Mira can send the wrong location; the officer can answer literally; Kabir can discover his own plan is embarrassing."
+    },
+    {
+      "priority": 5,
+      "change": "Distinct audience reactions",
+      "acceptance": "The same filmed action produces different responses from friends, witnesses and people who saw only the edit."
+    }
+  ],
+  "writing_audit": {
+    "source": "dist/hinglish.js:3 and dist/main.js:68",
+    "issue": "Intro common-sense shortage and generic activity barks position characters as moral supervisors.",
+    "proposed_mira_intro": "Aa gaye! Idhar aa. Phone pe location bheji thi—haan, galat wali. Ab mil gaye na.",
+    "alternative_short_intro": "Aa gaye! Idhar. Main tumhe dhoondhne nikli thi, khud hi ghoom gayi.",
+    "proposed_concrete_barks": [
+      "Yeh bag pakad, main cup nikaalun.",
+      "Ruk, kisne bheja tha message?",
+      "Do kadam idhar. Haan, bas."
+    ],
+    "status": "Suggestions only; this analysis pass did not edit game files."
+  },
+  "reuse_boundary": "Design lessons and original adaptations only; no source assets, recordings or creator likeness acquired for reuse."
+}

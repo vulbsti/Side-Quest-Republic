@@ -1,4 +1,4 @@
-// Original authored fiction. Simulation time is seconds in a 1200-second day.
+// Original authored fiction. Performance beats are invented, not reel transcriptions.
 export const DAY_ACTORS = [
   {
     "id": "mira",
@@ -847,7 +847,6 @@ export const DAY_ACTORS = [
     "knowledgePolicy": "Witness, report or attributable message required; no automatic global knowledge"
   }
 ];
-
 export const DAY_DISTRICTS = [
   {
     "id": "cp",
@@ -906,7 +905,6 @@ export const DAY_DISTRICTS = [
     "context": "shops, residents and overlooked witnesses"
   }
 ];
-
 export const DAY_ENCOUNTERS = [
   {
     "id": "tuition_call",
@@ -919,8 +917,8 @@ export const DAY_ENCOUNTERS = [
     "choices": [
       {
         "id": "teacher",
-        "label": "Offer to play the tuition teacher",
-        "line": "Kabir: Bhai, attendance se zyada acting important ho gayi.",
+        "label": "Try being the tuition teacher yourself",
+        "line": "Revision. Bas revision bol de.",
         "effects": [
           {
             "type": "relationship",
@@ -935,14 +933,39 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "tuition_friend"
+          },
+          {
+            "type": "flag",
+            "target": "performed_tuition_call",
+            "value": "teacher"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "kabir",
+            "line": "Haan mummy, sir hain. Sir… naam?",
+            "action": "phone-offer",
+            "duration": 1.2
+          },
+          {
+            "speaker": "officer",
+            "line": "Naam bhi abhi decide karoge?",
+            "action": "pause",
+            "duration": 1.2
+          },
+          {
+            "speaker": "kabir",
+            "line": "Revision. Bas revision bol de.",
+            "action": "phone-call",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "ask",
-        "label": "Ask Sharma if he will play along",
-        "line": "Sharma: Teacher nahi hoon. Ghar pe bol do safe ho. Camera neeche.",
+        "label": "Ask Sharma if he will take the call",
+        "line": "Haan. Ab tum pehle ghar pe baat kar lo.",
         "effects": [
           {
             "type": "relationship",
@@ -957,14 +980,39 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "officer_recognizes"
+          },
+          {
+            "type": "flag",
+            "target": "performed_tuition_call",
+            "value": "ask"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "officer",
+            "line": "Phone pakdao. Pehle tumhara naam batao.",
+            "action": "phone-offer",
+            "duration": 1.2
+          },
+          {
+            "speaker": "kabir",
+            "line": "Mera? Aapko mummy ko subject bolna hai.",
+            "action": "pause",
+            "duration": 1.2
+          },
+          {
+            "speaker": "officer",
+            "line": "Haan. Ab tum pehle ghar pe baat kar lo.",
+            "action": "phone-return",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "private",
-        "label": "Ask Meera to put the camera away",
-        "line": "Meera: Theek. Har awkward moment content nahi hota.",
+        "label": "Lower the camera and stay beside Kabir",
+        "line": "Haan mummy. Bahar hoon. Nahi, thoda zyada bahar.",
         "effects": [
           {
             "type": "relationship",
@@ -980,21 +1028,59 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "privacy_respected"
+          },
+          {
+            "type": "flag",
+            "target": "performed_tuition_call",
+            "value": "private"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "kabir",
+            "line": "Camera neeche kar na. Usko pata chal jayega.",
+            "action": "lower-phone",
+            "duration": 1.2
+          },
+          {
+            "speaker": "kabir",
+            "line": "Haan mummy. Bahar hoon. Nahi, thoda zyada bahar.",
+            "action": "phone-call",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "leave",
         "label": "Let Kabir answer honestly",
-        "line": "Kabir: Haan mummy… tuition wali story thodi complicated hai.",
+        "line": "Haan mummy… peeche ki awaaz? Assembly hai.",
         "effects": [
           {
             "type": "fatigue",
             "value": -1
+          },
+          {
+            "type": "flag",
+            "target": "performed_tuition_call",
+            "value": "leave"
           }
         ],
-        "policy": "neutral"
+        "policy": "neutral",
+        "responseBeats": [
+          {
+            "speaker": "kabir",
+            "line": "Theek, main kar lunga.",
+            "action": "phone-check",
+            "duration": 1.2
+          },
+          {
+            "speaker": "kabir",
+            "line": "Haan mummy… peeche ki awaaz? Assembly hai.",
+            "action": "phone-call",
+            "duration": 1.2
+          }
+        ]
       }
     ],
     "onExpire": [
@@ -1021,7 +1107,35 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -10,
       "z": -35
-    }
+    },
+    "staging": {
+      "cast": [
+        "kabir",
+        "officer"
+      ],
+      "setup": [
+        {
+          "speaker": "kabir",
+          "line": "Bhai, ek second. Nahi, phone mat utha—mummy hai.",
+          "action": "phone-ring",
+          "duration": 1.2
+        },
+        {
+          "speaker": "kabir",
+          "line": "Tu bas teacher jaisa khada reh. Maths mat bolna. Maine maths chhod di.",
+          "action": "phone-check",
+          "duration": 1.2
+        },
+        {
+          "speaker": "officer",
+          "line": "Yahan khade hoke tuition chal rahi hai?",
+          "action": "look-at-phone",
+          "duration": 1.2
+        }
+      ],
+      "originalPerformance": true
+    },
+    "callbacks": []
   },
   {
     "id": "borrowed_sound",
@@ -1035,7 +1149,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "promise",
         "label": "Promise to help protect the equipment",
-        "line": "Ravi: Speaker mera nahi. Trust mera hai.",
+        "line": "Ravi: Blue wire. Darker blue. Haan. Isko kheenchna mat.",
         "effects": [
           {
             "type": "promise",
@@ -1058,7 +1172,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "soundcheck",
         "label": "Help make the announcement audible",
-        "line": "Ravi: Volume kam, clarity zyada. Revolutionary concept.",
+        "line": "Ravi: Ek baar bolo. Apna naam nahi, test bolo.",
         "effects": [
           {
             "type": "solidarity",
@@ -1074,7 +1188,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "clip",
         "label": "Make a harmless soundcheck clip",
-        "line": "Ravi: Bass drop hua. Cup bhi.",
+        "line": "Ravi: Bass check tha. Cup kyun gira?",
         "effects": [
           {
             "type": "relationship",
@@ -1092,7 +1206,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave Ravi to his soundcheck",
-        "line": "Ravi: Haan, main dekh lunga.",
+        "line": "Ravi: Theek. Woh stand pakad ke jaa sakta tha waise.",
         "effects": [
           {
             "type": "fatigue",
@@ -1126,7 +1240,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -10,
       "z": -35
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "water_account",
@@ -1140,7 +1255,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "need",
         "label": "Help count who needs water first",
-        "line": "Sana: Perfect plan nahi. Better information toh hai.",
+        "line": "Saat, paanch, chaar. Theek. Sabko thoda milega.",
         "effects": [
           {
             "type": "aid",
@@ -1159,14 +1274,33 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "water_counted"
+          },
+          {
+            "type": "flag",
+            "target": "performed_water_account",
+            "value": "need"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "sana",
+            "line": "Pehle in teenon se count poochh le. Main cups nikaalti hoon.",
+            "action": "count-crate",
+            "duration": 1.2
+          },
+          {
+            "speaker": "sana",
+            "line": "Saat, paanch, chaar. Theek. Sabko thoda milega.",
+            "action": "cup-handover",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "stage",
         "label": "Send it to the visible stage",
-        "line": "Sana: Wahan dikhega. Yahan bhi log hain.",
+        "line": "Bas idhar wale ko bol dena doosra aayega. Aayega na?",
         "effects": [
           {
             "type": "credibility",
@@ -1180,14 +1314,33 @@ export const DAY_ENCOUNTERS = [
             "type": "relationship",
             "value": -3,
             "target": "sana"
+          },
+          {
+            "type": "flag",
+            "target": "performed_water_account",
+            "value": "stage"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "sana",
+            "line": "Stage? Haan, wahan bhej dete hain.",
+            "action": "lift-crate",
+            "duration": 1.2
+          },
+          {
+            "speaker": "sana",
+            "line": "Bas idhar wale ko bol dena doosra aayega. Aayega na?",
+            "action": "crate-handover",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "promise",
         "label": "Promise to bring another crate later",
-        "line": "Sana: Promise ko inventory mein add nahi kar sakti.",
+        "line": "Number bhi. Naam se paani nahi aayega.",
         "effects": [
           {
             "type": "promise",
@@ -1203,21 +1356,59 @@ export const DAY_ENCOUNTERS = [
             "type": "relationship",
             "value": 2,
             "target": "sana"
+          },
+          {
+            "type": "flag",
+            "target": "performed_water_account",
+            "value": "promise"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "sana",
+            "line": "Doosra crate? Pakka? Main tera naam likh rahi hoon.",
+            "action": "phone-note",
+            "duration": 1.2
+          },
+          {
+            "speaker": "sana",
+            "line": "Number bhi. Naam se paani nahi aayega.",
+            "action": "pause",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "leave",
         "label": "Do not volunteer",
-        "line": "Sana: Theek. Rasta khula rakhna.",
+        "line": "Arre, kisi ne phir do utha liye.",
         "effects": [
           {
             "type": "fatigue",
             "value": -1
+          },
+          {
+            "type": "flag",
+            "target": "performed_water_account",
+            "value": "leave"
           }
         ],
-        "policy": "neutral"
+        "policy": "neutral",
+        "responseBeats": [
+          {
+            "speaker": "sana",
+            "line": "Theek. Cup mat le jaana bas, count kiye hain.",
+            "action": "count-crate",
+            "duration": 1.2
+          },
+          {
+            "speaker": "sana",
+            "line": "Arre, kisi ne phir do utha liye.",
+            "action": "look-around",
+            "duration": 1.2
+          }
+        ]
       }
     ],
     "onExpire": [
@@ -1248,7 +1439,34 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -60,
       "z": 12
-    }
+    },
+    "staging": {
+      "cast": [
+        "sana"
+      ],
+      "setup": [
+        {
+          "speaker": "sana",
+          "line": "Ek crate. Teen log bol rahe hain unke paas paani khatam hai.",
+          "action": "count-crate",
+          "duration": 1.2
+        },
+        {
+          "speaker": "sana",
+          "line": "Cup chahiye? Haan, woh—ruk, woh khali hai.",
+          "action": "offer-cup",
+          "duration": 1.2
+        },
+        {
+          "speaker": "sana",
+          "line": "Tu idhar aaya hai toh do minute haath dega?",
+          "action": "look-at-player",
+          "duration": 1.2
+        }
+      ],
+      "originalPerformance": true
+    },
+    "callbacks": []
   },
   {
     "id": "cute_boundary",
@@ -1262,7 +1480,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "permission",
         "label": "Ask everyone before recording",
-        "line": "Sharma: Permission poochna bhi trend bana do.",
+        "line": "Sharma: Haan, ek minute. Duty ka sawaal hai toh pehle woh.",
         "effects": [
           {
             "type": "relationship",
@@ -1289,7 +1507,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "self",
         "label": "Turn the joke on yourself",
-        "line": "Meera: Rizz application rejected. Self-awareness approved.",
+        "line": "Meera: Main normal sawaal poochhne aayi thi. Yeh kya nikal gaya.",
         "effects": [
           {
             "type": "solidarity",
@@ -1311,7 +1529,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "push",
         "label": "Keep demanding a reaction",
-        "line": "Sharma: Bas. Ab camera hatao.",
+        "line": "Sharma: Bola na. Ab phone neeche.",
         "effects": [
           {
             "type": "relationship",
@@ -1334,7 +1552,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Walk on without filming",
-        "line": "Meera lowers the phone. The moment passes.",
+        "line": "Meera: Haan, chalo. Pehli baar hi tha.",
         "effects": [
           {
             "type": "fatigue",
@@ -1368,7 +1586,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 0,
       "z": 10
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "resident_route",
@@ -1377,12 +1596,12 @@ export const DAY_ENCOUNTERS = [
     "actorId": "asha",
     "start": 110,
     "end": 360,
-    "description": "Asha needs deliveries to reach her shop. A new banner blocks the lane. Students think she wants the protest gone.",
+    "description": "Asha ka delivery wala lane mein atka hai. Banner lagane waale keh rahe hain: abhi toh seedha kiya tha.",
     "choices": [
       {
         "id": "listen",
-        "label": "Hear both sides and shift the banner",
-        "line": "Asha: Protest rahe. Meri dukaan tak raasta bhi rahe.",
+        "label": "Banner thoda upar karo. Delivery ko VIP entry.",
+        "line": "Asha: Haan, bas. VIP entry ka bill mat bhej dena.",
         "effects": [
           {
             "type": "solidarity",
@@ -1403,8 +1622,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "dismiss",
-        "label": "Tell her the cause is more important",
-        "line": "Asha: Cause mein hum kab aayenge?",
+        "label": "Delivery wale ko bolo duck karke aaye.",
+        "line": "Asha: Fridge aa raha hai. Gymnast nahi.",
         "effects": [
           {
             "type": "relationship",
@@ -1421,8 +1640,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "promise",
-        "label": "Promise to return and help",
-        "line": "Asha: Beta, yaad rakhna. Main yahin hoon.",
+        "label": "Do dost laata hoon. Main banner se chhota hoon.",
+        "line": "Asha: Naam bata pehle. Dost lene gaye log kal se missing hain.",
         "effects": [
           {
             "type": "promise",
@@ -1439,8 +1658,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "leave",
-        "label": "Avoid the disagreement",
-        "line": "The banner stays while Asha calls her supplier.",
+        "label": "Main delivery wale ko dekh ke aata hoon... udhar.",
+        "line": "Asha: Woh idhar khada hai. Achha, tum bhi nikal lo.",
         "effects": [
           {
             "type": "fatigue",
@@ -1474,7 +1693,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -55,
       "z": 65
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "arrival_buddy",
@@ -1488,7 +1708,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "regroup",
         "label": "Agree one regrouping point together",
-        "line": "Nikhil: Finally ek location jo change nahi ho rahi.",
+        "line": "Haan, group pe wahi bhej. Main ab kahin nahi jaa raha.",
         "effects": [
           {
             "type": "relationship",
@@ -1503,14 +1723,33 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "regroup_known"
+          },
+          {
+            "type": "flag",
+            "target": "performed_arrival_buddy",
+            "value": "regroup"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "nikhil",
+            "line": "Ek naam fix karte hain. Yeh wala gate: peela board.",
+            "action": "point",
+            "duration": 1.2
+          },
+          {
+            "speaker": "nikhil",
+            "line": "Haan, group pe wahi bhej. Main ab kahin nahi jaa raha.",
+            "action": "phone-call",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "charge",
         "label": "Help him call home and charge his phone",
-        "line": "Nikhil: Mummy ko bas awaaz sunni thi.",
+        "line": "Thanks. Haan mummy, awaaz aa rahi hai?",
         "effects": [
           {
             "type": "relationship",
@@ -1525,14 +1764,33 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "nikhil_home_called"
+          },
+          {
+            "type": "flag",
+            "target": "performed_arrival_buddy",
+            "value": "charge"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "nikhil",
+            "line": "Do percent hai. Location kholun ya mummy ko call?",
+            "action": "phone-offer",
+            "duration": 1.2
+          },
+          {
+            "speaker": "nikhil",
+            "line": "Thanks. Haan mummy, awaaz aa rahi hai?",
+            "action": "phone-call",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "invite",
         "label": "Promise to check on him later",
-        "line": "Nikhil: Main stranger se friend category mein aa gaya?",
+        "line": "Main hil raha hoon. Group ko yeh bhi batana padta hai.",
         "effects": [
           {
             "type": "promise",
@@ -1543,21 +1801,59 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "nikhil_promise"
+          },
+          {
+            "type": "flag",
+            "target": "performed_arrival_buddy",
+            "value": "invite"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "nikhil",
+            "line": "Saath? Haan. Bas unko message kar doon.",
+            "action": "phone-check",
+            "duration": 1.2
+          },
+          {
+            "speaker": "nikhil",
+            "line": "Main hil raha hoon. Group ko yeh bhi batana padta hai.",
+            "action": "join",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "leave",
         "label": "Point toward the crowd and continue",
-        "line": "Nikhil: Achha… main pooch lunga.",
+        "line": "Jab tak koi naya main gate nahi milta.",
         "effects": [
           {
             "type": "fatigue",
             "value": -1
+          },
+          {
+            "type": "flag",
+            "target": "performed_arrival_buddy",
+            "value": "leave"
           }
         ],
-        "policy": "neutral"
+        "policy": "neutral",
+        "responseBeats": [
+          {
+            "speaker": "nikhil",
+            "line": "Theek. Main yahin wait karta hoon.",
+            "action": "phone-check",
+            "duration": 1.2
+          },
+          {
+            "speaker": "nikhil",
+            "line": "Jab tak koi naya main gate nahi milta.",
+            "action": "pause",
+            "duration": 1.2
+          }
+        ]
       }
     ],
     "onExpire": [
@@ -1589,7 +1885,48 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -14,
       "z": 49
-    }
+    },
+    "staging": {
+      "cast": [
+        "nikhil"
+      ],
+      "setup": [
+        {
+          "speaker": "nikhil",
+          "line": "Main main gate pe hoon. Unhone bola main gate pe aao.",
+          "action": "phone-check",
+          "duration": 1.2
+        },
+        {
+          "speaker": "nikhil",
+          "line": "Abhi thodi der pehle mila tha. Haan toh? Akela thodi chhod doon.",
+          "action": "phone-check",
+          "duration": 1.2
+        },
+        {
+          "speaker": "nikhil",
+          "line": "Yeh bhi main gate hai? Achha.",
+          "action": "look-around",
+          "duration": 1.2
+        },
+        {
+          "speaker": "nikhil",
+          "line": "Ab message aaya: chai pe hain. Chai kahan?",
+          "action": "phone-ring",
+          "duration": 1.2
+        }
+      ],
+      "originalPerformance": true
+    },
+    "inspirationSources": [
+      {
+        "url": "https://www.instagram.com/peeinghuman/reel/DeU2JR_zqYq/",
+        "basis": "Root observed signed-in caption and visible comments this session; reported sense of belonging and short acquaintance informing friendship response.",
+        "audioVerified": false,
+        "adaptation": "Original fictional dialogue; not a quotation or recreation of a verified full event."
+      }
+    ],
+    "callbacks": []
   },
   {
     "id": "slogan_workshop",
@@ -1603,7 +1940,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "listen",
         "label": "Help write a shared demand",
-        "line": "Mira: Perfect slogan nahi. Sabko jagah mil gayi.",
+        "line": "Mira: Ek-ek karke. Mic ek hai, demands chaar.",
         "effects": [
           {
             "type": "solidarity",
@@ -1625,7 +1962,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "meme",
         "label": "Use the funniest line regardless",
-        "line": "Kabir laughs, then notices someone walking away.",
+        "line": "Kabir: Hansa toh sahi. Achha, woh kyun jaa raha hai?",
         "effects": [
           {
             "type": "credibility",
@@ -1646,7 +1983,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "space",
         "label": "Make room for another speaker",
-        "line": "Mira: Mic share karne se awaaz kam nahi hoti.",
+        "line": "Mira: Le, tu bol. Main paani peeti hoon.",
         "effects": [
           {
             "type": "solidarity",
@@ -1663,7 +2000,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Listen without joining",
-        "line": "The group settles on an imperfect statement.",
+        "line": "Mira tries the line again; two people start a different version.",
         "effects": [
           {
             "type": "fatigue",
@@ -1696,21 +2033,22 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 0,
       "z": -11
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "press_edit",
-    "title": "The missing first ten seconds",
+    "title": "The part before the music",
     "district": "press",
     "actorId": "journalist",
     "start": 230,
     "end": 490,
-    "description": "Zoya receives a short clip of an argument. Meera has the longer recording; its opening changes the apparent cause.",
+    "description": "Meera has made a messy dash look effortless. The original audio tells a less flattering version. Zoya wants to hear the beginning.",
     "choices": [
       {
         "id": "context",
-        "label": "Help obtain the longer recording",
-        "line": "Zoya: Pehle context. Caption baad mein.",
+        "label": "Keep the awkward beginning in the edit",
+        "line": "Pehle wala bhi. Log dekh lenge.",
         "effects": [
           {
             "type": "evidence",
@@ -1731,14 +2069,33 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "context_preserved"
+          },
+          {
+            "type": "flag",
+            "target": "performed_press_edit",
+            "value": "context"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "meera",
+            "line": "Dono rakh doon? Hero ke baad lost tourist?",
+            "action": "phone-edit",
+            "duration": 1.2
+          },
+          {
+            "speaker": "journalist",
+            "line": "Pehle wala bhi. Log dekh lenge.",
+            "action": "clip-play",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "viral",
-        "label": "Share the short clip immediately",
-        "line": "Meera: Views aa gaye. Ab corrections kaun dekhega?",
+        "label": "Send the heroic short cut",
+        "line": "Usme jo peeche reh gaya, usse poochha?",
         "effects": [
           {
             "type": "rumor",
@@ -1754,14 +2111,33 @@ export const DAY_ENCOUNTERS = [
             "type": "tension",
             "value": 4,
             "target": "press"
+          },
+          {
+            "type": "flag",
+            "target": "performed_press_edit",
+            "value": "viral"
           }
         ],
-        "policy": "disruptive"
+        "policy": "disruptive",
+        "responseBeats": [
+          {
+            "speaker": "meera",
+            "line": "Short wala bhej diya.",
+            "action": "phone-share",
+            "duration": 1.2
+          },
+          {
+            "speaker": "journalist",
+            "line": "Usme jo peeche reh gaya, usse poochha?",
+            "action": "pause",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "private",
-        "label": "Ask that identifiable faces be protected",
-        "line": "Zoya: Evidence aur exposure ek cheez nahi.",
+        "label": "Keep it in the friends’ group",
+        "line": "Likh sakti ho. Rok nahi sakti.",
         "effects": [
           {
             "type": "relationship",
@@ -1776,21 +2152,59 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "faces_protected"
+          },
+          {
+            "type": "flag",
+            "target": "performed_press_edit",
+            "value": "private"
           }
         ],
-        "policy": "helpful"
+        "policy": "helpful",
+        "responseBeats": [
+          {
+            "speaker": "meera",
+            "line": "Group mein? Theek. Forward mat karna likh doon?",
+            "action": "phone-edit",
+            "duration": 1.2
+          },
+          {
+            "speaker": "journalist",
+            "line": "Likh sakti ho. Rok nahi sakti.",
+            "action": "phone-share",
+            "duration": 1.2
+          }
+        ]
       },
       {
         "id": "leave",
         "label": "Leave the editors to decide",
-        "line": "The shorter clip travels faster than the verification.",
+        "line": "Original sambhaal ke rakhna.",
         "effects": [
           {
             "type": "fatigue",
             "value": -1
+          },
+          {
+            "type": "flag",
+            "target": "performed_press_edit",
+            "value": "leave"
           }
         ],
-        "policy": "neutral"
+        "policy": "neutral",
+        "responseBeats": [
+          {
+            "speaker": "meera",
+            "line": "Tu decide nahi karega toh main karun?",
+            "action": "phone-check",
+            "duration": 1.2
+          },
+          {
+            "speaker": "journalist",
+            "line": "Original sambhaal ke rakhna.",
+            "action": "phone-pocket",
+            "duration": 1.2
+          }
+        ]
       }
     ],
     "onExpire": [
@@ -1823,7 +2237,41 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 58,
       "z": -30
-    }
+    },
+    "staging": {
+      "cast": [
+        "journalist",
+        "meera"
+      ],
+      "setup": [
+        {
+          "speaker": "meera",
+          "line": "Yeh dekho. Music ke saath full hero lag raha hai.",
+          "action": "clip-play",
+          "duration": 1.2
+        },
+        {
+          "speaker": "journalist",
+          "line": "Original mein pehle kya bol raha tha?",
+          "action": "phone-check",
+          "duration": 1.2
+        },
+        {
+          "speaker": "meera",
+          "line": "Raw mat chala. Raw mat—haan, ab sun lo.",
+          "action": "clip-stop",
+          "duration": 1.2
+        },
+        {
+          "speaker": "journalist",
+          "line": "“Ruk, rasta nahi pata.” Yeh bhi tumhari recording hai.",
+          "action": "pause",
+          "duration": 1.2
+        }
+      ],
+      "originalPerformance": true
+    },
+    "callbacks": []
   },
   {
     "id": "meeting_terms",
@@ -1837,7 +2285,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "clarify",
         "label": "Ask for the exact agreed wording",
-        "line": "Dev: Promise nahi tha. Request accepted thi. Difference bolna padega.",
+        "line": "Dev: Meeting bola tha. Time nahi diya. Main phir call karta hoon.",
         "effects": [
           {
             "type": "credibility",
@@ -1852,6 +2300,11 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "terms_clear"
+          },
+          {
+            "type": "reschedule",
+            "target": "orders_change",
+            "value": 35
           }
         ],
         "policy": "helpful"
@@ -1859,7 +2312,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "announce",
         "label": "Announce that the meeting is confirmed",
-        "line": "Rao: Yeh assurance maine nahi diya.",
+        "line": "Rao: Kisne confirm kiya? Naam bolo.",
         "effects": [
           {
             "type": "rumor",
@@ -1882,7 +2335,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "witness",
         "label": "Offer to record a jointly agreed update",
-        "line": "Rao: Jo agreed hai, wahi record karo.",
+        "line": "Rao: Date aur time dono likho. Sirf photo se nahi hoga.",
         "effects": [
           {
             "type": "evidence",
@@ -1905,7 +2358,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave the negotiation room",
-        "line": "Dev returns to the stage with an ambiguous update.",
+        "line": "Dev checks his phone before walking back.",
         "effects": [
           {
             "type": "fatigue",
@@ -1940,7 +2393,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 58,
       "z": 45
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "delivery_receipt",
@@ -1954,7 +2408,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "verify",
         "label": "Ask Iqbal and Sana to check the receipt together",
-        "line": "Iqbal: Sawal poochho. Faisla pehle mat sunaao.",
+        "line": "Iqbal: Receipt is pocket mein thi. Ruk, yeh diesel wali hai.",
         "effects": [
           {
             "type": "evidence",
@@ -1986,7 +2440,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "report",
         "label": "Report the uncertainty accurately to Sharma",
-        "line": "Sharma: Unlabelled hai, weapon confirmed nahi. Main entry karwata hoon.",
+        "line": "Sharma: Entry kara deta hoon. Jo dekha woh batao, guess nahi.",
         "effects": [
           {
             "type": "evidence",
@@ -2015,7 +2469,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "accuse",
         "label": "Publicly accuse the driver without evidence",
-        "line": "Iqbal: Naam mera aa gaya. Sach abhi check bhi nahi hua.",
+        "line": "Iqbal: Mera naam daal diya? Abhi carton khula bhi nahi.",
         "effects": [
           {
             "type": "rumor",
@@ -2043,7 +2497,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Step back and let the delivery proceed",
-        "line": "Sana checks what she can while the disputed carton is set aside.",
+        "line": "Sana asks the driver to wait while she finds the order message.",
         "effects": [
           {
             "type": "fatigue",
@@ -2086,7 +2540,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": -60,
       "z": 12
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "political_offer",
@@ -2100,7 +2555,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "disclose",
         "label": "Encourage her to disclose the offer and verify",
-        "line": "Meera: Sponsored outrage? Invoice bhi hoga?",
+        "line": "Meera: Caption bhi ready? Mujhe bas apna face dena hai?",
         "effects": [
           {
             "type": "evidence",
@@ -2128,7 +2583,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "accept",
         "label": "Help publish the claim as personal testimony",
-        "line": "Zoya: Tumne dekha tha, ya caption mila tha?",
+        "line": "Zoya: Yeh wording tumhari nahi lag rahi. Kahan se aayi?",
         "effects": [
           {
             "type": "rumor",
@@ -2155,7 +2610,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "decline",
         "label": "Decline quietly and keep the messages",
-        "line": "Meera: Reach kam sahi. Script meri hogi.",
+        "line": "Meera: Nahi. Mere comments mein mujhe hi baithna padega.",
         "effects": [
           {
             "type": "evidence",
@@ -2174,7 +2629,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave Meera to make her decision",
-        "line": "Meera hesitates; the offer remains on her phone.",
+        "line": "Meera types a reply, deletes it, and locks the phone.",
         "effects": [
           {
             "type": "fatigue",
@@ -2208,7 +2663,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 58,
       "z": -30
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "water_callback",
@@ -2222,7 +2678,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "deliver",
         "label": "Spend time helping distribute the remaining water",
-        "line": "Sana: Chhota kaam. Abhi sabse useful kaam.",
+        "line": "Sana: Aaya tu. Idhar rakh. Cup woh bag mein hain.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -2253,7 +2709,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "honest",
         "label": "Admit you cannot fulfil the earlier promise",
-        "line": "Sana: Theek. Agli baar capacity dekh ke haan bolna.",
+        "line": "Sana: Theek. Main kisi aur ko bolti hoon. Number mat kaatna.",
         "effects": [
           {
             "type": "credibility",
@@ -2275,7 +2731,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "perform",
         "label": "Film yourself helping but leave before distribution",
-        "line": "Sana: Reel ho gayi. Crate abhi bhi yahin hai.",
+        "line": "Sana: Record ho gaya? Crate abhi bhi idhar hai.",
         "effects": [
           {
             "type": "credibility",
@@ -2297,7 +2753,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Avoid the conversation",
-        "line": "Sana turns to another volunteer.",
+        "line": "Sana looks past you and calls someone else over.",
         "effects": [
           {
             "type": "relationship",
@@ -2343,6 +2799,24 @@ export const DAY_ENCOUNTERS = [
         "trueText": "The morning count lets Sana name which group still needs supplies.",
         "falseText": "Without a count, Sana must ask each group again."
       }
+    ],
+    "variants": [
+      {
+        "when": {
+          "flags": {
+            "performed_water_account": "promise"
+          }
+        },
+        "description": "Sana finds your name in her notes. She had counted on another crate and asks whether you brought it."
+      },
+      {
+        "when": {
+          "flags": {
+            "performed_water_account": "need"
+          }
+        },
+        "description": "Sana shows you the count you helped make earlier. The numbers have changed; the same people are still asking for cups."
+      }
     ]
   },
   {
@@ -2357,7 +2831,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "medical",
         "label": "Ask for a clearly marked medical exception",
-        "line": "Rao: Exception record kar do. Staff ko same instruction mile.",
+        "line": "Rao: Team ko bhi bol do. Mere bolne se sabne suna nahi.",
         "effects": [
           {
             "type": "aid",
@@ -2384,7 +2858,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "public",
         "label": "Demand a public explanation with witnesses",
-        "line": "Dev: Answer clear hona chahiye. Personal shouting nahi.",
+        "line": "Dev: Theek, main poochhta hoon. Tu mere upar mat bol.",
         "effects": [
           {
             "type": "credibility",
@@ -2406,7 +2880,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "rumor",
         "label": "Tell others the passage is already sealed",
-        "line": "Sharma: Band abhi hua nahi. Log kyun bhaag rahe hain?",
+        "line": "Sharma: Kisne bola band hai? Kaun message kar raha hai?",
         "effects": [
           {
             "type": "rumor",
@@ -2425,7 +2899,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave before the instruction is clarified",
-        "line": "Different officers receive different summaries.",
+        "line": "Rao repeats the instruction; another radio call cuts across it.",
         "effects": [
           {
             "type": "fatigue",
@@ -2490,7 +2964,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "verify",
         "label": "Check the time and contact a known person",
-        "line": "Nikhil: Purana message tha? Main sach mein darr gaya.",
+        "line": "Nikhil: Purana tha? Main abhi mummy ko bolne wala tha.",
         "effects": [
           {
             "type": "credibility",
@@ -2517,7 +2991,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "forward",
         "label": "Forward the warning as confirmed",
-        "line": "Phones light up; several people change direction at once.",
+        "line": "One phone vibrates, then another. Nikhil starts calling again.",
         "effects": [
           {
             "type": "rumor",
@@ -2536,7 +3010,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "stay",
         "label": "Stay with Nikhil while he makes a call",
-        "line": "Nikhil: Bas do minute saath rehna.",
+        "line": "Nikhil: Bas yahin ruk. Call lag raha hai.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -2563,7 +3037,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Keep moving",
-        "line": "Nikhil tries another number.",
+        "line": "Nikhil tries the same number twice.",
         "effects": [
           {
             "type": "relationship",
@@ -2629,7 +3103,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "deescalate",
         "label": "Pull the conversation toward Kabir’s friends",
-        "line": "Kabir: Mujhe funny banna tha. Kisi ka weapon nahi.",
+        "line": "Kabir: Nahi bhai. Mere ko isme mat daal.",
         "effects": [
           {
             "type": "escalation",
@@ -2655,7 +3129,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "witness",
         "label": "Keep an accurate record and ask a trusted organiser for help",
-        "line": "Mira: Jo dekha wahi batao. Affiliation guess mat karo.",
+        "line": "Mira: Tu paas tha? Achha, pehle bata kaun kahan khada tha.",
         "effects": [
           {
             "type": "evidence",
@@ -2678,7 +3152,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "join",
         "label": "Encourage the confrontation",
-        "line": "Kabir: Yeh joke nahi raha.",
+        "line": "Kabir: Ruk. Yeh humne decide nahi kiya tha.",
         "effects": [
           {
             "type": "escalation",
@@ -2705,7 +3179,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave the scene",
-        "line": "Other participants argue about whether to intervene.",
+        "line": "The stranger keeps talking; two friends stop listening.",
         "effects": [
           {
             "type": "fatigue",
@@ -2743,7 +3217,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 0,
       "z": 10
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "broken_mic",
@@ -2757,7 +3232,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "help",
         "label": "Help relay the verified message calmly",
-        "line": "Ravi: Same words. Apna masala mat daalna.",
+        "line": "Ravi: Same line bol. Haan, wahi. Apna ending mat daal.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -2788,7 +3263,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "gear",
         "label": "Help move the borrowed equipment out of the crush",
-        "line": "Ravi: Subah wala promise yaad tha. Thanks.",
+        "line": "Ravi: Pakad liya? Achha. Main wire nikaalta hoon.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -2815,7 +3290,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "invent",
         "label": "Fill the silence with your own dramatic warning",
-        "line": "Mira: Yeh announcement kisne approve kiya?",
+        "line": "Mira: Kisne bola? Mic abhi off tha.",
         "effects": [
           {
             "type": "rumor",
@@ -2838,7 +3313,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Stay clear of the equipment",
-        "line": "Ravi asks another volunteer.",
+        "line": "Ravi turns and calls another pair of hands.",
         "effects": [
           {
             "type": "fatigue",
@@ -2893,7 +3368,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "help",
         "label": "Help reconnect Asha with her worker",
-        "line": "Asha: Bas naam se bulao. Woh awaaz pehchaanega.",
+        "line": "Asha: Naam se bula. Woh sun lega.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -2920,7 +3395,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "listen",
         "label": "Ask what she actually witnessed",
-        "line": "Asha: Maine teen log dekhe. Unka group nahi pata.",
+        "line": "Asha: Teen the. Main naam nahi jaanti.",
         "effects": [
           {
             "type": "evidence",
@@ -2943,7 +3418,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "claim",
         "label": "Turn her uncertainty into a confident accusation",
-        "line": "Asha: Mere naam se woh mat bolo jo maine nahi kaha.",
+        "line": "Asha: Mere naam se mat bhej. Maine yeh nahi bola.",
         "effects": [
           {
             "type": "rumor",
@@ -2966,7 +3441,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave the lane",
-        "line": "The shutter stops halfway while Asha waits.",
+        "line": "Asha keeps one hand on the shutter and waits.",
         "effects": [
           {
             "type": "fatigue",
@@ -2978,7 +3453,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "trusted_local",
         "label": "Ask Asha to introduce you to the other witnesses",
-        "line": "Asha: Isne subah humari baat suni thi. Jo dekha woh bata do.",
+        "line": "Asha: Haan, isi ne subah jagah banayi thi. Bata do isko.",
         "policy": "helpful",
         "requires": {
           "flags": {
@@ -3049,7 +3524,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "assist",
         "label": "Follow Sana’s request and keep space around the person",
-        "line": "Sana: Diagnosis mujhe karne do. Tum space help karo.",
+        "line": "Sana: Bag idhar. Do kadam peeche. Haan, ab jagah hai.",
         "effects": [
           {
             "type": "aid",
@@ -3075,7 +3550,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "officer",
         "label": "Ask Sharma for medical access",
-        "line": "Sharma: Passage do. Abhi isko treatment chahiye.",
+        "line": "Sharma: Idhar se. Ruko, isko pehle jaane do.",
         "effects": [
           {
             "type": "aid",
@@ -3097,7 +3572,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "film",
         "label": "Film the injured person for engagement",
-        "line": "Sana: Consent ke bina camera band.",
+        "line": "Sana: Phone hata. Mujhe jagah chahiye.",
         "effects": [
           {
             "type": "credibility",
@@ -3119,7 +3594,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Move away without obstructing help",
-        "line": "Sana signals another volunteer.",
+        "line": "Sana calls for someone beside you.",
         "effects": [
           {
             "type": "fatigue",
@@ -3131,7 +3606,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "invoke_exception",
         "label": "Invoke the medical passage already agreed",
-        "line": "Sharma: Haan, wahi exception. Team ko yaad dilata hoon.",
+        "line": "Sharma: Haan, wahi instruction. Radio pe phir bolta hoon.",
         "policy": "helpful",
         "requires": {
           "flags": {
@@ -3209,7 +3684,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "context",
         "label": "Give Zoya the original sequence and a precise account",
-        "line": "Zoya: Correction clear hogi. Reach guarantee nahi.",
+        "line": "Zoya: Original bhejo. Abhi. Main timestamp dekhti hoon.",
         "effects": [
           {
             "type": "evidence",
@@ -3232,7 +3707,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "admit",
         "label": "Acknowledge your actual mistakes without accepting invented ones",
-        "line": "Zoya: Jo kiya woh bolo. Jo nahi kiya woh bhi clear.",
+        "line": "Zoya: Theek. Yeh part tumhara tha. Uske baad?",
         "effects": [
           {
             "type": "credibility",
@@ -3254,7 +3729,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "counter",
         "label": "Publish an equally unsupported counter-accusation",
-        "line": "Zoya: Do galat captions se context nahi banta.",
+        "line": "Zoya: Ruko, ab doosra caption bhi check karna padega.",
         "effects": [
           {
             "type": "rumor",
@@ -3276,7 +3751,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Do not respond now",
-        "line": "Zoya preserves your right not to comment.",
+        "line": "Zoya keeps the recorder off and waits.",
         "effects": [
           {
             "type": "fatigue",
@@ -3288,7 +3763,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "compare_originals",
         "label": "Compare the preserved originals with the montage",
-        "line": "Zoya: Sequence yahin clear hai. Isko responsibly explain karte hain.",
+        "line": "Zoya: Dono files hain? Achha, shuru se chalao.",
         "policy": "helpful",
         "requires": {
           "flags": {
@@ -3345,6 +3820,32 @@ export const DAY_ENCOUNTERS = [
         "trueText": "The record includes your encouragement of confrontation. Zoya asks you to address that directly.",
         "falseText": "Zoya asks what you personally witnessed rather than assigning you a role."
       }
+    ],
+    "variants": [
+      {
+        "when": {
+          "flags": {
+            "performed_press_edit": "viral"
+          }
+        },
+        "description": "The heroic short cut you approved has been reposted with a different caption. Meera recognises the exact cut; Zoya asks for its missing beginning."
+      },
+      {
+        "when": {
+          "flags": {
+            "performed_press_edit": "context"
+          }
+        },
+        "description": "Zoya has both versions you kept: the confident edit and the awkward beginning. The new caption leaves out the same few seconds."
+      },
+      {
+        "when": {
+          "flags": {
+            "performed_press_edit": "private"
+          }
+        },
+        "description": "The clip you kept in the friends’ group has escaped it. Meera is checking who forwarded it; Zoya wants the original file."
+      }
     ]
   },
   {
@@ -3359,7 +3860,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "specific",
         "label": "State the limited offer and its unresolved terms",
-        "line": "Dev: Na jeet ka fake claim. Na zero bolke erase.",
+        "line": "Dev: Yeh do points maane. Teesra abhi latka hai.",
         "effects": [
           {
             "type": "credibility",
@@ -3373,6 +3874,11 @@ export const DAY_ENCOUNTERS = [
             "type": "flag",
             "value": true,
             "target": "honest_concession"
+          },
+          {
+            "type": "reschedule",
+            "target": "final_responsibility",
+            "value": 25
           }
         ],
         "policy": "helpful"
@@ -3380,7 +3886,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "victory",
         "label": "Call it complete victory",
-        "line": "A cheer rises; questions follow when the details arrive.",
+        "line": "Someone cheers before Dev finishes reading the second line.",
         "effects": [
           {
             "type": "solidarity",
@@ -3401,7 +3907,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "reject",
         "label": "Reject the offer and argue for continued pressure",
-        "line": "Dev: Phir logon ko cost bhi clearly bataani hogi.",
+        "line": "Dev: Phir aur rukna padega. Main group se poochhta hoon.",
         "effects": [
           {
             "type": "pressure",
@@ -3423,7 +3929,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Decline to speak for others",
-        "line": "Dev returns to consult the group.",
+        "line": "Dev folds the paper, then opens it again.",
         "effects": [
           {
             "type": "fatigue",
@@ -3483,7 +3989,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "rollcall",
         "label": "Help verify names and last known contacts",
-        "line": "Nikhil: Missing message aur missing person same nahi. Check karte hain.",
+        "line": "Nikhil: Pehle phone karo. Message pe missing likh diya sabne.",
         "effects": [
           {
             "type": "aid",
@@ -3509,7 +4015,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "trusted",
         "label": "Ask trusted volunteers to coordinate follow-up",
-        "line": "Mira: Ek list. Duplicate panic nahi.",
+        "line": "Mira: Ek list bhejo. Mere paas teen aa gayi hain.",
         "effects": [
           {
             "type": "aid",
@@ -3531,7 +4037,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "panic",
         "label": "Post that everyone unresponsive has been detained",
-        "line": "Several families receive frightening, unverified messages.",
+        "line": "A family calls back immediately; nobody has a clear answer.",
         "effects": [
           {
             "type": "rumor",
@@ -3554,7 +4060,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Say you need to leave and give your own status",
-        "line": "Nikhil: Theek. Apna safe message bhej dena.",
+        "line": "Nikhil: Pahunch ke ek dot hi bhej dena.",
         "effects": [
           {
             "type": "flag",
@@ -3601,6 +4107,24 @@ export const DAY_ENCOUNTERS = [
         "trueText": "Nikhil: Pehle tum mere saath ruke the. Ab doosron ko check karte hain.",
         "falseText": "Nikhil is trying to organise the check-in despite his own uncertainty."
       }
+    ],
+    "variants": [
+      {
+        "when": {
+          "flags": {
+            "performed_arrival_buddy": "regroup"
+          }
+        },
+        "description": "Nikhil already has “peela board” typed. This time he checks that everyone means the same place before pressing send."
+      },
+      {
+        "when": {
+          "flags": {
+            "performed_arrival_buddy": "leave"
+          }
+        },
+        "description": "Nikhil sees you and hesitates before asking for help again. His phone still has three different locations in the chat."
+      }
     ]
   },
   {
@@ -3615,7 +4139,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "care",
         "label": "Commit to the volunteer care effort",
-        "line": "Mira: Hero speech nahi. Ek kaam, poora.",
+        "line": "Mira: Sana ko do log chahiye. Tu aa raha hai?",
         "effects": [
           {
             "type": "aid",
@@ -3636,7 +4160,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "witness",
         "label": "Commit to a careful record of what happened",
-        "line": "Zoya: Facts, uncertainty, sequence. Sab teen chahiye.",
+        "line": "Zoya: Battery bachi hai? Original delete mat karna.",
         "effects": [
           {
             "type": "credibility",
@@ -3659,7 +4183,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "escalate",
         "label": "Urge people into further confrontation",
-        "line": "Mira: Tumhara decision, dusron pe bhi padega.",
+        "line": "Mira: Ruk, sab tere saath nahi chal rahe.",
         "effects": [
           {
             "type": "escalation",
@@ -3685,7 +4209,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Leave honestly and tell your friends",
-        "line": "Mira: Apni limit bolna bhi responsibility hai.",
+        "line": "Mira: Theek. Kiske saath jaa raha hai?",
         "effects": [
           {
             "type": "fatigue",
@@ -3702,7 +4226,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "regroup",
         "label": "Use the meeting point you agreed earlier",
-        "line": "Nikhil: Location pehle se decided hai. Main group ko same message bhejta hoon.",
+        "line": "Nikhil: Peela board. Wahi wala. Main message bhej raha hoon.",
         "policy": "helpful",
         "requires": {
           "flags": {
@@ -3750,7 +4274,8 @@ export const DAY_ENCOUNTERS = [
     "location": {
       "x": 0,
       "z": -11
-    }
+    },
+    "callbacks": []
   },
   {
     "id": "return_promises",
@@ -3764,7 +4289,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "repair",
         "label": "Help pack and acknowledge anything left undone",
-        "line": "Ravi: Kal bhi milna hai. Isliye aaj clear kar lete hain.",
+        "line": "Ravi: Haan, mil gaya. Stand kahan hai?",
         "effects": [
           {
             "type": "resolvePromise",
@@ -3791,7 +4316,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "listen",
         "label": "Listen before telling your own heroic version",
-        "line": "Ravi: Sabka din alag tha. Same jagah pe.",
+        "line": "Ravi: Baith. Chai thandi hai, par chai hai.",
         "effects": [
           {
             "type": "credibility",
@@ -3813,7 +4338,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "boast",
         "label": "Claim you held the whole day together",
-        "line": "Ravi: Haan, aur chai bhi tumne invent ki thi.",
+        "line": "Ravi: Haan, aur chai bhi tune invent ki thi.",
         "effects": [
           {
             "type": "credibility",
@@ -3835,7 +4360,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "leave",
         "label": "Say goodbye and go",
-        "line": "Ravi: Message kar dena pahunch ke.",
+        "line": "Ravi: Pahunch ke message kar dena.",
         "effects": [
           {
             "type": "flag",
@@ -3896,7 +4421,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "annotate",
         "label": "Separate what you witnessed from what you heard",
-        "line": "Zoya: Uncertainty likhna weakness nahi.",
+        "line": "Zoya: Is timing ka proof hai? Nahi? Theek, blank chhodte hain.",
         "effects": [
           {
             "type": "credibility",
@@ -3913,7 +4438,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "people",
         "label": "Centre the people affected and their consent",
-        "line": "Zoya: Naam publish karne se pehle unse poochhenge.",
+        "line": "Zoya: Naam pehle unse confirm kar leti hoon.",
         "effects": [
           {
             "type": "solidarity",
@@ -3934,7 +4459,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "myth",
         "label": "Choose the version that makes you look best",
-        "line": "The edit is satisfying. The omissions remain.",
+        "line": "The edit ends on the loudest cheer; the next sentence is cut.",
         "effects": [
           {
             "type": "credibility",
@@ -3951,7 +4476,7 @@ export const DAY_ENCOUNTERS = [
       {
         "id": "rest",
         "label": "Stop posting and check on your friends privately",
-        "line": "Zoya: Har ending upload nahi hoti.",
+        "line": "Zoya puts the phone face down and finally drinks her tea.",
         "effects": [
           {
             "type": "fatigue",

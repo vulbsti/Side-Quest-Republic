@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from './districts.js';
+import {WORLD_BOUNDS as B} from './districts.js?v=12';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
@@ -27,10 +27,11 @@ export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={})
  return null;
 }
 export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??.36){
+ if(![entity.x,entity.z,dx,dz,radius].every(Number.isFinite)||radius<0)return entity;
  const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
  for(let i=0;i<steps;i++)for(const axis of ['x','z']){
   const delta=(axis==='x'?dx:dz)/steps;if(!delta)continue;
-  const old=entity[axis];entity[axis]=clamp(old+delta,axis==='x'?B.minX:B.minZ,axis==='x'?B.maxX:B.maxZ);
+  const old=entity[axis];entity[axis]=clamp(old+delta,(axis==='x'?B.minX:B.minZ)+radius,(axis==='x'?B.maxX:B.maxZ)-radius);
   for(const o of obstacles){const feet=entity.y||0,top=o.h,bottom=o.base||0;
    if(feet>=top-.025||feet+(entity.height||1.8)<=bottom+.01)continue;
    if(overlapsXZ(entity,o,radius)){entity[axis]=old;break;}
@@ -78,7 +79,7 @@ export function separateBodies(bodies,obstacles,iterations=5){
  }
 }
 export function visible(a,b,obstacles){const d=dist(a,b);for(let s=1;s<Math.ceil(d*2);s++){const t=s/Math.ceil(d*2),x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;for(const o of obstacles)if(o.h>1.65&&x>o.x-o.w/2&&x<o.x+o.w/2&&z>o.z-o.d/2&&z<o.z+o.d/2)return false;}return true;}
-export function steer(entity,target,speed,dt,obstacles){const d=dist(entity,target);if(d<.15)return 0;const old={x:entity.x,z:entity.z};const dx=(target.x-entity.x)/d,dz=(target.z-entity.z)/d;moveWithCollisions(entity,dx*speed*dt,dz*speed*dt,obstacles,.4);if(dist(old,entity)<speed*dt*.3){const side=entity.side||1;moveWithCollisions(entity,-dz*side*speed*dt,dx*side*speed*dt,obstacles,.4);entity.stuck=(entity.stuck||0)+dt;if(entity.stuck>1.1){entity.side=-side;entity.stuck=0;}}else entity.stuck=0;return dist(old,entity)/Math.max(dt,.001);}
+export function steer(entity,target,speed,dt,obstacles){const d=dist(entity,target);if(d<.15||!Number.isFinite(dt)||dt<=0)return 0;const old={x:entity.x,z:entity.z};const dx=(target.x-entity.x)/d,dz=(target.z-entity.z)/d;const travel=Math.min(speed*dt,d);moveWithCollisions(entity,dx*travel,dz*travel,obstacles,.4);if(dist(old,entity)<speed*dt*.3){const side=entity.side||1;moveWithCollisions(entity,-dz*side*speed*dt,dx*side*speed*dt,obstacles,.4);entity.stuck=(entity.stuck||0)+dt;if(entity.stuck>1.1){entity.side=-side;entity.stuck=0;}}else entity.stuck=0;return dist(old,entity)/Math.max(dt,.001);}
 export class Simulation{
 constructor(obstacles=[]){this.obstacles=obstacles;this.reset();}
 reset(){this.time=0;this.player={x:-7,z:34,y:0,vy:0,vx:0,vz:0,yaw:Math.PI,stamina:100,radius:.36,height:1.8,grounded:true};this.heat=0;this.aura=0;this.trust=0;this.mischief=0;this.noise=0;this.pursuit=false;this.catches=0;this.cooldown=0;this.chases=0;this.escaped=0;this.sprinting=false;this.distance=0;this.police=[{x:9,z:16,home:{x:9,z:16},state:'patrol',phase:0},{x:28,z:-7,home:{x:28,z:-7},state:'patrol',phase:2},{x:-12,z:-4,home:{x:-12,z:-4},state:'patrol',phase:4},{x:9,z:-30,home:{x:9,z:-30},state:'patrol',phase:6}].map((p,i)=>({...p,y:0,yaw:0,seen:0,search:0,speed:0,side:i%2?1:-1,last:{x:p.x,z:p.z}}));}

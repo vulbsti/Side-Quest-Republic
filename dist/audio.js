@@ -3,7 +3,7 @@
  */
 export class Soundtrack {
   constructor() {
-    this.ctx = null; this.mood = 'explore'; this.pendingMood = 'explore';
+    this.scoreEnabled = false; this.ctx = null; this.mood = 'explore'; this.pendingMood = 'explore';
     this.muted = false; this.paused = false; this.step = 0; this.timer = null;
     this.bpm = 108; this.nextTime = 0; this.lastStepAt = -1; this.nodes = new Set();
   }
@@ -34,7 +34,7 @@ export class Soundtrack {
     const startingContext = this.ctx;
     await startingContext.resume();
     if (this.ctx !== startingContext || this.paused) return true;
-    if (!this.timer) {
+    if (this.scoreEnabled && !this.timer) {
       this.nextTime = this.ctx.currentTime + .06;
       this.timer = setInterval(()=>this.schedule(), 30); this.schedule();
     }
@@ -55,7 +55,7 @@ export class Soundtrack {
   }
   update() {} // Scheduler is independent of render frame rate.
   schedule() {
-    if (!this.ctx || this.paused || this.ctx.state !== 'running') return;
+    if (!this.scoreEnabled || !this.ctx || this.paused || this.ctx.state !== 'running') return;
     if(this.nextTime < this.ctx.currentTime-.1) this.nextTime=this.ctx.currentTime+.025;
     const tick=60/this.bpm/4;
     while(this.nextTime < this.ctx.currentTime+.13) {

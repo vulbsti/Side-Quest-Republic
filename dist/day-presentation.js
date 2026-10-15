@@ -33,7 +33,7 @@ export function cinematicCameraFrame(elapsed,location={x:0,z:0},actorPos=locatio
   return {kind:kinds[index],index,progress:t,position:{x:mix(a.x,b.x,t),y:mix(a.y,b.y,t),z:mix(a.z,b.z,t)},lookAt:{x:mix(lx,x,index===0?.4:1),y:y+1.35,z:mix(lz,z,index===0?.4:1)},finished:false};
 }
 export class DayPresentation{
-  constructor(soundtrack,{enabled=true}={}){this.soundtrack=soundtrack;this.enabled=enabled;this.paused=false;this.scene=null;this.elapsed=0;this.phase=null;this.mood='playful';this.ambientClock=0;this.nodes=new Set();this.bus=null;this.context=null;this.disposed=false;}
+  constructor(soundtrack,{enabled=false}={}){this.soundtrack=soundtrack;this.enabled=enabled;this.paused=false;this.scene=null;this.elapsed=0;this.phase=null;this.mood='playful';this.ambientClock=0;this.nodes=new Set();this.bus=null;this.context=null;this.disposed=false;}
   ready(){
     const s=this.soundtrack,c=s?.ctx;
     if(this.disposed||!this.enabled||this.paused||s?.paused||s?.muted||!c||c.state!=='running')return false;
