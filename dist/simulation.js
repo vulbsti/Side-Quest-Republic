@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from './districts.js?v=23';
+import {WORLD_BOUNDS as B} from './districts.js?v=24';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
@@ -89,7 +89,25 @@ export function separateBodies(bodies,obstacles,iterations=5){
   if(wa&&missingB>.00001)moveWithCollisions(a,-nx*missingB,-nz*missingB,obstacles);
  }
 }
-export function visible(a,b,obstacles){const d=dist(a,b);for(let s=1;s<Math.ceil(d*2);s++){const t=s/Math.ceil(d*2),x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;for(const o of obstacles)if(o.h>1.65&&x>o.x-o.w/2&&x<o.x+o.w/2&&z>o.z-o.d/2&&z<o.z+o.d/2)return false;}return true;}
+// Open segment against open box interiors: a tangent or endpoint-only touch
+// does not hide someone, but even a thin wall crossed between endpoints does.
+// One slab test per obstacle replaces distance-dependent point sampling.
+export function visible(a,b,obstacles){
+ const dx=b.x-a.x,dz=b.z-a.z;
+ if(!Number.isFinite(dx)||!Number.isFinite(dz))return false;
+ if(dx===0&&dz===0)return true;
+ for(const o of obstacles){
+  if(!(o.h>1.65)||!(o.w>0)||!(o.d>0))continue;
+  const minX=o.x-o.w/2,maxX=o.x+o.w/2,minZ=o.z-o.d/2,maxZ=o.z+o.d/2;
+  let enter=0,leave=1;
+  if(dx===0){if(a.x<=minX||a.x>=maxX)continue;}
+  else {const t1=(minX-a.x)/dx,t2=(maxX-a.x)/dx;enter=Math.max(enter,Math.min(t1,t2));leave=Math.min(leave,Math.max(t1,t2));if(enter>=leave)continue;}
+  if(dz===0){if(a.z<=minZ||a.z>=maxZ)continue;}
+  else {const t1=(minZ-a.z)/dz,t2=(maxZ-a.z)/dz;enter=Math.max(enter,Math.min(t1,t2));leave=Math.min(leave,Math.max(t1,t2));}
+  if(enter<leave)return false;
+ }
+ return true;
+}
 export function steer(entity,target,speed,dt,obstacles){const d=dist(entity,target);if(d<.15||!Number.isFinite(dt)||dt<=0)return 0;const old={x:entity.x,z:entity.z};const dx=(target.x-entity.x)/d,dz=(target.z-entity.z)/d;const travel=Math.min(speed*dt,d);moveWithCollisions(entity,dx*travel,dz*travel,obstacles,.4);if(dist(old,entity)<speed*dt*.3){const side=entity.side||1;moveWithCollisions(entity,-dz*side*speed*dt,dx*side*speed*dt,obstacles,.4);entity.stuck=(entity.stuck||0)+dt;if(entity.stuck>1.1){entity.side=-side;entity.stuck=0;}}else entity.stuck=0;return dist(old,entity)/Math.max(dt,.001);}
 export class Simulation{
 constructor(obstacles=[]){this.obstacles=obstacles;this.reset();}

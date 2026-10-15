@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {CrisisPresentation} from './dist/crisis-presentation.js';
+const player={x:0,z:0},bodies=[{id:'officer',x:0,z:-5}],crisis={status:'advance',policeIds:['officer'],civilianIds:[],time:10},event={id:'e1',type:'crisis-advance',time:10,position:{x:0,z:-5}},base={dt:.1,player,bodies,crisis,canSee:()=>true};
+const p=new CrisisPresentation();let r=p.update({...base,events:[event]});assert.equal(r.cue.direction,'ahead');assert.equal(r.events.length,1);assert(r.fovDelta>0&&r.fovDelta<=2.5);assert.equal(r.offset.y,0);
+r=p.update({...base,events:[event],cameraYaw:Math.PI/2});assert.equal(r.events.length,0);assert.equal(r.cue.direction,'right');
+for(let i=0;i<500;i++){r=p.update(base);assert(r.fovDelta<=2.5);assert(Math.abs(r.offset.y)<=.025);}assert.equal(r.cue,null);
+const contact={id:'e2',type:'crisis-player-contact',position:{x:0,z:0},time:10};r=p.update({...base,events:[contact]});assert(r.offset.y<0);
+r=p.update({...base,reducedMotion:true});assert.equal(r.fovDelta,0);assert.deepEqual(r.offset,{x:0,y:0,z:0});
+const distant=new CrisisPresentation();r=distant.update({...base,player:{x:80,z:80},events:[event]});assert.equal(r.intensity,0);assert.equal(r.cue,null);r=distant.update({...base,events:[event]});assert.equal(r.events.length,0);
+const blocked=new CrisisPresentation();r=blocked.update({...base,events:[event],canSee:()=>false});assert.equal(r.intensity,0);assert.equal(r.cue,null);
+r=new CrisisPresentation().update({...base,events:[event],canSee:undefined});assert.equal(r.intensity,0);assert.equal(r.cue,null);
+r=new CrisisPresentation().update({...base,events:[{...event,time:3}]});assert.equal(r.events.length,0);
+r=p.update({...base,enabled:false});assert.equal(r.intensity,0);assert.equal(r.fovDelta,0);assert.equal(r.cue,null);
+p.reset();r=p.update({...base,events:[event]});assert.equal(r.events.length,1);
+for(let i=0;i<100;i++)r=p.update({...base,crisis:{status:'cooldown'}});assert(r.intensity<.000001);
+console.log('Crisis presentation passed: localized LOS, bounded FOV/contact dip, reduced motion, no stale/duplicate cue, directional basis, disabled/reset.');

@@ -1,4 +1,4 @@
-import { RGBELoader } from './assets/materials/RGBELoader.js?v=23';
+import { RGBELoader } from './assets/materials/RGBELoader.js?v=24';
 /** Apply only to the static world, BEFORE characters are created. */
 export async function enhanceEnvironment(THREE, world) {
   const {scene,renderer,sun}=world, loader=new THREE.TextureLoader();
@@ -88,7 +88,11 @@ function addFoliage(T,scene,leafMap){
       leafMap?color.setHSL(.18+rnd()*.08,.06+rnd()*.13,.65+rnd()*.25):color.setHSL(.225+rnd()*.055,.25+rnd()*.18,.16+rnd()*.13);leaves.setColorAt(k*34+i,color);idx++;
     }
   }
-  if(leafMap){leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,map:leafMap,alphaTest:.45,side:T.DoubleSide});}leaves.castShadow=true;leaves.receiveShadow=true;leaves.name='Instanced broadleaf foliage';leaves.computeBoundingSphere();scene.add(leaves);return leaves;
+  if(leafMap){leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,map:leafMap,alphaTest:.45,side:T.DoubleSide});}// One tree per bounded instance batch: an offscreen tree no longer submits
+  // every leaf in Delhi. Keep exactly the same matrices, colours and materials.
+  const trees=[],matrix=new T.Matrix4(),leafColor=new T.Color();
+  for(let i=0;i<34;i++){const tree=new T.InstancedMesh(geo,mat,620);for(let k=0;k<620;k++){leaves.getMatrixAt(k*34+i,matrix);leaves.getColorAt(k*34+i,leafColor);tree.setMatrixAt(k,matrix);tree.setColorAt(k,leafColor);}tree.customDepthMaterial=leaves.customDepthMaterial;tree.castShadow=tree.receiveShadow=true;tree.name='Instanced broadleaf tree '+i;tree.computeBoundingSphere();scene.add(tree);trees.push(tree);}
+  return {get count(){return trees.reduce((n,t)=>n+t.count,0);},set count(n){for(const tree of trees)tree.count=Math.max(0,Math.min(620,Math.floor(n/34)));},set castShadow(on){for(const tree of trees)tree.castShadow=on;},trees};
 }
 function addStreetDetail(T,scene){
   let seed=96;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};

@@ -16,3 +16,28 @@ const street=new StreetAudio({});assert.equal(street.preferences.voice,false);st
 street.recorded.manifest=actual;street.recorded.status='available';assert.match(street.recordingStatus(),/Monkeys Spinning Monkeys/);street.recorded.lastMusicId='run-amok';assert.match(street.recordingStatus(),/Selected: Run Amok/);street.recorded.failedClipId='run-amok';assert.match(street.recordingStatus(),/Could not load Run Amok/);
 console.log('PASS: admitted local music, exact voice mapping, no automatic TTS/procedural score, mood crossfade, distance attenuation, ducking, late-download mute safety');
 const ambience=new RecordedAudio({fetcher:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)})});ambience.attach(context,node());await ambience.loadManifest({...manifest,clips:[clip('street','ambience')],music:{},voices:[]});for(let i=0;i<20;i++)ambience.setAmbience('street');await new Promise(r=>setTimeout(r,0));assert.equal(ambience.active.size,1,'frame ticks cannot stack ambient loops');ambience.setMusic(false);assert.equal(ambience.active.size,1,'music switch preserves street ambience');ambience.stop();assert.equal(ambience.active.size,0,'pause stops ambience');ambience.buffers.clear();let releaseAmbient;ambience.fetcher=()=>new Promise(r=>releaseAmbient=()=>r({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)}));ambience.setAmbience('street');ambience.stop();releaseAmbient();await new Promise(r=>setTimeout(r,0));assert.equal(ambience.active.size,0,'late ambience download cannot restart paused audio');console.log('PASS: single ambient loop, independent music control and pause/download race');
+// Real reactions should remain audible over music, without stacking a laugh on itself.
+const reactions=new RecordedAudio({fetcher:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)})});reactions.attach(context,node());
+await reactions.loadManifest({...manifest,clips:[clip('music'),{...clip('laugh','cue'),duckMusic:true}],music:{calm:'music'},voices:[],cues:{chuckle:'laugh'}});
+reactions.setMood('calm');await new Promise(r=>setTimeout(r,0));
+assert.equal(await reactions.play('laugh'),true);assert.ok(reactions.musicBus.gain.value<reactions.musicLevel);
+assert.equal(await reactions.play('laugh'),false,'identical recorded reactions cannot stack');
+[...reactions.active].find(n=>n.id==='laugh').source.stop();assert.equal(reactions.musicBus.gain.value,reactions.musicLevel);
+assert.ok(validateRecordingManifest({...manifest,ambience:'missing'}).length,'ambience must refer to an admitted recording');
+ambience.fetcher=async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)});
+await ambience.loadManifest({...manifest,clips:[clip('street','ambience'),clip('square','ambience')],music:{},voices:[]});
+ambience.setAmbience('street');await new Promise(r=>setTimeout(r,0));ambience.setAmbience('square');await new Promise(r=>setTimeout(r,0));
+assert.deepEqual([...ambience.active].map(n=>n.id),['square'],'changing district ambience removes the previous loop');
+ambience.setAmbience(null);assert.equal(ambience.active.size,0);
+const cueStreet=new StreetAudio({});cueStreet.ready=()=>true;cueStreet.recorded.manifest=actual;const played=[];cueStreet.recorded.play=(id)=>{played.push(id);return Promise.resolve(true);};
+assert.equal(cueStreet.cue('tap'),true);cueStreet.time=.3;assert.equal(cueStreet.cue('mic'),false,'aliases share their recording cooldown');
+assert.equal(cueStreet.cue('chuckle'),true,'a distinct nearby reaction is not lost behind a tap');
+cueStreet.time=2;assert.equal(cueStreet.cue('tap'),true);assert.deepEqual(played,['metal-tap','mild-chuckle','metal-tap']);
+cueStreet.reset();assert.equal(cueStreet.cueTimes.size,0);
+console.log('PASS: recorded reaction ducking, alias cooldown, overlapping distinct cues, ambience replacement and provenance mapping');
+assert.ok(validateRecordingManifest({...manifest,crowdAmbience:'missing'}).length,'crowd ambience must reference admitted media');
+const moodStreet=new StreetAudio({});moodStreet.ready=()=>true;moodStreet.recorded.manifest=actual;const beds=[];moodStreet.recorded.setAmbience=id=>beds.push(id);moodStreet.recorded.setMood=()=>{};
+for(const tension of [0,40,30,24])moodStreet.tick(.1,{tension});
+assert.deepEqual(beds,[actual.ambience,actual.crowdAmbience,actual.crowdAmbience,actual.ambience],'crowd recording enters at rising tension and has hysteresis');
+assert.equal(actual.clips.find(c=>c.id===actual.crowdAmbience).kind,'ambience','field crowd remains atmosphere, never falsely mapped to character dialogue');
+console.log('PASS: admitted recorded Delhi crowd atmosphere, hysteresis and explicit field-recording provenance');

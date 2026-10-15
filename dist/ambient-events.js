@@ -1,4 +1,4 @@
-import {DISTRICTS,STORY_ANCHORS} from './districts.js?v=23';
+import {DISTRICTS,STORY_ANCHORS} from './districts.js?v=24';
 /** Small original-fiction street activities. Every directive is an intention for
  * the runtime collision router; every line is invented, never a real quotation.
  * Runtime priorities: scene/follow > incident/crisis > ambient. No body mutation.

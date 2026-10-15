@@ -1,6 +1,6 @@
-import {restoreDestinationState} from './destinations.js?v=23';
-import {restoreTransit} from './transit.js?v=23';
-import {WORLD_BOUNDS as B} from './districts.js?v=23';
+import {restoreDestinationState} from './destinations.js?v=24';
+import {restoreTransit} from './transit.js?v=24';
+import {WORLD_BOUNDS as B} from './districts.js?v=24';
 /** Versioned local-only continuation. No scene objects or transient UI are saved.
  * serializeSession({game,sim,npcs,items,camera?}) -> plain snapshot (not JSON).
  * restoreData(JSON string | snapshot) -> sanitized snapshot, or null on bad envelope/version.

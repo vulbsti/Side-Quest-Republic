@@ -1,0 +1,44 @@
+{
+  "version": 24,
+  "quality_pass": false,
+  "implemented": [
+    "Witnessed retreat propagation and proximity-triggered filmer reversal",
+    "Up to four physically gated crisis waves and pressure-dependent recovery",
+    "Physics-rate contact sampling with 10Hz decisions",
+    "Exact obstacle LOS and spatial geometry batching",
+    "Shader and first-draw warmup before play",
+    "Recorded CC0 Delhi Hindi crowd field recording, reaction ducking and cue fixes",
+    "Full-physics cancellable waiting and inspector observation",
+    "Compact desktop interaction tray and clearer personal-attention HUD"
+  ],
+  "verified": [
+    "Actual-map crisis movement: no solid penetration, maximum step 0.260679m",
+    "Decision cadence, contact deduplication, save and wait continuity",
+    "LOS randomized checks and exact geometry/foliage preservation",
+    "Character pose, physics, world routes and four-policy narrative checks",
+    "Recorded audio mapping, replacement, hysteresis and provenance tests"
+  ],
+  "browser": {
+    "origin": "http://127.0.0.1:4325/dist/",
+    "seed": 15426,
+    "observed": [
+      "Authorized fresh day reset",
+      "Played mock-news interaction; aura3 trust1 mischief2",
+      "Walked to Jantar Mantar; visibly assembled crowd and police",
+      "Ambient reunion lines in street",
+      "Wait cancellation restores player control",
+      "Actual live inspector receipts: warning770 advance778 scatter781 regroup789 cooldown799; seven witnessed retreat recruits"
+    ],
+    "performance": "Observed approximately29\u201330fps at1280x720; not a controlled cross-version benchmark",
+    "limitations": [
+      "First wave completed during physical observation; full advance animation not visually witnessed frame by frame",
+      "New crowd field recording decoded and provenance checked, listening not verified"
+    ]
+  },
+  "remaining": [
+    "Photorealistic character/environment assets and richer animation",
+    "Recorded Hinglish character performances",
+    "More convincing overlapping crisis choreography and varied crowd speech",
+    "Full finale visual/audio playthrough and broader hardware performance verification"
+  ]
+}

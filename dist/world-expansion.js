@@ -1,7 +1,8 @@
-import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=23';
-import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=23';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=23';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=23';
+import {spatialBatches} from './spatial-batching.js?v=24';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=24';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=24';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=24';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=24';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world,{bodies=()=>[]}={}){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);
@@ -161,4 +162,4 @@ export function expandWorld(world,{bodies=()=>[]}={}){
  }
  return {destinations:DESTINATIONS,districts:DISTRICTS,anchors:STORY_ANCHORS,connections:CONNECTION_ROUTES,dynamicGroups,barricades,update};
 }
-function consolidate(group){group.updateMatrixWorld(true);const batches=new Map();group.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone();g.applyMatrix4(o.matrixWorld);const scale=o.material.userData?.worldScale;if(scale){const p=g.attributes.position,n=g.attributes.normal,uv=new Float32Array(p.count*2);for(let i=0;i<p.count;i++){const ax=Math.abs(n.getX(i)),ay=Math.abs(n.getY(i)),az=Math.abs(n.getZ(i));uv[i*2]=(ay>=ax&&ay>=az?p.getX(i):ax>az?p.getZ(i):p.getX(i))/scale;uv[i*2+1]=(ay>=ax&&ay>=az?p.getZ(i):p.getY(i))/scale;}g.setAttribute('uv',new T.BufferAttribute(uv,2));}const arr=batches.get(o.material)||[];arr.push(g.index?g.toNonIndexed():g);batches.set(o.material,arr);});group.clear();for(const [material,geos]of batches){const geometry=mergeGeometries(geos,false);if(geometry){const mesh=new T.Mesh(geometry,material);mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}geos.forEach(g=>g.dispose());}}
+function consolidate(group){group.updateMatrixWorld(true);const meshes=[];group.traverse(o=>{if(o.isMesh&&!o.isSkinnedMesh&&!Array.isArray(o.material))meshes.push(o);});const batches=spatialBatches(T,meshes);group.clear();group.add(...batches);}

@@ -1,6 +1,7 @@
+import {spatialBatches} from './spatial-batching.js?v=24';
 import * as THREE from 'three';
-import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=23';
-import { GLTFLoader } from './vendor/GLTFLoader.js?v=23';
+import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=24';
+import { GLTFLoader } from './vendor/GLTFLoader.js?v=24';
 export {THREE};
 const M={},G={};
 export function mat(c,roughness=.8){const k=c+'_'+roughness;return M[k]??=new THREE.MeshStandardMaterial({color:c,roughness});}
@@ -43,6 +44,6 @@ for(let x of [-35,-31]){cube(.08,2.2,.08,'#52644d',x,1.1,31,scene);obstacle(x,31
 const landmarks=[{id:'cp',name:'The CP colonnades',x:0,z:-42},{id:'jm',name:'Misra Yantra',x:24,z:-18},{id:'crowd',name:'A chorus, not a crowd',x:0,z:-9}];
 mergeStatic(scene,new Set([...flags,bus].filter(Boolean)));return {renderer,scene,camera,obstacles,assets,bus,flags,landmarks,sun,put};}
 
-function mergeStatic(scene,exclude){scene.updateMatrixWorld(true);const groups=new Map(),remove=[];scene.traverse(o=>{if(!o.isMesh||Array.isArray(o.material))return;for(let p=o;p;p=p.parent)if(exclude.has(p))return;let g=o.geometry.clone();if(g.index)g=g.toNonIndexed();g.applyMatrix4(o.matrixWorld);for(const name of Object.keys(g.attributes))if(!['position','normal','uv'].includes(name))g.deleteAttribute(name);if(!g.attributes.normal)g.computeVertexNormals();if(!g.attributes.uv)g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(g.attributes.position.count*2),2));let group=groups.get(o.material.uuid);if(!group){group={mat:o.material,geos:[]};groups.set(o.material.uuid,group);}group.geos.push(g);remove.push(o);});for(const o of remove)o.removeFromParent();for(const group of groups.values()){const g=mergeGeometries(group.geos,false);if(!g)continue;const m=new THREE.Mesh(g,group.mat);m.castShadow=true;m.receiveShadow=true;scene.add(m);for(const src of group.geos)src.dispose();}}
+function mergeStatic(scene,exclude){scene.updateMatrixWorld(true);const meshes=[];scene.traverse(o=>{if(!o.isMesh||o.isSkinnedMesh||Array.isArray(o.material))return;for(let p=o;p;p=p.parent)if(exclude.has(p))return;meshes.push(o);});const batches=spatialBatches(THREE,meshes);for(const o of meshes)o.removeFromParent();scene.add(...batches);}
 
 function mergeRigid(group){const buckets=new Map();for(const child of [...group.children]){if(!child.isMesh)continue;child.updateMatrix();let geo=child.geometry.clone();if(geo.index)geo=geo.toNonIndexed();geo.applyMatrix4(child.matrix);let b=buckets.get(child.material);if(!b){b=[];buckets.set(child.material,b);}b.push(geo);group.remove(child);}for(const [material,geos] of buckets){const merged=mergeGeometries(geos,false);if(merged){const m=new THREE.Mesh(merged,material);m.castShadow=m.receiveShadow=true;group.add(m);}geos.forEach(g=>g.dispose());}}

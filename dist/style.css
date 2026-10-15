@@ -78,3 +78,8 @@ select#missionPicker{width:100%;padding:7px 8px;border:1px solid #ffffff40;borde
 #nearbyActions button.selected:hover{background:#c7dd91}#prompt button:focus-visible{outline:3px solid #436a32;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 20px}.badges>span{display:inline-flex;align-items:center;min-height:30px;padding:6px 9px;border:1px solid #adb6a0;border-radius:5px;background:#e8e8da;color:#626e59;font-size:10px;line-height:1.3}.badges>span.earned{border-color:#456b3e;background:#dbe8c5;color:#274d2a;font-weight:700}
 @media(max-width:480px){#promptPrimary{font-size:11px;padding:8px 9px}#cycleAction{font-size:9px;padding:7px}#actionHint{font-size:8px}.badges{gap:5px}.badges>span{font-size:9px;padding:6px 8px}}
+/* Keep nearby choices below the player sightline in crowded desktop scenes. */
+@media(min-width:900px) and (min-height:651px){
+ #nearbyActions{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:145px;max-height:55px;overflow-x:auto;overflow-y:hidden}
+ #nearbyActions button{min-height:38px}
+}

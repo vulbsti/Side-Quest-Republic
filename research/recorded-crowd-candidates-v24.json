@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-16",
+  "scope": "Research candidates only; public source page and public MP3 preview, no authentication. No generated recordings.",
+  "candidates": [
+    {
+      "sourceUrl": "https://freesound.org/people/SoundEnsemble/sounds/516658/",
+      "title": "Freesound - -45 SE 4ch DELHI ATMO World Book Fair square walk outdoor crowd chats.wav by SoundEnsemble",
+      "author": "SoundEnsemble",
+      "licenseLinks": [
+        "http://creativecommons.org/publicdomain/zero/1.0/"
+      ],
+      "downloadUrl": "https://cdn.freesound.org/previews/516/516658_3662372-hq.mp3",
+      "listened": false,
+      "admitted": false,
+      "localFile": "research/media/freesound-516658-candidate.mp3",
+      "bytes": 2413632,
+      "sha256": "3e06b103048f6b8e28b72d3bf5ad7eacdf05405df6e9b06fcf5e8e488364e07f",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2,
+            "side_data_list": [
+              {}
+            ]
+          }
+        ],
+        "format": {
+          "duration": "101.688000"
+        }
+      },
+      "sourceContentEvidence": "Outdoor World Book Fair square in Delhi; source title describes crowd chats.",
+      "fit": "Potential outdoor crowd bed; language and delivery not listened to.",
+      "verification": "Primary-source description/license checked; downloaded preview ffprobe metadata verified. No listening review or exact transcript."
+    },
+    {
+      "sourceUrl": "https://freesound.org/people/SoundEnsemble/sounds/516660/",
+      "title": "Freesound - -43 SE 4ch DELHI ATMO World Book Fair inside indoor crowd beep background hindi.wav by SoundEnsemble",
+      "author": "SoundEnsemble",
+      "licenseLinks": [
+        "http://creativecommons.org/publicdomain/zero/1.0/"
+      ],
+      "downloadUrl": "https://cdn.freesound.org/previews/516/516660_3662372-hq.mp3",
+      "listened": false,
+      "admitted": true,
+      "localFile": "research/media/freesound-516660-candidate.mp3",
+      "bytes": 2933952,
+      "sha256": "46017d9ba307fde158b6774816c1d60e1b3052bbc9b33c4e522949f5ce5e35dc",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2,
+            "side_data_list": [
+              {}
+            ]
+          }
+        ],
+        "format": {
+          "duration": "126.024000"
+        }
+      },
+      "sourceContentEvidence": "Indoor World Book Fair at Pragati Maidan, Delhi, recorded by Piotrek Zyla; source title explicitly identifies Hindi background.",
+      "fit": "45-second source excerpt admitted as low-volume crowd atmosphere, not scripted character dialogue or actual protest recording.",
+      "verification": "Primary-source description/license checked; downloaded preview ffprobe metadata verified. No listening review or exact transcript.",
+      "gameAsset": "dist/assets/audio/delhi-bookfair-crowd-cc0.mp3",
+      "excerptSeconds": [
+        0,
+        45
+      ],
+      "modifications": "0.6s fade in, 1.5s fade out, MP3 re-encode; stereo public preview differs from four-channel original.",
+      "admissionScope": "Atmosphere only; source language metadata is not a verified transcription."
+    },
+    {
+      "sourceUrl": "https://freesound.org/people/Nielsvdb/sounds/465692/",
+      "title": "Freesound - Old Delhi Street Ambience by Nielsvdb",
+      "author": "Nielsvdb",
+      "licenseLinks": [
+        "https://creativecommons.org/licenses/by/4.0/"
+      ],
+      "downloadUrl": "https://cdn.freesound.org/previews/465/465692_3315462-hq.mp3",
+      "listened": false,
+      "admitted": false,
+      "localFile": "research/media/freesound-465692-candidate.mp3",
+      "bytes": 1651752,
+      "sha256": "b868f41d4bc8ef3140129b44b61ca04dab79755636019a4c30f2fbe18ccf8ab3",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2,
+            "side_data_list": [
+              {}
+            ]
+          }
+        ],
+        "format": {
+          "duration": "71.880000"
+        }
+      },
+      "sourceContentEvidence": "Old Delhi street recording; uploader describes vendors with passing bikes and tuk-tuks.",
+      "fit": "Candidate market layer; individual speech content and language not listened to.",
+      "verification": "Primary-source description/license checked; downloaded preview ffprobe metadata verified. No listening review or exact transcript."
+    },
+    {
+      "sourceUrl": "https://freesound.org/people/Martin.Sadoux/sounds/423510/",
+      "title": "Freesound - India outdoor crowd.WAV by Martin.Sadoux",
+      "author": "Martin.Sadoux",
+      "licenseLinks": [
+        "http://creativecommons.org/publicdomain/zero/1.0/"
+      ],
+      "downloadUrl": "https://cdn.freesound.org/previews/423/423510_8177280-hq.mp3",
+      "listened": false,
+      "admitted": false,
+      "localFile": "research/media/freesound-423510-candidate.mp3",
+      "bytes": 3163488,
+      "sha256": "089f75a49b9a9f3a4933dfd7dbbf1cf0c7f82df09fb294308823fc8c1994cffe",
+      "metadata": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2,
+            "side_data_list": [
+              {}
+            ]
+          }
+        ],
+        "format": {
+          "duration": "135.384000"
+        }
+      },
+      "sourceContentEvidence": "Outdoor crowd near Mahalakshmi Temple, Kolhapur, Maharashtra.",
+      "fit": "Lower-priority location mismatch; do not assume Hindi or use religious calls as protest slogans.",
+      "verification": "Primary-source description/license checked; downloaded preview ffprobe metadata verified. No listening review or exact transcript."
+    }
+  ],
+  "rejected": [
+    {
+      "sourceUrl": "https://freesound.org/people/cottonsoundtechie/sounds/564709/",
+      "reason": "Source categorized processed/synthetic with inconsistent duration; does not meet existing natural field-recording brief."
+    }
+  ]
+}

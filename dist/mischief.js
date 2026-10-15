@@ -31,12 +31,12 @@ export function actMischief(world,bodies,player,id,{canSee}={}){
  const mood=world.actors?.[actor.id]?.needs;
  const tense=pressure>65||(mood?.fatigue||0)>75||(mood?.fear||0)>65;
  const scene={
- 'mock-news':[['player','Breaking news. Aap yahan kyun aaye?','camera'],[actor.id,'Mera charger iske bag mein hai. Isko bol, protest baad mein.',null],['player','Exclusive: power struggle confirmed.','chuckle']],
+ 'mock-news':[['player','Breaking news. Aap yahan kyun aaye?','camera'],[actor.id,'Mera charger iske bag mein hai. Isko bol, protest baad mein.',null],['player','Achha. Toh aandolan Type-C ka hai.','chuckle']],
  'mic-echo':[['player','Testing. One two. One two.','tap'],[actor.id,'Mic hai kahan?',null],['player','Budget mein bas echo approve hua tha.','chuckle']],
- 'catwalk':[['player','Ek second. Yeh crossing meri entry hai.','camera'],[actor.id,'Bhai, bag ki chain khuli hai. Entry se pehle inventory bacha.',null],['player','Limited edition confetti nahi tha woh.','chuckle']],
+ 'catwalk':[['player','Ek second. Yeh crossing meri entry hai.','camera'],[actor.id,'Bhai, bag ki chain khuli hai. Entry se pehle inventory bacha.',null],['player','Fashion week cancel. Mera charger uthao.','chuckle']],
  'tuition-call':[['player','Sir, mummy ko bol do extra class chal rahi hai?','phone'],[actor.id,tense?'Abhi phone rakh. Radio pe sun nahi paa raha.':'Subject kya hai? Main homework bhi poochhunga.',null],['player',tense?'Haan. Network bhi emotionally unavailable hai.':'Rehne do sir. Aap toh actual teacher nikle.','chuckle']],
  'water-weather':[['player','Sir, water cannon ka weather forecast milega?','question'],[actor.id,tense?'Forecast baad mein. Yeh raasta khaali rakho.':'Mausam department udhar nahi hai. Bottle laaya?',null],['player',tense?'Theek. Main shade mein bulletin deta hoon.':'Laaya tha. Dost ne plant samajh ke khud pee li.','chuckle']],
- 'comic-chant':[['player','Attendance lagao! Jo late aaya—','tap'],[actor.id,'Usko location kisne galat bheji thi?',null],['player','Slogan committee adjourned. Chai break.','applause']]
+ 'comic-chant':[['player','Attendance lagao! Jo late aaya—','tap'],[actor.id,'Usko location kisne galat bheji thi?',null],['player','Achha meri galti. Attendance chhodo, chai bolo.','applause']]
  }[id];
  const repeat=count>0,group=id==='comic-chant',officer=officers(actor);
  const effects=[{type:'aura',value:repeat?0:group?5:3},{type:'mischief',value:repeat?0:group?4:2},{type:'trust',value:tense&&officer?-1:repeat?0:1},{type:'heat',value:group?(pressure>65?9:4):officer&&tense?3:0},{type:'intensity',value:group?2:0}];
