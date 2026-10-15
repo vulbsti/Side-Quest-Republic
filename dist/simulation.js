@@ -5,6 +5,26 @@ export function overlapsXZ(e,o,r=e.radius??.36){
  const nx=clamp(e.x,o.x-o.w/2,o.x+o.w/2),nz=clamp(e.z,o.z-o.d/2,o.z+o.d/2);
  return Math.hypot(e.x-nx,e.z-nz)<r-.00001;
 }
+// Ground spawn recovery. Deterministic radial samples, nearest ring first;
+// this is a bounded search, not a continuous geometric nearest-point solver.
+export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={}){
+ if(!Number.isFinite(position?.x)||!Number.isFinite(position?.z)||!Number.isFinite(radius)||radius<0||!Number.isFinite(maxRadius)||maxRadius<0)return null;
+ const legal=p=>p.x>=-47+radius&&p.x<=53-radius&&p.z>=-45+radius&&p.z<=57-radius;
+ const free=p=>legal(p)&&!obstacles.some(o=>(o.h??0)>0&&(o.base||0)<1.8&&overlapsXZ(p,o,radius));
+ const origin={x:position.x,z:position.z};
+ if(free(origin))return origin;
+ // Include the exact radius limit even when not divisible by the ring spacing.
+ const step=.2,rings=Math.ceil(maxRadius/step);
+ for(let ring=1;ring<=rings;ring++){
+  const r=Math.min(maxRadius,ring*step),samples=Math.max(16,Math.ceil(2*Math.PI*r/.2));
+  for(let index=0;index<samples;index++){
+   const angle=index*2*Math.PI/samples;
+   const p={x:origin.x+Math.cos(angle)*r,z:origin.z+Math.sin(angle)*r};
+   if(free(p))return p;
+  }
+ }
+ return null;
+}
 export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??.36){
  const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
  for(let i=0;i<steps;i++)for(const axis of ['x','z']){

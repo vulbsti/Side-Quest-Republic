@@ -1,25 +1,61 @@
 # Side Quest Republic — One Delhi Afternoon
 
-Full-browser 3D social mischief demo, built with vendored Three.js and original Blender assets. Serve `dist` over HTTP (`python3 -m http.server 4173 --directory dist`). WebGL 2 required; no build/install step. Google Fonts are optional.
+A full-browser 3D social adventure set in a compressed, reference-informed version of Connaught Place and Jantar Mantar. Version 5 connects the three stories into a campaign with browser saves, selectable interactions, ten optional moments and an ending that reflects your choices.
 
-WASD/arrows move; Shift runs; Space jumps; drag rotates the camera; wheel zooms. E interacts, Q drops the carried object, G performs, F takes a landmark photo. J opens stories, directions, memories and sources. Escape pauses. Touch controls and click-to-walk are provided; desktop is the primary target.
+## Run and controls
 
-Three stories can be played in any order: borrow and return Ravi's speaker after a crowd performance, take Kabir's career question to Officer Sharma, and reunite Nikhil with his lost phone. Additional water deliveries, costumes, photographs, key incident, police pursuits and recoverable capture feed the afternoon recap. Objects remain where dropped. Leave at the Metro whenever ready. Progress is session-only; reloading starts over.
+Serve `dist` over HTTP from this directory:
 
-Police use notice, chase, last-seen search and patrol states with line-of-sight checks. The original WebAudio soundtrack changes with suspicion, chase and performance. This is a compact stylized interpretation of CP/Jantar Mantar, not a measured replica, photogrammetry, or realistic policing simulation. The bus is a stationary story prop. Reported inspiration is distinguished from invented characters, dialogue, rewards and outcomes in Field notes. References/model provenance: `assets-src/ASSETS.md`.
+```sh
+python3 -m http.server 4173 --directory dist
+```
 
-Validation: `node test-3d.mjs` checks collision, occlusion, A* navigation, movement, sprint/stamina, jump/landing and police detection/capture. These are logic tests, not proof of visual quality. Browser smoke review covers 3D loading, camera/movement, journal and conversations. Full route completion and audio listening remain separate acceptance checks. Original 2D prototype retained in `archive/v1`.
+Open `http://localhost:4173`. WebGL 2 is required; no build or dependency installation is needed. Three.js is vendored. Google Fonts are optional.
 
-## October 15 realism and social pass
+WASD/arrows move, Shift runs, Space jumps, dragging rotates the camera, and the wheel zooms. E performs the selected nearby action; **Tab cycles available actions**, so talking to someone does not hide a nearby pickup. Q drops an object, G performs, F takes a landmark photo, and H calls a group chant. J opens stories, directions, memories and sources; Escape pauses. Touch controls, click-to-walk and story navigation are provided. Desktop remains the primary target.
 
-Textured, skinned MakeHuman-derived humans replace capsule characters. Original skeletal idle/walk/run/carry/wave/jump clips blend at runtime. Three variants share geometry and textures between clones. This is a substantial prototype upgrade, not motion capture or GTA-quality animation. See `assets-src/HUMANS.md` for provenance and production limitations.
+The minimap rotates with the camera: its top represents the direction you are looking. Displayed markers and click destinations use the same coordinate transform. Choose a tracked story and use its navigation action to walk toward the next objective; manual movement takes over.
 
-Photo-based CC0 asphalt, stone, plaster and HDR lighting replace flat surfaces. Benches have procedural grain and hardware; foliage is instanced and the balanced setting reduces its density. Material references are analogues, not surveyed Delhi surfaces or a photogrammetric reconstruction. See `assets-src/ENVIRONMENT.md`.
+## Finish the afternoon
 
-Characters separate physically; vertical collision uses feet/body height, supported bench tops, ceiling contacts and substeps. Regression tests cover landing, walking off, traversing benches, fast falls, wall-constrained body separation and thin obstacles.
+Play the three stories in any order:
 
-64 original Hinglish dialogue adaptations and seven social interaction types distinguish aura, rizz, trust and heat. Friendly first jokes have no heat spike; repetition diminishes rewards. Talk to crowd members or perform nearby to recruit them; H chants with ten nearby recruits. Taking a bus key raises heat and can cost trust. These are fictional rules, not predictions about actual police conduct.
+1. Borrow Ravi's speaker, take it to the stage, gather a crowd, complete a performance, then **return the speaker to Ravi**. The performance alone does not finish this story.
+2. Take Kabir's career question to Officer Sharma and resolve the follow-up conversation.
+3. Find Nikhil's phone and bring it to the check-in volunteer to reunite him with the group.
 
-Signed-in Instagram inspection directly read one visible comment sample, including both amusement and criticism. Research provenance, unavailable clips and unverified user examples are recorded in `research/`. The tuition and compliment scenes remain user-inspired fiction rather than confirmed historical reenactments.
+The stage offers an eight-beat rhythm challenge or a **call-and-response alternative without beat timing**. Both finish the same performance. The conversation version asks for three matching answers across four rounds.
 
-Current verification: physics and social model suites pass. Local browser review verified loading, human meshes, environment materials, Hinglish Kabir dialogue, officer choice menus and tuition-joke reward (aura10/rizz5, no heat). Full ending, sustained performance across devices, final audio listening and every animation transition have not been exhaustively validated.
+All three resolved stories complete the campaign. The Metro provides a recap; leaving before completion produces a partial afternoon rather than claiming all stories are finished. The ending reflects completed errands, trust, mischief, the key's return and earlier captures. After an interruption by police, progress remains and dropped belongings can be recovered.
+
+Ten moments track the three story resolutions plus water deliveries, three landmark photos, returning the key, wearing the costume, a ten-person chant, escaping a pursuit, and trying four distinct social exchanges. These are optional discoveries, not prerequisites for the three-story campaign. Items remain where you drop them, and the speaker can be picked up again after performing.
+
+## Continue after reloading
+
+Progress automatically saves in **this browser's local storage**. The title offers **Continue your afternoon** when a valid save exists; **New afternoon** explicitly starts over. Reloading no longer clears progress. Saves include quests, social history, memories, stats, player/camera position, NPC participation and carried/dropped items. Conversation windows and an unfinished rhythm attempt are transient.
+
+Saves are local to the browser and site address, not cloud accounts. Clearing site data, switching browsers or changing the origin will not transfer the save. If storage is blocked or full, the game reports that saving is unavailable. The versioned save helpers reject unsupported/corrupt data without deleting it. Source and tests: `dist/save-game.js`, `test-save.mjs`.
+
+## World, characters and provenance
+
+Textured, skinned MakeHuman-derived humans replace the original capsule characters. Male, female and unarmed khaki officer variants share geometry and textures between clones, with original skeletal idle/walk/run/carry/wave/jump clips and runtime clothing colors. These are authored game animations, not motion capture; foot-placement IK and photoreal facial acting are not implemented. See `assets-src/HUMANS.md` for CC0 asset provenance and limits.
+
+Original Blender colonnades, observatory forms, bus, cart and barricades establish the Delhi setting. Photo-based CC0 asphalt, stone, plaster and HDR lighting replace flat surfaces; benches have grain and hardware, and foliage is instanced. The balanced graphics setting reduces foliage density. These are architectural interpretations and material analogues, not measured replicas or photogrammetry. The bus is a stationary story prop. See `assets-src/ASSETS.md` and `assets-src/ENVIRONMENT.md`.
+
+Police use notice, chase, last-seen search and patrol states with line-of-sight checks. Characters separate physically, and vertical collision handles supported surfaces and ceilings. An original WebAudio soundtrack changes with suspicion, pursuit and performance.
+
+Hinglish conversations and seven social interaction types distinguish aura, rizz, trust and heat. Friendly first jokes do not spike heat; repeated pestering has diminishing rewards. Recruit people through conversation or nearby performances; ten nearby participants enable the group chant. The rules and dialogue are fictional, not predictions about actual policing.
+
+Field notes distinguish reported inspiration from invented characters, rewards and outcomes. A signed-in Instagram inspection read a small visible comment sample that included amusement and criticism; unavailable clips and unverified examples remain documented in `research/`. The tuition and compliment scenes are user-inspired fiction, not confirmed historical reenactments.
+
+## Verification
+
+Pure-module suites currently pass:
+
+```sh
+node --test test-3d.mjs test-social.mjs test-save.mjs test-minimap.mjs test-interactions.mjs test-campaign.mjs
+```
+
+They cover movement/collision, navigation, body separation, jump/landing, police state transitions, social rewards, save corruption and roundtrips, minimap transforms, interaction selection and campaign summaries. Passing these checks does not establish visual quality or a completed player journey.
+
+**Version 5 browser acceptance completed on local preview (`http://localhost:4319/`, 15 Oct 2026):** played all three stories through normal browser controls to the 3/3 “Chaotic. Reliable.” Metro epilogue. Verified speaker permission/pickup, save/reload while carrying, stage connection, crowd recruitment, four-round call-and-response, retrieval and return; phone pickup/delivery and Nikhil following; Kabir/Officer Sharma career dialogue. The journey caught and fixed stale NPC navigation targets after spawn recovery. Confirmed selectable nearby actions, map click starts a route, campaign progress persists, readable prompt styling and layout at 697×1301. Browser console reported no errors at the end. Map cardinal orientation and inverse click projection are covered by deterministic tests. Rhythm timing, every optional moment, audio listening and all devices remain separate coverage limits.

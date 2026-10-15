@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {Simulation,moveWithCollisions,visible,findPath,verticalStep,supportHeight,separateBodies,overlapsXZ} from './dist/simulation.js';
+import {Simulation,moveWithCollisions,visible,findPath,verticalStep,supportHeight,separateBodies,overlapsXZ,nearestFreePoint} from './dist/simulation.js';
 const wall={x:0,z:0,w:2,d:8,h:3};let e={x:-2,z:0,y:0};for(let i=0;i<60;i++)moveWithCollisions(e,.05,0,[wall]);assert(e.x< -1.3,'wall collision');assert(!visible({x:-3,z:0},{x:3,z:0},[wall]),'occluded vision');assert(visible({x:-3,z:7},{x:3,z:7},[wall]));const path=findPath({x:-5,z:0},{x:5,z:0},[wall]);assert(path.length>0);assert(path.some(p=>Math.abs(p.z)>=6),'path around wall');let s=new Simulation([]);let z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1});assert(s.player.z<z-3);const walk=z-s.player.z;s=new Simulation([]);z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1,sprint:true});assert(z-s.player.z>walk);assert(s.player.stamina<100);for(let i=0;i<120;i++)s.step(1/60,{});assert.equal(s.player.stamina,100);
 s=new Simulation([]);s.step(.016,{jump:true});for(let i=0;i<20;i++)s.step(.016,{});assert(s.player.y>1.4,'jump clears low barriers');for(let i=0;i<80;i++)s.step(.016,{});assert.equal(s.player.y,0);
 s=new Simulation([]);s.player.x=9;s.player.z=19;s.provoke(70);let chase=false,caught=false;for(let i=0;i<1000;i++){const r=s.step(.016,{});chase ||=s.pursuit;caught ||=r==='caught';if(caught)break;}assert(chase,'notice escalates');assert(caught,'capture works');assert.equal(s.catches,1);assert(s.cooldown>0);assert.equal(s.heat,0);
@@ -73,3 +73,20 @@ assert.equal(a.x,0,'hidden bodies do not repel');
 a=makeBody(-3);moveWithCollisions(a,8,0,[{x:0,z:0,w:.08,d:4,h:3}]);
 assert(a.x<-.39,'large horizontal movement cannot tunnel through a thin wall');
 console.log('PASS: bench support/landing/walk-off/traverse, fast fall, ceiling contact, personal-space correction, wall constraints, vertical nonoverlap, anchored/hidden bodies, thin-wall sweep');
+
+const bus={x:24,z:2,w:10,d:2.8,h:3.2};
+const trapped={x:28,z:3};const escapedSpawn=nearestFreePoint(trapped,[bus]);
+assert(escapedSpawn);assert(!overlapsXZ(escapedSpawn,bus,.4),'bus spawn must clear the body radius');
+assert.deepEqual(trapped,{x:28,z:3},'spawn recovery is pure');
+assert.deepEqual(escapedSpawn,nearestFreePoint(trapped,[bus]),'spawn recovery is deterministic');
+assert.deepEqual(nearestFreePoint({x:0,z:0},[]),{x:0,z:0});
+assert.equal(nearestFreePoint({x:0,z:0},[{x:0,z:0,w:100,d:100,h:3}],{maxRadius:2}),null);
+for(const point of [{x:-47,z:0},{x:53,z:0},{x:0,z:-45},{x:0,z:57}]){
+ const recovered=nearestFreePoint(point,[]);assert(recovered);
+ assert(recovered.x>=-46.6&&recovered.x<=52.6&&recovered.z>=-44.6&&recovered.z<=56.6,'body stays inside map bounds');
+}
+assert.equal(nearestFreePoint({x:1000,z:0},[]),null);
+assert.equal(nearestFreePoint({x:0,z:0},[bus],{maxRadius:0})?.x,0);
+assert.equal(nearestFreePoint({x:NaN,z:0},[]),null);
+assert.deepEqual(nearestFreePoint({x:0,z:0},[{x:0,z:0,w:2,d:2,h:5,base:3}]),{x:0,z:0},'overhead canopy permits ground spawn');
+console.log('PASS: deterministic collision-free ground spawn recovery, bounded failure, map-edge clearance, overhead space');
