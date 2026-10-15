@@ -1,6 +1,6 @@
-import {animationInterval} from './frame-clock.js?v=19';
+import {animationInterval} from './frame-clock.js?v=20';
 import * as THREE from 'three';
-import {GLTFLoader} from './vendor/GLTFLoader.js?v=19';
+import {GLTFLoader} from './vendor/GLTFLoader.js?v=20';
 const GESTURE={phone:/phone|record/,offer:/offer|record/,shrug:/shrug/,point:/point/,laugh:/laugh/,count:/count|look-at-hand/,listen:/nod|listen/,wave:/wave/,mic:/mic-check/,rest:/rest/};
 const models={}, loader=new GLTFLoader();let pending,serial=0;
 /** Loads three textured, skinned MakeHuman characters. Call before makeCharacter. */

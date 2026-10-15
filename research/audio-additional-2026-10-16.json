@@ -1,0 +1,89 @@
+{
+  "collected_on": "2026-10-16",
+  "method": "Public primary-source pages and their publicly embedded high-quality preview files. No authentication, credentials, generation or voice synthesis.",
+  "assets": [
+    {
+      "id": 459455,
+      "title": "Voices - male laughter - mild chuckles.wav",
+      "author": "jodybruchon",
+      "source_url": "https://freesound.org/people/jodybruchon/sounds/459455/",
+      "download_url": "https://cdn.freesound.org/previews/459/459455_7872308-hq.mp3",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_verified_from": "Explicit Creative Commons publicdomain/zero/1.0 link in primary source HTML",
+      "asset_path": "dist/assets/audio/mild-chuckle-cc0.mp3",
+      "sha256": "0098d0af5367129438b8b06bbac90858f8a0b12ae4a0ffc206d4564646b93cb1",
+      "bytes": 35796,
+      "duration_seconds": 1.515102,
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1,
+          "side_data_list": [
+            {}
+          ]
+        }
+      ],
+      "representation": "Unmodified public high-quality MP3 preview supplied by Freesound; not original WAV",
+      "applicability": "Short recorded mild male chuckle. Nonverbal comic reaction, not Indian speech or a protest recording.",
+      "audible_review": false
+    },
+    {
+      "id": 462362,
+      "title": "Small applause",
+      "author": "Breviceps",
+      "source_url": "https://freesound.org/people/Breviceps/sounds/462362/",
+      "download_url": "https://cdn.freesound.org/previews/462/462362_9159316-hq.mp3",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_verified_from": "Explicit Creative Commons publicdomain/zero/1.0 link in primary source HTML",
+      "asset_path": "dist/assets/audio/small-applause-cc0.mp3",
+      "sha256": "0297dc19883bf2ffd6ea2634101eb744c6d52acb588a7b8eab1760d6ebd543ba",
+      "bytes": 106967,
+      "duration_seconds": 4.519184,
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "side_data_list": [
+            {}
+          ]
+        }
+      ],
+      "representation": "Unmodified public high-quality MP3 preview supplied by Freesound; not original WAV",
+      "applicability": "Recorded applause of about 30 people. Suitable occasional small gathering response; no claim it comes from Indian protesters.",
+      "audible_review": false
+    },
+    {
+      "id": 34864,
+      "title": "Indian Street - Delhi.wav",
+      "author": "grololo",
+      "source_url": "https://freesound.org/people/grololo/sounds/34864/",
+      "download_url": "https://cdn.freesound.org/previews/34/34864_311859-hq.mp3",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_verified_from": "Explicit Creative Commons publicdomain/zero/1.0 link in primary source HTML",
+      "asset_path": "dist/assets/audio/delhi-street-cc0.mp3",
+      "sha256": "fe307ad4c1b656f1953cd212af5e787810bc13b5ae7ac5d103676d057827eb1f",
+      "bytes": 1127809,
+      "duration_seconds": 50.546939,
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "side_data_list": [
+            {}
+          ]
+        }
+      ],
+      "representation": "Unmodified public high-quality MP3 preview supplied by Freesound; not original WAV",
+      "applicability": "Downtown Delhi street recorded in February 2006; traffic/horns ambience, not current protest footage.",
+      "audible_review": false
+    }
+  ],
+  "total_bytes": 1270572,
+  "limitations": "Verified license metadata, byte integrity and decode metadata. Not listened to. Integration and final audio mix review remain pending."
+}

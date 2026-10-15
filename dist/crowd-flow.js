@@ -1,4 +1,4 @@
-import {findPath,nearestFreePoint,dist} from './simulation.js?v=19';
+import {findPath,nearestFreePoint,dist} from './simulation.js?v=20';
 /** Bounded physical crowd routing. Caller owns steering/collision and rendering.
  * Only hidden bodies may be placed at an entry. Visible bodies never teleport.
  * Call update once per simulation second before NPC steering; do not overwrite

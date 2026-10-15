@@ -1,4 +1,4 @@
-import { RGBELoader } from './assets/materials/RGBELoader.js?v=19';
+import { RGBELoader } from './assets/materials/RGBELoader.js?v=20';
 /** Apply only to the static world, BEFORE characters are created. */
 export async function enhanceEnvironment(THREE, world) {
   const {scene,renderer,sun}=world, loader=new THREE.TextureLoader();

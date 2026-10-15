@@ -1,4 +1,4 @@
-import {SHOP_SOLIDS,FORECOURT_SOLIDS,URBAN_SOLIDS} from './destinations.js?v=19';
+import {SHOP_SOLIDS,FORECOURT_SOLIDS,URBAN_SOLIDS} from './destinations.js?v=20';
 /** Fictionalised Delhi-inspired geography; not a surveyed reproduction. */
 export const WORLD_BOUNDS=Object.freeze({minX:-90,maxX:90,minZ:-85,maxZ:100,x:[-90,90],z:[-85,100]});
 export const DISTRICTS=Object.freeze([
