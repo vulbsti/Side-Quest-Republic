@@ -5,3 +5,8 @@ s=new Simulation([]);s.step(.016,{jump:true});for(let i=0;i<20;i++)s.step(.016,{
 s=new Simulation([]);s.player.x=9;s.player.z=19;s.provoke(70);let chase=false,caught=false;for(let i=0;i<1000;i++){const r=s.step(.016,{});chase ||=s.pursuit;caught ||=r==='caught';if(caught)break;}assert(chase,'notice escalates');assert(caught,'capture works');assert.equal(s.catches,1);assert(s.cooldown>0);assert.equal(s.heat,0);
 s=new Simulation([wall]);s.player.x=-3;s.player.z=0;s.police=[{x:3,z:0,y:0,home:{x:3,z:0},state:'notice',phase:0,yaw:-Math.PI/2,seen:.3,search:0,speed:0,last:{x:-3,z:0}}];s.provoke(80);for(let i=0;i<40;i++)s.step(.016,{});assert.notEqual(s.police[0].state,'chase','no sight through wall');
 console.log('PASS: collisions, sight, pathfinding, movement, sprint/stamina, jump/landing, notice/pursuit/capture, occluded detection');
+
+// Thin barricades between grid nodes must block crossing edges.
+const thin=[{x:14,z:11,w:3,d:.7,h:1.3}];
+const detour=findPath({x:14,z:14},{x:14,z:8},thin);
+assert(detour.some(p=>Math.abs(p.x-14)>2),'route must go around a thin barricade');
