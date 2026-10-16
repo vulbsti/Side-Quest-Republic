@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {DayClient} from './dist/day-client.js';
 const old={id:'old',location:{x:0,z:0},title:'Old'},next={id:'next',location:{x:30,z:0},title:'Next'};
-function fixture(){let active=[old,next],distance=20,target=null,releases=0,clears=0;const c=Object.create(DayClient.prototype);Object.assign(c,{opened:false,available:()=>active,encounter:id=>active.find(e=>e.id===id),distance:()=>distance,hooks:{prepare:e=>target=e.id,walk(){},toast(){},castReady:()=>false,releaseScene:()=>{target=null;releases++;},clearRoute:()=>clears++}});return {c,get target(){return target;},get releases(){return releases;},get clears(){return clears;},set available(v){active=v;},set distance(v){distance=v;}};}
+function fixture(){let active=[old,next],distance=20,target=null,releases=0,clears=0;const c=Object.create(DayClient.prototype);Object.assign(c,{state:{time:0},opened:false,available:()=>active,encounter:id=>active.find(e=>e.id===id),distance:()=>distance,hooks:{prepare:e=>target=e.id,walk(){},toast(){},castReady:()=>false,releaseScene:()=>{target=null;releases++;},clearRoute:()=>clears++}});return {c,get target(){return target;},get releases(){return releases;},get clears(){return clears;},set available(v){active=v;},set distance(v){distance=v;}};}
 // Following reserves real cast; expiry releases it even if no scene panel opened.
 const expired=fixture();expired.c.follow('old');assert.equal(expired.target,'old');expired.available=[next];expired.c.maintainCast();assert.equal(expired.target,null);assert.equal(expired.c.following,null);assert.equal(expired.clears,1);expired.c.maintainCast();assert.equal(expired.releases,1,'expiry release is idempotent');
 // A nearby V request also reserves cast without a route/follow identifier.

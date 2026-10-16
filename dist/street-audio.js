@@ -1,6 +1,6 @@
 /** Existing recordings are the primary audio path. Missing recordings remain silent.
  * Speech is played only from matched existing recordings; missing lines remain silent. */
-import {RecordedAudio} from './recorded-audio.js?v=26';
+import {RecordedAudio} from './recorded-audio.js?v=27';
 const bounded=(v,a,b)=>Math.max(a,Math.min(b,v));
 export class StreetAudio {
  constructor(soundtrack){this.soundtrack=soundtrack;this.preferences={enabled:true,music:true,beat:false,voice:false,voiceURI:'',volume:.6};this.recorded=new RecordedAudio();this.time=0;this.lastCue=-10;this.cueTimes=new Map();this.paused=false;this.utterance=null;this.pendingVoice=[];this.manifestRequested=false;this.crowdedAtmosphere=false;}

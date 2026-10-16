@@ -1,5 +1,5 @@
-import {CROWD_CAPACITY} from './escalation-staging.js?v=26';
-import {findPath,nearestFreePoint,dist} from './simulation.js?v=26';
+import {CROWD_CAPACITY} from './escalation-staging.js?v=27';
+import {findPath,nearestFreePoint,dist} from './simulation.js?v=27';
 /** Bounded physical crowd routing. Caller owns steering/collision and rendering.
  * Only hidden bodies may be placed at an entry. Visible bodies never teleport.
  * Call update once per simulation second before NPC steering; do not overwrite

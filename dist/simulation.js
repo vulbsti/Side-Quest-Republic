@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from './districts.js?v=26';
+import {WORLD_BOUNDS as B} from './districts.js?v=27';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.

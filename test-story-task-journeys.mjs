@@ -18,3 +18,28 @@ function journey(kind){let {world,bodies,options}=fixture(kind);if(kind==='mic')
 journey('medical');journey('mic');journey('regroup');
 for(const kind of ['medical','mic','regroup']){const {world,bodies,options}=fixture(kind);update(world,bodies,.1,options);const r=act(world,bodies,'story-task-abandon',options);assert(r.ok);assert.equal(r.effects.length,0);for(let i=0;i<10;i++)update(world,bodies,1,options);assert(!world.storyTasks.history.some(e=>e.type==='story-task-completed'));assert.equal(world.storyTasks.tasks[0].status,'abandoned');}
 console.log('PASS all task types abandoned without reward or false completion');
+// Restore a split group on the real map, retrieve the waiting member, then finish.
+{
+ let {world,bodies,options}=fixture('regroup');update(world,bodies,.05,options);
+ act(world,bodies,'story-task-recruit:arrival1',options);act(world,bodies,'story-task-recruit:arrival2',options);
+ Object.assign(bodies[0],nearestFreePoint({x:38,z:-12},obstacles,{radius:.4,maxRadius:3}));
+ Object.assign(bodies[1],nearestFreePoint({x:36,z:-12},obstacles,{radius:.4,maxRadius:3}));
+ world=JSON.parse(JSON.stringify(world));let r=update(world,bodies,.1,options);
+ assert.equal(world.storyTasks.tasks[0].status,'separated');
+ let rejoined=false,done=false,paths={};
+ for(let frame=0;frame<1600;frame++){
+  const goal=rejoined?options.safePoint:bodies[2];
+  if(frame%5===0||!paths.player?.length)paths.player=findPath(bodies[0],goal,obstacles);
+  if(paths.player.length&&distance(bodies[0],paths.player[0])<.3)paths.player.shift();
+  if(distance(bodies[0],goal)>(rejoined?.2:1.4))steer(bodies[0],paths.player[0]||goal,4.7,.05,obstacles);
+  r=update(world,bodies,.05,options);
+  if(!rejoined&&r.options.some(a=>a.id==='story-task-rejoin')){assert(act(world,bodies,'story-task-rejoin',options).ok);rejoined=true;paths.player=[];}
+  const prior=bodies.map(b=>({...b}));
+  for(const d of r.directives){const b=bodies.find(b=>b.id===d.actorId);if(frame%5===0||!paths[b.id]?.length)paths[b.id]=findPath(b,d.to,obstacles);if(paths[b.id].length&&distance(b,paths[b.id][0])<.3)paths[b.id].shift();steer(b,paths[b.id][0]||d.to,d.speed,.05,obstacles);}
+  separateBodies(bodies,obstacles);world.time+=.05;
+  for(let i=1;i<bodies.length;i++){assert(distance(prior[i],bodies[i])<.5,'recovery never teleports companions');assert(!obstacles.some(o=>(o.base||0)<1.8&&o.h>0&&overlapsXZ(bodies[i],o,.35)),'recovery respects map obstacles');}
+  if(world.storyTasks.tasks[0].status==='completed'){done=true;console.log('PASS split regroup recovered on actual map',{frame});break;}
+ }
+ assert(rejoined,'player can physically bring split companions together');assert(done,JSON.stringify({bodies,task:world.storyTasks.tasks[0]}));
+ assert.equal(world.storyTasks.history.filter(e=>e.type==='story-task-completed').length,1);
+}

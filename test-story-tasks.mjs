@@ -31,3 +31,25 @@ for(;frames<2000;frames++){
 }
 assert.equal(w.storyTasks.tasks[0].status,'completed',JSON.stringify({task:w.storyTasks.tasks[0],b}));console.log('PASS story medical escort through actual map at walking speed',frames);
 function distance(a,b){return Math.hypot(a.x-b.x,a.z-b.z);}
+// A new task cannot steal actors still visibly holding at a completed task.
+({w,b,o}=setup('broken_mic','help'));update(w,b,.1,o);act(w,b,'story-task-repair',o);for(let i=0;i<4;i++)update(w,b,1,o);
+w.resolved.last_group_call={status:'played',choiceId:'rollcall',eventId:'next',time:805};r=update(w,b,.1,o);
+assert(!r.options.some(x=>x.id.startsWith('story-task-recruit:')),'completed listeners remain reserved');
+assert.equal(new Set(r.directives.map(x=>x.actorId)).size,r.directives.length,'one task owns each actor');
+for(let i=0;i<30;i++)r=update(w,b,1,o);
+assert(r.options.some(x=>x.id.startsWith('story-task-recruit:')),'actors released after hold expires');
+// Regroup offers only people with a route to the actual destination.
+({w,b,o}=setup('last_group_call','rollcall'));r=update(w,b,.1,{...o,canRoute:a=>a.id==='arrival2'});
+assert(!r.options.some(x=>x.id==='story-task-recruit:arrival1'));
+assert(r.options.some(x=>x.id==='story-task-recruit:arrival2'));
+// An unaccepted medical offer can recover when that person becomes unavailable.
+({w,b,o}=setup());update(w,b,.1,o);b[1].hidden=true;r=update(w,b,.1,o);
+assert.equal(r.objective.actorId,'arrival2');assert(!r.reservedActorIds.includes('arrival1'));
+// Two people separated by more than six metres must not produce an impossible rejoin.
+({w,b,o}=setup('last_group_call','rollcall'));update(w,b,.1,o);act(w,b,'story-task-recruit:arrival1',o);act(w,b,'story-task-recruit:arrival2',o);
+b[0].x=16;b[1].x=14;b[1].z=0;b[2].x=0;b[2].z=0;r=update(w,b,.1,o);
+assert.equal(r.state.tasks[0].status,'separated');assert(!act(w,b,'story-task-rejoin',o).ok);
+assert(r.directives.find(d=>d.actorId==='arrival1').speed>0,'nearby companion follows while retrieving lagging member');
+assert.equal(r.directives.find(d=>d.actorId==='arrival2').speed,0,'lagging member waits instead of knowing unseen position');
+assert(!w.storyTasks.history.some(e=>e.type==='story-task-completed'));
+console.log('PASS task ownership, reachable recruitment, unavailable offers and split-group recovery');
