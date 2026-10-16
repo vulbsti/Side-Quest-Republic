@@ -1,7 +1,7 @@
-import {spatialBatches} from './spatial-batching.js?v=24';
+import {spatialBatches} from './spatial-batching.js?v=25';
 import * as THREE from 'three';
-import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=24';
-import { GLTFLoader } from './vendor/GLTFLoader.js?v=24';
+import { mergeGeometries } from './vendor/BufferGeometryUtils.js?v=25';
+import { GLTFLoader } from './vendor/GLTFLoader.js?v=25';
 export {THREE};
 const M={},G={};
 export function mat(c,roughness=.8){const k=c+'_'+roughness;return M[k]??=new THREE.MeshStandardMaterial({color:c,roughness});}

@@ -83,3 +83,34 @@ select#missionPicker{width:100%;padding:7px 8px;border:1px solid #ffffff40;borde
  #nearbyActions{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:145px;max-height:55px;overflow-x:auto;overflow-y:hidden}
  #nearbyActions button{min-height:38px}
 }
+
+/* v25: one readable action strip; the street, not a stack of buttons, owns
+   the centre of the frame. Alternatives stay scrollable and keyboard reachable. */
+#nearbyActions{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;max-height:62px;scroll-snap-type:x proximity;scroll-padding:4px;padding:2px 3px 5px;scrollbar-width:thin;touch-action:pan-x}
+#nearbyActions button{flex:0 0 145px;min-height:44px;scroll-snap-align:start}
+#promptPrimary,#cycleAction{min-height:44px}
+#prompt{padding:8px;gap:5px 8px}
+#actionHint{padding:0 3px}
+.bubble{max-width:min(210px,60vw);padding:7px 10px;line-height:1.4;pointer-events:none}
+#hud[data-crisis="true"] #chapter{background:#172e25e8}
+#hud[data-crisis="true"] #chapter h2{font-size:25px;margin:5px 0}
+#hud[data-crisis="true"] #chapterProgress,
+#hud[data-crisis="true"] #missionPicker{display:none}
+#hud[data-crisis="true"] #wanted{border-left:2px solid #efba7c}
+#hud[data-crisis="true"] #wantedHint{display:block;line-height:1.4;margin-top:5px}
+@media(max-width:600px){
+ #nearbyActions{max-width:calc(100vw - 48px)}
+ #nearbyActions button{flex-basis:150px;font-size:11px}
+ #hud[data-crisis="true"] #chapter{width:calc(100vw - 150px);min-width:170px;padding:8px 10px}
+ #hud[data-crisis="true"] #chapter h2{font-size:21px}
+ #hud[data-crisis="true"] #objectiveText{font-size:10px;line-height:1.4;margin:5px 0}
+ #hud[data-crisis="true"] #objectiveSub{display:none}
+ #hud[data-crisis="true"] #wantedHint{font-size:9px}
+ .bubble{font-size:10px;max-width:175px}
+}
+@media(max-height:650px) and (min-width:600px){
+ #hud[data-crisis="true"] #chapter{max-width:225px}
+ #hud[data-crisis="true"] #objectiveText{line-height:1.35;margin:4px 0}
+ #hud[data-crisis="true"] #objectiveNavigate{margin-top:3px}
+}
+@media(prefers-reduced-motion:reduce){#hud button,#toast,#heatbar{transition:none}#nearbyActions{scroll-behavior:auto}}

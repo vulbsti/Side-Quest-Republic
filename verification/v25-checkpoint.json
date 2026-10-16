@@ -1,0 +1,42 @@
+{
+  "version": 25,
+  "quality_pass": false,
+  "priorities": [
+    {
+      "area": "Playable crisis",
+      "implemented": "Physical escort with approach, follow, separation/rejoin, joint arrival, abandonment and saved progress; longer crisis windows",
+      "acceptance": "Complete browser escort with actual companion movement and truthful outcome",
+      "status": "integration and real-map automated tests pass; browser pending"
+    },
+    {
+      "area": "Group coordination",
+      "implemented": "Staggered retreat, persistent recovery positions, settling without endpoint fighting",
+      "acceptance": "Continuous collision-free movement, no reassembly reset or destination oscillation",
+      "status": "actual-map regression passes; browser pending"
+    },
+    {
+      "area": "Connected systems",
+      "implemented": "Reserved escort ownership, emergency-aware NPC response, no inappropriate recruitment, ending receipts",
+      "acceptance": "Saved companion remains owned; only physically completed escort counts as care",
+      "status": "production-extraction and ending tests pass"
+    },
+    {
+      "area": "Readable opportunities",
+      "implemented": "Local task objective, blue companion/destination rings, contextual action labels, dedicated abandon button",
+      "acceptance": "Player discovers and completes task without inspector",
+      "status": "browser pending"
+    },
+    {
+      "area": "Visible institutional conflict",
+      "implemented": "Hesitant officers step aside for visible retreaters while others advance; existing witnessed incident response retained",
+      "acceptance": "Different physical responses have local evidence and inspectable reasons",
+      "status": "simulation tests pass; broader political faction choreography still incomplete"
+    },
+    {
+      "area": "Presentation",
+      "implemented": "Bounded nearby captions, compact crisis HUD, player-facing dialogue instead of debug narration, paused menus stop redundant 3D redraw",
+      "acceptance": "Readable responsive scene with meaningful action feedback",
+      "status": "browser pending; photorealism and recorded character performances not delivered"
+    }
+  ]
+}

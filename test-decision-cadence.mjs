@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 const source=fs.readFileSync('dist/main.js','utf8'),start=source.indexOf('function worldStep(dt)'),end=source.indexOf('tickStreetQueue();',start);
 const calls={incident:[],crisis:[],ambient:[],contact:0};
-const ctx={mode:'play',day:{state:{},tick(){}},sim:{time:0},street:null,expansion:null,decisionWorld:null,decisionElapsed:0,incidentProjection:null,crisisProjection:null,ambientProjection:null,mischiefUntil:0,mischiefOrders:[],world:{obstacles:[]},syncPhysicalActors(){},worldRunning:()=>true,incidentBodies:()=>[],visible:()=>true,applyStreetResult(){},applyIncidentProjection(r){ctx.incidentProjection=r;},sampleCrisisContact(){calls.contact++;return {events:[]};}};
+const ctx={mode:'play',day:{state:{},tick(){}},sim:{time:0},street:null,expansion:null,decisionWorld:null,decisionElapsed:0,incidentProjection:null,crisisProjection:null,ambientProjection:null,taskProjection:null,taskBodies:()=>[],escortGeometry:()=>({}),updateCrisisTasks:()=>({directives:[],events:[],effects:[],reservedActorIds:[]}),mischiefUntil:0,mischiefOrders:[],world:{obstacles:[]},syncPhysicalActors(){},worldRunning:()=>true,incidentBodies:()=>[],visible:()=>true,applyStreetResult(){},applyIncidentProjection(r){ctx.incidentProjection=r;},sampleCrisisContact(){calls.contact++;return {events:[]};}};
 for(const [name,key]of [['updateIncident','incident'],['updateCrisis','crisis'],['updateAmbient','ambient']])ctx[name]=(_w,_b,dt)=>{calls[key].push(dt);return {directives:[],events:[],effects:[]};};
 vm.createContext(ctx);vm.runInContext(source.slice(start,end)+'}',ctx);
 for(let i=0;i<60;i++)ctx.worldStep(1/60);

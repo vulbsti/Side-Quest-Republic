@@ -1,8 +1,8 @@
-import {spatialBatches} from './spatial-batching.js?v=24';
-import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=24';
-import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=24';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=24';
-import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=24';
+import {spatialBatches} from './spatial-batching.js?v=25';
+import {SHOP_LAYOUT,SHOP_SOLIDS,FORECOURTS,FORECOURT_SOLIDS,DESTINATIONS,URBAN_SOLIDS} from './destinations.js?v=25';
+import {THREE as T,cube,cylinder,sign,mat} from './world.js?v=25';
+import {mergeGeometries} from './vendor/BufferGeometryUtils.js?v=25';
+import {DISTRICTS,STORY_ANCHORS,CONNECTION_ROUTES,EXPANSION_SOLIDS} from './districts.js?v=25';
 /** Visual projection only: the living-world simulation owns every event. */
 export function expandWorld(world,{bodies=()=>[]}={}){
  const {scene,obstacles}=world,staticGroup=new T.Group();staticGroup.name='Delhi neighbourhood expansion';scene.add(staticGroup);
