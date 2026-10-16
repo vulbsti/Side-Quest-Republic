@@ -27,7 +27,12 @@
       "runtime ownership and exactly-once authored rewards",
       "crowd and actor collision regressions",
       "camera occlusion regression"
-    ]
+    ],
+    "browser_medical_attempt": {
+      "result": "not_completed",
+      "observation": "Repeated scene entry reported Sana walking over. The day progressed from about 16:21 to 16:37 and the available scene changed to A concession nobody trusts before medical dialogue was entered.",
+      "cause": "Unconfirmed: requires actor route and encounter readiness diagnosis."
+    }
   },
   "limitations": [
     "Full game quality target not passed",
