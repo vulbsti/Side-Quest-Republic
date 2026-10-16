@@ -17,7 +17,7 @@ assert.equal(update(world,bodies,1,o).options.length,0); // no repeat same wave
 for(const override of [{canSee:undefined},{canSee:()=>false},{canRoute:()=>false},{safePoints:[]}]){const q=setup();assert.equal(update(q.world,q.bodies,.1,{...q.o,...override}).objective,null);}
 ({world,bodies,o}=setup());bodies[0].x=-5;update(world,bodies,.1,o);assert.equal(act(world,bodies,'escort-start',o).ok,false);
 // Occlusion separates, while reload preserves paused objective and timeout.
-({world,bodies,o}=setup());update(world,bodies,.1,o);act(world,bodies,'escort-start',o);o.canSee=()=>false;update(world,bodies,1,o);world=JSON.parse(JSON.stringify(world));for(let i=0;i<36;i++)update(world,bodies,1,o);assert.equal(world.crisisTasks.task.status,'parted');
+({world,bodies,o}=setup());update(world,bodies,.1,o);act(world,bodies,'escort-start',o);o.canSee=()=>false;update(world,bodies,1,o);world=JSON.parse(JSON.stringify(world));for(let i=0;i<40;i++)update(world,bodies,1,o);assert.equal(world.crisisTasks.task.status,'parted');
 // Existing scene ownership cannot be stolen, even after accepting.
 ({world,bodies,o}=setup());update(world,bodies,.1,o);act(world,bodies,'escort-start',o);bodies[1].sceneTarget={x:2,z:3};r=update(world,bodies,.1,o);assert.equal(r.directives.length,0);assert.equal(r.state.task.status,'unavailable');
 console.log('PASS crisis escort: physical follow, contact, LOS, route gate, arrival, separation, persistence and ownership');
@@ -65,3 +65,26 @@ for(;frames<2400;frames++){
 }
 assert.equal(r.state.task.status,'completed',JSON.stringify({task:r.state.task,bodies}));assert(maxMove<.3,'no teleport through actual geometry');
 console.log('PASS physical actual-map escort',JSON.stringify({frames,maxMove}));
+// Live-browser regression: companion must keep up with the actual player's
+// default 4.7m/s movement, but cannot keep up with sustained 8.1m/s sprinting.
+function paceRun(playerSpeed){
+ const q=setup();q.o.safePoints=[{id:'far',label:'the far meeting point',x:60,z:0}];
+ q.bodies[0].x=8;q.bodies[1].x=7;update(q.world,q.bodies,.1,q.o);assert(act(q.world,q.bodies,'escort-start',q.o).ok);
+ let result;
+ for(let frame=0;frame<1800;frame++){
+  q.bodies[0].x=Math.min(60,q.bodies[0].x+playerSpeed/60);
+  result=update(q.world,q.bodies,1/60,q.o);const d=result.directives[0];
+  if(d)steer(q.bodies[1],d.to,d.speed,1/60,[]);
+  if(['completed','separated'].includes(result.state.task.status))break;
+ }
+ return result;
+}
+assert.equal(paceRun(4.7).state.task.status,'completed','walking player can finish without babysitting slower NPC');
+assert.equal(paceRun(8.1).state.task.status,'separated','sprinting away still loses companion');
+({world,bodies,o}=setup());update(world,bodies,.1,o);act(world,bodies,'escort-start',o);update(world,bodies,.1,o);
+const lastSeen={...world.crisisTasks.task.lastSeenPlayer};o.canSee=()=>false;bodies[0].x=10;
+r=update(world,bodies,1,o);assert.equal(r.state.task.status,'following','brief occlusion has grace');
+assert(r.directives[0].to.x<=7,'unseen player movement is not followed magically');assert.deepEqual(r.state.task.lastSeenPlayer,lastSeen);
+o.canSee=()=>true;r=update(world,bodies,.1,o);assert.equal(r.state.task.outOfSightSeconds,0);
+o.canSee=()=>false;for(let i=0;i<4;i++)r=update(world,bodies,1,o);assert.equal(r.state.task.status,'separated','sustained occlusion still separates');
+console.log('PASS actual walking/sprint pace and bounded corner LOS grace without hidden knowledge');

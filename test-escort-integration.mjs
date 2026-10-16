@@ -21,9 +21,35 @@ c.npcs[0].dayPath=[{x:9,z:3}];c.taskProjection.directives=[order('escort-follow-
 c.taskProjection=null;c.crisisProjection=null;c.ambientProjection=null;c.applyIncidentProjection({directives:[],events:[],effects:[]});assert.equal(c.npcs[0].incidentOrder,null);assert.equal(c.npcs[0].dayTarget,null);
 // Execute actual NPC steering loop with a saturated navigation queue. Budget is
 // simulation-time based, so observer acceleration and regular play are equal.
-function navigationRun(dt){let routes=0,speeds=[];const context={npcs:Array.from({length:40},(_,i)=>({...npc('n'+i),dayTarget:{x:20,z:2},incidentOrder:order('escort-wait-for-player',0,{x:20,z:2})})),sim:{police:[],time:0,player:{x:0,z:0}},navigationCredits:0,updateLivingActors(){},game:{},items:[],talk:null,day:null,world:{obstacles:[]},dist:distance,findPath(a,b){routes++;return [{...b}];},steer(n,target,speed){speeds.push(speed);return 0;}};vm.createContext(context);vm.runInContext(extract('updateNPCs'),context);
- for(let i=0;i<Math.round(2/dt);i++){context.sim.time+=dt;for(const n of context.npcs){n.nextPathAt=0;n.dayPath=[];}context.updateNPCs(dt);}
- assert(speeds.every(v=>v===0),'actual steering does not replace stopped escort speed with walking default');return routes;
+function navigationRun(dt){
+ const receipts=[],steered=[];
+ const moving=Array.from({length:40},(_,i)=>({...npc('moving'+i),dayTarget:{x:20,z:2},incidentOrder:{...order('scatter-from-line',3),actorId:'moving'+i,to:{x:20,z:2}}}));
+ const stopped={...npc('stopped'),dayTarget:{x:20,z:2},incidentOrder:{...order('escort-wait-for-player',0),actorId:'stopped',to:{x:20,z:2}}};
+ // Put the accepted companion LAST, behind more requests than the budget can
+ // satisfy. A test where everybody is stopped never exercises this queue.
+ const escort={...npc('escort'),dayTarget:{x:20,z:2},incidentOrder:{...order('escort-follow-player',3),actorId:'escort',to:{x:20,z:2}}};
+ const context={npcs:[...moving,stopped,escort],sim:{police:[],time:0,player:{x:0,z:0}},navigationCredits:0,updateLivingActors(){},game:{},items:[],talk:null,day:{state:{crisisTasks:{task:{actorId:'escort',status:'following'}},actors:{}}},world:{obstacles:[]},dist:distance,
+ findPath(a,b){receipts.push({id:a.id,time:context.sim.time});return [{...b}];},
+ steer(n,target,speed){steered.push({id:n.id,speed,moving:distance(n,target)>.1});return speed;}};
+ vm.createContext(context);vm.runInContext(extract('updateNPCs'),context);
+ for(let i=0;i<Math.round(2/dt);i++){
+  context.sim.time=(i+1)*dt;
+  for(const n of moving){n.nextPathAt=0;n.dayPath=[];}
+  // The companion's destination moves while competing route requests remain
+  // saturated. This should refresh within .4 sec, not the old 2 sec interval.
+  if(context.sim.time>=.5){escort.incidentOrder.to={x:21.5,z:2};escort.dayTarget=escort.incidentOrder.to;}
+  context.updateNPCs(dt);
+ }
+ assert(receipts.length>20,'Moving population must actually consume route budget');
+ assert(receipts.some(r=>r.id.startsWith('moving')),'Crowd route requests are exercised');
+ assert(!receipts.some(r=>r.id==='stopped'),'Stopped escort must not consume route budget');
+ assert(!steered.some(r=>r.id==='stopped'&&r.speed>0),'Stopped escort cannot inherit walking speed');
+ const escortRoutes=receipts.filter(r=>r.id==='escort');
+ assert(escortRoutes.length>=2,'Accepted companion must not starve behind the crowd');
+ assert(escortRoutes[0].time<=.11,'Companion receives first available navigation budget');
+ assert(escortRoutes[1].time<=.91,'A 1.5m target change refreshes within .4 sec');
+ assert(steered.some(r=>r.id==='escort'&&r.moving&&r.speed===3),'Companion receives a usable route and requested speed');
+ return receipts.length;
 }
-assert.equal(navigationRun(1/60),navigationRun(.1),'same simulated duration gets same route budget');
-console.log('PASS actual main escort integration: saved reservations, single-owner projection, stop/repath, release, zero-speed steering and navigation cadence parity');
+assert.equal(navigationRun(1/60),navigationRun(.1),'same simulated duration gets same positive route budget');
+console.log('PASS actual main escort integration: reservations, single-owner projection, stop/repath, release, moving crowd cadence, zero-speed exclusion and escort navigation priority');
