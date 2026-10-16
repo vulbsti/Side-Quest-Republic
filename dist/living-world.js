@@ -1,4 +1,4 @@
-import {deriveEscalation} from './escalation-director.js?v=25';
+import {deriveEscalation} from './escalation-director.js?v=26';
 /** Deterministic, serializable social world. All political institutions are fictional. */
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,Number(n)||0));
 const copy=x=>JSON.parse(JSON.stringify(x));
@@ -49,7 +49,26 @@ function matches(s,r={}){for(const[k,v]of Object.entries(r.flags||{}))if(s.flags
 function eligible(s,e){return !s.finished&&!(e.start!==undefined&&s.time<e.start||e.end!==undefined&&s.time>e.end&&s.activeEncounter!==e.id||s.resolved[e.id])&&matches(s,e.requires);}
 function contextualEncounter(s,e){const variant=(e.variants||[]).find(v=>matches(s,v.when));const callbackText=(e.callbacks||[]).map(c=>s.flags[c.flag]?c.trueText:c.falseText).filter(Boolean).join(' ');return {...e,description:[variant?.description||e.description,callbackText].filter(Boolean).join(' '),contextLine:variant?.line,choices:e.choices.filter(c=>matches(s,c.requires))};}
 export function getAvailableEncounters(s,location){return s.encounters.filter(e=>eligible(s,e)&&(!location||e.district===location)).map(e=>contextualEncounter(s,e));}
-export function actWorld(s,encounterId,choiceId,context={}){let encounter=s.encounters.find(e=>e.id===encounterId);if(!encounter||!eligible(s,encounter))return {ok:false,reason:'This moment is no longer available.'};if(s.districts[context.district])encounter={...encounter,district:context.district};const choice=encounter.choices?.find(c=>c.id===choiceId);if(!choice||!matches(s,choice.requires))return {ok:false,reason:'That choice is no longer available.'};const ev=event(s,'choice',choice.line||choice.reply||choice.label,{encounterId,choiceId,district:encounter.district,actorId:encounter.actorId});witness(s,ev,`choice:${encounterId}`,true);s.resolved[encounterId]={status:'played',choiceId,time:s.time,eventId:ev.id};effects(s,choice.effects,{...encounter,eventId:ev.id});if(s.actors[encounter.actorId]){const a=s.actors[encounter.actorId];a.memories.push(ev.id);const rel=s.relationships[a.id];rel.familiarity=clamp(rel.familiarity+5);}decideActors(s,true);return {ok:true,event:ev,choice};}
+/** These choices accept physical work; their success effects wait for an arrival receipt. */
+export function storyTaskKind(encounterId,choiceId){
+ const choices={first_injury:{assist:'medical',officer:'medical',invoke_exception:'medical'},climax_role:{care:'medical',regroup:'regroup'},broken_mic:{help:'mic',gear:'mic'},last_group_call:{rollcall:'regroup',trusted:'regroup'}};
+ return choices[encounterId]?.[choiceId]||null;
+}
+function deferredTaskEffect(e){return ['aid','resolvePromise','flag','solidarity','credibility'].includes(e.type);}
+/** Apply the original reward once, only after the physical task has recorded completion. */
+export function applyCompletedStoryTaskEffects(s,receiptId){
+ const receipt=(s.storyTasks?.history||[]).find(e=>e.id===receiptId&&e.type==='story-task-completed');
+ if(!receipt)return {ok:false,reason:'No completed physical task receipt'};
+ const source=s.events.find(e=>e.id===receipt.sourceEventId&&e.type==='choice');
+ if(!source||storyTaskKind(source.encounterId,source.choiceId)!==receipt.kind)return {ok:false,reason:'Task does not match its source choice'};
+ const key=`story-task-reward:${source.id}`;if(s.flags[key])return {ok:false,reason:'Already rewarded'};
+ const encounter=s.encounters.find(e=>e.id===source.encounterId),choice=encounter?.choices.find(c=>c.id===source.choiceId);
+ if(!choice)return {ok:false,reason:'Missing authored choice'};
+ s.flags[key]=true;effects(s,normalizeEffects(choice.effects).filter(deferredTaskEffect),{...encounter,eventId:receipt.id});
+ if(s.finished)s.ending=summarizeWorld(s);
+ return {ok:true,receipt};
+}
+export function actWorld(s,encounterId,choiceId,context={}){let encounter=s.encounters.find(e=>e.id===encounterId);if(!encounter||!eligible(s,encounter))return {ok:false,reason:'This moment is no longer available.'};if(s.districts[context.district])encounter={...encounter,district:context.district};const choice=encounter.choices?.find(c=>c.id===choiceId);if(!choice||!matches(s,choice.requires))return {ok:false,reason:'That choice is no longer available.'};const ev=event(s,'choice',choice.line||choice.reply||choice.label,{encounterId,choiceId,district:encounter.district,actorId:encounter.actorId});witness(s,ev,`choice:${encounterId}`,true);s.resolved[encounterId]={status:'played',choiceId,time:s.time,eventId:ev.id};const appliedEffects=normalizeEffects(choice.effects).filter(e=>!(storyTaskKind(encounterId,choiceId)&&deferredTaskEffect(e))&&!(encounterId==='return_promises'&&choiceId==='repair'&&e.type==='resolvePromise'&&!s.flags['physical:speaker_return']));effects(s,appliedEffects,{...encounter,eventId:ev.id});if(s.actors[encounter.actorId]){const a=s.actors[encounter.actorId];a.memories.push(ev.id);const rel=s.relationships[a.id];rel.familiarity=clamp(rel.familiarity+5);}decideActors(s,true);return {ok:true,event:ev,choice,appliedEffects};}
 function scheduled(s,id,text,district){if(id==='pressure_point'&&s.escalation?.hotspot)district=s.escalation.hotspot.district;const d=s.districts[district],e=event(s,'world',text,{district,arc:id});witness(s,e,id);const p=s.player;
 if(id==='arrivals'){d.density+=12;s.districts.cp.density+=8;}
 if(id==='negotiation'){s.flags.negotiations='active';s.institutions.assembly.cohesion=clamp(65+p.trust*.15);}
@@ -83,18 +102,30 @@ export function inspectActor(s,id){const a=s.actors[id];if(!a)return null;return
 export function completedEscortReceipts(s){
  const seen=new Set();return (s.crisisTasks?.history||[]).filter(e=>e?.type==='escort-completed'&&typeof e.id==='string'&&!seen.has(e.id)&&seen.add(e.id)).map(e=>({action:'companion-escort',eventId:e.id,actorId:e.actorId,time:e.time,description:e.description||'You accompanied someone to a regroup point.'}));
 }
+/** Canonical physical completions only; multiple history copies cannot inflate outcomes. */
+export function completedStoryTaskReceipts(s){
+ const seen=new Set(),receipts=[];
+ for(const e of s.storyTasks?.history||[]){
+  if(e?.type!=='story-task-completed'||typeof e.id!=='string'||seen.has(e.id)||!['medical','mic','regroup'].includes(e.kind))continue;
+  seen.add(e.id);
+  const actions=e.kind==='medical'?['injury-care',...(e.passageTraversed===true?['medical-passage']:[])]:e.kind==='regroup'?['regroup','rollcall']:['equipment-restored'];
+  for(const action of actions)receipts.push({action,taskKind:e.kind,description:e.description,eventId:e.id,sourceEventId:e.sourceEventId,actorIds:copy(e.actorIds||[]),time:e.time,position:e.position?copy(e.position):null});
+ }
+ return receipts;
+}
 /** Recovery describes performed late actions, never cancels the historical rupture. */
 function recoveryOutcome(s){
  const selected=(id,choices)=>{const r=s.resolved[id];return r?.status==='played'&&choices.includes(r.choiceId)?r:null;};
- const actions=[['injury-care','first_injury',['assist','officer','invoke_exception']],['medical-passage','first_injury',['invoke_exception','officer']],['late-care','climax_role',['care']],['rollcall','last_group_call',['rollcall','trusted']],['regroup','climax_role',['regroup']],['late-escalation','climax_role',['escalate']],['repair','return_promises',['repair']],['late-account','climax_role',['witness']]];
+ const actions=[['late-escalation','climax_role',['escalate']],['repair','return_promises',['repair']],['late-account','climax_role',['witness']]];
  const receipts=actions.flatMap(([action,id,choices])=>{const r=selected(id,choices);return r?[{action,encounterId:id,choiceId:r.choiceId,eventId:r.eventId,time:r.time}]:[];});
- receipts.push(...completedEscortReceipts(s));
+ receipts.push(...completedEscortReceipts(s),...completedStoryTaskReceipts(s));
  const has=action=>receipts.some(r=>r.action===action),care=has('injury-care')||has('late-care')||has('companion-escort'),medicalPassage=has('medical-passage'),regroup=has('regroup'),contacts=has('rollcall'),renewedEscalation=has('late-escalation');
+ const regroupActorIds=[...new Set(receipts.filter(r=>r.action==='regroup').flatMap(r=>r.actorIds||[]))];
  const promises=s.promises.map(p=>({id:p.id,to:p.to,status:p.status}));
  const outcome=renewedEscalation?'renewed-confrontation':regroup&&contacts?'coordinated-regroup':care&&!medicalPassage?'care-without-passage':care?'care-and-passage':contacts?'contacts-checked':'independent-dispersal';
- const titles={'renewed-confrontation':'Renewed confrontation during departure','coordinated-regroup':'A regroup point and a checked contact list','care-without-passage':'Care continues without a confirmed medical passage','care-and-passage':'Care reaches a medical passage','contacts-checked':'Contacts checked as the square disperses','independent-dispersal':'The square disperses without your coordination'};
- const details=[renewedEscalation?'Your late call to advance adds a new confrontation during departure.':'No renewed confrontation is attributed to your final choice.',has('companion-escort')?'You physically accompanied someone to a regroup point. This confirms that arrival, not their final journey home.':care?'You took a specific care task.':'No performed care task is recorded.',medicalPassage?'A performed medical response involved the passage.':'An agreed exception alone does not establish that anyone used a medical passage.',contacts?'A rollcall or trusted follow-up was performed; this does not prove everyone reached home.':'The final whereabouts of the group remain unconfirmed.',regroup?'You chose the established regroup point.':null,has('late-account')?'You preserved an account; that is separate from providing care or transport.':null,promises.some(p=>p.status==='broken')?'Broken commitments remain in the relationship record.':null,promises.some(p=>p.status==='open')?'Some commitments remain open.':null].filter(Boolean);
- return {outcome,title:titles[outcome],care,medicalPassage,regroup,contactsChecked:contacts,renewedEscalation,receipts,promises,text:details.join(' ')};
+ const titles={'renewed-confrontation':'Renewed confrontation during departure','coordinated-regroup':'Companions reunited at the meeting point','care-without-passage':'Care continues without a confirmed medical passage','care-and-passage':'Care reaches a medical passage','contacts-checked':'Companions checked in as the square disperses','independent-dispersal':'The square disperses without your coordination'};
+ const details=[renewedEscalation?'Your late call to advance adds a new confrontation during departure.':'No renewed confrontation is attributed to your final choice.',has('companion-escort')?'You physically accompanied someone to a regroup point. This confirms that arrival, not their final journey home.':care?'You took a specific care task.':'No performed care task is recorded.',medicalPassage?'A performed medical response involved the passage.':'An agreed exception alone does not establish that anyone used a medical passage.',contacts?`${regroupActorIds.length} recorded companion${regroupActorIds.length===1?'':'s'} checked in at the meeting point; this does not prove everyone reached home.`:'The final whereabouts of the group remain unconfirmed.',regroup?'The recorded companions physically reached the regroup point.':null,has('late-account')?'You preserved an account; that is separate from providing care or transport.':null,promises.some(p=>p.status==='broken')?'Broken commitments remain in the relationship record.':null,promises.some(p=>p.status==='open')?'Some commitments remain open.':null].filter(Boolean);
+ return {outcome,title:titles[outcome],care,medicalPassage,regroup,contactsChecked:contacts,regroupActorIds,renewedEscalation,receipts,promises,text:details.join(' ')};
 }
 function recordRecovery(s){const recovery=recoveryOutcome(s);const ev=event(s,'recovery',recovery.title,{district:'jantar',outcome:recovery.outcome,causedBy:recovery.receipts.map(r=>r.eventId).filter(Boolean),actions:copy(recovery.receipts),promises:copy(recovery.promises)});for(const r of recovery.receipts){const actor=s.actors[s.encounters.find(e=>e.id===r.encounterId)?.actorId];if(actor&&!actor.memories.includes(ev.id))actor.memories.push(ev.id);}}
 export function summarizeWorld(s){const severity=s.flags.ruptureSeverity??s.districts.jantar.tension,kept=s.promises.filter(p=>p.status==='kept').length,broken=s.promises.filter(p=>p.status==='broken').length,played=Object.values(s.resolved).filter(x=>x.status==='played').length;
@@ -123,7 +154,7 @@ export function restoreWorld(raw){try{
   s.actors[id]=a;s.relationships[id]={...defaults.relationships[id],...s.relationships[id]};
  }
  if(s.finished&&s.time===DAY_DURATION){let repaired=false;for(const e of s.encounters)if(!s.resolved[e.id]){s.resolved[e.id]={status:'missed',time:s.time};const ev=event(s,'missed',e.expiryText||`Elsewhere: ${e.title}`,{district:e.district,encounterId:e.id});effects(s,e.onExpire||e.noPlayer,{...e,eventId:ev.id});repaired=true;}if(repaired)s.ending=summarizeWorld(s);}
- if(s.finished&&!s.ending?.recovery)s.ending=summarizeWorld(s);if(s.physical?.enabled)s.physical.actors={};if(validateWorld(s).length)return null;return s;
+ if(s.finished)s.ending=summarizeWorld(s);if(s.physical?.enabled)s.physical.actors={};if(validateWorld(s).length)return null;return s;
 }catch{return null;}}
 /** Bridge physical street actions into the same causal ledger; each id applies once. */
 export function recordWorldAction(s,id,detail={}){if(s.finished)return {ok:false,reason:'The day has ended.'};const key=`physical:${id}`;if(s.flags[key])return {ok:false,reason:'Already recorded'};const definitions={speaker_return:{actorId:'ravi',district:'cp',text:'You returned the borrowed speaker.',effects:{aid:2,trust:5,relationship:{actorId:'ravi',trust:12},resolvePromise:'speaker_return'}},phone_reunited:{actorId:'nikhil',district:'metro',text:'Your search reunited a friend with their phone.',effects:{aid:3,trust:5,relationship:{actorId:'nikhil',trust:15},flags:{buddy_reunited:true}}},water_shared:{actorId:'sana',district:'supply',text:'You shared water with people in the square.',effects:{aid:2,solidarity:5,tension:-3,relationship:{actorId:'sana',trust:8}}},officer_joke:{actorId:'officer',district:'connector',text:'An awkward friendly joke made the officer remember you.',effects:{relationship:{actorId:'officer',trust:5,familiarity:15}}},key_taken:{actorId:'officer',district:'connector',text:'The missing keys brought unwanted attention to you.',effects:{escalation:3,pressure:6,relationship:{actorId:'officer',trust:-8}}},key_returned:{actorId:'officer',district:'connector',text:'Returning the keys repaired some of the damage.',effects:{escalation:-2,pressure:-3,relationship:{actorId:'officer',trust:5}}},caught:{actorId:'officer',district:'connector',text:'A detention interrupted your afternoon.',effects:{fatigue:8,pressure:5}}};const d=definitions[id];if(!d)return {ok:false,reason:'Unknown street action'};s.flags[key]=true;const ev=event(s,'street-action',d.text,{actorId:d.actorId,district:d.district,actionId:id,...detail});effects(s,d.effects,{...d,eventId:ev.id});witness(s,ev,key,true);if(id==='speaker_return')for(const p of s.promises)if(p.to==='ravi'&&p.status==='open')p.status='kept';if(id==='water_shared')s.flags.water_shared=true;decideActors(s,true);return {ok:true,event:ev};}

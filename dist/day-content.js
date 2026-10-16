@@ -3232,8 +3232,8 @@ export const DAY_ENCOUNTERS = [
     "choices": [
       {
         "id": "help",
-        "label": "Help relay the verified message calmly",
-        "line": "Ravi: Same line bol. Haan, wahi. Apna ending mat daal.",
+        "label": "Reconnect the loose microphone lead",
+        "line": "Ravi: Loose lead udhar hai. Saath aa, connection pakadna padega.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -3263,8 +3263,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "gear",
-        "label": "Help move the borrowed equipment out of the crush",
-        "line": "Ravi: Pakad liya? Achha. Main wire nikaalta hoon.",
+        "label": "Steady the equipment and secure its loose connection",
+        "line": "Ravi: Connection hil raha hai. Mere saath aa, steady karte hain.",
         "effects": [
           {
             "type": "resolvePromise",
@@ -3524,8 +3524,8 @@ export const DAY_ENCOUNTERS = [
     "choices": [
       {
         "id": "assist",
-        "label": "Follow Sana’s request and keep space around the person",
-        "line": "Sana: Bag idhar. Do kadam peeche. Haan, ab jagah hai.",
+        "label": "Find someone who needs help and accompany them to the meeting point",
+        "line": "Sana: Kisi ko saath chahiye. Pehle pooch, phir dheere saath chalna.",
         "effects": [
           {
             "type": "aid",
@@ -3550,8 +3550,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "officer",
-        "label": "Ask Sharma for medical access",
-        "line": "Sharma: Idhar se. Ruko, isko pehle jaane do.",
+        "label": "Ask Sharma for access, then accompany someone to the meeting point",
+        "line": "Sharma: Pehle unse pooch lo. Main gap ke liye baat karta hoon.",
         "effects": [
           {
             "type": "aid",
@@ -3606,8 +3606,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "invoke_exception",
-        "label": "Invoke the medical passage already agreed",
-        "line": "Sharma: Haan, wahi instruction. Radio pe phir bolta hoon.",
+        "label": "Request the agreed access and accompany someone to the meeting point",
+        "line": "Sharma: Radio pe poochta hoon. Unke saath rehna; abhi pahunche nahi hain.",
         "policy": "helpful",
         "requires": {
           "flags": {
@@ -3989,8 +3989,8 @@ export const DAY_ENCOUNTERS = [
     "choices": [
       {
         "id": "rollcall",
-        "label": "Help verify names and last known contacts",
-        "line": "Nikhil: Pehle phone karo. Message pe missing likh diya sabne.",
+        "label": "Find two nearby people and walk together to the east meeting point",
+        "line": "Nikhil: Do log ko saath leke east meeting point aa. List baad mein dekhenge.",
         "effects": [
           {
             "type": "aid",
@@ -4015,8 +4015,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "trusted",
-        "label": "Ask trusted volunteers to coordinate follow-up",
-        "line": "Mira: Ek list bhejo. Mere paas teen aa gayi hain.",
+        "label": "Help two nearby people regroup at the east meeting point",
+        "line": "Mira: Do log ko pooch, saath chalna hai? East meeting point pe milte hain.",
         "effects": [
           {
             "type": "aid",
@@ -4139,8 +4139,8 @@ export const DAY_ENCOUNTERS = [
     "choices": [
       {
         "id": "care",
-        "label": "Commit to the volunteer care effort",
-        "line": "Mira: Sana ko do log chahiye. Tu aa raha hai?",
+        "label": "Offer to accompany someone to the east meeting point",
+        "line": "Mira: Kisi ko company chahiye. Pooch ke saath chal; sprint mat maarna.",
         "effects": [
           {
             "type": "aid",
@@ -4226,8 +4226,8 @@ export const DAY_ENCOUNTERS = [
       },
       {
         "id": "regroup",
-        "label": "Use the meeting point you agreed earlier",
-        "line": "Nikhil: Peela board. Wahi wala. Main message bhej raha hoon.",
+        "label": "Bring two nearby people to the east meeting point",
+        "line": "Nikhil: East meeting point. Do log ko saath laa; attendance abhi pending hai.",
         "policy": "helpful",
         "requires": {
           "flags": {

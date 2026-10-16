@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS} from './districts.js?v=25';
+import {WORLD_BOUNDS} from './districts.js?v=26';
 /** Authored fictional crowd-control wave. This module emits physical intentions,
  * never damage, position writes, affiliation-based suspicion or automatic arrests.
  * Runtime must route every `to` through collision/navigation and honour ownership.

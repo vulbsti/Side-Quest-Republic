@@ -5,8 +5,8 @@ const source=await fs.readFile(new URL('./dist/main.js',import.meta.url),'utf8')
 function extract(name){const start=source.indexOf(`function ${name}(`);assert(start>=0);const next=source.indexOf('\nfunction ',start+1);return source.slice(start,next<0?source.length:next);}
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const npc=id=>({id,x:2,z:2,pose:0,model:{position:{set(){}},rotation:{}}});
-const c={day:{state:{crisisTasks:{task:{actorId:'friend',status:'following'}},districts:{},player:{},events:[],actors:{},sequence:0}},npcs:[npc('friend'),npc('bystander'),{...npc('scene'),sceneTarget:{}},{...npc('following'),follow:true},{...npc('recruited'),recruited:true}],sim:{time:1,player:{x:0,z:0}},world:{obstacles:[]},taskProjection:null,incidentProjection:null,ambientProjection:null,crisisProjection:null,mischiefOrders:[],mischiefUntil:0,nearestFreePoint:p=>({...p}),dist:distance,clamp:(v,a,b)=>Math.max(a,Math.min(b,v))};
-vm.createContext(c);vm.runInContext(['taskBodies','incidentBodies','applyIncidentProjection'].map(extract).join('\n'),c);
+const c={day:{state:{crisisTasks:{task:{actorId:'friend',status:'following'}},districts:{},player:{},events:[],actors:{},sequence:0}},npcs:[npc('friend'),npc('bystander'),{...npc('scene'),sceneTarget:{}},{...npc('following'),follow:true},{...npc('recruited'),recruited:true}],sim:{time:1,player:{x:0,z:0}},world:{obstacles:[]},storyProjection:null,taskProjection:null,incidentProjection:null,ambientProjection:null,crisisProjection:null,mischiefOrders:[],mischiefUntil:0,nearestFreePoint:p=>({...p}),dist:distance,clamp:(v,a,b)=>Math.max(a,Math.min(b,v))};
+vm.createContext(c);vm.runInContext(['taskBodies','storyReserved','incidentBodies','applyIncidentProjection'].map(extract).join('\n'),c);
 assert.deepEqual(Array.from(c.incidentBodies(),b=>b.id),['bystander','player'],'saved accepted companion excluded before projection rebuild');
 assert(c.taskBodies().some(b=>b.id==='friend'),'task receives full raw body set');
 for(const status of ['following','separated','completed']){c.day.state.crisisTasks.task.status=status;c.day.state.crisisTasks.task.holdSeconds=59;assert(!c.incidentBodies().some(b=>b.id==='friend'));}
@@ -28,7 +28,7 @@ function navigationRun(dt){
  // Put the accepted companion LAST, behind more requests than the budget can
  // satisfy. A test where everybody is stopped never exercises this queue.
  const escort={...npc('escort'),dayTarget:{x:20,z:2},incidentOrder:{...order('escort-follow-player',3),actorId:'escort',to:{x:20,z:2}}};
- const context={npcs:[...moving,stopped,escort],sim:{police:[],time:0,player:{x:0,z:0}},navigationCredits:0,updateLivingActors(){},game:{},items:[],talk:null,day:{state:{crisisTasks:{task:{actorId:'escort',status:'following'}},actors:{}}},world:{obstacles:[]},dist:distance,
+ const context={npcs:[...moving,stopped,escort],sim:{police:[],time:0,player:{x:0,z:0}},navigationCredits:0,storyProjection:null,updateLivingActors(){},game:{},items:[],talk:null,day:{state:{crisisTasks:{task:{actorId:'escort',status:'following'}},actors:{}}},world:{obstacles:[]},dist:distance,
  findPath(a,b){receipts.push({id:a.id,time:context.sim.time});return [{...b}];},
  steer(n,target,speed){steered.push({id:n.id,speed,moving:distance(n,target)>.1});return speed;}};
  vm.createContext(context);vm.runInContext(extract('updateNPCs'),context);

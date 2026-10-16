@@ -23,7 +23,7 @@ const lead={id:'officer',x:0,z:0,yaw:0},sidePlayer={id:'player',x:2,z:0};
 const baseline=stagedCameraFrame({player:sidePlayer,cast:[lead],speakerId:'officer'});
 const third={id:'third',x:baseline.position.x,z:baseline.position.z};
 const avoidThird=stagedCameraFrame({player:sidePlayer,cast:[lead,third],speakerId:'officer'});
-assert(avoidThird);assert(Math.hypot(avoidThird.position.x-third.x,avoidThird.position.z-third.z)>=.65,'lens cannot enter non-speaking cast member');
+assert(avoidThird);assert(Math.hypot(avoidThird.position.x-third.x,avoidThird.position.z-third.z)>=.65||avoidThird.position.y>1.98,'lens cannot enter non-speaking cast member; above-head framing is allowed');
 assert.deepEqual(stagedCameraFrame({player:sidePlayer,cast:[lead,{...third,hidden:true}],speakerId:'officer'}),baseline,'hidden cast does not block the lens');
 const priorThird={position:{x:-3,y:1.6,z:3}};
 const unblocked=stagedCameraFrame({player:sidePlayer,cast:[lead],speakerId:'officer',previous:priorThird});
@@ -32,3 +32,16 @@ const avoided=stagedCameraFrame({player:sidePlayer,cast:[lead,crossing],speakerI
 assert(avoided);assert(cameraSegmentClear(priorThird.position,avoided.position,[{x:crossing.x,z:crossing.z,w:.5,d:.45,base:0,h:1.8}],.1),'camera smoothing cannot cross a third performer');
 const hiddenFrame=stagedCameraFrame({player:sidePlayer,cast:[lead,{...third,hidden:true}],speakerId:'officer',previous:{position:baseline.position}});assert(hiddenFrame);
 console.log('PASS: all visible cast exclude lens and swept camera motion, hidden cast ignored');
+
+// The actual reported broken-mic arrangement: the player stands between Ravi
+// and the desired frontal camera. Lens collision alone used to allow this.
+const ravi={id:'ravi',x:0,z:-11,yaw:0},closePlayer={id:'player',x:.4,z:-9.6,yaw:Math.PI};
+for(const configuration of [{speakerId:'ravi'}, {speakerId:'ravi',camera:'reaction'}, {speakerId:'ravi',phase:'choice'}]){
+ const shot=stagedCameraFrame({player:closePlayer,cast:[ravi],actorId:'ravi',...configuration});
+ assert(shot,'Close performers retain a valid frame');
+ const subjects=shot.shot==='two-shot'?[ravi,closePlayer]:[shot.focusId==='ravi'?ravi:closePlayer];
+ for(const subject of subjects){const blocker=subject===ravi?closePlayer:ravi;
+  assert(cameraSegmentClear(shot.position,{x:subject.x,y:1.8*.82,z:subject.z},[{x:blocker.x,z:blocker.z,w:.64,d:.55,base:0,h:1.8}],.16),'Other performer must not occlude the focus face');
+ }
+}
+console.log('PASS: close broken-mic arrangement keeps speaker, reaction and two-shot faces unobstructed');

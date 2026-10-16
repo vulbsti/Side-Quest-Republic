@@ -31,19 +31,25 @@ export function stagedCameraFrame({player,cast=[],speakerId,listenerId,actorId,c
  const prior=previous?.position&&Number.isFinite(previous.position.y)?previous.position:null;
  const performers=[...new Set([...visible,player].filter(a=>finite(a)&&!a.hidden))];
  const lensClear=position=>performers.every(a=>Math.hypot(position.x-a.x,position.z-a.z)>=.65||position.y>(a.y||0)+(a.height||1.8)+.18||position.y<(a.y||0)-.18);
- const performerBounds=performers.map(a=>({x:a.x,z:a.z,w:.5,d:.45,base:a.y||0,h:(a.y||0)+(a.height||1.8)}));
+ const bodyBounds=a=>({x:a.x,z:a.z,w:.64,d:.55,base:a.y||0,h:(a.y||0)+(a.height||1.8)});
+ const performerBounds=performers.map(bodyBounds);
+ // Keeping the lens outside bodies is insufficient: a listener can fill the
+ // entire foreground while standing between the camera and the speaker.
+ // Check a face-sized sight corridor against every other visible performer.
+ const subjects=twoShot&&finite(other)?[speaker,other]:[speaker];
+ const facesClear=position=>subjects.every(subject=>{const head={x:subject.x,y:(subject.y||0)+(subject.height||1.8)*.82,z:subject.z};return cameraSegmentClear(position,head,performers.filter(a=>a!==subject&&a.id!==subject.id).map(bodyBounds),.16);});
  const choices=[];
- for(const angle of [0,.35,-.35,.7,-.7,1,-1,Math.PI/2,-Math.PI/2,Math.PI])for(const scale of [1,.78,.58])for(const elevation of [.15,.38]){
+ for(const angle of [0,.35,-.35,.7,-.7,1,-1,Math.PI/2,-Math.PI/2,Math.PI])for(const scale of [1,.78,.58])for(const elevation of [.15,.38,.85,1.35]){
   const range=desiredDistance*scale,position={x:focus.x+Math.sin(yaw+angle)*range,y:focus.y+elevation,z:focus.z+Math.cos(yaw+angle)*range};
   if(!cameraSegmentClear(position,focus,obstacles)||!cameraSegmentClear(position,position,obstacles))continue;
   if(prior&&!cameraSegmentClear(prior,position,obstacles))continue;
   if(prior&&performerBounds.some(o=>cameraSegmentClear(prior,prior,[o],.1)&&!cameraSegmentClear(prior,position,[o],.1)))continue;
   // Never put the lens inside another performer. Static colliders are handled above.
-  if(!lensClear(position))continue;
+  if(!lensClear(position)||!facesClear(position))continue;
   const score=Math.abs(angle)*1.8+(1-scale)*2+elevation*.2+(prior?dist(prior,position)*.22:0);
   choices.push({position,lookAt:focus,shot:twoShot?'two-shot':reaction?'reaction':'speaker',speakerId:actualSpeaker.id||'player',focusId:speaker.id||'player',score});
  }
  choices.sort((a,b)=>a.score-b.score);if(choices.length){const {score,...frame}=choices[0];return frame;}
- if(prior&&lensClear(prior)&&cameraSegmentClear(prior,focus,obstacles)&&cameraSegmentClear(prior,prior,obstacles))return {position:{...prior},lookAt:focus,shot:'hold',speakerId:actualSpeaker.id||'player',focusId:speaker.id||'player'};
+ if(prior&&lensClear(prior)&&facesClear(prior)&&cameraSegmentClear(prior,focus,obstacles)&&cameraSegmentClear(prior,prior,obstacles))return {position:{...prior},lookAt:focus,shot:'hold',speakerId:actualSpeaker.id||'player',focusId:speaker.id||'player'};
  return null;
 }
