@@ -25,6 +25,8 @@ const crowd = []; // pooled crowd bodies
 const bubbles = [];
 const items = {};
 let shuttle, shuttleObstacle;
+const occluders = []; // static scenery the follow camera must not sit behind (signs, banners, walls)
+const ray = new THREE.Raycaster();
 let memory = loadMemory();
 let loopLinks = new Set();
 
@@ -321,10 +323,10 @@ function updateBubbles(dt) {
     const b = bubbles[i], body = bodies[b.id];
     b.ttl -= dt;
     v.set(body.x, body.y + 2.15, body.z).project(world.camera);
-    const far = dist(body, sim.player) > 30 || v.z > 1 || !body.model.visible;
+    const far = dist(body, sim.player) > 30 || v.z > 1 || Math.abs(v.x) > 1.05 || v.y < -0.9 || !body.model.visible;
     b.el.style.display = far ? 'none' : 'block';
-    b.el.style.left = ((v.x + 1) / 2) * innerWidth + 'px';
-    b.el.style.top = ((1 - v.y) / 2) * innerHeight + 'px';
+    b.el.style.left = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130) + 'px';
+    b.el.style.top = clamp(((1 - v.y) / 2) * innerHeight, 90, innerHeight - 40) + 'px';
     if (b.ttl <= 0) { b.el.remove(); bubbles.splice(i, 1); }
   }
 }
@@ -355,7 +357,6 @@ function findPrompt() {
     else if (carrying === 'speaker' && id === 'ravi') options.push({ d: dist(p, b) - 1, text: 'Give Ravi his speaker', run: () => give('ravi') });
     else options.push({ d: dist(p, b), text: `Talk to ${PEOPLE[id].name}`, run: () => talk(id) });
   }
-  if (carrying && !options.length) options.push({ d: 9, text: `Put the ${carrying === 'key' ? 'key' : 'speaker'} down`, run: drop });
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
 }
@@ -528,7 +529,19 @@ function camera(dt) {
       }
     }
   }
-  world.camera.position.lerp(desired, 1 - Math.exp(-dt * 9));
+  // Single-sided signs only register from their front, so cast both ways and keep the hit nearest the player.
+  const toCam = desired.clone().sub(target), len = toCam.length();
+  toCam.normalize();
+  ray.far = len;
+  ray.set(target, toCam);
+  let clear = ray.intersectObjects(occluders, false)[0]?.distance ?? len;
+  ray.set(desired, toCam.clone().negate());
+  const back = ray.intersectObjects(occluders, false).at(-1);
+  if (back) clear = Math.min(clear, len - back.distance);
+  if (clear < len) {
+    desired.copy(target).addScaledVector(toCam, Math.max(1.2, clear - 0.4));
+    world.camera.position.copy(desired); // snap in front of the occluder rather than sliding through it
+  } else world.camera.position.lerp(desired, 1 - Math.exp(-dt * 9));
   world.camera.lookAt(target);
 }
 
@@ -602,6 +615,14 @@ function setupInput() {
     expandWorld(world, { bodies: () => (sim ? [sim.player] : []) });
     await loadCharacters((name) => ($('#loadtext').textContent = 'Preparing ' + name + ' characters…'));
     placeProps();
+    const box = new THREE.Box3();
+    world.scene.traverse((o) => {
+      if (!o.isMesh || o.isSkinnedMesh || o.isInstancedMesh) return;
+      box.setFromObject(o);
+      // Big merged scenery is already handled by the obstacle boxes; this catches signs and banners cheaply.
+      const tris = (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3;
+      if (box.max.y > 1.8 && box.max.y - box.min.y > 0.3 && tris < 600) occluders.push(o);
+    });
     sim = new Simulation(world.obstacles);
     sim.police = []; // Sharma is a character with a routine now, not a patrol bot.
     playerModel = makeCharacter({ color: '#df754c', pants: '#31565a', backpack: true, gender: 'male' });
@@ -614,7 +635,7 @@ function setupInput() {
     $('#loading').classList.add('hidden');
     showTitle();
     requestAnimationFrame(frame);
-    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, startLoop, openBoard, act, at, advance, SPOTS };
+    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, startLoop, openBoard, act, at, advance, SPOTS }; // for debugging and browser checks
   } catch (e) {
     console.error(e);
     $('#loadtext').textContent = 'The 3D scene could not start. WebGL 2 is required. ' + e.message;
