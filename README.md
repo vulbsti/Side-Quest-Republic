@@ -1,4 +1,28 @@
-# Side Quest Republic — One Delhi Afternoon
+# Side Quest Republic — Same Day Again
+
+A 3D browser game about one chaotic protest day at Jantar Mantar and Connaught Place. The day loops: from 10:00 to 17:00 people follow their routines, and what you move around (a speaker, a bus key, a rumour) changes where the crowd ends up, where the police stand and how the day ends. When it ends you wake up at the Metro exit again, keeping what you learned on the chaos board.
+
+This is slice 1 of the rebuild described in the design plan: three people with routines (Ravi, Iqbal, Officer Sharma) plus Mira's noon speech, two objects (the speaker and the bus key), five places, about ten rules and five endings.
+
+## Run and play
+
+```sh
+python3 -m http.server 4173 --directory dist
+```
+
+Open `http://localhost:4173`. WASD/arrows move, Shift runs, drag to look, wheel zooms. E acts on whatever is nearest (pick up, give back, talk), Q puts down what you carry, hold T to let time pass faster, Tab opens the chaos board. Talking to people adds their routine to the board; seeing a rule fire adds a cause-and-effect link.
+
+## How it is built
+
+- `dist/loop/rules.js` holds the whole day as one world state plus routines and rules ("when X happens on screen, person Y does Z"). It has no DOM or Three.js, so whole days can be played in tests.
+- `dist/loop/content.js` holds every line, hint, board link and ending. Writers can change the day's words without touching the engine.
+- `dist/loop/main.js` draws the state in the existing 3D city and turns keys into actions.
+- `node test-loop.mjs` plays idle, speaker, key, key-and-speaker, returned-key, detained and party days and checks they end differently, plus a reader check that every rule says something visible.
+
+The previous v27 build is still available at `http://localhost:4173/v27.html`; its modules in `dist/` are reused for the city, characters, movement and bus model.
+
+# Previous build (v5–v27)
+
 
 A full-browser 3D social adventure set in a compressed, reference-informed version of Connaught Place and Jantar Mantar. Version 5 connects the three stories into a campaign with browser saves, selectable interactions, ten optional moments and an ending that reflects your choices.
 
