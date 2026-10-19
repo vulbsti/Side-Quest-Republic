@@ -630,7 +630,7 @@ function updateBus(s, dt) {
     if (b.timer <= 0) b.phase = 'toCP';
   } else {
     const target = b.phase === 'toJantar' ? SPOTS.busJantar : SPOTS.busCP;
-    const d = target.z - b.z, step = BUS.speed * dt;
+    const d = target.z - b.z, step = b.blocked ? 0 : BUS.speed * dt; // the client sets blocked while the player stands in the lane ahead
     if (Math.abs(d) <= step) {
       b.z = target.z;
       if (b.phase === 'toJantar') {
@@ -932,6 +932,7 @@ export const RULES = [
 
 function startClash(s, place) {
   s.clash = { place, live: s.stream.live && s.stream.place === place, t: s.t };
+  s.police.line = place; // Rao sends the line to break it up
   const d = s.people.dev; d.mode = 'shouting'; walkTo(d, LINE_FRONT[place]);
   emit(s, s.clash.live ? 'clash-live' : 'clash', { link: s.clash.live ? 'clash-live' : 'dev-provokes', place, pos: LINE_FRONT[place] });
   s.crowd.barricade = Math.ceil(s.crowd.barricade / 2);

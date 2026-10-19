@@ -205,6 +205,20 @@ for (const l of ['nikhil-finds-kabir', 'kabir-roast']) assert(r.links.has(l), `r
 assert(!r.links.has('kabir-leaves'));
 assert.equal(r.s.ending, 'roast');
 
+// The shuttle waits while the client reports the player standing in its lane.
+{
+  const s = createDay();
+  while (s.bus.phase !== 'toJantar') advance(s, 0.1);
+  const z = s.bus.z; s.bus.blocked = true; advance(s, 3);
+  assert.equal(s.bus.z, z, 'a blocked shuttle stays put');
+  s.bus.blocked = false; advance(s, 1);
+  assert.notEqual(s.bus.z, z);
+}
+
+// Rao sends the line to a scuffle.
+r = play([[at(10, 10), (s) => whisper(s, 'dev', 'minister')]]);
+assert.equal(r.s.police.line, 'barricade');
+
 // Reader check: every rule and every link has content, and every link is reachable by some script above or by an owner.
 for (const rule of RULES) assert(LINES[rule.says], `rule ${rule.id} says something visible`);
 for (const id of Object.keys(LINKS)) assert(LINKS[id].from && LINKS[id].to);

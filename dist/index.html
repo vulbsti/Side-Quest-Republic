@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#122923">
 <title>Side Quest Republic — Same Day Again</title>
-<link rel="stylesheet" href="loop/loop.css?v=2">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="loop/loop.css?v=3">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body>
@@ -26,7 +27,11 @@
   <div id="choices" class="hidden"><div id="choicesTitle"></div><ol id="choicesList"></ol></div>
   <div id="prompt" class="hidden"><kbd>E</kbd><span id="promptText"></span></div>
   <div id="carrying" class="hidden"></div>
-  <div id="keys"><span><kbd>WASD</kbd> move <kbd>Shift</kbd> run</span><span><kbd>E</kbd> act <kbd>Q</kbd> put down <kbd>T</kbd> wait</span><span><kbd>Tab</kbd> chaos board</span></div>
+  <div id="touch" aria-label="Touch controls">
+    <div class="pad"><button data-key="w" aria-label="Forward">▲</button><button data-key="a" aria-label="Left">◀</button><button data-key="s" aria-label="Back">▼</button><button data-key="d" aria-label="Right">▶</button></div>
+    <div class="acts"><button data-key="e" class="big">E</button><button data-key="q">Q</button><button data-key="t">T</button><button data-key="shift">Run</button><button data-key="tab">Board</button></div>
+  </div>
+  <div id="keys"><span><kbd>WASD</kbd> move <kbd>Shift</kbd> run</span><span><kbd>E</kbd> act <kbd>Q</kbd> put down <kbd>Space</kbd> jump</span><span><kbd>T</kbd> hold to wait</span><span><kbd>Tab</kbd> chaos board</span></div>
 </div>
 
 <div id="board" class="hidden" role="dialog" aria-label="Chaos board">
@@ -41,6 +46,6 @@
 </div>
 
 <div id="screen" class="hidden"></div>
-<script type="module" src="loop/main.js?v=2"></script>
+<script type="module" src="loop/main.js?v=3"></script>
 </body>
 </html>

@@ -275,7 +275,7 @@ function updateSquad(dt) {
     const target = L.axis === 'x' ? { x: L.x + off, z: L.z } : { x: L.x, z: L.z + off };
     if (!b.model.visible) { b.model.visible = true; Object.assign(b, L.axis === 'x' ? { x: target.x, z: target.z + 9 } : { x: target.x + 9, z: target.z }); }
     const ox = b.x, oz = b.z;
-    b.speed = dist(b, target) > 0.3 ? steer(b, target, 4, dt, world.obstacles) : 0;
+    b.speed = dist(b, target) > 0.3 ? steer(b, target, day.clash ? 6 : 4, dt, world.obstacles) : 0;
     b.yaw = b.speed > 0.1 ? Math.atan2(b.x - ox, b.z - oz) : L.yaw;
     b.model.position.set(b.x, 0, b.z);
     b.model.rotation.y = b.yaw;
@@ -337,6 +337,17 @@ function updateItems(t) {
   }
 }
 
+// The shuttle stops and honks rather than driving into a player standing in its lane.
+let honked = false;
+function busWaits() {
+  const b = day.bus, p = sim.player;
+  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
+  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
+  const ahead = (p.z - b.z) * dir;
+  b.blocked = moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8;
+  if (b.blocked && !honked) toast('Poooon! Iqbal honks and waits for you to get out of the way.', 3);
+  honked = b.blocked;
+}
 function updateShuttle() {
   const b = day.bus;
   shuttle.position.set(b.x, 0, b.z);
@@ -397,6 +408,7 @@ function handleEvents() {
 function updateBubbles(dt) {
   const v = new THREE.Vector3();
   const placed = [];
+  const side = $('#side').getBoundingClientRect();
   for (let i = bubbles.length - 1; i >= 0; i--) {
     const b = bubbles[i], body = bodies[b.id];
     b.ttl -= dt;
@@ -404,10 +416,11 @@ function updateBubbles(dt) {
     const far = dist(body, sim.player) > 30 || v.z > 1 || Math.abs(v.x) > 1.05 || v.y < -0.9 || !body.model.visible;
     b.el.style.display = far ? 'none' : 'block';
     if (!far) {
-      const x = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130);
+      let x = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130);
       let y = clamp(((1 - v.y) / 2) * innerHeight, 110, innerHeight - 40);
       // Stack bubbles that would overlap, so two people talking at once stay readable.
       for (const p of placed) if (Math.abs(p.x - x) < 220 && Math.abs(p.y - y) < p.h + 6) y = p.y - p.h - 6;
+      if (side.top < innerHeight / 2 && x + 120 > side.left && y - 60 < side.bottom) x = side.left - 125;
       b.el.style.left = x + 'px';
       b.el.style.top = Math.max(110, y) + 'px';
       placed.push({ x, y, h: b.el.offsetHeight || 50 });
@@ -443,6 +456,7 @@ const PICKUP = {
   speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone',
   phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate',
 };
+const OWNER = { speaker: 'ravi', key: 'iqbal', megaphone: 'dev', phone: 'zoya', water: 'sana' };
 const GIVES = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] };
 function findPrompt() {
   const p = sim.player, carrying = day.player.carrying;
@@ -450,12 +464,15 @@ function findPrompt() {
   if (!carrying) {
     for (const id of OBJECTS) {
       const o = day.objects[id];
-      if (isFree(o) && dist(p, o) < 2) options.push({ d: dist(p, o) - 1.5, text: PICKUP[id], run: () => take(id) });
+      if (!isFree(o) || dist(p, o) >= 2) continue;
+      const watching = witnesses().filter((w) => w === OWNER[id] || (id === 'key' && w === 'sharma'));
+      const warn = watching.length ? ` (${watching.map((w) => PEOPLE[w].name).join(' and ')} can see you)` : '';
+      options.push({ d: dist(p, o) - 1.5, text: PICKUP[id] + warn, warn: !!warn, run: () => take(id) });
     }
   }
   for (const id of Object.keys(bodies)) {
     const b = bodies[id], s = day.people[id];
-    if (s.hidden || dist(p, b) > 3) continue;
+    if (s.hidden || dist(p, b) > (id === 'mira' ? 5 : 3)) continue; // Mira stands on the raised stage
     if (carrying && GIVES[carrying].includes(id) && !s.carrying) options.push({ d: dist(p, b) - 1, text: `Give ${PEOPLE[id].name} the ${carrying === 'water' ? 'water crate' : carrying}`, run: () => give(id) });
     else options.push({ d: dist(p, b), text: `Talk to ${PEOPLE[id].name}`, run: () => talk(id) });
   }
@@ -491,6 +508,7 @@ function openChoices(id) {
     + '<li><button data-r=""><kbd>Esc</kbd> Say nothing</button></li>';
   for (const b of $('#choicesList').querySelectorAll('button')) b.onclick = () => choose(b.dataset.r);
   $('#choices').classList.remove('hidden');
+  $('#hud').classList.add('choosing');
 }
 function choose(rid) {
   if (choices && rid) {
@@ -502,6 +520,7 @@ function choose(rid) {
 function closeChoices() {
   choices = null;
   $('#choices').classList.add('hidden');
+  $('#hud').classList.remove('choosing');
 }
 
 // --- loop, screens, board ----------------------------------------------------
@@ -535,7 +554,7 @@ function showTitle() {
     <p>It's 10:00 at the Rajiv Chowk exit. By 17:00 something will have happened at Jantar Mantar. What happens depends on who is where, what is in whose pocket, and what everyone has heard.</p>
     <p>Watch people's routines, move things around, start a rumour, and see what follows. When the day ends, it starts again. You keep everything you learned.</p>
     <div class="buttons"><button class="primary" id="go">${memory.loops > 1 ? `Start loop ${memory.loops}` : 'Start the day'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
-    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links and ${memory.endings.length} of ${Object.keys(ENDINGS).length} endings. ` : ''}WASD to move, drag to look, E to act, Tab for the chaos board, hold T to let time pass.</p></div>`;
+    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links and ${memory.endings.length} of ${Object.keys(ENDINGS).length} endings. ` : ''}WASD to move, Space to jump, drag to look, E to act, Tab for the chaos board, hold T to let time pass. On a phone, use the on-screen buttons.</p></div>`;
   $('#screen').classList.remove('hidden');
   $('#hud').classList.add('hidden');
   $('#go').onclick = () => startLoop();
@@ -609,6 +628,7 @@ function step(dt) {
     accumulator -= STEP;
     day.player.x = sim.player.x;
     day.player.z = sim.player.z;
+    busWaits();
     tick(day, STEP);
     handleEvents();
     if (day.over) { setTimeout(showEnding, day.ending === 'detained' ? 2500 : 600); mode = 'ending'; closeChoices(); return; }
@@ -669,6 +689,10 @@ function camera(dt) {
   const desired = target.clone().add(new THREE.Vector3(Math.sin(yaw) * zoom, zoom * pitch, Math.cos(yaw) * zoom));
   for (const o of world.obstacles) {
     if (o.h < 2) continue;
+    if (o.h < 3.5) { // low props (carts, buses): lift the camera over them rather than pulling it into the player
+      if (Math.abs(desired.x - o.x) < o.w / 2 + 1 && Math.abs(desired.z - o.z) < o.d / 2 + 1) desired.y = Math.max(desired.y, o.h + 1.2);
+      continue;
+    }
     for (let f = 0.15; f < 1; f += 0.05) {
       const x = target.x + (desired.x - target.x) * f, z = target.z + (desired.z - target.z) * f, y = target.y + (desired.y - target.y) * f;
       if (y > (o.base || 0) - 0.2 && y < o.h + 0.3 && Math.abs(x - o.x) < o.w / 2 + 0.2 && Math.abs(z - o.z) < o.d / 2 + 0.2) {
@@ -748,7 +772,7 @@ function setupInput() {
   addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
     if ([' ', 'tab', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
-    if (k === 'tab') { if (mode === 'board') closeBoard(); else if (mode === 'play') openBoard(); return; }
+    if (k === 'tab') { if (mode === 'board') closeBoard(); else if (mode === 'play' || mode === 'end') openBoard(); return; }
     if (k === 'escape' && mode === 'board') { closeBoard(); return; }
     if (k === 'escape' && choices) { closeChoices(); return; }
     if (e.repeat) return;
@@ -775,6 +799,22 @@ function setupInput() {
     world.camera.updateProjectionMatrix();
     world.renderer.setSize(innerWidth, innerHeight);
   });
+  // Touch: on-screen buttons press the same keys; the action prompt can be tapped.
+  for (const btn of document.querySelectorAll('#touch [data-key]')) {
+    const k = btn.dataset.key;
+    const up = () => { keys[k] = false; };
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (mode === 'board' && k === 'tab') { closeBoard(); return; }
+      if (mode !== 'play') { if (k === 'tab' && mode === 'end') openBoard(); return; }
+      keys[k] = true;
+      if (k === 'e' && prompt) prompt.run();
+      if (k === 'q' && day.player.carrying) drop();
+      if (k === 'tab') { keys[k] = false; openBoard(); }
+    });
+    for (const ev of ['pointerup', 'pointercancel', 'pointerleave']) btn.addEventListener(ev, up);
+  }
+  $('#prompt').addEventListener('click', () => { if (mode === 'play' && prompt) prompt.run(); });
   $('#closeBoard').onclick = closeBoard;
   $('#restartLoop').onclick = () => { closeBoard(); if (mode === 'end') startLoop(); else { finish(day, null); memory.loops++; saveMemory(); startLoop(); } };
 }
@@ -792,7 +832,8 @@ function setupInput() {
       box.setFromObject(o);
       // Big merged scenery is already handled by the obstacle boxes; this catches signs and banners cheaply.
       const tris = (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3;
-      if (box.max.y > 1.8 && box.max.y - box.min.y > 0.3 && tris < 600) occluders.push(o);
+      // Props lower than the follow camera (cart poles, kettles) only collapse the view, so they don't count.
+      if (box.max.y > 3.5 && box.max.y - box.min.y > 0.3 && tris < 600) occluders.push(o);
     });
     sim = new Simulation(world.obstacles);
     sim.police = []; // Sharma is a character with a routine now, not a patrol bot.

@@ -48,17 +48,27 @@ kbd{font:10px 'DM Sans',sans-serif;border:1px solid #ffffff60;background:#ffffff
 .bubble b{display:block;font-size:9px;letter-spacing:1px;color:#61824f;margin-bottom:3px}
 .label{position:absolute;transform:translate(-50%,-100%);font-size:10px;letter-spacing:1px;font-weight:700;color:var(--cream);background:#132f28b0;padding:2px 6px;border-radius:4px;white-space:nowrap}
 
-#toast{position:absolute;left:50%;top:92px;transform:translateX(-50%);max-width:min(520px,calc(100vw - 30px));background:#182d24ed;padding:12px 18px;border-radius:7px;border:1px solid #d8ed9766;text-align:center;opacity:0;transition:opacity .25s;line-height:1.5;font-size:13px}
+#toast{position:absolute;left:50%;bottom:170px;transform:translateX(-50%);max-width:min(520px,calc(100vw - 30px));background:#182d24ed;padding:12px 18px;border-radius:7px;border:1px solid #d8ed9766;text-align:center;opacity:0;transition:opacity .25s;line-height:1.5;font-size:13px}
+#hud.choosing #toast{bottom:auto;top:96px} /* keep event text clear of the whisper menu */
 #toast.link{border-color:var(--lime);background:#24402ef2}
 
 #prompt{position:absolute;left:50%;bottom:120px;transform:translateX(-50%);background:#f7f2df;color:#1c3529;padding:10px 16px;border-radius:7px;display:flex;align-items:center;gap:10px;font-weight:600;text-shadow:none;box-shadow:0 5px 20px #0003;max-width:calc(100vw - 28px)}
+#prompt{pointer-events:auto;cursor:pointer}
+#touch{display:none}
+#touch button{pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;background:#132f28c8;border:1px solid #ffffff40;border-radius:10px;font-weight:700;color:var(--cream);padding:0}
+#touch .pad{position:absolute;left:16px;bottom:16px;width:150px;height:150px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);gap:4px}
+#touch .pad [data-key=w]{grid-area:1/2}#touch .pad [data-key=a]{grid-area:2/1}#touch .pad [data-key=s]{grid-area:3/2}#touch .pad [data-key=d]{grid-area:2/3}
+#touch .acts{position:absolute;right:16px;bottom:16px;display:grid;grid-template-columns:repeat(3,52px);gap:6px}
+#touch .acts button{height:46px;font-size:13px}
+#touch .acts .big{grid-column:span 3;height:56px;background:var(--lime);color:#163023;font-size:18px}
+@media (pointer:coarse),(max-width:860px){#touch{display:block}}
 #prompt kbd{border-color:#1b392950;background:#dce8bd;font-weight:700;font-size:13px;color:#1c3529}
 #carrying{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);font-size:12px;background:#1b382cbf;padding:7px 12px;border-radius:5px}
 #keys{position:absolute;left:20px;bottom:18px;font-size:10px;line-height:2.2;color:#fff5de;background:#16352670;padding:7px 11px;border-radius:7px}
 #keys span{display:block}
 
-#screen{z-index:5;display:flex;align-items:center;padding:6%;background:linear-gradient(90deg,#0c211df0,#0b251d99 55%,#0c211d30);overflow:auto}
-.screen-content{max-width:620px}
+#screen{z-index:5;display:flex;align-items:flex-start;padding:6%;background:linear-gradient(90deg,#0c211df0,#0b251d99 55%,#0c211d30);overflow:auto}
+.screen-content{max-width:620px;margin:auto 0} /* centred when it fits, top-aligned and scrollable when it doesn't */
 .screen-content h1{font:900 clamp(52px,8vw,112px)/.86 'Barlow Condensed',Impact,sans-serif;margin:20px 0}
 .screen-content h1 em{color:var(--lime);font-style:normal;display:block}
 .screen-content h2{font:800 clamp(40px,6vw,64px)/.95 'Barlow Condensed';margin:16px 0}
@@ -96,4 +106,4 @@ kbd{font:10px 'DM Sans',sans-serif;border:1px solid #ffffff60;background:#ffffff
 #board h3.sub{margin-top:18px}
 #restartLoop{margin-top:16px;width:100%;background:var(--lime);color:#163023;border:0;font-weight:700}
 
-@media(max-width:860px){.board-grid{grid-template-columns:1fr}#keys{display:none}#side{top:auto;bottom:16px;right:16px;width:min(300px,calc(100vw - 32px))}#feed{display:none}#clock b{font-size:34px}#levers{max-width:calc(100vw - 40px)}#prompt,#choices{bottom:170px}#carrying{bottom:136px}}
+@media(max-width:860px){.board-grid{grid-template-columns:1fr}#keys{display:none}#side{top:200px;bottom:auto;right:16px;width:min(260px,calc(100vw - 32px))}#feed{display:none}#wireless{font-size:11px}#clock b{font-size:34px}#levers{max-width:calc(100vw - 40px)}#stream{top:118px}#prompt,#choices{bottom:186px}#carrying{bottom:250px}#toast{bottom:300px}#hud.choosing #toast{top:280px}}
