@@ -1,0 +1,6587 @@
+{
+  "revision": "bf7b29707d5d0a4b44482bcee6d65b066af934f6",
+  "viewport": [
+    1280,
+    720
+  ],
+  "gpu": "ANGLE (AMD, AMD Radeon 860M Graphics (radeonsi krackan1 ACO), OpenGL ES 3.2)",
+  "skips": [
+    [
+      11,
+      0
+    ],
+    [
+      11,
+      59
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      13,
+      12
+    ],
+    [
+      14,
+      24
+    ],
+    [
+      14,
+      59
+    ],
+    [
+      15,
+      29
+    ],
+    [
+      16,
+      58
+    ],
+    [
+      10,
+      5
+    ],
+    [
+      11,
+      29
+    ],
+    [
+      13,
+      10
+    ],
+    [
+      14,
+      59
+    ],
+    [
+      15,
+      29
+    ],
+    [
+      15,
+      39
+    ],
+    [
+      15,
+      59
+    ],
+    [
+      16,
+      9
+    ],
+    [
+      16,
+      58
+    ]
+  ],
+  "probeSkip": {
+    "from": 32.20000000000019,
+    "to": 373.8000000000165,
+    "x": -7.036034445412599,
+    "z": 33.65661568593987
+  },
+  "events": [
+    {
+      "name": "19-mira-handoff-approach",
+      "state": {
+        "t": 334.6000000000076,
+        "mode": "play",
+        "player": {
+          "x": 0.137445129701046,
+          "z": -10.99000708872824,
+          "carrying": "megaphone"
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -26.439999999999976,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -5.5728108543674395,
+            "z": 29.608006783979647,
+            "path": [
+              {
+                "x": -3,
+                "z": 28
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 2
+          },
+          "dev": {
+            "id": "dev",
+            "x": -14.8,
+            "z": -32.2,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -26.439999999999976
+          },
+          "megaphone": {
+            "holder": "player",
+            "x": 0.137445129701046,
+            "z": -10.99000708872824
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 65,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 6059.149999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "20-mira-megaphone-given",
+      "state": {
+        "t": 335.2000000000077,
+        "mode": "play",
+        "player": {
+          "x": 0.13744512970104622,
+          "z": -10.990009999998213,
+          "carrying": "megaphone"
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -28.599999999999973,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.94465411067767,
+            "z": 28.590408819173543,
+            "path": [
+              {
+                "x": -3,
+                "z": 28
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 2
+          },
+          "dev": {
+            "id": "dev",
+            "x": -14.8,
+            "z": -32.2,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -28.599999999999973
+          },
+          "megaphone": {
+            "holder": "player",
+            "x": 0.13744512970104622,
+            "z": -10.990009999998213
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 65,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 6078.649999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "21-stage-jump-workaround",
+      "state": {
+        "t": 336.60000000000804,
+        "mode": "play",
+        "player": {
+          "x": 0.1374451297010455,
+          "z": -14.375212105736361,
+          "carrying": "megaphone"
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -33.639999999999965,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -2.443886931491048,
+            "z": 31.151307388217397,
+            "path": [
+              {
+                "x": -1.5,
+                "z": 36.5
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": -14.8,
+            "z": -32.2,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -33.639999999999965
+          },
+          "megaphone": {
+            "holder": "player",
+            "x": 0.1374451297010455,
+            "z": -14.375212105736361
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 4,
+          "cpParty": 0,
+          "stage": 65,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 6124.149999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "22-megaphone-handoff",
+      "state": {
+        "t": 337.10000000000815,
+        "mode": "play",
+        "player": {
+          "x": 0.1374451297010455,
+          "z": -14.37525677957502,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -2.165830397236572,
+            "z": 32.726961082326106,
+            "path": [
+              {
+                "x": -1.5,
+                "z": 36.5
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": -14.8,
+            "z": -32.2,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "mira",
+            "x": 0,
+            "z": -14.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 4,
+          "cpParty": 0,
+          "stage": 65,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 6140.399999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "23-police-line-1500",
+      "state": {
+        "t": 376.5000000000171,
+        "mode": "play",
+        "player": {
+          "x": -0.2588855844269951,
+          "z": -3.8698411340907035,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -9.307014731918368,
+            "z": 33.62373141455638,
+            "path": [
+              {
+                "x": -11,
+                "z": 33
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 1
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "mira",
+            "x": 0,
+            "z": -14.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 4,
+          "cpParty": 0,
+          "stage": 70,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 7474.899999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "24-mira-1530",
+      "state": {
+        "t": 413.5000000000255,
+        "mode": "play",
+        "player": {
+          "x": -0.418150986323645,
+          "z": -3.7961442207944582,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -8.829124341746976,
+            "z": 31.643202713591847,
+            "path": [
+              {
+                "x": -3,
+                "z": 28
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 2
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "mira",
+            "x": 0,
+            "z": -14.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 70,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 8962.399999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "25-loop1-ending",
+      "state": {
+        "t": 525.0000000000508,
+        "mode": "end",
+        "player": {
+          "x": -0.440817775076832,
+          "z": -3.8183244819053708,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -4.840000000000038,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -1.6097173287276145,
+            "z": 35.878268470543524,
+            "path": [
+              {
+                "x": -1.5,
+                "z": 36.5
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -4.840000000000038
+          },
+          "megaphone": {
+            "holder": "mira",
+            "x": 0,
+            "z": -14.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 70,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 32377.399999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "ending1": {
+        "ending": "singalong",
+        "over": true
+      }
+    },
+    {
+      "name": "26-loop1-board",
+      "state": {
+        "t": 525.0000000000508,
+        "mode": "board",
+        "player": {
+          "x": -0.440817775076832,
+          "z": -3.8183244819053708,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -4.840000000000038,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true,
+            "searchIndex": 1
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -1.6097173287276145,
+            "z": 35.878268470543524,
+            "path": [
+              {
+                "x": -1.5,
+                "z": 36.5
+              }
+            ],
+            "mode": "lost",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -4.840000000000038
+          },
+          "megaphone": {
+            "holder": "mira",
+            "x": 0,
+            "z": -14.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 70,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 32377.399999999725,
+          "live": true,
+          "place": "stage",
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "27-loop2-nikhil",
+      "state": {
+        "t": 7.799999999999988,
+        "mode": "play",
+        "player": {
+          "x": -4.868041175451014,
+          "z": 32.003374234332306,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -3,
+            "z": 30,
+            "path": [],
+            "mode": "idle",
+            "carrying": "phone"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -2.718133980298967,
+            "z": 31.88274831042745,
+            "path": [],
+            "mode": "follow",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -3,
+            "z": 30
+          },
+          "water": {
+            "holder": null,
+            "x": 6.2,
+            "z": -37.2
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 6,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "28-nikhil-follow-confirmed",
+      "state": {
+        "t": 9.399999999999983,
+        "mode": "play",
+        "player": {
+          "x": -3.014314353799466,
+          "z": 29.20548445339944,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -29.320000000000007,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -3,
+            "z": 30,
+            "path": [],
+            "mode": "idle",
+            "carrying": "phone"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.5924024561258725,
+            "z": 31.14671473484729,
+            "path": [],
+            "mode": "follow",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -29.320000000000007
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -3,
+            "z": 30
+          },
+          "water": {
+            "holder": null,
+            "x": 6.2,
+            "z": -37.2
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 6,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "29-dev-minister-rumour",
+      "state": {
+        "t": 14.399999999999965,
+        "mode": "play",
+        "player": {
+          "x": -3.0143140856310535,
+          "z": 28.35999090049359,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -11.320000000000036,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -3,
+            "z": 30,
+            "path": [],
+            "mode": "idle",
+            "carrying": "phone"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.412704003701244,
+            "z": 30.36746471555664,
+            "path": [],
+            "mode": "follow",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -11.320000000000036
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -3,
+            "z": 30
+          },
+          "water": {
+            "holder": null,
+            "x": 6.2,
+            "z": -37.2
+          }
+        },
+        "crowd": {
+          "cpWaiting": 1,
+          "cpParty": 0,
+          "stage": 6,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "30-dev-minister-unlocked",
+      "state": {
+        "t": 24.200000000000074,
+        "mode": "play",
+        "player": {
+          "x": 4.598834912058779,
+          "z": -2.856158544992348,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -3,
+            "z": 30,
+            "path": [],
+            "mode": "idle",
+            "carrying": "phone"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "waitStage",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -3,
+            "z": 30
+          },
+          "water": {
+            "holder": null,
+            "x": 6.2,
+            "z": -37.2
+          }
+        },
+        "crowd": {
+          "cpWaiting": 2,
+          "cpParty": 0,
+          "stage": 9,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "31-water-at-cp",
+      "state": {
+        "t": 31.200000000000173,
+        "mode": "play",
+        "player": {
+          "x": 5.975351439873963,
+          "z": -35.91832093451289,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -22.839999999999982,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -4.729407130114773,
+            "z": 9.936160275074831,
+            "path": [
+              {
+                "x": -7.5,
+                "z": -5.5
+              }
+            ],
+            "mode": "toFilm",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "waitStage",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -22.839999999999982
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -4.729407130114773,
+            "z": 9.936160275074831
+          },
+          "water": {
+            "holder": null,
+            "x": 6.2,
+            "z": -37.2
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 9,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "32-water-carried",
+      "state": {
+        "t": 31.60000000000018,
+        "mode": "play",
+        "player": {
+          "x": 5.975351439873963,
+          "z": -35.91869300351107,
+          "carrying": "water"
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chai",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -24.27999999999998,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -4.9555371304908045,
+            "z": 8.676293130122657,
+            "path": [
+              {
+                "x": -7.5,
+                "z": -5.5
+              }
+            ],
+            "mode": "toFilm",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "waitStage",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": -18,
+            "z": -30.8,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -24.27999999999998
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -4.9555371304908045,
+            "z": 8.676293130122657
+          },
+          "water": {
+            "holder": "player",
+            "x": 5.975351439873963,
+            "z": -35.91869300351107
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 9,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "33-water-delivered",
+      "state": {
+        "t": 45.90000000000038,
+        "mode": "play",
+        "player": {
+          "x": -9.229902920607271,
+          "z": -11.499655460898799,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 2.091227188965214,
+            "z": -21.75539152394196,
+            "path": [
+              {
+                "x": 5.6,
+                "z": -9.6
+              }
+            ],
+            "mode": "toStage",
+            "carrying": "speaker"
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -21.76000000000002,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "filming",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -11,
+            "z": 30.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -6,
+            "z": 38,
+            "path": [],
+            "mode": "away",
+            "carrying": null,
+            "hidden": true
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "waitStage",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": "ravi",
+            "x": 2.091227188965214,
+            "z": -21.75539152394196,
+            "on": false
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -21.76000000000002
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 9,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "34-nikhil-kabir-reunion",
+      "state": {
+        "t": 117.4999999999976,
+        "mode": "play",
+        "player": {
+          "x": -3.647365926670021,
+          "z": -3.2065620976107634,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": -19.5,
+            "z": -31.5,
+            "path": [],
+            "mode": "chaiBreak",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": -0.05714712164911312,
+            "z": -31.648910773021115,
+            "path": [
+              {
+                "x": 7.6,
+                "z": -31
+              }
+            ],
+            "mode": "toBus",
+            "carrying": null,
+            "hidden": false
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -7.5,
+            "z": -5.5,
+            "path": [],
+            "mode": "filming",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -1.5,
+            "z": -33.5,
+            "path": [],
+            "mode": "film",
+            "carrying": null,
+            "target": "cp"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "hook",
+            "x": 8.55,
+            "z": -31
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -7.5,
+            "z": -5.5
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 10,
+          "cpParty": 0,
+          "stage": 14,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": null,
+          "line": null
+        },
+        "stream": {
+          "viewers": 0,
+          "live": false,
+          "place": null,
+          "viral": false
+        }
+      }
+    },
+    {
+      "name": "35-phone-north-cart",
+      "state": {
+        "t": 238.19999999999075,
+        "mode": "play",
+        "player": {
+          "x": -16.98645249447762,
+          "z": -37.59771988040915,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -5.932908750178716,
+            "z": -6.257183124314929,
+            "path": [
+              {
+                "x": -7.2,
+                "z": -1.4
+              }
+            ],
+            "mode": "toStage",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -15.4,
+            "z": -34.3,
+            "path": [],
+            "mode": "charging",
+            "carrying": null,
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "cart",
+            "x": -16.9,
+            "z": -35.6
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 2,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4800.599999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "36-phone-north-attempt",
+      "state": {
+        "t": 239.79999999999066,
+        "mode": "play",
+        "player": {
+          "x": -16.986452413266367,
+          "z": -38.32882184332495,
+          "carrying": "phone"
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -7.2,
+            "z": -1.4,
+            "path": [],
+            "mode": "selling",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -15.4,
+            "z": -34.3,
+            "path": [],
+            "mode": "charging",
+            "carrying": null,
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "player",
+            "x": -16.986452413266367,
+            "z": -38.32882184332495
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 2,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4776.599999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "37-phone-returned",
+      "state": {
+        "t": 246.2999999999903,
+        "mode": "play",
+        "player": {
+          "x": -13.508317916642202,
+          "z": -34.06149709641733,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -12.039999999999997,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -7.2,
+            "z": -1.4,
+            "path": [],
+            "mode": "selling",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -15.4,
+            "z": -34.3,
+            "path": [],
+            "mode": "charging",
+            "carrying": "phone",
+            "target": "stage"
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -12.039999999999997
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -15.4,
+            "z": -34.3
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 3,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4679.099999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "38-bus-lane",
+      "state": {
+        "t": 254.19999999998984,
+        "mode": "play",
+        "player": {
+          "x": 9.59017015306292,
+          "z": -17.888063193568442,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -7.2,
+            "z": -1.4,
+            "path": [],
+            "mode": "selling",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -2.9941404644332903,
+            "z": -30.03045093905821,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -2.9941404644332903,
+            "z": -30.03045093905821
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 4,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4560.599999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "39-bus-player-contact",
+      "state": {
+        "t": 262.9999999999913,
+        "mode": "play",
+        "player": {
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -25.360000000000014,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -7.2,
+            "z": -1.4,
+            "path": [],
+            "mode": "selling",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -12.07159866118942,
+            "z": -33.1545112275522,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -25.360000000000014
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -12.07159866118942,
+            "z": -33.1545112275522
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4428.599999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "transitSamples": [
+        {
+          "t": 254.29999999998984,
+          "x": 9.590170437272809,
+          "z": -17.888042793473513,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 254.59999999998982,
+          "x": 9.590170451117812,
+          "z": -17.888041799703235,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 254.7999999999898,
+          "x": 9.590170451228788,
+          "z": -17.888041791737752,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 255.0999999999898,
+          "x": 9.59017045122956,
+          "z": -17.88804179168252,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 255.29999999998978,
+          "x": 9.590170451229564,
+          "z": -17.88804179168197,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 255.59999999998976,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 255.89999999998975,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 256.09999999998973,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 256.3999999999898,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 256.59999999998985,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 256.8999999999899,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 257.19999999999,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 257.39999999999003,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 257.6999999999901,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 257.99999999999017,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 258.1999999999902,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 258.4999999999903,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 258.79999999999035,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 258.9999999999904,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 259.29999999999046,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 259.59999999999053,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 259.7999999999906,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 260.09999999999064,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 260.3999999999907,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "cp"
+        },
+        {
+          "t": 260.59999999999076,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -34,
+          "phase": "toJantar"
+        },
+        {
+          "t": 260.8999999999908,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -32.92,
+          "phase": "toJantar"
+        },
+        {
+          "t": 261.1999999999909,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -31.840000000000003,
+          "phase": "toJantar"
+        },
+        {
+          "t": 261.39999999999094,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -31.120000000000005,
+          "phase": "toJantar"
+        },
+        {
+          "t": 261.699999999991,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -30.040000000000006,
+          "phase": "toJantar"
+        },
+        {
+          "t": 261.9999999999911,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -28.960000000000008,
+          "phase": "toJantar"
+        },
+        {
+          "t": 262.1999999999911,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -28.24000000000001,
+          "phase": "toJantar"
+        },
+        {
+          "t": 262.4999999999912,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -27.16000000000001,
+          "phase": "toJantar"
+        },
+        {
+          "t": 263.0999999999913,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -25.000000000000014,
+          "phase": "toJantar"
+        },
+        {
+          "t": 263.3999999999914,
+          "x": 9.590170451229564,
+          "z": -17.888041791681964,
+          "bz": -23.920000000000016,
+          "phase": "toJantar"
+        },
+        {
+          "t": 263.69999999999146,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -22.840000000000018,
+          "phase": "toJantar"
+        },
+        {
+          "t": 263.99999999999153,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -21.76000000000002,
+          "phase": "toJantar"
+        },
+        {
+          "t": 264.1999999999916,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -21.04000000000002,
+          "phase": "toJantar"
+        },
+        {
+          "t": 264.49999999999164,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -19.960000000000022,
+          "phase": "toJantar"
+        },
+        {
+          "t": 264.6999999999917,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -19.240000000000023,
+          "phase": "toJantar"
+        },
+        {
+          "t": 264.99999999999176,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -18.160000000000025,
+          "phase": "toJantar"
+        },
+        {
+          "t": 265.2999999999918,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -17.080000000000027,
+          "phase": "toJantar"
+        },
+        {
+          "t": 265.49999999999187,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -16.360000000000028,
+          "phase": "toJantar"
+        },
+        {
+          "t": 265.79999999999194,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -15.28000000000003,
+          "phase": "toJantar"
+        },
+        {
+          "t": 265.999999999992,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -14.56000000000003,
+          "phase": "toJantar"
+        },
+        {
+          "t": 266.29999999999205,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -13.480000000000032,
+          "phase": "toJantar"
+        },
+        {
+          "t": 266.5999999999921,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -12.400000000000034,
+          "phase": "toJantar"
+        },
+        {
+          "t": 266.8999999999922,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -11.320000000000036,
+          "phase": "toJantar"
+        },
+        {
+          "t": 267.09999999999224,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -10.600000000000037,
+          "phase": "toJantar"
+        },
+        {
+          "t": 267.3999999999923,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -9.520000000000039,
+          "phase": "toJantar"
+        },
+        {
+          "t": 267.59999999999235,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -8.80000000000004,
+          "phase": "toJantar"
+        },
+        {
+          "t": 267.8999999999924,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -7.720000000000041,
+          "phase": "toJantar"
+        },
+        {
+          "t": 268.1999999999925,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -6.64000000000004,
+          "phase": "toJantar"
+        },
+        {
+          "t": 268.49999999999255,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -5.560000000000039,
+          "phase": "toJantar"
+        },
+        {
+          "t": 268.6999999999926,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -4.840000000000038,
+          "phase": "toJantar"
+        },
+        {
+          "t": 268.99999999999267,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -3.7600000000000375,
+          "phase": "toJantar"
+        },
+        {
+          "t": 269.39999999999276,
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "bz": -2.320000000000038,
+          "phase": "toJantar"
+        }
+      ]
+    },
+    {
+      "name": "40-bus-shove",
+      "state": {
+        "t": 269.9999999999929,
+        "mode": "play",
+        "player": {
+          "x": 8.19,
+          "z": -17.888041791681964,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -0.1600000000000375,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -7.2,
+            "z": -1.4,
+            "path": [],
+            "mode": "selling",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -9.195132338123061,
+            "z": -26.241460298563076,
+            "path": [
+              {
+                "x": -10,
+                "z": -26
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 2
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 5.2,
+            "z": -3.2,
+            "path": [],
+            "mode": "stage",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -0.1600000000000375
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 5.2,
+            "z": -3.2
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -9.195132338123061,
+            "z": -26.241460298563076
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 1,
+          "cpParty": 0,
+          "stage": 54,
+          "parliament": 0,
+          "barricade": 0
+        },
+        "police": {
+          "watch": "stage",
+          "line": null
+        },
+        "stream": {
+          "viewers": 4323.599999999927,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "41-barricade-police-line",
+      "state": {
+        "t": 378.6000000000176,
+        "mode": "play",
+        "player": {
+          "x": 30.857565195786485,
+          "z": -4.461390481437189,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -14.373318029624118,
+            "z": -31.10220436789481,
+            "path": [
+              {
+                "x": -16,
+                "z": -33
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 3
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 14.004637890010892,
+            "z": -10.628913219696697,
+            "path": [
+              {
+                "x": 18,
+                "z": -14
+              },
+              {
+                "x": 36.2,
+                "z": -4.5
+              }
+            ],
+            "mode": "toBarricade",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 14.004637890010892,
+            "z": -10.628913219696697
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -14.373318029624118,
+            "z": -31.10220436789481
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 4,
+          "cpParty": 0,
+          "stage": 70,
+          "parliament": 0,
+          "barricade": 1
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 2694.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "42-dev-crowd-arrives",
+      "state": {
+        "t": 389.00000000001995,
+        "mode": "play",
+        "player": {
+          "x": 30.925463988519358,
+          "z": -4.374649386918488,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 0.9199999999999626,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -11.457772676541365,
+            "z": -27.70073478929827,
+            "path": [
+              {
+                "x": -16,
+                "z": -33
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 3
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.2,
+            "z": -4.5,
+            "path": [],
+            "mode": "waiting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 0.9199999999999626
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.2,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -11.457772676541365,
+            "z": -27.70073478929827
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 64,
+          "parliament": 0,
+          "barricade": 7
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 2538.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "43-dev-minister-no-show",
+      "state": {
+        "t": 413.8000000000256,
+        "mode": "play",
+        "player": {
+          "x": 30.925463988519358,
+          "z": -4.374649386918488,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -33.64,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.956811550612297,
+            "z": -30.61628014238102,
+            "path": [
+              {
+                "x": -16,
+                "z": -33
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 3
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.2,
+            "z": -4.5,
+            "path": [],
+            "mode": "waiting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -33.64
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.2,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.956811550612297,
+            "z": -30.61628014238102
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 16
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 2166.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "44-barricade-crowd-settled",
+      "state": {
+        "t": 424.20000000002796,
+        "mode": "play",
+        "player": {
+          "x": 31.00204566502576,
+          "z": -4.137734121659176,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -11.041266197529547,
+            "z": -27.21481056378448,
+            "path": [
+              {
+                "x": -16,
+                "z": -33
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 3
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.2,
+            "z": -4.5,
+            "path": [],
+            "mode": "waiting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.2,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -11.041266197529547,
+            "z": -27.21481056378448
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 16
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 2010.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "45-barricade-escalation",
+      "state": {
+        "t": 427.1000000000286,
+        "mode": "play",
+        "player": {
+          "x": 31.00204566502576,
+          "z": -4.137734121659176,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -15.4,
+            "z": -34.3,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.2,
+            "z": -4.5,
+            "path": [],
+            "mode": "waiting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.2,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -15.4,
+            "z": -34.3
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 16
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1967.0999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "46-dev-1600",
+      "state": {
+        "t": 451.6000000000342,
+        "mode": "play",
+        "player": {
+          "x": 31.00204566502576,
+          "z": -4.137734121659176,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -21.40000000000002,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -12.676762540973161,
+            "z": -33.3627819134518,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -21.40000000000002
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -12.676762540973161,
+            "z": -33.3627819134518
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1599.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "47-barricade-1610",
+      "state": {
+        "t": 463.40000000003687,
+        "mode": "play",
+        "player": {
+          "x": 31.00204566502576,
+          "z": -4.137734121659176,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": 2,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -12.676762540973161,
+            "z": -33.3627819134518,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": 2
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -12.676762540973161,
+            "z": -33.3627819134518
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1422.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "48-clash-without-visible-detentions",
+      "state": {
+        "t": 470.80000000003855,
+        "mode": "play",
+        "player": {
+          "x": 31.00204566502576,
+          "z": -4.137734121659176,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -21.399999999999984,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -9.808141160664599,
+            "z": -26.057557651800618,
+            "path": [
+              {
+                "x": -10,
+                "z": -26
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 2
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -21.399999999999984
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -9.808141160664599,
+            "z": -26.057557651800618
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1311.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "49-six-constables-stage",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "end",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "50-loop2-ending",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "end",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "ending2": {
+        "ending": "scuffle",
+        "over": true
+      }
+    },
+    {
+      "name": "51-mobile-ending-top",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "end",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "52-mobile-board-top",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "board",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "53-mobile-board-bottom",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "board",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    },
+    {
+      "name": "54-loop2-board",
+      "state": {
+        "t": 475.0000000000395,
+        "mode": "board",
+        "player": {
+          "x": 20.123864553369696,
+          "z": 3.9918685627774333,
+          "carrying": null
+        },
+        "people": {
+          "ravi": {
+            "id": "ravi",
+            "x": 5.6,
+            "z": -9.6,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "iqbal": {
+            "id": "iqbal",
+            "x": 10,
+            "z": -34,
+            "path": [],
+            "mode": "drive",
+            "carrying": null,
+            "hidden": true
+          },
+          "sharma": {
+            "id": "sharma",
+            "x": 40,
+            "z": -4.5,
+            "path": [],
+            "mode": "post",
+            "carrying": null,
+            "post": "barricade"
+          },
+          "mira": {
+            "id": "mira",
+            "x": 0,
+            "z": -14.5,
+            "path": [],
+            "mode": "stage",
+            "carrying": null
+          },
+          "asha": {
+            "id": "asha",
+            "x": -18,
+            "z": -34.2,
+            "path": [],
+            "mode": "stall",
+            "carrying": null
+          },
+          "zoya": {
+            "id": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514,
+            "path": [
+              {
+                "x": 0,
+                "z": -29
+              }
+            ],
+            "mode": "search",
+            "carrying": "phone",
+            "target": "stage",
+            "searchIndex": 1
+          },
+          "meera": {
+            "id": "meera",
+            "x": -5.3,
+            "z": -5.5,
+            "path": [],
+            "mode": "chase",
+            "carrying": null,
+            "target": "stage"
+          },
+          "kabir": {
+            "id": "kabir",
+            "x": -4.6,
+            "z": -2.4,
+            "path": [],
+            "mode": "stage",
+            "carrying": null,
+            "hidden": false
+          },
+          "nikhil": {
+            "id": "nikhil",
+            "x": -3.1999999999999997,
+            "z": -1.5999999999999999,
+            "path": [],
+            "mode": "withKabir",
+            "carrying": null,
+            "wander": 0
+          },
+          "dev": {
+            "id": "dev",
+            "x": 36.5,
+            "z": -4.5,
+            "path": [],
+            "mode": "shouting",
+            "carrying": "megaphone"
+          },
+          "sana": {
+            "id": "sana",
+            "x": -9.5,
+            "z": -9,
+            "path": [],
+            "mode": "tent",
+            "carrying": null
+          }
+        },
+        "objects": {
+          "speaker": {
+            "holder": null,
+            "x": 3.2,
+            "z": -10.4,
+            "on": true
+          },
+          "key": {
+            "holder": "iqbal",
+            "x": 10,
+            "z": -34
+          },
+          "megaphone": {
+            "holder": "dev",
+            "x": 36.5,
+            "z": -4.5
+          },
+          "phone": {
+            "holder": "zoya",
+            "x": -13.281926420756903,
+            "z": -33.5710525993514
+          },
+          "water": {
+            "holder": null,
+            "x": -8.4,
+            "z": -8.4
+          }
+        },
+        "crowd": {
+          "cpWaiting": 0,
+          "cpParty": 0,
+          "stage": 55,
+          "parliament": 0,
+          "barricade": 8
+        },
+        "police": {
+          "watch": "stage",
+          "line": "stage"
+        },
+        "stream": {
+          "viewers": 1248.5999999999267,
+          "live": false,
+          "place": null,
+          "viral": true
+        }
+      }
+    }
+  ],
+  "transitSamples": [
+    {
+      "t": 254.29999999998984,
+      "x": 9.590170437272809,
+      "z": -17.888042793473513,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 254.59999999998982,
+      "x": 9.590170451117812,
+      "z": -17.888041799703235,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 254.7999999999898,
+      "x": 9.590170451228788,
+      "z": -17.888041791737752,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 255.0999999999898,
+      "x": 9.59017045122956,
+      "z": -17.88804179168252,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 255.29999999998978,
+      "x": 9.590170451229564,
+      "z": -17.88804179168197,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 255.59999999998976,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 255.89999999998975,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 256.09999999998973,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 256.3999999999898,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 256.59999999998985,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 256.8999999999899,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 257.19999999999,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 257.39999999999003,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 257.6999999999901,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 257.99999999999017,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 258.1999999999902,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 258.4999999999903,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 258.79999999999035,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 258.9999999999904,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 259.29999999999046,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 259.59999999999053,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 259.7999999999906,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 260.09999999999064,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 260.3999999999907,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "cp"
+    },
+    {
+      "t": 260.59999999999076,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -34,
+      "phase": "toJantar"
+    },
+    {
+      "t": 260.8999999999908,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -32.92,
+      "phase": "toJantar"
+    },
+    {
+      "t": 261.1999999999909,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -31.840000000000003,
+      "phase": "toJantar"
+    },
+    {
+      "t": 261.39999999999094,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -31.120000000000005,
+      "phase": "toJantar"
+    },
+    {
+      "t": 261.699999999991,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -30.040000000000006,
+      "phase": "toJantar"
+    },
+    {
+      "t": 261.9999999999911,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -28.960000000000008,
+      "phase": "toJantar"
+    },
+    {
+      "t": 262.1999999999911,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -28.24000000000001,
+      "phase": "toJantar"
+    },
+    {
+      "t": 262.4999999999912,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -27.16000000000001,
+      "phase": "toJantar"
+    },
+    {
+      "t": 263.0999999999913,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -25.000000000000014,
+      "phase": "toJantar"
+    },
+    {
+      "t": 263.3999999999914,
+      "x": 9.590170451229564,
+      "z": -17.888041791681964,
+      "bz": -23.920000000000016,
+      "phase": "toJantar"
+    },
+    {
+      "t": 263.69999999999146,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -22.840000000000018,
+      "phase": "toJantar"
+    },
+    {
+      "t": 263.99999999999153,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -21.76000000000002,
+      "phase": "toJantar"
+    },
+    {
+      "t": 264.1999999999916,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -21.04000000000002,
+      "phase": "toJantar"
+    },
+    {
+      "t": 264.49999999999164,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -19.960000000000022,
+      "phase": "toJantar"
+    },
+    {
+      "t": 264.6999999999917,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -19.240000000000023,
+      "phase": "toJantar"
+    },
+    {
+      "t": 264.99999999999176,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -18.160000000000025,
+      "phase": "toJantar"
+    },
+    {
+      "t": 265.2999999999918,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -17.080000000000027,
+      "phase": "toJantar"
+    },
+    {
+      "t": 265.49999999999187,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -16.360000000000028,
+      "phase": "toJantar"
+    },
+    {
+      "t": 265.79999999999194,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -15.28000000000003,
+      "phase": "toJantar"
+    },
+    {
+      "t": 265.999999999992,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -14.56000000000003,
+      "phase": "toJantar"
+    },
+    {
+      "t": 266.29999999999205,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -13.480000000000032,
+      "phase": "toJantar"
+    },
+    {
+      "t": 266.5999999999921,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -12.400000000000034,
+      "phase": "toJantar"
+    },
+    {
+      "t": 266.8999999999922,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -11.320000000000036,
+      "phase": "toJantar"
+    },
+    {
+      "t": 267.09999999999224,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -10.600000000000037,
+      "phase": "toJantar"
+    },
+    {
+      "t": 267.3999999999923,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -9.520000000000039,
+      "phase": "toJantar"
+    },
+    {
+      "t": 267.59999999999235,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -8.80000000000004,
+      "phase": "toJantar"
+    },
+    {
+      "t": 267.8999999999924,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -7.720000000000041,
+      "phase": "toJantar"
+    },
+    {
+      "t": 268.1999999999925,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -6.64000000000004,
+      "phase": "toJantar"
+    },
+    {
+      "t": 268.49999999999255,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -5.560000000000039,
+      "phase": "toJantar"
+    },
+    {
+      "t": 268.6999999999926,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -4.840000000000038,
+      "phase": "toJantar"
+    },
+    {
+      "t": 268.99999999999267,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -3.7600000000000375,
+      "phase": "toJantar"
+    },
+    {
+      "t": 269.39999999999276,
+      "x": 8.19,
+      "z": -17.888041791681964,
+      "bz": -2.320000000000038,
+      "phase": "toJantar"
+    }
+  ],
+  "logs": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (File not found)"
+    }
+  ],
+  "mobileBefore": {
+    "x": -7.054367438602317,
+    "z": 33.75173635770616,
+    "mode": "lost"
+  },
+  "mobileAfter": {
+    "menu": false,
+    "pos": {
+      "x": -7.034374395940422,
+      "z": 33.65119136087934
+    }
+  }
+}
