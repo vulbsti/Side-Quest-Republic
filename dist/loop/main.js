@@ -9,8 +9,8 @@ import { warmupRenderer } from '../render-warmup.js?v=27';
 import {
   createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree,
   clockText, placeAt, SPOTS, PLACES, at, advance,
-} from './rules.js';
-import { PEOPLE, TALK, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js';
+} from './rules.js?v=4';
+import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=4';
 
 const $ = (s) => document.querySelector(s);
 const STEP = 0.1;
@@ -31,6 +31,8 @@ const bubbles = [];
 const items = {};
 let shuttle, shuttleObstacle;
 const occluders = []; // static scenery the follow camera must not sit behind (signs, banners, walls)
+const overhead = []; // banners and signs above head height, faded when you stand right under them
+let talked = {}; // how often you've asked each person about their current situation today
 const ray = new THREE.Raycaster();
 let memory = loadMemory();
 let loopLinks = new Set();
@@ -253,12 +255,21 @@ function updateCrowd(dt) {
     crowdSnap = false;
     for (const b of free) b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: -4, z: -48 };
   }
+  const surge = clashSurge();
   for (const b of crowd) {
     if (!b.model.visible) continue;
     const ox = b.x, oz = b.z;
-    b.speed = b.target && dist(b, b.target) > 0.4 ? steer(b, b.target, b.group ? 3.4 : 3.8, dt, world.obstacles) : 0;
+    let target = b.target;
+    // In a clash the front of the crowd heaves at the police line and falls back, again and again.
+    if (surge && b.group === surge.group && target) {
+      const push = (0.5 + 0.5 * Math.sin(day.t * 1.7 + b.phase)) * 2.6;
+      target = { x: target.x + surge.dx * push, z: target.z + surge.dz * push };
+    }
+    // Group members stop once roughly in place, so bodies nudged apart don't shuffle on the spot forever.
+    b.speed = target && dist(b, target) > (b.group && b.group !== surge?.group ? 0.9 : 0.4) ? steer(b, target, b.group ? 3.4 : 3.8, dt, world.obstacles) : 0;
     if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
     else if (b.group === 'stage') b.yaw = Math.atan2(0 - b.x, -14 - b.z);
+    else if (surge && b.group === surge.group) b.yaw = Math.atan2(surge.dx, surge.dz);
     else if (b.group === 'barricade') b.yaw = Math.PI / 2;
     else if (b.group === 'cpParty') b.yaw = Math.atan2(day.objects.speaker.x - b.x, day.objects.speaker.z - b.z);
     if (!b.group && b.target && dist(b, b.target) < 1) b.model.visible = false;
@@ -267,12 +278,26 @@ function updateCrowd(dt) {
   }
 }
 
+const CLASH_GROUP = { stage: 'stage', cp: 'cpWaiting', barricade: 'barricade', parliament: 'parliament' };
+// Which crowd group is shoving, and the direction from it to the police line.
+function clashSurge() {
+  const place = day.clash?.place, L = LINE_LAYOUT[place], group = CLASH_GROUP[place];
+  if (!L || !GROUPS[group].center) return null;
+  const c = GROUPS[group].center, d = Math.hypot(L.x - c.x, L.z - c.z) || 1;
+  return { group, dx: (L.x - c.x) / d, dz: (L.z - c.z) / d };
+}
+
 function updateSquad(dt) {
   const L = LINE_LAYOUT[day.police.line];
+  const surge = day.clash?.place === day.police.line ? clashSurge() : null;
   squad.forEach((b, i) => {
     if (!L) { b.model.visible = false; return; }
     const off = (i - (SQUAD - 1) / 2) * 1.5;
     const target = L.axis === 'x' ? { x: L.x + off, z: L.z } : { x: L.x, z: L.z + off };
+    if (surge) { // the line shoves back
+      const back = Math.max(0, Math.sin(day.t * 1.7 + i * 0.9)) * 0.9;
+      target.x -= surge.dx * back; target.z -= surge.dz * back;
+    }
     if (!b.model.visible) { b.model.visible = true; Object.assign(b, L.axis === 'x' ? { x: target.x, z: target.z + 9 } : { x: target.x + 9, z: target.z }); }
     const ox = b.x, oz = b.z;
     b.speed = dist(b, target) > 0.3 ? steer(b, target, day.clash ? 6 : 4, dt, world.obstacles) : 0;
@@ -338,7 +363,7 @@ function updateItems(t) {
 }
 
 // The shuttle stops and honks rather than driving into a player standing in its lane.
-let honked = false;
+let honked = false, blockedFor = 0;
 function busWaits() {
   const b = day.bus, p = sim.player;
   const moving = b.phase === 'toJantar' || b.phase === 'toCP';
@@ -346,6 +371,8 @@ function busWaits() {
   const ahead = (p.z - b.z) * dir;
   b.blocked = moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8;
   if (b.blocked && !honked) toast('Poooon! Iqbal honks and waits for you to get out of the way.', 3);
+  blockedFor = b.blocked ? blockedFor + STEP : 0;
+  if (blockedFor >= 10) { blockedFor = 0; toast('Iqbal leans out: "Bhai, side ho jao! Poora schedule tumhare peeche ruka hai."', 4); }
   honked = b.blocked;
 }
 function updateShuttle() {
@@ -363,8 +390,9 @@ function updateShuttle() {
 function toast(text, time = 4, isLink = false) {
   const el = $('#toast');
   el.textContent = text;
-  el.classList.toggle('link', isLink);
+  el.classList.toggle('linked', isLink);
   el.style.opacity = 1;
+  $('#hud').classList.add('toasting');
   toastTime = time;
 }
 function say(id, text, duration = 5) {
@@ -405,27 +433,44 @@ function handleEvents() {
     if (e.link && heard) learnLink(e.link);
   }
 }
+const MAX_BUBBLES = () => (innerWidth < 600 ? 2 : 3);
+// Keep speech bubbles off the HUD panels and off each other; only the nearest few speakers get one.
 function updateBubbles(dt) {
   const v = new THREE.Vector3();
-  const placed = [];
-  const side = $('#side').getBoundingClientRect();
+  const panels = ['#side', '#stream', '#levers', '#clock', '#choices', '#prompt']
+    .map((q) => $(q)).filter((el) => el && el.offsetParent !== null).map((el) => el.getBoundingClientRect());
+  const shown = [];
   for (let i = bubbles.length - 1; i >= 0; i--) {
     const b = bubbles[i], body = bodies[b.id];
     b.ttl -= dt;
+    if (b.ttl <= 0) { b.el.remove(); bubbles.splice(i, 1); continue; }
     v.set(body.x, body.y + 2.15, body.z).project(world.camera);
-    const far = dist(body, sim.player) > 30 || v.z > 1 || Math.abs(v.x) > 1.05 || v.y < -0.9 || !body.model.visible;
-    b.el.style.display = far ? 'none' : 'block';
-    if (!far) {
-      let x = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130);
-      let y = clamp(((1 - v.y) / 2) * innerHeight, 110, innerHeight - 40);
-      // Stack bubbles that would overlap, so two people talking at once stay readable.
-      for (const p of placed) if (Math.abs(p.x - x) < 220 && Math.abs(p.y - y) < p.h + 6) y = p.y - p.h - 6;
-      if (side.top < innerHeight / 2 && x + 120 > side.left && y - 60 < side.bottom) x = side.left - 125;
-      b.el.style.left = x + 'px';
-      b.el.style.top = Math.max(110, y) + 'px';
-      placed.push({ x, y, h: b.el.offsetHeight || 50 });
+    const off = dist(body, sim.player) > 30 || v.z > 1 || Math.abs(v.x) > 1.05 || v.y < -0.9 || !body.model.visible;
+    const asked = choices && choices.id === b.id; // their words are already in the whisper menu
+    if (off || asked) b.el.style.display = 'none';
+    else shown.push({ b, d: dist(body, sim.player), x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight });
+  }
+  shown.sort((a, c) => a.d - c.d);
+  const placed = [];
+  for (const [n, s] of shown.entries()) {
+    if (n >= MAX_BUBBLES()) { s.b.el.style.display = 'none'; continue; }
+    s.b.el.style.display = 'block';
+    const w = s.b.el.offsetWidth || 230, h = s.b.el.offsetHeight || 50;
+    const fit = (x, y) => ({ x: clamp(x, w / 2 + 8, innerWidth - w / 2 - 8), y: clamp(y, h + 8, innerHeight - 8) });
+    let { x, y } = fit(s.x, s.y);
+    for (let tries = 0; tries < 6; tries++) {
+      const hit = [...panels, ...placed].find((r) => x + w / 2 > r.left - 4 && x - w / 2 < r.right + 4 && y > r.top - 4 && y - h < r.bottom + 4);
+      if (!hit) break;
+      // Move the smallest distance that clears the panel: left, right, above or below it.
+      const moves = [
+        fit(hit.left - w / 2 - 6, y), fit(hit.right + w / 2 + 6, y), fit(x, hit.top - 6), fit(x, hit.bottom + h + 6),
+      ].filter((m) => !(m.x + w / 2 > hit.left - 4 && m.x - w / 2 < hit.right + 4 && m.y > hit.top - 4 && m.y - h < hit.bottom + 4));
+      if (!moves.length) break;
+      ({ x, y } = moves.sort((a, c) => Math.hypot(a.x - x, a.y - y) - Math.hypot(c.x - x, c.y - y))[0]);
     }
-    if (b.ttl <= 0) { b.el.remove(); bubbles.splice(i, 1); }
+    s.b.el.style.left = x + 'px';
+    s.b.el.style.top = y + 'px';
+    placed.push({ left: x - w / 2, right: x + w / 2, top: y - h, bottom: y });
   }
 }
 function ambient(dt) {
@@ -492,17 +537,26 @@ function give(to) {
 function talk(id) {
   act(day, { type: 'talk', to: id });
   const state = talkState(day, id);
-  const entry = TALK[id].find((t) => t.when === state) || TALK[id].find((t) => t.when === 'default') || TALK[id][0];
-  say(id, entry.line, 7);
-  const fresh = learnHint(entry.hint);
-  if (entry.hint && HINTS[entry.hint]) toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[entry.hint].text}`, 5);
-  if (id !== 'sharma') openChoices(id);
+  const byState = (w) => TALK[id].filter((t) => t.when === w);
+  const pool = byState(state).length ? byState(state) : byState('default').length ? byState('default') : [TALK[id][0]];
+  // Each thing they have to say once, then they get short with you.
+  const key = id + ':' + pool[0].when, n = talked[key] = (talked[key] || 0) + 1;
+  const entry = pool[n - 1];
+  const line = entry ? entry.line : AGAIN[id][(n - pool.length - 1) % AGAIN[id].length];
+  say(id, line, 7);
+  if (entry?.hint && HINTS[entry.hint]) {
+    const fresh = learnHint(entry.hint);
+    toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[entry.hint].text}`, 5);
+  }
+  if (id !== 'sharma') openChoices(id, line);
 }
 // Whispering: after talking to anyone but Sharma you can pass on a rumour you know.
-function openChoices(id) {
+function openChoices(id, line) {
   const list = knownRumours();
   if (!list.length) return;
   choices = { id, list };
+  $('#choicesSaid').innerHTML = `<b>${PEOPLE[id].name.toUpperCase()}</b>`;
+  $('#choicesSaid').append(line);
   $('#choicesTitle').textContent = `Whisper something to ${PEOPLE[id].name}?`;
   $('#choicesList').innerHTML = list.map((rid, i) => `<li><button data-r="${rid}"><kbd>${i + 1}</kbd> ${RUMOURS[rid].label}</button></li>`).join('')
     + '<li><button data-r=""><kbd>Esc</kbd> Say nothing</button></li>';
@@ -538,6 +592,8 @@ function resetDay() {
   crowdClock = 0;
   crowdSnap = true;
   ambientClock = 12;
+  talked = {};
+  blockedFor = 0;
   streamText = ''; streamTime = 0;
   closeChoices();
   $('#wirelessLog').replaceChildren();
@@ -580,9 +636,10 @@ function showEnding() {
   const lv = levers(day);
   const learned = [...loopLinks].map((id) => `<li>${LINKS[id].from} → ${LINKS[id].to}</li>`).join('');
   const where = { stage: 'the stage', cp: 'CP', barricade: 'the barricade', parliament: 'Parliament Street' };
+  const size = (n) => (n <= 0 ? 'nobody' : n < 6 ? 'a handful' : n < 15 ? 'a small crowd' : n < 30 ? 'a big crowd' : 'packed');
   $('#screen').innerHTML = `<div class="screen-content"><span class="tiny">${clockText(day.t)} · LOOP ${memory.loops - 1} ENDS</span>
     <h2>${e.title}</h2><p class="headline">${e.headline}</p><p>${e.text}</p>
-    <p class="fine">Crowd at Jantar ${lv.crowds.stage} · at CP ${lv.crowds.cp} · at the barricade ${lv.crowds.barricade} · on Parliament Street ${lv.crowds.parliament} · police line at ${lv.line ? where[lv.line] : 'nowhere'} · mood ${lv.intensity}</p>
+    <p class="fine">Jantar Mantar: ${size(lv.crowds.stage)} · CP: ${size(lv.crowds.cp)} · barricade: ${size(lv.crowds.barricade)} · Parliament Street: ${size(lv.crowds.parliament)} · police line at ${lv.line ? where[lv.line] : 'nowhere'}</p>
     ${learned ? `<p>What you saw happen this loop:</p><ul>${learned}</ul>` : '<p>You didn\'t see any link happen this loop.</p>'}
     <div class="buttons"><button class="primary" id="again">Wake up again</button><button id="seeBoard">Chaos board</button></div></div>`;
   $('#screen').classList.remove('hidden');
@@ -668,13 +725,31 @@ function animate(t) {
     });
     if (b.model.userData.phone) b.model.userData.phone.visible = id === 'zoya' && s.carrying === 'phone';
   }
-  for (const b of crowd) if (b.model.visible) {
-    const dancing = b.group === 'cpParty' && day.objects.speaker.on;
-    const cheering = b.group === 'stage' && ((day.people.mira.mode === 'speech' && day.speech === 'big') || day.moment);
-    const angry = b.group === 'barricade' && day.minister === 'noshow';
-    animateCharacter(b.model, b.speed, t, { pose: (dancing || cheering || angry) && Math.sin(t * 3 + b.phase) > 0.2, distance: dist(b, p) });
-  }
-  for (const b of squad) if (b.model.visible) animateCharacter(b.model, b.speed, t, { distance: dist(b, p) });
+  const surge = clashSurge();
+  crowd.forEach((b, i) => {
+    if (!b.model.visible) return;
+    const still = b.speed < 0.3 || (b.target && dist(b, b.target) < 1.2);
+    // Each set piece gets something you can see from across the square.
+    const dancing = still && b.group === 'cpParty' && day.objects.speaker.on; // jump to the beat
+    const sitting = still && b.group === 'stage' && day.moment === 'singalong'; // everyone sits and sways
+    const shoving = surge && b.group === surge.group; // heave at the line
+    const cheering = b.group === 'stage' && ((day.people.mira.mode === 'speech' && day.speech === 'big') || day.moment === 'roast');
+    const angry = b.group === 'barricade' && day.minister === 'noshow' && !shoving;
+    if (dancing) {
+      b.model.position.y = Math.abs(Math.sin(t * 5.2 + b.phase)) * 0.4;
+      b.model.rotation.y = b.yaw + Math.sin(t * 2.6 + b.phase) * 0.7;
+    } else if (sitting) {
+      b.model.position.y = -0.34;
+      b.model.rotation.y = b.yaw + Math.sin(t * 1.4 + b.phase) * 0.12;
+    }
+    animateCharacter(b.model, dancing || sitting ? 0 : b.speed, t, {
+      pose: dancing || ((cheering || angry) && Math.sin(t * 3 + b.phase) > 0.2),
+      seated: sitting,
+      gesture: shoving ? 'push' : (sitting && i % 3 === 0) || (dancing && Math.sin(t * 2.6 + b.phase) > 0) ? 'wave' : '',
+      distance: dist(b, p),
+    });
+  });
+  for (const b of squad) if (b.model.visible) animateCharacter(b.model, b.speed, t, { gesture: surge && day.police.line === day.clash.place ? 'push' : '', distance: dist(b, p) });
 }
 
 function camera(dt) {
@@ -715,6 +790,27 @@ function camera(dt) {
     world.camera.position.copy(desired); // snap in front of the occluder rather than sliding through it
   } else world.camera.position.lerp(desired, 1 - Math.exp(-dt * 9));
   world.camera.lookAt(target);
+  if (day?.clash && mode === 'play' && dist(p, LINE_LAYOUT[day.clash.place] || p) < 22) { // the scuffle shakes the picture
+    const k = 0.05, n = performance.now() / 1000;
+    world.camera.rotation.z += Math.sin(n * 31) * k * 0.4;
+    world.camera.position.y += Math.sin(n * 23) * k;
+  }
+  // A banner right over your head would fill the top of the screen, so it goes see-through.
+  for (const o of overhead) {
+    const box = o.userData.box;
+    const near = Math.hypot(Math.max(box.min.x - p.x, 0, p.x - box.max.x), Math.max(box.min.z - p.z, 0, p.z - box.max.z)) < 7;
+    const want = near ? 0.22 : 1;
+    if (!o.userData.own && want < 1) {
+      o.material = Array.isArray(o.material) ? o.material.map((m) => m.clone()) : o.material.clone();
+      o.userData.own = true;
+    }
+    if (!o.userData.own) continue;
+    for (const m of [].concat(o.material)) {
+      m.transparent = true;
+      m.opacity += (want - m.opacity) * (1 - Math.exp(-dt * 8));
+      m.depthWrite = m.opacity > 0.95;
+    }
+  }
 }
 
 const CARRY_TEXT = {
@@ -764,7 +860,7 @@ function frame(now) {
   }
   camera(dt);
   updateBubbles(dt);
-  if (toastTime > 0 && (toastTime -= dt) <= 0) $('#toast').style.opacity = 0;
+  if (toastTime > 0 && (toastTime -= dt) <= 0) { $('#toast').style.opacity = 0; $('#hud').classList.remove('toasting'); }
   world.renderer.render(world.scene, world.camera);
 }
 
@@ -834,6 +930,8 @@ function setupInput() {
       const tris = (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3;
       // Props lower than the follow camera (cart poles, kettles) only collapse the view, so they don't count.
       if (box.max.y > 3.5 && box.max.y - box.min.y > 0.3 && tris < 600) occluders.push(o);
+      const size = box.getSize(new THREE.Vector3());
+      if (box.min.y > 2.4 && tris < 5000 && Math.max(size.x, size.z) < 14) { o.userData.box = box.clone(); overhead.push(o); }
     });
     sim = new Simulation(world.obstacles);
     sim.police = []; // Sharma is a character with a routine now, not a patrol bot.
@@ -848,7 +946,7 @@ function setupInput() {
     showTitle();
     requestAnimationFrame(frame);
     // For debugging and automated browser checks.
-    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; }, startLoop, openBoard, act, at, advance, SPOTS, bodies };
+    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; }, startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, snap: () => { crowdSnap = true; crowdClock = 0; } };
   } catch (e) {
     console.error(e);
     $('#loadtext').textContent = 'The 3D scene could not start. WebGL 2 is required. ' + e.message;

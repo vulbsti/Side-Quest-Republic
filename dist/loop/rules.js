@@ -554,7 +554,8 @@ function updateKabirNikhil(s, dt) {
   const k = s.people.kabir, n = s.people.nikhil;
   if (k.mode === 'toStage' && arrived(k)) k.mode = 'stage';
   if (k.mode === 'leaving' && arrived(k)) { k.hidden = true; k.mode = 'away'; }
-  if (n.mode === 'lost' && arrived(n)) {
+  if (n.mode === 'lost' && dist(n, s.player) < 4) n.path = []; // stands still while you're near enough to talk
+  else if (n.mode === 'lost' && arrived(n)) {
     n.wander = (n.wander + 1) % 3;
     goTo(n, [SPOTS.nikhilStart, { x: -11, z: 33 }, { x: -3, z: 28 }][n.wander]);
   }

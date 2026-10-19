@@ -23,6 +23,7 @@ export const TALK = {
     { when: 'chai-break', line: 'Chai break, bas paanch minute. Speaker stage pe safe hai… hai na?', hint: 'ravi-chai' },
     { when: 'searching', line: 'Mera speaker dekha kya? Kaala, bhaari, thoda attitude wala.', hint: 'ravi-route' },
     { when: 'default', line: 'Barah baje Mira bolegi, aur mera speaker poori Jantar Mantar ko hila dega.', hint: 'ravi-chai' },
+    { when: 'default', line: 'Speaker mera bachcha hai. Pichhle saal ek baar CP pe chhoda tha, poora market naach gaya.', hint: 'ravi-route' },
   ],
   iqbal: [
     { when: 'driving', line: 'Bhai, bus chal rahi hai. Baat karni hai toh CP stop pe milo.', hint: null },
@@ -34,6 +35,7 @@ export const TALK = {
     { when: 'at-cp', line: 'Rao sir ne CP bheja hai. Barricade? Wahan koi aur… hai na? Hai na?', hint: 'sharma-orders' },
     { when: 'afternoon', line: 'Teen baje Rao sir line lagwayenge. Jahan camera, wahan line. Unka formula hai.', hint: 'rao-line' },
     { when: 'default', line: 'Mera kaam simple hai. Barricade. Jab tak Rao sir wireless pe kuch aur na bolein.', hint: 'sharma-orders' },
+    { when: 'default', line: 'Teen baje Rao sir line lagwayenge. Pehle se bata raha hoon, baad mein mat kehna.', hint: 'rao-line' },
   ],
   mira: [
     { when: 'before-speech', line: 'Barah baje bolungi. Ravi ka speaker mila toh poora Jantar sunega.', hint: 'mira-speech' },
@@ -41,6 +43,7 @@ export const TALK = {
   ],
   asha: [
     { when: 'morning', line: 'Mere stall pe jo bola jaata hai, dus minute mein poore CP ko pata. Ek baar kisi ne biryani ki afwaah udaai, poora Jantar khaali!', hint: 'asha-biryani' },
+    { when: 'morning', line: 'Bus wale Iqbal bhai gyarah baje aate hain chai pe. Chabi hook pe chhod dete hain, bhole hain.', hint: 'iqbal-break' },
     { when: 'default', line: 'Ek baje chai leke stage pe jaati hoon, do baje wapas. Bheed hai toh dhandha hai.', hint: 'asha-gossip' },
   ],
   zoya: [
@@ -48,6 +51,7 @@ export const TALK = {
     { when: 'charging', line: 'Phone das percent pe hai. Bees minute charge, phir wapas field mein.', hint: 'zoya-live' },
     { when: 'searching', line: 'Mera phone! Charging pe lagaya tha! Bina phone ke main bas ek aunty hoon jo notes le rahi hai.', hint: 'zoya-live' },
     { when: 'default', line: 'Koi bhi afwaah suno, mujhe batao. Main check karti hoon, phir live pe sach bolti hoon.', hint: 'zoya-checks' },
+    { when: 'default', line: 'Barah baje Mira ka bhashan, wahan bheed hogi. Wahi se live jaungi.', hint: 'zoya-live' },
   ],
   meera: [
     { when: 'party', line: 'Ye toh content hai! Speaker, dance, CP. Reel ready. Algorithm khush.', hint: 'meera-reels' },
@@ -56,6 +60,7 @@ export const TALK = {
   kabir: [
     { when: 'with-nikhil', line: 'Nikhil mil gaya! Ab tuition-wuition cancel. Aaj stage pe set karunga, bas mic chahiye.', hint: 'kabir-mic' },
     { when: 'default', line: 'Do baje nikalna hai, mummy ko tuition bola hai. Nikhil bhi aane wala tha, pata nahi kahan atka.', hint: 'kabir-tuition' },
+    { when: 'default', line: 'Mic mile toh saade teen baje ek set maar doon. Par mic toh Dev ke paas hai.', hint: 'kabir-mic' },
   ],
   nikhil: [
     { when: 'lost', line: 'Bhaiya, Kabir ko dhoondh raha hoon. Phone teen percent pe hai. Aap le chaloge? Main peeche peeche aata hoon.', hint: 'nikhil-lost' },
@@ -67,12 +72,28 @@ export const TALK = {
     { when: 'chai', line: 'Megaphone stage pe rakha hai, paandrah minute. Kaun uthayega? Sab mujhe jaante hain.', hint: 'dev-chai' },
     { when: 'no-megaphone', line: 'Mera megaphone! Bina uske meri negotiation sirf baat-cheet hai.', hint: 'dev-chai' },
     { when: 'default', line: 'Meeting ka promise mila hai. Agar koi minister aane ki khabar laaye, main barricade pe khada milunga.', hint: 'dev-minister' },
+    { when: 'default', line: 'Sawa do baje chai ka break. Megaphone stage pe hi chhodunga, kaun lega.', hint: 'dev-chai' },
   ],
   sana: [
     { when: 'no-water', line: 'Paani khatam. Crate CP stop pe pada hai, shuttle se aana tha. Do baje ki dhoop mein log girenge.', hint: 'sana-water' },
     { when: 'has-water', line: 'Paani aa gaya. Ab koi bhi chakkar khaaye toh mere tent pe bhejo.', hint: 'sana-water' },
     { when: 'default', line: 'Ek baje tak paani chalega. Uske baad shuttle wala crate chahiye.', hint: 'sana-water' },
   ],
+};
+
+// Talking to someone again in the same situation: they get shorter with you.
+export const AGAIN = {
+  ravi: ['Haan bhai, wahi speaker. Kitni baar bataun?', 'Tum census wale ho kya? Sab poochh rahe ho.'],
+  iqbal: ['Bola na, hook pe chabi. Ab mujhe chai peene do.', 'Bhai, meter chalu hai kya? Itne sawaal.'],
+  sharma: ['Dobara poochhoge toh Rao sir ko bata dunga. Mazaak hai.', 'Aage badho, bheed mat lagao. Ek aadmi ki bheed bhi bheed hai.'],
+  mira: ['Suna nahi? Repeat chahiye toh bhashan mein aa jao.', 'Main notes nahi deti, sirf awaaz deti hoon.'],
+  asha: ['Chai lo ya jao, gossip ka refill nahi hota.', 'Pehli baat free thi. Doosri ke das rupaye.'],
+  zoya: ['Comments mein poochh lo, main reply karti hoon.', 'Tum ho toh mere stream pe aa jao, wahi bataya hai.'],
+  meera: ['Ye already story pe hai. Swipe up karo.', 'Bhai repeat content ko algorithm maarta hai.'],
+  kabir: ['Haan haan, yaad hai. Tum mere mummy ke spy toh nahi?', 'Mera joke dobara sunoge toh paise lagenge.'],
+  nikhil: ['Bhaiya, aap chalo na, main peeche hoon.', 'Kabir ka last seen do ghante pehle ka hai. Tension.'],
+  dev: ['Dekho, main busy hoon. Minister kabhi bhi aa sakte hain.', 'Ye meeting ki tayyari hai, chit-chat nahi.'],
+  sana: ['Paani, paani, paani. Mera poora din isi ek shabd pe hai.', 'Agar crate dikhe toh bas uthake le aao. Bas.'],
 };
 
 // Hints show up under each person on the board once you have talked to them.

@@ -1,7 +1,7 @@
 // Plays whole looping days with scripted players and checks the rules actually change the outcome.
 import assert from 'node:assert/strict';
 import { createDay, advance, act, at, SPOTS, RULES, drainEvents, dist } from './dist/loop/rules.js';
-import { LINKS, LINES, ENDINGS, HINTS, TALK, RUMOURS, PEOPLE, AMBIENT } from './dist/loop/content.js';
+import { LINKS, LINES, ENDINGS, HINTS, TALK, AGAIN, RUMOURS, PEOPLE, AMBIENT } from './dist/loop/content.js';
 
 const runUntil = (s, t) => advance(s, t - s.t);
 const moveTo = (s, spot) => Object.assign(s.player, { x: spot.x, z: spot.z });
@@ -215,6 +215,16 @@ assert.equal(r.s.ending, 'roast');
   assert.notEqual(s.bus.z, z);
 }
 
+// Lost Nikhil stands still while the player is close enough to talk to him.
+{
+  const s = createDay();
+  advance(s, 2);
+  moveTo(s, { x: s.people.nikhil.x + 1.5, z: s.people.nikhil.z });
+  const { x, z } = s.people.nikhil;
+  advance(s, 30);
+  assert(dist(s.people.nikhil, { x, z }) < 0.3, 'Nikhil waits for you');
+}
+
 // Rao sends the line to a scuffle.
 r = play([[at(10, 10), (s) => whisper(s, 'dev', 'minister')]]);
 assert.equal(r.s.police.line, 'barricade');
@@ -229,5 +239,6 @@ const unseen = Object.keys(LINKS).filter((id) => !everSeen.has(id));
 assert.deepEqual(unseen, [], 'every board link happens in at least one scripted day');
 assert(RULES.length >= 30, `${RULES.length} rules`);
 for (const list of Object.values(TALK)) for (const t of list) assert(!t.hint || HINTS[t.hint], `hint ${t.hint}`);
+for (const id of Object.keys(TALK)) assert(AGAIN[id]?.length, `${id} has lines for being asked again`);
 
 console.log(`PASS: ${RULES.length} rules; slice 1 days, rumours, stream, police line, megaphone, minister, water and Nikhil days end differently`);
