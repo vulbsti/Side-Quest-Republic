@@ -7,21 +7,26 @@ import { loadCharacters, makeCharacter, animateCharacter, CARRY_POSES } from '..
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
 import {
-  createDay, tick, act, talkState, drainEvents, finish, levers,
+  createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree,
   clockText, placeAt, SPOTS, PLACES, at, advance,
 } from './rules.js';
-import { PEOPLE, TALK, HINTS, LINKS, ENDINGS } from './content.js';
+import { PEOPLE, TALK, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js';
 
 const $ = (s) => document.querySelector(s);
 const STEP = 0.1;
-const CROWD_POOL = 40;
+const CROWD_POOL = 44;
+const SQUAD = 6;
 const SAVE_KEY = 'sqr-loop-v1';
+const OBJECTS = ['speaker', 'key', 'megaphone', 'phone', 'water'];
+const HEAVY = ['speaker', 'water'];
+const POSE = { speaker: 'speaker', water: 'water', key: 'key', phone: 'phone', megaphone: 'key' };
 
 let world, sim, day, mode = 'loading';
 let playerModel, keys = {}, yaw = 0, pitch = 0.38, zoom = 9, dragging = false, lastMouse = null;
-let accumulator = 0, last = 0, toastTime = 0, prompt = null;
+let accumulator = 0, last = 0, toastTime = 0, prompt = null, choices = null, ambientClock = 12, ambientTurn = 0;
 const bodies = {}; // person id -> { model, x, z, y, speed, yaw }
 const crowd = []; // pooled crowd bodies
+const squad = []; // Rao's police line
 const bubbles = [];
 const items = {};
 let shuttle, shuttleObstacle;
@@ -43,6 +48,7 @@ function saveMemory() {
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(memory)); } catch {}
 }
 function learnLink(id) {
+  if (!LINKS[id]) return;
   loopLinks.add(id);
   if (memory.links.includes(id)) return;
   memory.links.push(id);
@@ -51,10 +57,12 @@ function learnLink(id) {
   toast(`New on the chaos board: ${l.from} → ${l.to}`, 5, true);
 }
 function learnHint(id) {
-  if (!id || memory.hints.includes(id)) return;
+  if (!id || memory.hints.includes(id)) return false;
   memory.hints.push(id);
   saveMemory();
+  return true;
 }
+const knownRumours = () => Object.entries(RUMOURS).filter(([, r]) => !r.unlock || memory.hints.includes(r.unlock)).map(([id]) => id);
 
 // --- props ----------------------------------------------------------------
 
@@ -81,8 +89,30 @@ function keyModel() {
   cube(0.15, 0.06, 0.06, '#e7c45b', 0.05, 0.2, 0.5, g);
   return g;
 }
+function megaphoneModel() {
+  const g = new THREE.Group();
+  const horn = cylinder(0.08, 0.24, 0.5, '#f1ede0', 0, 0.3, 0.12, g, 18);
+  horn.rotation.x = Math.PI / 2;
+  const rim = cylinder(0.25, 0.25, 0.04, '#c8402f', 0, 0.3, 0.38, g, 18);
+  rim.rotation.x = Math.PI / 2;
+  cube(0.07, 0.22, 0.08, '#2c2c2c', 0, 0.16, -0.02, g);
+  return g;
+}
+function phoneModel() {
+  const g = new THREE.Group();
+  cube(0.12, 0.02, 0.24, '#121b1f', 0, 0.02, 0, g);
+  cube(0.1, 0.005, 0.2, '#5d8fb0', 0, 0.033, 0, g);
+  cube(0.02, 0.02, 0.4, '#e6e6e6', 0.03, 0.02, -0.3, g); // charging cable
+  return g;
+}
+function waterModel() {
+  const g = new THREE.Group();
+  cube(0.7, 0.36, 0.5, '#2d6fa3', 0, 0.18, 0, g);
+  for (let i = 0; i < 6; i++) cylinder(0.07, 0.07, 0.34, '#bfe3f2', -0.22 + (i % 3) * 0.22, 0.5, i < 3 ? -0.11 : 0.11, g, 8);
+  return g;
+}
 function placeProps() {
-  // A chai stall at the CP shuttle stop, where Ravi and Iqbal take their breaks.
+  // A chai stall at the CP shuttle stop, where Asha sells and everyone gossips.
   world.put('chai-cart', -18, -36, 0.3);
   world.obstacles.push({ id: 'cp-chai', x: -18, z: -36, w: 3, d: 2, h: 3 });
   // The barricade between Jantar Mantar and Parliament Street, with a gap Sharma stands in.
@@ -102,6 +132,15 @@ function placeProps() {
     world.scene.add(s);
     cylinder(0.05, 0.05, 2.6, '#4c5a50', x, 1.3, z, world.scene);
   }
+  // Sana's first-aid tent beside the stage: an open canopy, so people can walk under it.
+  const tent = new THREE.Group();
+  for (const [dx, dz] of [[-1.3, -1], [1.3, -1], [-1.3, 1], [1.3, 1]]) cylinder(0.04, 0.04, 2.3, '#cfd5d2', dx, 1.15, dz, tent);
+  cube(2.9, 0.08, 2.3, '#f3f1ea', 0, 2.32, 0, tent);
+  cube(0.5, 0.14, 0.04, '#c8402f', 0, 2.1, 1.17, tent);
+  cube(0.14, 0.5, 0.04, '#c8402f', 0, 2.1, 1.17, tent);
+  cube(1.2, 0.7, 0.6, '#dfe5e2', -0.6, 0.35, -0.6, tent);
+  tent.position.set(SPOTS.sanaTent.x - 1.2, 0, SPOTS.sanaTent.z - 0.4);
+  world.scene.add(tent);
   // The legacy stationary bus becomes the shuttle.
   shuttle = world.bus;
   const i = world.obstacles.findIndex((o) => o.id === 'legacy-bus');
@@ -112,9 +151,12 @@ function placeProps() {
 
   items.speaker = speakerModel();
   items.key = keyModel();
-  world.scene.add(items.speaker, items.key);
+  items.megaphone = megaphoneModel();
+  items.phone = phoneModel();
+  items.water = waterModel();
   // A soft ring under anything you could pick up, so it reads from a distance.
-  for (const id of ['speaker', 'key']) {
+  for (const id of OBJECTS) {
+    world.scene.add(items[id]);
     const ring = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.68, 32), new THREE.MeshBasicMaterial({ color: '#e5ff86', transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
     ring.rotation.x = -Math.PI / 2;
     world.scene.add(ring);
@@ -126,6 +168,7 @@ function placeProps() {
 
 function makePeople() {
   for (const [id, p] of Object.entries(PEOPLE)) {
+    if (p.voice) continue; // Inspector Rao is only ever a voice on the wireless
     const model = makeCharacter(p.look);
     world.scene.add(model);
     const s = day.people[id];
@@ -138,6 +181,12 @@ function makePeople() {
     world.scene.add(model);
     crowd.push({ model, x: 0, z: 0, y: 0, speed: 0, yaw: 0, radius: 0.36, group: null, target: null, side: i % 2 ? 1 : -1, phase: i * 1.7 });
   }
+  for (let i = 0; i < SQUAD; i++) {
+    const model = makeCharacter({ police: true });
+    model.visible = false;
+    world.scene.add(model);
+    squad.push({ model, x: 0, z: 0, y: 0, speed: 0, yaw: 0, radius: 0.4, side: i % 2 ? 1 : -1 });
+  }
 }
 
 // Where each crowd group stands, and where its people come from.
@@ -145,12 +194,20 @@ const GROUPS = {
   cpWaiting: { center: { x: 4.5, z: -31 }, r: 3.8, spawn: { x: -4, z: -47 } },
   cpParty: { center: null, r: 3.2, spawn: { x: -8, z: -46 } },
   stage: { center: { x: 0, z: -5.5 }, r: 5.5, spawn: { x: 10, z: 4 } },
+  barricade: { center: { x: 32.6, z: -3.2 }, r: 3.4, spawn: { x: 12, z: -6 } },
   parliament: { center: { x: 62, z: -4 }, r: 6, spawn: { x: 40, z: -4.5 } },
+};
+// Where Rao's line stands at each place: a row centred on (x, z), along the given axis, facing yaw.
+const LINE_LAYOUT = {
+  stage: { x: 0, z: 1.8, axis: 'x', yaw: Math.PI },
+  cp: { x: 4.5, z: -26.4, axis: 'x', yaw: Math.PI },
+  barricade: { x: 37.8, z: -4.5, axis: 'z', yaw: -Math.PI / 2 },
+  parliament: { x: 55.5, z: -4, axis: 'z', yaw: Math.PI / 2 },
 };
 function crowdTargets() {
   const c = day.crowd, sp = day.objects.speaker;
   GROUPS.cpParty.center = { x: sp.x, z: sp.z + 2.4 };
-  const counts = { cpWaiting: c.cpWaiting, cpParty: c.cpParty, stage: c.stage, parliament: c.parliament };
+  const counts = { cpWaiting: c.cpWaiting, cpParty: c.cpParty, stage: c.stage, barricade: c.barricade, parliament: c.parliament };
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
   const scale = total > CROWD_POOL ? CROWD_POOL / total : 1;
   const want = {};
@@ -202,11 +259,27 @@ function updateCrowd(dt) {
     b.speed = b.target && dist(b, b.target) > 0.4 ? steer(b, b.target, b.group ? 3.4 : 3.8, dt, world.obstacles) : 0;
     if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
     else if (b.group === 'stage') b.yaw = Math.atan2(0 - b.x, -14 - b.z);
+    else if (b.group === 'barricade') b.yaw = Math.PI / 2;
     else if (b.group === 'cpParty') b.yaw = Math.atan2(day.objects.speaker.x - b.x, day.objects.speaker.z - b.z);
     if (!b.group && b.target && dist(b, b.target) < 1) b.model.visible = false;
     b.model.position.set(b.x, 0, b.z);
     b.model.rotation.y = b.yaw;
   }
+}
+
+function updateSquad(dt) {
+  const L = LINE_LAYOUT[day.police.line];
+  squad.forEach((b, i) => {
+    if (!L) { b.model.visible = false; return; }
+    const off = (i - (SQUAD - 1) / 2) * 1.5;
+    const target = L.axis === 'x' ? { x: L.x + off, z: L.z } : { x: L.x, z: L.z + off };
+    if (!b.model.visible) { b.model.visible = true; Object.assign(b, L.axis === 'x' ? { x: target.x, z: target.z + 9 } : { x: target.x + 9, z: target.z }); }
+    const ox = b.x, oz = b.z;
+    b.speed = dist(b, target) > 0.3 ? steer(b, target, 4, dt, world.obstacles) : 0;
+    b.yaw = b.speed > 0.1 ? Math.atan2(b.x - ox, b.z - oz) : L.yaw;
+    b.model.position.set(b.x, 0, b.z);
+    b.model.rotation.y = b.yaw;
+  });
 }
 
 function updateBodies(dt) {
@@ -224,7 +297,9 @@ function updateBodies(dt) {
       b.speed = dist(b, s) > 0.3 ? steer(b, s, 3.8, dt, world.obstacles) : 0;
       if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
       else if (id === 'sharma' && s.post === 'barricade') b.yaw = -Math.PI / 2;
-      else if (id === 'ravi' && s.mode === 'stage') b.yaw = Math.atan2(-b.x, -14 - b.z);
+      else if (id === 'dev' && s.mode === 'waiting') b.yaw = Math.PI / 2;
+      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(-b.x, -14 - b.z);
+      else if (id === 'asha' && s.mode === 'stall') b.yaw = 0.3;
     }
     b.model.position.set(b.x, b.y, b.z);
     b.model.rotation.y = b.yaw;
@@ -235,30 +310,28 @@ function attach(item, holderModel, pose) {
   if (item.parent !== holderModel) holderModel.add(item);
   item.position.fromArray(CARRY_POSES[pose].position);
   item.rotation.set(0, 0, 0);
+  item.scale.setScalar(1);
 }
 function updateItems(t) {
-  const sp = day.objects.speaker, k = day.objects.key;
-  if (sp.holder === 'player') attach(items.speaker, playerModel, 'speaker');
-  else if (sp.holder === 'ravi') attach(items.speaker, bodies.ravi.model, 'speaker');
-  else {
-    if (items.speaker.parent !== world.scene) world.scene.add(items.speaker);
-    items.speaker.position.set(sp.x, 0, sp.z);
-    const beat = sp.on ? Math.max(0, Math.sin(t * 9)) * 0.05 : 0;
-    items.speaker.scale.set(1 + beat, 1 - beat * 0.5, 1 + beat);
+  for (const id of OBJECTS) {
+    const o = day.objects[id], it = items[id];
+    const holderModel = o.holder === 'player' ? playerModel : bodies[o.holder]?.model;
+    it.visible = o.holder !== 'iqbal' && o.holder !== 'bus' && !(holderModel && !holderModel.visible);
+    if (id === 'phone' && o.holder === 'zoya') it.visible = false; // in her hand, too small to matter
+    if (holderModel) { attach(it, holderModel, POSE[id]); continue; }
+    if (it.parent !== world.scene) world.scene.add(it);
+    const raised = o.holder === 'hook' || o.holder === 'cart';
+    it.position.set(o.x, raised ? 1.05 : 0, o.z);
+    if (id === 'key') it.rotation.set(raised ? Math.PI / 2 : 0, t * 1.5, 0);
+    if (id === 'speaker') {
+      const beat = o.on ? Math.max(0, Math.sin(t * 9)) * 0.05 : 0;
+      it.scale.set(1 + beat, 1 - beat * 0.5, 1 + beat);
+    }
   }
-  items.speaker.userData.led.material = mat(sp.on ? '#e5ff86' : '#3b4a3f', 0.4);
-  items.key.visible = k.holder !== 'iqbal';
-  if (k.holder === 'player') attach(items.key, playerModel, 'key');
-  else {
-    if (items.key.parent !== world.scene) world.scene.add(items.key);
-    const onHook = k.holder === 'hook';
-    items.key.position.set(k.x, onHook ? 1.05 : 0, k.z);
-    items.key.rotation.set(onHook ? Math.PI / 2 : 0, t * 1.5, 0);
-  }
-  for (const id of ['speaker', 'key']) {
+  items.speaker.userData.led.material = mat(day.objects.speaker.on ? '#e5ff86' : '#3b4a3f', 0.4);
+  for (const id of OBJECTS) {
     const o = day.objects[id], ring = items[id + 'Ring'];
-    const free = o.holder === null || o.holder === 'hook';
-    ring.visible = free && !day.player.carrying && dist(sim.player, o) < 14;
+    ring.visible = isFree(o) && !day.player.carrying && dist(sim.player, o) < 14;
     ring.position.set(o.x, 0.04, o.z);
     ring.scale.setScalar(1 + Math.sin(t * 4) * 0.12);
   }
@@ -298,20 +371,24 @@ function say(id, text, duration = 5) {
   bubble.el.innerHTML = `<b>${PEOPLE[id].name.toUpperCase()}</b>`;
   bubble.el.append(text);
 }
-function radio(text) {
+function logLine(list, text, max) {
   const li = document.createElement('li');
   li.innerHTML = `<small>${clockText(day.t)}</small>`;
   li.append(text);
-  const log = $('#wirelessLog');
+  const log = $(list);
   log.prepend(li);
-  while (log.children.length > 4) log.lastChild.remove();
+  while (log.children.length > max) log.lastChild.remove();
 }
+let streamText = '', streamTime = 0;
 function handleEvents() {
   for (const e of drainEvents(day)) {
     const near = e.pos ? dist(sim.player, e.pos) < 26 : false;
     const here = e.place && placeAt(sim.player) === e.place;
-    const heard = e.who === 'wireless' || near || here || (bodies[e.who] && dist(sim.player, bodies[e.who]) < 26);
-    if (e.who === 'wireless') radio(e.text);
+    const onPhone = e.who === 'wireless' || e.who === 'feed' || e.who === 'stream';
+    const heard = onPhone || near || here || (bodies[e.who] && dist(sim.player, bodies[e.who]) < 26);
+    if (e.who === 'wireless') logLine('#wirelessLog', e.text, 3);
+    else if (e.who === 'feed') logLine('#feedLog', e.text, 3);
+    else if (e.who === 'stream') { streamText = e.text.replace(/^Zoya Live: |^Zoya: /, ''); streamTime = 10; }
     else if (bodies[e.who]) say(e.who, e.text, 6);
     else if (e.who === 'street' && e.text && heard) toast(e.text, 5);
     if (e.link && heard) learnLink(e.link);
@@ -319,42 +396,67 @@ function handleEvents() {
 }
 function updateBubbles(dt) {
   const v = new THREE.Vector3();
+  const placed = [];
   for (let i = bubbles.length - 1; i >= 0; i--) {
     const b = bubbles[i], body = bodies[b.id];
     b.ttl -= dt;
     v.set(body.x, body.y + 2.15, body.z).project(world.camera);
     const far = dist(body, sim.player) > 30 || v.z > 1 || Math.abs(v.x) > 1.05 || v.y < -0.9 || !body.model.visible;
     b.el.style.display = far ? 'none' : 'block';
-    b.el.style.left = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130) + 'px';
-    b.el.style.top = clamp(((1 - v.y) / 2) * innerHeight, 90, innerHeight - 40) + 'px';
+    if (!far) {
+      const x = clamp(((v.x + 1) / 2) * innerWidth, 130, innerWidth - 130);
+      let y = clamp(((1 - v.y) / 2) * innerHeight, 110, innerHeight - 40);
+      // Stack bubbles that would overlap, so two people talking at once stay readable.
+      for (const p of placed) if (Math.abs(p.x - x) < 220 && Math.abs(p.y - y) < p.h + 6) y = p.y - p.h - 6;
+      b.el.style.left = x + 'px';
+      b.el.style.top = Math.max(110, y) + 'px';
+      placed.push({ x, y, h: b.el.offsetHeight || 50 });
+    }
     if (b.ttl <= 0) { b.el.remove(); bubbles.splice(i, 1); }
   }
+}
+function ambient(dt) {
+  ambientClock -= dt;
+  if (ambientClock > 0) return;
+  ambientClock = 14;
+  const m = moods(day);
+  const near = Object.keys(bodies).filter((id) => bodies[id].model.visible && dist(bodies[id], sim.player) < 14 && !bubbles.some((b) => b.id === id));
+  const lines = AMBIENT.filter((a) => near.includes(a.who) && (m.has(a.when) || a.when === 'default'));
+  // Lines that match the mood come before the generic ones.
+  lines.sort((a, b) => (b.when !== 'default') - (a.when !== 'default'));
+  const pick = lines[ambientTurn++ % Math.max(1, Math.min(lines.length, 3))];
+  if (pick) say(pick.who, pick.line, 5);
 }
 
 // --- player actions ---------------------------------------------------------
 
 function witnesses() {
   const out = [];
-  const ranges = { sharma: 14, iqbal: 9, ravi: 9 };
+  const ranges = { sharma: 14, iqbal: 9, ravi: 9, zoya: 8, dev: 8 };
   for (const [id, r] of Object.entries(ranges)) {
     const b = bodies[id];
     if (!day.people[id].hidden && dist(b, sim.player) < r && visible(b, sim.player, world.obstacles)) out.push(id);
   }
   return out;
 }
+const PICKUP = {
+  speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone',
+  phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate',
+};
+const GIVES = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] };
 function findPrompt() {
   const p = sim.player, carrying = day.player.carrying;
   const options = [];
-  const sp = day.objects.speaker, k = day.objects.key;
   if (!carrying) {
-    if (sp.holder === null && dist(p, sp) < 2) options.push({ d: dist(p, sp), text: 'Pick up Ravi\'s speaker', run: () => take('speaker') });
-    if ((k.holder === 'hook' || k.holder === null) && dist(p, k) < 2) options.push({ d: dist(p, k) - 0.5, text: 'Pocket the bus key', run: () => take('key') });
+    for (const id of OBJECTS) {
+      const o = day.objects[id];
+      if (isFree(o) && dist(p, o) < 2) options.push({ d: dist(p, o) - 1.5, text: PICKUP[id], run: () => take(id) });
+    }
   }
-  for (const id of Object.keys(PEOPLE)) {
+  for (const id of Object.keys(bodies)) {
     const b = bodies[id], s = day.people[id];
     if (s.hidden || dist(p, b) > 3) continue;
-    if (carrying === 'key' && id === 'iqbal') options.push({ d: dist(p, b) - 1, text: 'Give Iqbal his key', run: () => give('iqbal') });
-    else if (carrying === 'speaker' && id === 'ravi') options.push({ d: dist(p, b) - 1, text: 'Give Ravi his speaker', run: () => give('ravi') });
+    if (carrying && GIVES[carrying].includes(id) && !s.carrying) options.push({ d: dist(p, b) - 1, text: `Give ${PEOPLE[id].name} the ${carrying === 'water' ? 'water crate' : carrying}`, run: () => give(id) });
     else options.push({ d: dist(p, b), text: `Talk to ${PEOPLE[id].name}`, run: () => talk(id) });
   }
   options.sort((a, b) => a.d - b.d);
@@ -371,11 +473,35 @@ function give(to) {
   act(day, { type: 'give', to });
 }
 function talk(id) {
+  act(day, { type: 'talk', to: id });
   const state = talkState(day, id);
   const entry = TALK[id].find((t) => t.when === state) || TALK[id].find((t) => t.when === 'default') || TALK[id][0];
   say(id, entry.line, 7);
-  learnHint(entry.hint);
-  if (entry.hint && HINTS[entry.hint]) toast(`${PEOPLE[id].name}: ${HINTS[entry.hint].text}`, 5);
+  const fresh = learnHint(entry.hint);
+  if (entry.hint && HINTS[entry.hint]) toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[entry.hint].text}`, 5);
+  if (id !== 'sharma') openChoices(id);
+}
+// Whispering: after talking to anyone but Sharma you can pass on a rumour you know.
+function openChoices(id) {
+  const list = knownRumours();
+  if (!list.length) return;
+  choices = { id, list };
+  $('#choicesTitle').textContent = `Whisper something to ${PEOPLE[id].name}?`;
+  $('#choicesList').innerHTML = list.map((rid, i) => `<li><button data-r="${rid}"><kbd>${i + 1}</kbd> ${RUMOURS[rid].label}</button></li>`).join('')
+    + '<li><button data-r=""><kbd>Esc</kbd> Say nothing</button></li>';
+  for (const b of $('#choicesList').querySelectorAll('button')) b.onclick = () => choose(b.dataset.r);
+  $('#choices').classList.remove('hidden');
+}
+function choose(rid) {
+  if (choices && rid) {
+    const r = act(day, { type: 'whisper', to: choices.id, rumour: rid });
+    if (r.say === 'already-dead') toast('Nobody believes that one any more.', 3);
+  }
+  closeChoices();
+}
+function closeChoices() {
+  choices = null;
+  $('#choices').classList.add('hidden');
 }
 
 // --- loop, screens, board ----------------------------------------------------
@@ -389,9 +515,14 @@ function resetDay() {
   yaw = 0;
   for (const [id, b] of Object.entries(bodies)) Object.assign(b, { x: day.people[id].x, z: day.people[id].z });
   for (const b of crowd) { b.group = null; b.model.visible = false; }
+  for (const b of squad) b.model.visible = false;
   crowdClock = 0;
   crowdSnap = true;
+  ambientClock = 12;
+  streamText = ''; streamTime = 0;
+  closeChoices();
   $('#wirelessLog').replaceChildren();
+  $('#feedLog').replaceChildren();
   for (const b of bubbles.splice(0)) b.el.remove();
   $('#loopCount').textContent = `LOOP ${memory.loops}`;
 }
@@ -401,10 +532,10 @@ function showTitle() {
   const seen = memory.links.length;
   $('#screen').innerHTML = `<div class="screen-content"><span class="tiny">SIDE QUEST REPUBLIC</span>
     <h1>Same day.<em>Again.</em></h1>
-    <p>It's 10:00 at the Rajiv Chowk exit. By 17:00 something will have happened at Jantar Mantar. What happens depends on who is where, and what is in whose pocket.</p>
-    <p>Watch people's routines, move things around, and see what follows. When the day ends, it starts again. You keep everything you learned.</p>
+    <p>It's 10:00 at the Rajiv Chowk exit. By 17:00 something will have happened at Jantar Mantar. What happens depends on who is where, what is in whose pocket, and what everyone has heard.</p>
+    <p>Watch people's routines, move things around, start a rumour, and see what follows. When the day ends, it starts again. You keep everything you learned.</p>
     <div class="buttons"><button class="primary" id="go">${memory.loops > 1 ? `Start loop ${memory.loops}` : 'Start the day'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
-    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD to move, drag to look, E to act, Tab for the chaos board, hold T to let time pass.</p></div>`;
+    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links and ${memory.endings.length} of ${Object.keys(ENDINGS).length} endings. ` : ''}WASD to move, drag to look, E to act, Tab for the chaos board, hold T to let time pass.</p></div>`;
   $('#screen').classList.remove('hidden');
   $('#hud').classList.add('hidden');
   $('#go').onclick = () => startLoop();
@@ -416,20 +547,23 @@ function startLoop() {
   mode = 'play';
   $('#screen').classList.add('hidden');
   $('#hud').classList.remove('hidden');
-  toast(memory.loops === 1 ? 'Ravi\'s chai stall and the shuttle are at CP, south of here. The stage is in between.' : 'Back at the Metro exit. 10:00. Again.', 6);
+  logLine('#feedLog', 'Pinky: ⚠️ Forwarded many times: "water cannon aa raha hai Jantar pe??" Kisi ko pata hai? (Talk to someone to pass it on.)', 3);
+  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, south of here. The stage is in between. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
 function showEnding() {
   mode = 'end';
+  closeChoices();
   const e = ENDINGS[day.ending];
   if (!memory.endings.includes(day.ending)) memory.endings.push(day.ending);
   memory.loops++;
   saveMemory();
   const lv = levers(day);
   const learned = [...loopLinks].map((id) => `<li>${LINKS[id].from} → ${LINKS[id].to}</li>`).join('');
+  const where = { stage: 'the stage', cp: 'CP', barricade: 'the barricade', parliament: 'Parliament Street' };
   $('#screen').innerHTML = `<div class="screen-content"><span class="tiny">${clockText(day.t)} · LOOP ${memory.loops - 1} ENDS</span>
     <h2>${e.title}</h2><p class="headline">${e.headline}</p><p>${e.text}</p>
-    <p class="fine">Crowd at Jantar ${lv.crowds.stage} · at CP ${lv.crowds.cp} · on Parliament Street ${lv.crowds.parliament} · Sharma at ${lv.policeAt === 'cp' ? 'CP' : 'the barricade'}</p>
+    <p class="fine">Crowd at Jantar ${lv.crowds.stage} · at CP ${lv.crowds.cp} · at the barricade ${lv.crowds.barricade} · on Parliament Street ${lv.crowds.parliament} · police line at ${lv.line ? where[lv.line] : 'nowhere'} · mood ${lv.intensity}</p>
     ${learned ? `<p>What you saw happen this loop:</p><ul>${learned}</ul>` : '<p>You didn\'t see any link happen this loop.</p>'}
     <div class="buttons"><button class="primary" id="again">Wake up again</button><button id="seeBoard">Chaos board</button></div></div>`;
   $('#screen').classList.remove('hidden');
@@ -442,17 +576,23 @@ let boardPrior = 'play';
 function openBoard() {
   boardPrior = mode === 'board' ? boardPrior : mode;
   mode = 'board';
+  closeChoices();
   const people = Object.entries(PEOPLE).map(([id, p]) => {
     const known = Object.entries(HINTS).filter(([h, v]) => v.who === id && memory.hints.includes(h)).map(([, v]) => `<li>${v.text}</li>`).join('');
-    return `<div class="person"><b>${p.name}</b><small>${p.role}</small><ul>${known || '<li class="unknown">Talk to them to learn their day.</li>'}</ul></div>`;
+    const ask = p.voice ? 'Ask Sharma about him.' : 'Talk to them to learn their day.';
+    return `<div class="person"><b>${p.name}</b><small>${p.role}</small><ul>${known || `<li class="unknown">${ask}</li>`}</ul></div>`;
   }).join('');
   const links = Object.entries(LINKS).map(([id, l]) => memory.links.includes(id)
     ? `<div class="link${loopLinks.has(id) ? ' new' : ''}"><span>${l.from}</span><i>→</i><span>${l.to}</span></div>`
     : `<div class="link unknown"><span>?</span><span>${l.hint}</span></div>`).join('');
   const endings = Object.entries(ENDINGS).map(([id, e]) => `<div class="ending${memory.endings.includes(id) ? '' : ' unseen'}">${memory.endings.includes(id) ? e.title : '???'}</div>`).join('');
+  const rumours = Object.entries(RUMOURS).map(([id, r]) => knownRumours().includes(id)
+    ? `<div class="ending">${r.label}</div>`
+    : `<div class="ending unseen">??? (${PEOPLE[HINTS[r.unlock].who].name} knows one)</div>`).join('');
   $('#boardPeople').innerHTML = people;
-  $('#boardLinks').innerHTML = links;
+  $('#boardLinks').innerHTML = `<p class="fine">${memory.links.length} of ${Object.keys(LINKS).length} found.</p>` + links;
   $('#boardEndings').innerHTML = endings;
+  $('#boardRumours').innerHTML = rumours;
   $('#board').classList.remove('hidden');
 }
 function closeBoard() {
@@ -471,42 +611,50 @@ function step(dt) {
     day.player.z = sim.player.z;
     tick(day, STEP);
     handleEvents();
-    if (day.over) { setTimeout(showEnding, day.ending === 'detained' ? 2500 : 600); mode = 'ending'; return; }
+    if (day.over) { setTimeout(showEnding, day.ending === 'detained' ? 2500 : 600); mode = 'ending'; closeChoices(); return; }
   }
   const forward = (keys.w || keys.arrowup ? 1 : 0) - (keys.s || keys.arrowdown ? 1 : 0);
   const right = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
   const iz = -Math.sin(yaw) * right - Math.cos(yaw) * forward;
-  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '], heavy: day.player.carrying === 'speaker' });
+  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '], heavy: HEAVY.includes(day.player.carrying) });
   keys[' '] = false;
   updateShuttle();
   updateBodies(dt);
   updateCrowd(dt);
-  separateBodies([sim.player, ...Object.values(bodies).filter((b) => b.model.visible && b.id !== 'mira'), ...crowd.filter((b) => b.model.visible)], world.obstacles);
-  for (const b of [...Object.values(bodies), ...crowd]) b.model.position.set(b.x, b.y || 0, b.z);
+  updateSquad(dt);
+  separateBodies([sim.player, ...Object.values(bodies).filter((b) => b.model.visible && b.id !== 'mira'), ...crowd.filter((b) => b.model.visible), ...squad.filter((b) => b.model.visible)], world.obstacles);
+  for (const b of [...Object.values(bodies), ...crowd, ...squad]) b.model.position.set(b.x, b.y || 0, b.z);
   playerModel.position.set(sim.player.x, sim.player.y, sim.player.z);
   const turn = Math.atan2(Math.sin(sim.player.yaw - playerModel.rotation.y), Math.cos(sim.player.yaw - playerModel.rotation.y));
   playerModel.rotation.y += turn * Math.min(1, dt * 14);
+  ambient(dt);
+  if (choices && (day.people[choices.id].hidden || dist(sim.player, bodies[choices.id]) > 4)) closeChoices();
 }
 
 function animate(t) {
   const p = sim.player;
-  animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: day.player.carrying || false, airborne: !p.grounded, vy: p.vy, important: true });
+  const carryPose = (c) => (c ? POSE[c] : false);
+  animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: carryPose(day.player.carrying), airborne: !p.grounded, vy: p.vy, important: true });
   for (const [id, b] of Object.entries(bodies)) {
     if (!b.model.visible) continue;
     const s = day.people[id];
+    const carrying = s.carrying === 'phone' ? false : s.carrying;
     animateCharacter(b.model, b.speed, t, {
-      carry: s.carrying || false,
+      carry: carryPose(carrying),
       talking: bubbles.some((x) => x.id === id) || (id === 'mira' && s.mode === 'speech'),
       distance: dist(b, p),
       important: true,
     });
+    if (b.model.userData.phone) b.model.userData.phone.visible = id === 'zoya' && s.carrying === 'phone';
   }
   for (const b of crowd) if (b.model.visible) {
     const dancing = b.group === 'cpParty' && day.objects.speaker.on;
-    const cheering = b.group === 'stage' && day.people.mira.mode === 'speech' && day.speech === 'big';
-    animateCharacter(b.model, b.speed, t, { pose: (dancing || cheering) && Math.sin(t * 3 + b.phase) > 0.2, distance: dist(b, p) });
+    const cheering = b.group === 'stage' && ((day.people.mira.mode === 'speech' && day.speech === 'big') || day.moment);
+    const angry = b.group === 'barricade' && day.minister === 'noshow';
+    animateCharacter(b.model, b.speed, t, { pose: (dancing || cheering || angry) && Math.sin(t * 3 + b.phase) > 0.2, distance: dist(b, p) });
   }
+  for (const b of squad) if (b.model.visible) animateCharacter(b.model, b.speed, t, { distance: dist(b, p) });
 }
 
 function camera(dt) {
@@ -545,16 +693,37 @@ function camera(dt) {
   world.camera.lookAt(target);
 }
 
-function updateHUD() {
+const CARRY_TEXT = {
+  key: 'Iqbal\'s bus key is in your pocket. Q puts it down.',
+  speaker: 'You\'re carrying Ravi\'s speaker. Q puts it down and switches it on.',
+  megaphone: 'You have Dev\'s megaphone. Give it to someone, or Q to put it down.',
+  phone: 'Zoya\'s phone is in your pocket. No phone, no live stream. Q puts it down.',
+  water: 'You\'re carrying Sana\'s water crate. Her tent is beside the stage.',
+};
+const MOOD = { calm: 'Calm', rising: 'Rising', high: 'Boiling over' };
+const WHERE = { stage: 'Stage', cp: 'CP', barricade: 'Barricade', parliament: 'Parliament St' };
+function updateHUD(dt) {
   $('#clockTime').textContent = clockText(day.t);
   const place = placeAt(sim.player);
   $('#place').textContent = place ? PLACES[place].name.toUpperCase() : '';
-  prompt = mode === 'play' ? findPrompt() : null;
+  prompt = mode === 'play' && !choices ? findPrompt() : null;
   $('#prompt').classList.toggle('hidden', !prompt);
   if (prompt) $('#promptText').textContent = prompt.text;
   const c = day.player.carrying;
   $('#carrying').classList.toggle('hidden', !c);
-  if (c) $('#carrying').textContent = c === 'key' ? 'Iqbal\'s bus key is in your pocket. Q puts it down.' : 'You\'re carrying Ravi\'s speaker. Q puts it down and switches it on.';
+  if (c) $('#carrying').textContent = CARRY_TEXT[c];
+  const lv = levers(day);
+  $('#levers').innerHTML = `<span>Mood <b class="${lv.intensity}">${MOOD[lv.intensity]}</b></span><span>Crowd <b>${WHERE[lv.location]}</b></span>`
+    + `<span>Police ${lv.line ? `line at <b>${WHERE[lv.line]}</b>` : lv.watch ? `watching <b>${WHERE[lv.watch]}</b>` : `<b>${WHERE[lv.policeAt]}</b>`}</span>`;
+  const st = day.stream;
+  streamTime -= dt;
+  const showStream = st.live || streamTime > 0;
+  $('#stream').classList.toggle('hidden', !showStream);
+  if (showStream) {
+    const v = Math.round(st.viewers);
+    $('#streamHead').textContent = st.live ? `● ZOYA LIVE · ${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v} watching · ${WHERE[st.place]}` : '○ ZOYA · offline';
+    $('#streamText').textContent = streamText;
+  }
 }
 
 function frame(now) {
@@ -567,7 +736,7 @@ function frame(now) {
   if (day && mode !== 'loading') {
     animate(t);
     updateItems(t);
-    updateHUD();
+    updateHUD(dt);
   }
   camera(dt);
   updateBubbles(dt);
@@ -581,7 +750,9 @@ function setupInput() {
     if ([' ', 'tab', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
     if (k === 'tab') { if (mode === 'board') closeBoard(); else if (mode === 'play') openBoard(); return; }
     if (k === 'escape' && mode === 'board') { closeBoard(); return; }
+    if (k === 'escape' && choices) { closeChoices(); return; }
     if (e.repeat) return;
+    if (choices && /^[1-9]$/.test(k)) { const rid = choices.list[Number(k) - 1]; if (rid) choose(rid); return; }
     keys[k] = true;
     if (mode !== 'play') return;
     if (k === 'e' && prompt) prompt.run();
@@ -635,7 +806,8 @@ function setupInput() {
     $('#loading').classList.add('hidden');
     showTitle();
     requestAnimationFrame(frame);
-    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, startLoop, openBoard, act, at, advance, SPOTS }; // for debugging and browser checks
+    // For debugging and automated browser checks.
+    window.__loop = { get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; }, startLoop, openBoard, act, at, advance, SPOTS, bodies };
   } catch (e) {
     console.error(e);
     $('#loadtext').textContent = 'The 3D scene could not start. WebGL 2 is required. ' + e.message;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#122923">
 <title>Side Quest Republic — Same Day Again</title>
-<link rel="stylesheet" href="loop/loop.css?v=1">
+<link rel="stylesheet" href="loop/loop.css?v=2">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body>
@@ -15,9 +15,15 @@
 <div id="hud" class="hidden">
   <div id="clock"><b id="clockTime">10:00</b><span id="loopCount">LOOP 1</span></div>
   <div id="place"></div>
-  <div id="wireless"><div class="tiny">POLICE WIRELESS · OVERHEARD</div><ol id="wirelessLog"></ol></div>
+  <div id="levers"></div>
+  <div id="stream" class="hidden"><div id="streamHead"></div><div id="streamText"></div></div>
+  <div id="side">
+    <div id="wireless"><div class="tiny">POLICE WIRELESS · OVERHEARD</div><ol id="wirelessLog"></ol></div>
+    <div id="feed"><div class="tiny">JANTAR UPDATES 🔥 · WHATSAPP GROUP</div><ol id="feedLog"></ol></div>
+  </div>
   <div id="bubbles"></div>
   <div id="toast" role="status"></div>
+  <div id="choices" class="hidden"><div id="choicesTitle"></div><ol id="choicesList"></ol></div>
   <div id="prompt" class="hidden"><kbd>E</kbd><span id="promptText"></span></div>
   <div id="carrying" class="hidden"></div>
   <div id="keys"><span><kbd>WASD</kbd> move <kbd>Shift</kbd> run</span><span><kbd>E</kbd> act <kbd>Q</kbd> put down <kbd>T</kbd> wait</span><span><kbd>Tab</kbd> chaos board</span></div>
@@ -29,12 +35,12 @@
     <div class="board-grid">
       <section><h3>People</h3><div id="boardPeople"></div></section>
       <section><h3>Cause and effect</h3><p class="fine">A link appears once you see it happen. Grey links are still out there.</p><div id="boardLinks"></div></section>
-      <section><h3>Endings seen</h3><div id="boardEndings"></div><button id="restartLoop">Start the day again</button></section>
+      <section><h3>Endings seen</h3><div id="boardEndings"></div><h3 class="sub">Rumours you can start</h3><div id="boardRumours"></div><button id="restartLoop">Start the day again</button></section>
     </div>
   </div>
 </div>
 
 <div id="screen" class="hidden"></div>
-<script type="module" src="loop/main.js?v=1"></script>
+<script type="module" src="loop/main.js?v=2"></script>
 </body>
 </html>
