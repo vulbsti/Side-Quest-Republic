@@ -143,6 +143,21 @@ function placeProps() {
   cube(1.2, 0.7, 0.6, '#dfe5e2', -0.6, 0.35, -0.6, tent);
   tent.position.set(SPOTS.sanaTent.x - 1.2, 0, SPOTS.sanaTent.z - 0.4);
   world.scene.add(tent);
+  // The ambulance that turns up when people faint in the heat.
+  const amb = new THREE.Group();
+  cube(2.1, 1.9, 4.6, '#f4f2ec', 0, 1.25, 0, amb);
+  cube(2.0, 0.9, 1.0, '#9fc3d6', 0, 1.75, 2.35, amb);
+  cube(2.12, 0.22, 4.62, '#c8402f', 0, 1.0, 0, amb);
+  for (const side of [-1, 1]) {
+    cube(0.04, 0.5, 0.15, '#c8402f', side * 1.06, 1.7, -0.6, amb);
+    cube(0.04, 0.15, 0.5, '#c8402f', side * 1.06, 1.7, -0.6, amb);
+  }
+  cube(0.5, 0.18, 0.3, '#3a7bd5', 0, 2.29, 1.2, amb);
+  for (const [dx, dz] of [[-1, -1.5], [1, -1.5], [-1, 1.5], [1, 1.5]]) cylinder(0.36, 0.36, 0.25, '#1e2422', dx, 0.36, dz, amb).rotation.z = Math.PI / 2;
+  amb.position.set(-14.5, 0, -6);
+  amb.visible = false;
+  world.scene.add(amb);
+  items.ambulance = amb;
   // The legacy stationary bus becomes the shuttle.
   shuttle = world.bus;
   const i = world.obstacles.findIndex((o) => o.id === 'legacy-bus');
@@ -353,6 +368,7 @@ function updateItems(t) {
       it.scale.set(1 + beat, 1 - beat * 0.5, 1 + beat);
     }
   }
+  items.ambulance.visible = !!day.heat;
   items.speaker.userData.led.material = mat(day.objects.speaker.on ? '#e5ff86' : '#3b4a3f', 0.4);
   for (const id of OBJECTS) {
     const o = day.objects[id], ring = items[id + 'Ring'];
@@ -457,17 +473,16 @@ function updateBubbles(dt) {
     s.b.el.style.display = 'block';
     const w = s.b.el.offsetWidth || 230, h = s.b.el.offsetHeight || 50;
     const fit = (x, y) => ({ x: clamp(x, w / 2 + 8, innerWidth - w / 2 - 8), y: clamp(y, h + 8, innerHeight - 8) });
-    let { x, y } = fit(s.x, s.y);
-    for (let tries = 0; tries < 6; tries++) {
-      const hit = [...panels, ...placed].find((r) => x + w / 2 > r.left - 4 && x - w / 2 < r.right + 4 && y > r.top - 4 && y - h < r.bottom + 4);
-      if (!hit) break;
-      // Move the smallest distance that clears the panel: left, right, above or below it.
-      const moves = [
-        fit(hit.left - w / 2 - 6, y), fit(hit.right + w / 2 + 6, y), fit(x, hit.top - 6), fit(x, hit.bottom + h + 6),
-      ].filter((m) => !(m.x + w / 2 > hit.left - 4 && m.x - w / 2 < hit.right + 4 && m.y > hit.top - 4 && m.y - h < hit.bottom + 4));
-      if (!moves.length) break;
-      ({ x, y } = moves.sort((a, c) => Math.hypot(a.x - x, a.y - y) - Math.hypot(c.x - x, c.y - y))[0]);
+    // Try where they stand first, then beside, above or below each thing in the way; take the nearest spot that is clear of everything.
+    const hits = (m) => [...panels, ...placed].some((r) => m.x + w / 2 > r.left - 4 && m.x - w / 2 < r.right + 4 && m.y > r.top - 4 && m.y - h < r.bottom + 4);
+    const home = fit(s.x, s.y);
+    const spots = [home];
+    for (const r of [...panels, ...placed]) {
+      spots.push(fit(r.left - w / 2 - 6, home.y), fit(r.right + w / 2 + 6, home.y), fit(home.x, r.top - 6), fit(home.x, r.bottom + h + 6));
     }
+    const best = spots.filter((m) => !hits(m)).sort((a, c) => Math.hypot(a.x - home.x, a.y - home.y) - Math.hypot(c.x - home.x, c.y - home.y))[0];
+    if (!best || Math.hypot(best.x - home.x, best.y - home.y) > innerHeight * 0.45) { s.b.el.style.display = 'none'; continue; } // nowhere sensible: skip it
+    const { x, y } = best;
     s.b.el.style.left = x + 'px';
     s.b.el.style.top = y + 'px';
     placed.push({ left: x - w / 2, right: x + w / 2, top: y - h, bottom: y });
@@ -732,20 +747,23 @@ function animate(t) {
     // Each set piece gets something you can see from across the square.
     const dancing = still && b.group === 'cpParty' && day.objects.speaker.on; // jump to the beat
     const sitting = still && b.group === 'stage' && day.moment === 'singalong'; // everyone sits and sways
+    const fainted = still && b.group === 'stage' && day.heat && !sitting && i % 4 === 0; // slumped on the ground
     const shoving = surge && b.group === surge.group; // heave at the line
     const cheering = b.group === 'stage' && ((day.people.mira.mode === 'speech' && day.speech === 'big') || day.moment === 'roast');
     const angry = b.group === 'barricade' && day.minister === 'noshow' && !shoving;
     if (dancing) {
       b.model.position.y = Math.abs(Math.sin(t * 5.2 + b.phase)) * 0.4;
       b.model.rotation.y = b.yaw + Math.sin(t * 2.6 + b.phase) * 0.7;
+    } else if (fainted) {
+      b.model.position.y = -0.34;
     } else if (sitting) {
       b.model.position.y = -0.34;
       b.model.rotation.y = b.yaw + Math.sin(t * 1.4 + b.phase) * 0.12;
     }
-    animateCharacter(b.model, dancing || sitting ? 0 : b.speed, t, {
+    animateCharacter(b.model, dancing || sitting || fainted ? 0 : b.speed, t, {
       pose: dancing || ((cheering || angry) && Math.sin(t * 3 + b.phase) > 0.2),
-      seated: sitting,
-      gesture: shoving ? 'push' : (sitting && i % 3 === 0) || (dancing && Math.sin(t * 2.6 + b.phase) > 0) ? 'wave' : '',
+      seated: sitting || fainted,
+      gesture: fainted ? 'rest' : shoving ? 'push' : (sitting && i % 3 === 0) || (dancing && Math.sin(t * 2.6 + b.phase) > 0) ? 'wave' : '',
       distance: dist(b, p),
     });
   });
