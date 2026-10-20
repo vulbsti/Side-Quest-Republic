@@ -7,6 +7,7 @@
     "test": "for f in tests/*.mjs; do node \"$f\" > /dev/null || { echo \"FAIL $f\"; exit 1; }; done && echo 'all tests pass'",
     "verify": "node verify/run.mjs",
     "verify:replay": "node verify/replay.mjs",
-    "verify:playback": "node verify/playback.mjs"
+    "verify:playback": "node verify/playback.mjs",
+    "story:check": "node verify/story-check.mjs"
   }
 }

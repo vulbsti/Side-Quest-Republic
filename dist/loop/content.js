@@ -544,6 +544,8 @@ Object.assign(LINES, {
   'plead-works': [['sharma', 'Arre tum toh wahi ho. Reel wale. Jao jao, ye bus bhar gayi hai waise bhi.']],
   'plead-fails': [['street', 'You make your case. The constable writes something down. It is not your release.']],
   'released-1730': [['wireless', 'Rao: Sabko chhod do. Paperwork kaun karega. Over.'], ['street', 'The bus door opens and everyone files out, blinking, into the evening.']],
+  'released-story': [['street', 'The bus door folds open and you step down into the noise like nothing happened.']],
+  'detained-story': [['street', 'Two hands, one elbow, and you are on the bus before you finish your sentence.']],
   'released-distraction': [['street', 'While the guard turns to deal with the noise, you step down off the bus and keep walking.']],
   'detain-me-leave': [['street', 'You step off the bus. Behind you, Sharma is still writing your name in a register.']],
   'friend-distracts': [['kabir', 'SIR! SIR! Mera phone kisi ne chura liya! Wahan! Woh! Nahi, woh!'], ['nikhil', 'Sir, ek sawaal tha. Bahut lamba sawaal hai. Pehle background deta hoon.'], ['sana', 'Sir, yahan koi behosh hai! Aapki zaroorat hai! Abhi!'], ['asha', 'Sharma ji, chai! Free! Aaj ke liye! Idhar aaiye na!']],
@@ -668,6 +670,8 @@ export const INTENTS = {
   'scene-cannon-request': 'Ask Sharma about the heat',
   'scene-detain-me': 'Your friends are on the bus',
   'scene-choose': 'Choose what you do',
+  'convo-choose': 'Answer',
+  'convo-leave': 'Walk away',
   go: 'Something is building at the {place}',
 };
 

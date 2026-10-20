@@ -3,8 +3,9 @@
 // Pure module (no DOM, no Three.js) so the whole day can be played by tests.
 // Every value here is either drawn on screen or read by a rule; nothing is decorative.
 import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, PROVOCATEUR_TELLS, TALK, AGAIN } from './content.js';
-import { SCENES } from './scenes.js';
 import { CAPTIONS } from './phone.js';
+import { PESTER_BY } from './talks.js';
+import { createStory } from './story.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -16,7 +17,7 @@ function caption(kind, when, n = 0) {
 // Everything is written in clock time. SECONDS_PER_MINUTE is the tempo: 1.25 for the 10-minute
 // slice, 4.0 for the owner's full day (?long). Set it with setTempo() before createDay().
 export const TEMPO = { slice: 1.25, long: 4.0 };
-export let SECONDS_PER_MINUTE = TEMPO.slice;
+export let SECONDS_PER_MINUTE = TEMPO.long;
 export function setTempo(spm) {
   SECONDS_PER_MINUTE = typeof spm === 'string' ? TEMPO[spm] : spm;
   return SECONDS_PER_MINUTE;
@@ -133,7 +134,7 @@ function officer(id, kind, post, extra = {}) {
 export function createDay(opts = {}) {
   if (opts.tempo) setTempo(opts.tempo);
   const rumour = () => ({ people: {}, places: {}, dead: false, exposure: {}, meeraT: 0, zoyaT: 0 });
-  return {
+  const day = {
     t: 0,
     tempo: SECONDS_PER_MINUTE, // read by tick(), so a saved or long-tempo day keeps its clock
     phase: 'morning',
@@ -188,7 +189,7 @@ export function createDay(opts = {}) {
     stream: { viewers: 0, live: false, place: null, viral: false },
     police: { watch: null, line: null, barricades: [], raf: 0, cannon: null, gas: null, charge: null, stone: null },
     director: { intensity: 0, band: 'calm', hotspot: 'stage', target: 'crowd', stance: 'scatter', chargeAt: null, why: [] },
-    scene: null,
+    story: null, // the story layer's state (story.js): situations, the conversation on screen, chatter, the phone timeline
     clips: [], // every clip posted today, by anyone: { id, kind, caption, place, t, by }
     recent: [], // things that just happened and can be filmed: { kind, place, x, z, t }
     callbacks: [], // { key, t (cause), at (effect), data }
@@ -218,6 +219,8 @@ export function createDay(opts = {}) {
     events: [],
     cues: [],
   };
+  day.story = STORY.init();
+  return day;
 }
 
 // --- helpers -------------------------------------------------------------
@@ -458,7 +461,7 @@ export const SCHEDULE = [
   [13, 30, (s) => { s.bus.breakPending = true; }],
   [13, 40, (s) => { // Mummy calls. Kabir walks to the quiet end by the barricade to pick up.
     const k = s.people.kabir;
-    if (k.hidden || s.nikhilFound || !['stage', 'toStage'].includes(k.mode) || !SCENES['mummy-call']) return;
+    if (k.hidden || s.nikhilFound || !['stage', 'toStage'].includes(k.mode) ) return;
     k.mode = 'onCall'; walkTo(k, { x: 33, z: -1.5 });
     emit(s, 'kabir-phone-rings', { pos: k });
   }],
@@ -1723,7 +1726,7 @@ export const RULES = [
     id: 'friend-distracts',
     says: 'friend-distracts',
     repeat: true,
-    when: (s) => s.player.detained && !s.flags['player-stays-detained'] && !s.scene && rep(s).help >= 30 && s.t >= s.detention.since + mins(8) && distractor(s),
+    when: (s) => s.player.detained && !s.flags['player-stays-detained'] && !s.story.convo && rep(s).help >= 15 && s.t >= s.detention.since + mins(8) && distractor(s),
     then: (s) => {
       const who = distractor(s);
       say(s, who, LINES['friend-distracts'].find(([w]) => w === who)?.[1] ?? LINES['friend-distracts'][0][1], { key: 'friend-distracts', link: 'friend-distracts' });
@@ -1808,7 +1811,7 @@ export function tick(s, dt) {
   s.director = directorNow(s);
   updateGroups(s);
   runRules(s, cdt);
-  if (s.scene) { sceneBeats(s); if (s.t >= s.scene.until) endScene(s, null); }
+  STORY.tick(s, dt);
   if (!s.over && s.t >= at(18, 0)) finish(s);
   return s;
 }
@@ -1861,8 +1864,9 @@ export function endingCard(s) {
   const outcome = !sd.charge ? 'sitin' : intensityBand(sd.intensity ?? 0) === 'riot' ? 'riot' : sd.stance;
   const role = playerRole(s);
   const fill = (text, d = {}) => text.replace(/\{(\w+)\}/g, (_, k) => (k === 'place' ? PLACES[d.place || sd.place]?.name ?? '' : k === 't' || k === 'at' ? clockText(d[k]) : d[k] ?? ''));
-  const mine = s.callbacks.filter((c) => !c.key.startsWith('world-') && CALLBACKS[c.key]);
-  const world = s.callbacks.filter((c) => c.key.startsWith('world-') && CALLBACKS[c.key]);
+  const text = (key) => CALLBACKS[key] ?? STORY.callbackText(key);
+  const mine = s.callbacks.filter((c) => !c.key.startsWith('world-') && text(c.key));
+  const world = s.callbacks.filter((c) => c.key.startsWith('world-') && text(c.key));
   const picked = [...mine.slice(0, 5), ...world].slice(0, Math.max(3, Math.min(5, mine.length)));
   return {
     outcome,
@@ -1881,7 +1885,9 @@ export function endingCard(s) {
     flavour: s.ending,
     // A "no incidents" headline only fits a day that had none.
     headline: sd.charge && ['packed', 'quiet'].includes(s.ending) ? null : ENDINGS[s.ending]?.headline ?? null,
-    callbacks: picked.map((c) => ({ key: c.key, t: c.t, at: c.at, text: fill(CALLBACKS[c.key], { ...c.data, t: c.t, at: c.at }) })),
+    callbacks: picked.map((c) => ({ key: c.key, t: c.t, at: c.at, text: fill(text(c.key), { ...c.data, t: c.t, at: c.at }) })),
+    friends: { ...s.story.friends }, // Kabir, Nikhil and Meera at the end of the day: ok | hurt | detained | missing
+    situations: STORY.list(s).filter((x) => x.state === 'done' || x.state === 'fail').map((x) => ({ id: x.id, title: x.title, state: x.state })),
     rep: { ...rep(s) },
     clips: s.player.clips.length,
   };
@@ -1914,6 +1920,7 @@ export function witnesses(s, canSee = () => true) {
   for (const o of Object.values(s.officers)) if (!o.hidden && dist(o, pl) < WITNESS_RANGE.officer && canSee(o.id, o)) out.push(o.id);
   return out;
 }
+export const OFFICER_NAMES = { sharma: 'Sharma', c1: 'Constable Yadav', c2: 'Constable Meena', c3: 'Constable Tomar', c4: 'Constable Rawat', c5: 'Constable Gill', r1: 'Jawan Pandey' };
 const REACH = 5; // how close you must be to an officer, a provocateur or a crowd to act on them
 const MOODS = ['bored', 'amused', 'soft'];
 
@@ -1924,8 +1931,11 @@ const MOODS = ['bored', 'amused', 'soft'];
 export function act(s, cmd) {
   if (s.over) return { ok: false };
   const pl = s.player;
-  // On the bus you can still talk your way out, play the scene, or film through the window.
-  if (pl.detained && !['plead', 'scene', 'film'].includes(cmd.type)) return { ok: false, say: 'detained' };
+  // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
+  if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film'].includes(cmd.type)) return { ok: false, say: 'detained' };
+  if (cmd.type === 'say') return STORY.say(s, cmd.option);
+  if (cmd.type === 'leave') return STORY.leave(s);
+  if (cmd.type === 'situation') return STORY.startSituation(s, cmd.id);
   if (cmd.type === 'take') {
     const o = s.objects[cmd.object];
     if (!o || pl.carrying || !isFree(o)) return { ok: false };
@@ -2021,8 +2031,11 @@ export function act(s, cmd) {
     return { ok: false };
   }
   if (cmd.type === 'talk') {
-    const p = s.people[cmd.to];
+    const p = s.people[cmd.to] || officerById(s, cmd.to);
     if (!p || p.hidden) return { ok: false };
+    const story = STORY.talk(s, cmd.to);
+    if (story) return story;
+    if (!s.people[cmd.to]) return { ok: false };
     const said = talkLine(s, cmd.to);
     if (cmd.to === 'nikhil' && p.mode === 'lost') { p.mode = 'follow'; emit(s, s.nikhilFound ? 'nikhil-follows-again' : 'nikhil-follows'); }
     return { ok: true, ...said };
@@ -2047,13 +2060,10 @@ export function act(s, cmd) {
   }
   if (cmd.type === 'film') return film(s);
   if (cmd.type === 'provocateur') return provocateur(s, cmd);
-  if (cmd.type === 'plead') {
+  if (cmd.type === 'plead') { // "talk your way off the bus" is the bus-andar situation
     if (!pl.detained) return { ok: false };
-    if (rep(s).aura >= 50 && !s.flags['player-stays-detained']) { releasePlayer(s, 'plead-works'); return { ok: true }; }
-    emit(s, 'plead-fails'); cue(s, 'awkward-silence', { pos: pl });
-    return { ok: true, say: 'not-enough-aura' };
+    return STORY.startSituation(s, 'bus-andar', true);
   }
-  if (cmd.type === 'scene') return scene(s, cmd);
   return { ok: false };
 }
 
@@ -2063,13 +2073,12 @@ function pester(s, { to, how }) {
   const o = officerById(s, to), pl = s.player;
   if (!o || !['career', 'cute', 'cannon', 'detainme'].includes(how)) return { ok: false };
   if (dist(o, pl) > REACH || o.mode === 'chase' || o.mode === 'charge') return { ok: false, say: 'too-far' };
-  // "Sir mujhe bhi detain kar lo" at the bus, with friends inside, is its own scene.
-  if (how === 'detainme' && sceneAvailable(s, 'detain-me')) return scene(s, { id: 'detain-me' });
-  if (how === 'cannon' && sceneAvailable(s, 'cannon-request') && to === 'sharma') return scene(s, { id: 'cannon-request' });
-  say(s, 'player', PESTER.say[how], { key: `pester-${how}` });
+  const own = PESTER_BY[o.id] || PESTER_BY[o.kind] || {};
+  say(s, 'player', own.say?.[how] ?? PESTER.say[how], { key: `pester-${how}` });
   if (o.mood === 'annoyed') {
     addRep(s, { heat: 5 });
-    say(s, o.id, PESTER.annoyed[o.pestered.length % PESTER.annoyed.length], { key: 'pester-annoyed' });
+    const annoyed = own.annoyed || PESTER.annoyed;
+    say(s, o.id, annoyed[o.pestered.length % annoyed.length], { key: 'pester-annoyed' });
     cue(s, 'awkward-silence', { pos: o, data: { who: o.id } });
     return { ok: true, say: 'annoyed' };
   }
@@ -2079,14 +2088,16 @@ function pester(s, { to, how }) {
   if (o.pestered.length >= 3) { // push the same officer three times in ten minutes and he's had enough
     o.mood = 'annoyed'; o.annoyedAt = s.t; o.pestered = [];
     addRep(s, { heat: 20 });
-    say(s, o.id, PESTER.annoyed[0], { key: 'officer-annoyed', link: 'officer-annoyed' });
+    say(s, o.id, (own.annoyed || PESTER.annoyed)[0], { key: 'officer-annoyed', link: 'officer-annoyed' });
     cue(s, 'awkward-silence', { pos: o, data: { who: o.id } });
     return { ok: true, say: 'annoyed' };
   }
-  o.mood = MOODS[Math.min(2, MOODS.indexOf(o.mood) + 1)];
+  o.mood = MOODS[Math.min(2, Math.max(0, MOODS.indexOf(o.mood)) + 1)];
   addRep(s, { aura: how === 'cannon' ? 12 : how === 'detainme' ? 8 : 10, heat: how === 'cannon' || how === 'detainme' ? 0 : 2 });
-  const lines = PESTER[how][o.mood];
-  say(s, o.id, lines[(o.kind === 'raf' ? 1 : 0) % lines.length], { key: `pester-${how}`, link: o.mood === 'soft' ? 'pester-soft' : null });
+  // Each officer has their own answers (talks.js PESTER_BY), and doesn't give the same one twice running.
+  const lines = own[how]?.[o.mood] ?? PESTER[how][o.mood] ?? PESTER[how].bored;
+  o.said = (o.said || 0) + 1;
+  say(s, o.id, lines[o.said % lines.length], { key: `pester-${how}`, link: o.mood === 'soft' ? 'pester-soft' : null });
   cue(s, 'crowd-laugh', { pos: o, data: { who: o.id, how } });
   happen(s, `pester-${how}`, o);
   memo(s, `pester-${how}`, { who: o.id });
@@ -2178,20 +2189,7 @@ function provocateur(s, { id, how, to }) {
   return { ok: false };
 }
 
-// --- scenes ------------------------------------------------------------------
-
-/** When each ensemble scene can start (the engine owns triggers; the writer owns the words). */
-function sceneAvailable(s, id) {
-  if (!SCENES[id] || s.fired['scene:' + id] || s.scene || s.player.detained) return false;
-  const pl = s.player, k = s.people.kabir, sh = s.people.sharma;
-  // 13:40: Kabir's phone rings and he walks to the quiet end by the barricade, where Sharma stands.
-  if (id === 'mummy-call') return s.t >= at(13, 40) && s.t < at(14, 0) && k.mode === 'onCall' && !k.hidden && dist(sh, k) <= 14 && dist(pl, k) <= 8;
-  if (id === 'cannon-request') return s.t >= at(14, 0) && s.t < at(14, 45) && dist(pl, sh) <= 6 && guarded(s);
-  if (id === 'detain-me') return s.t >= at(14, 0) && s.t < at(17, 30) && friendsInside(s) && dist(pl, detentionPos(s)) <= 7;
-  return false;
-}
-const friendsInside = (s) => s.detention.people.some((id) => id === 'kabir' || id === 'nikhil') || (s.flags.crewDetained && s.detention.count > 0);
-export const scenesAvailable = (s) => Object.keys(SCENES).filter((id) => sceneAvailable(s, id));
+// --- the story layer's hands in the world -------------------------------------------
 
 /** requires: { mood: {id: [moods]}, rep: {aura: min, ...}, flags: [all] }. 'water-delivered' is Sana having water. */
 function meets(s, req = {}) {
@@ -2204,65 +2202,14 @@ function meets(s, req = {}) {
   for (const f of req.notFlags || []) if (s.flags[f]) return false;
   return true;
 }
-const BEAT_SECONDS = 2.2; // the engine's guess at one beat, when the client doesn't report beats
-const escapeBeat = (sc) => {
-  const i = sc.beats.findIndex((b) => b.event === 'detainees-escape' || /bahar aa gaye/i.test(b.line || ''));
-  return i < 0 ? null : i;
-};
-function scene(s, { id, option, beat }) {
-  const sc = SCENES[id];
-  if (!sc) return { ok: false };
-  if (option == null && beat == null) {
-    if (!sceneAvailable(s, id)) return { ok: false };
-    s.fired['scene:' + id] = true;
-    s.scene = { id, beat: 0, cast: sc.cast.slice(), options: sc.options.map((o, i) => ({ i, intent: o.intent, ok: meets(s, o.requires) })), t: s.t, until: s.t + sc.beats.length * BEAT_SECONDS + 30, escapeBeat: id === 'detain-me' ? escapeBeat(sc) : null, escaped: false };
-    cue(s, 'scene-start', { pos: s.player, data: { id } });
-    if (id === 'detain-me') {
-      memo(s, 'detain-me');
-      const sh = s.people.sharma;
-      if (sh.mode !== 'chase') { sh.mode = 'escort'; walkTo(sh, offset(detentionPos(s), -1, 1)); }
-      detainPlayer(s, 'asked-friends'); // "Andar."
-    }
-    return { ok: true, scene: s.scene };
-  }
-  if (!s.scene || s.scene.id !== id) return { ok: false };
-  if (option == null) { s.scene.beat = Math.max(s.scene.beat, beat); sceneBeats(s); return { ok: true }; }
-  const o = sc.options[option];
-  if (!o || !meets(s, o.requires)) return { ok: false, say: 'requires' };
-  s.scene.beat = sc.beats.length; sceneBeats(s); // the scene has played out by the time options are picked
-  const e = o.effects || {};
-  addRep(s, e);
-  for (const [who, mood] of Object.entries(e.mood || {})) {
-    const p = officerById(s, who) || s.people[who];
-    if (!p) continue;
-    p.mood = mood;
-    if (who === 'sharma' && mood === 'soft') memo(s, 'sharma-soft', { how: id });
-    if (mood === 'annoyed' && p.pestered) p.annoyedAt = s.t;
-  }
-  for (const f of e.flags || []) applySceneFlag(s, id, f);
-  // The clip a friend posts; null means nothing worth posting.
-  const kind = o.clip !== undefined ? o.clip : { 'mummy-call': 'mummy-call', 'cannon-request': 'pester-cannon', 'detain-me': 'detain-me' }[id];
-  if (kind) happen(s, kind, s.player);
-  endScene(s, option);
-  return { ok: true };
-}
-function sceneBeats(s) {
-  const sc = s.scene;
-  if (!sc) return;
-  sc.beat = Math.max(sc.beat, Math.floor((s.t - sc.t) / BEAT_SECONDS));
-  // detain-me: at Nikhil's "hum bahar aa gaye" the friends are already out the back, before the options.
-  if (sc.escapeBeat != null && !sc.escaped && sc.beat >= sc.escapeBeat) {
-    sc.escaped = true;
-    if (detainees(s)) { addRep(s, { help: 10 }); callback(s, 'detain-me', 'detain-me'); releaseDetainees(s, 'escape'); }
-  }
-}
-function applySceneFlag(s, id, f) {
+function applyFlag(s, f) {
   s.flags[f] = true; // the client reads these for CHAT flag:<name> and CALLBACK_BARKS
   if (f === 'kabir-stays') { s.kabirStays = true; memo(s, 'mummy-call'); }
   if (f === 'kabir-leaves-at-14') s.kabirStays = false;
   if (f === 'cannon-requested') memo(s, 'cannon-asked', { who: 'sharma' });
   if (f === 'crowd-at-barricade') s.crowd.barricade += crowdTake(s, 'stage', Math.min(6, Math.max(0, s.crowd.stage - 4)));
   if (f === 'player-released' && s.player.detained) releasePlayer(s, 'detain-me-leave');
+  if (f === 'kabir-stays' || f === 'kabir-leaves-at-14') s.story.friends.kabir = 'ok';
   if (f === 'missed-showdown') memo(s, 'missed-showdown');
   if (f === 'sharma-chasing-friends') {
     const sh = s.people.sharma, k = s.people.kabir, n = s.people.nikhil;
@@ -2273,15 +2220,39 @@ function applySceneFlag(s, id, f) {
     emit(s, 'sharma-chases-friends', { pos: sh });
   }
 }
-function endScene(s, option) {
-  if (!s.scene) return;
-  if (option == null) { // nobody picked: the scene still plays out
-    s.scene.beat = SCENES[s.scene.id].beats.length; sceneBeats(s);
-    if (s.scene.id === 'detain-me' && s.player.detained) releasePlayer(s, 'detain-me-leave');
-  }
-  cue(s, 'scene-end', { pos: s.player, data: { id: s.scene.id, option } });
-  s.scene = null;
+/** Put an object in someone's hands (a person id, 'player'), or on the ground at pos (who null). */
+function giveObject(s, id, who, pos = null) {
+  const o = s.objects[id];
+  if (!o) return;
+  const was = o.holder;
+  if (was === 'player') s.player.carrying = null;
+  else if (s.people[was]) s.people[was].carrying = null;
+  if (who === 'player') { if (s.player.carrying) giveObject(s, s.player.carrying, null, s.player); o.holder = 'player'; s.player.carrying = id; return; }
+  if (who && s.people[who]) { const p = s.people[who]; if (p.carrying) giveObject(s, p.carrying, null, p); o.holder = who; p.carrying = id; Object.assign(o, { x: p.x, z: p.z }); return; }
+  o.holder = null; if (pos) Object.assign(o, { x: pos.x, z: pos.z });
+  if (id === 'speaker') o.on = true;
 }
+function releasePerson(s, id) {
+  const i = s.detention.people.indexOf(id);
+  if (i < 0) return;
+  s.detention.people.splice(i, 1);
+  const p = s.people[id], d = detentionPos(s);
+  p.hidden = false; p.mode = 'story'; Object.assign(p, offset(d, -1.5, 1.5)); p.path = [];
+}
+function nikhilFoundByPlayer(s) {
+  const n = s.people.nikhil;
+  if (n.hidden || n.mode === 'detained') return;
+  n.mode = 'follow';
+}
+const STORY = createStory({
+  at, mins, dist, placeAt, phaseAt, SPOTS, PLACES, CROWD_CENTERS,
+  officerById, meets, say, cue, memo, callback, addRep, happen, walkTo, sendHome, startChase,
+  detainPlayer, detainPerson, releasePlayer, releasePerson, giveObject, placeLearns, crowdAdd, crowdTake, applyFlag,
+  nikhilFound: nikhilFoundByPlayer,
+});
+/** Every situation and where it stands: [{ id, title, act, state, card, goal, marker }]. */
+export const situations = (s) => STORY.list(s);
+export const storyCallbackText = (key) => STORY.callbackText(key);
 
 // --- what the player can do right here ------------------------------------------
 
@@ -2294,16 +2265,17 @@ export function opportunities(s, pos = s.player, radius = 10) {
   const push = (id, kind, text, p, cmd, extra = {}) => out.push({ id, kind, text, x: p.x, z: p.z, d: dist(pos, p), cmd, ...extra });
   const I = (k, d = {}) => (INTENTS[k] || k).replace(/\{(\w+)\}/g, (_, x) => d[x] ?? '');
   if (s.over) return out;
+  const c = s.story.convo;
+  if (c) push(`convo:${c.id}`, 'convo', I('convo-choose'), pl, null, { choices: [...c.options.map((o) => ({ text: o.intent, ok: o.ok, why: o.why, cmd: { type: 'say', option: o.i } })), { text: I('convo-leave'), ok: true, cmd: { type: 'leave' } }] });
   if (pl.detained) {
     const d = detentionPos(s);
-    push('plead', 'plead', I(rep(s).aura >= 50 ? 'plead' : 'plead-weak'), d, { type: 'plead' });
+    if (!c) push('plead', 'plead', I('plead'), d, { type: 'plead' });
     return out;
   }
-  for (const id of scenesAvailable(s)) {
-    const p = id === 'mummy-call' ? s.people.kabir : id === 'cannon-request' ? s.people.sharma : detentionPos(s);
-    push(`scene:${id}`, 'scene', I(`scene-${id}`), p, { type: 'scene', id });
+  for (const a of STORY.affordances(s)) {
+    if (a.kind === 'goal') push(a.id, 'goal', a.text, a.at, null);
+    else if (a.kind === 'situation') push(a.id, 'situation', a.text, a.at, a.cmd);
   }
-  if (s.scene) push(`scene:${s.scene.id}`, 'scene-choice', I('scene-choose'), pl, null, { choices: s.scene.options.map((o) => ({ text: o.intent, ok: o.ok, cmd: { type: 'scene', id: s.scene.id, option: o.i } })) });
   if (pl.chasedBy) {
     const c = officerById(s, pl.chasedBy);
     const crowdPlace = CROWD_PLACES.filter((p) => crowdAt(s, p) >= 6).sort((a, b) => dist(pos, CROWD_CENTERS[a]) - dist(pos, CROWD_CENTERS[b]))[0];
@@ -2316,12 +2288,12 @@ export function opportunities(s, pos = s.player, radius = 10) {
       { text: I('prov-expose', { tell: p.tell }), cmd: { type: 'provocateur', id: p.id, how: 'expose' } },
       { text: I('prov-join'), cmd: { type: 'provocateur', id: p.id, how: 'join' } },
     ];
-    if (near) choices.push({ text: I('prov-report', { name: near.id === 'sharma' ? 'Sharma' : near.kind === 'raf' ? 'the RAF jawan' : 'the constable' }), cmd: { type: 'provocateur', id: p.id, how: 'report', to: near.id } });
+    if (near) choices.push({ text: I('prov-report', { name: OFFICER_NAMES[near.id] ?? (near.kind === 'raf' ? 'the RAF jawan' : 'the constable') }), cmd: { type: 'provocateur', id: p.id, how: 'report', to: near.id } });
     push(`prov:${p.id}`, 'provocateur', I('prov-notice', { tell: p.tell }), p, choices[0].cmd, { choices });
   }
   for (const o of allOfficers(s)) {
     if (o.mode === 'chase' || o.mode === 'charge' || (o.hidden)) continue;
-    const name = o.id === 'sharma' ? 'Sharma' : o.kind === 'raf' ? 'the RAF jawan' : 'the constable';
+    const name = OFFICER_NAMES[o.id] ?? (o.kind === 'raf' ? 'the RAF jawan' : 'the constable');
     const choices = ['career', 'cute', 'cannon', 'detainme'].map((how) => ({ text: I(`pester-${how}`, { name }), cmd: { type: 'pester', to: o.id, how } }));
     const best = o.mood === 'annoyed' ? I('pester-annoyed', { name }) : choices[(o.pestered.length + (o.id === 'sharma' ? 0 : 1)) % 4].text;
     push(`pester:${o.id}`, 'pester', best, o, choices[0].cmd, { choices, mood: o.mood });
@@ -2332,7 +2304,8 @@ export function opportunities(s, pos = s.player, radius = 10) {
     for (const id of gives) { const p = s.people[id]; if (!p.hidden && !p.carrying) push(`give:${id}`, 'give', I(`give-${pl.carrying}`, { name: id[0].toUpperCase() + id.slice(1) }), p, { type: 'give', to: id }); }
     push('drop', 'drop', I('drop'), pl, { type: 'drop' });
   }
-  for (const p of Object.values(s.people)) if (!p.hidden && p.id !== 'sharma') push(`talk:${p.id}`, 'talk', I(p.id === 'nikhil' && p.mode === 'lost' ? 'talk-nikhil-lost' : 'talk', { name: p.id[0].toUpperCase() + p.id.slice(1) }), p, { type: 'talk', to: p.id });
+  for (const o of allOfficers(s)) if (!o.hidden && o.mode !== 'chase' && o.mode !== 'charge' && o.id !== 'sharma' && /^(c\d|r1)$/.test(o.id)) push(`talk:${o.id}`, 'talk', I('talk', { name: OFFICER_NAMES[o.id] }), o, { type: 'talk', to: o.id });
+  for (const p of Object.values(s.people)) if (!p.hidden) push(`talk:${p.id}`, 'talk', I(p.id === 'nikhil' && p.mode === 'lost' ? 'talk-nikhil-lost' : 'talk', { name: p.id[0].toUpperCase() + p.id.slice(1) }), p, { type: 'talk', to: p.id });
   const done = new Set(pl.clips.map((c) => `${c.kind}@${c.place}`));
   const h = s.recent.filter((r) => s.t - r.t <= mins(10) && !done.has(`${r.kind}@${r.place}`)).sort((a, b) => b.t - a.t)[0];
   if (h) push(`film:${h.kind}`, 'film', I('film', { what: I(`film-${h.kind}`) }), h, { type: 'film' });
@@ -2349,7 +2322,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
-  const URGENT = { scene: -6, 'scene-choice': -20, chase: -20, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, provocateur: -5, film: -4, give: -3, plead: -20 };
   const score = (o) => {
     let d = o.d + (URGENT[o.kind] ?? 0);
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
@@ -2387,17 +2360,17 @@ export function affordances(s) {
   const out = [], pl = s.player;
   const add = (id, kind, cmd, p) => out.push({ id, kind, cmd, at: p ? { x: p.x, z: p.z } : { x: pl.x, z: pl.z } });
   if (s.over) return out;
-  if (pl.detained) {
-    add('plead', 'plead', { type: 'plead' }, null);
-    for (const id of Object.keys(SCENES)) if (s.scene?.id === id) s.scene.options.forEach((o) => add(`scene:${id}:${o.i}`, 'scene-choice', { type: 'scene', id, option: o.i }, null));
+  // A conversation on screen: answer it or walk away (the client keeps you there until you do).
+  if (s.story.convo) {
+    for (const a of STORY.affordances(s)) add(a.id, a.kind, a.cmd, null);
     return out;
   }
-  if (s.scene) s.scene.options.forEach((o) => add(`scene:${s.scene.id}:${o.i}`, 'scene-choice', { type: 'scene', id: s.scene.id, option: o.i }, null));
-  for (const id of Object.keys(SCENES)) {
-    if (s.fired['scene:' + id] || s.scene) continue;
-    const p = id === 'mummy-call' ? s.people.kabir : id === 'cannon-request' ? s.people.sharma : detentionPos(s);
-    add(`scene:${id}`, 'scene', { type: 'scene', id }, id === 'detain-me' ? offset(p, -2, 2) : p);
+  if (pl.detained) {
+    add('plead', 'plead', { type: 'plead' }, null);
+    for (const id of s.detention.people) add(`talk:${id}`, 'talk', { type: 'talk', to: id }, null);
+    return out;
   }
+  for (const a of STORY.affordances(s)) add(a.id, a.kind === 'goal' ? 'go' : a.kind, a.cmd, a.at);
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) add(`take:${id}`, 'take', { type: 'take', object: id }, o);
   if (pl.carrying) {
     const gives = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] }[pl.carrying];
@@ -2406,11 +2379,12 @@ export function affordances(s) {
   }
   for (const p of Object.values(s.people)) {
     if (p.hidden) continue;
-    if (p.id !== 'sharma') add(`talk:${p.id}`, 'talk', { type: 'talk', to: p.id }, p);
+    add(`talk:${p.id}`, 'talk', { type: 'talk', to: p.id }, p);
     if (p.id !== 'sharma') for (const rid of Object.keys(s.rumours)) if (!s.rumours[rid].dead && !s.rumours[rid].people[p.id]) add(`whisper:${rid}:${p.id}`, 'whisper', { type: 'whisper', to: p.id, rumour: rid }, p);
   }
   for (const o of allOfficers(s)) {
     if (o.mode === 'chase' || o.mode === 'charge' || o.hidden) continue;
+    if (o.id !== 'sharma' && /^(c\d|r1)$/.test(o.id)) add(`talk:${o.id}`, 'talk', { type: 'talk', to: o.id }, o);
     for (const how of ['career', 'cute', 'cannon', 'detainme']) add(`pester:${o.id}:${how}`, 'pester', { type: 'pester', to: o.id, how }, o);
   }
   for (const place of CROWD_PLACES) {
