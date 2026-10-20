@@ -21,7 +21,7 @@ import { createPhone } from './phone-ui.js?v=1';
 const { createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
 const QS = new URLSearchParams(location.search);
-const LONG = QS.has('long'), DEV = QS.has('dev') || QS.has('demo'), DEMO = QS.has('demo');
+const LONG = QS.has('long'), DEV = QS.has('dev');
 const STEP = 0.1;
 const CROWD_POOL = 52, CONSTABLES = 8, RAF_POOL = 10, CREW_POOL = 8, PROV_POOL = 3, KIDS = 6, DETAINEES = 10;
 // Crowd bodies per group: each group wears its own outfits (characters.js variants), so pools are per kind.
@@ -49,22 +49,20 @@ if (LONG) { if (R.setTempo) R.setTempo(R.TEMPO?.long ? 'long' : 4.0); else R.set
 const MODELS_READY = true;
 let MODELS = null, MOD = null;
 const optional = async (path) => { try { return await import(path); } catch { return null; } };
-let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null }, demo = null;
+let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null };
 /** Audio swap point: audio.js createAudio() (or anything with the same methods, via __loop.setAudio). */
 const NOOP = () => {};
 let audio = { cue: NOOP, phase: NOOP, music: NOOP, chase: NOOP, intensity: NOOP, crowd: NOOP, update: NOOP, unlock: NOOP, silence: NOOP, duck: NOOP };
 async function loadOptional() {
-  const [sc, bk, ph, au, mo, dm] = await Promise.all([
+  const [sc, bk, ph, au, mo] = await Promise.all([
     optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js?v=1') : null,
-    DEMO ? optional('./dev-demo.js') : null,
   ]);
-  demo = dm;
-  SCENES = sc?.SCENES ?? dm?.SCENES ?? {};
-  BARKS = bk?.BARKS ?? dm?.BARKS ?? null;
+  SCENES = sc?.SCENES ?? {};
+  BARKS = bk?.BARKS ?? null;
   CALLBACK_BARKS = bk?.CALLBACK_BARKS ?? {};
   REAL_REELS = ph?.REAL_REELS ?? [];
   PHONE = {
-    CAPTIONS: ph?.CAPTIONS ?? dm?.CAPTIONS ?? {}, CHAT: ph?.CHAT ?? dm?.CHAT ?? {}, TICKER: ph?.TICKER ?? dm?.TICKER ?? {},
+    CAPTIONS: ph?.CAPTIONS ?? {}, CHAT: ph?.CHAT ?? {}, TICKER: ph?.TICKER ?? {},
     // Clip kinds that recreate a real reel: from REAL_REELS ids ('real-bus-key' -> 'bus-key') plus the known ones.
     REAL: new Set([...(ph?.REAL_REELS ?? []).map((r) => String(r.id || '').replace(/^real-/, '')), 'bus-key', 'pester-cannon', 'cannon-dance', 'detain-me', 'chase']),
   };
@@ -1066,7 +1064,6 @@ const STINGS = {
 let lastStingT = -99, stingsOn = !QS.has('nostings'); // ?nostings: for screenshots and testing
 function handleCues() {
   let list = S.cues(day);
-  if (demo?.drainCues) list = list.concat(demo.drainCues());
   for (const c of list) {
     if (!c || !c.cue) continue;
     props.cue(c);
@@ -1353,7 +1350,6 @@ function resetDay() {
   phone.reset();
   for (const b of bubbles.splice(0)) b.el.remove();
   $('#loopCount').textContent = `LOOP ${memory.loops}`;
-  demo?.reset?.();
 }
 
 function showTitle() {
@@ -1653,7 +1649,6 @@ function step(dt) {
     day.player.z = sim.player.z;
     busWaits();
     tick(day, STEP);
-    demo?.fill?.(day, STEP, clockMinutes);
     const ph = S.phase(day);
     if (ph !== phaseNow) onPhase(ph);
     handleEvents();
