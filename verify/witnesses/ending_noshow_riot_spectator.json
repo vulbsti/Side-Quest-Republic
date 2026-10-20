@@ -10,11 +10,67 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "whisper:biryani:asha",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
    "cmd": {
-    "type": "whisper",
-    "to": "asha",
-    "rumour": "biryani"
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "wait": 20
+  },
+  {
+   "clock": "10:53",
+   "wait": 20
+  },
+  {
+   "clock": "11:13",
+   "wait": 3
+  },
+  {
+   "clock": "11:16",
+   "do": "pester:c1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "11:18",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
    },
    "at": {
     "x": -18,
@@ -22,22 +78,81 @@
    }
   },
   {
-   "clock": "10:05",
-   "do": "hide:stage",
-   "cmd": null,
-   "at": {
-    "x": 0,
-    "z": -5.5
-   },
-   "hold": 1
+   "clock": "11:21",
+   "wait": 20
   },
   {
-   "clock": "10:08",
-   "do": "whisper:biryani:mira",
+   "clock": "11:41",
+   "do": "say:chabi:intro:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -13.249856443533723,
+    "z": -32.827736305909745
+   }
+  },
+  {
+   "clock": "11:42",
+   "wait": 45
+  },
+  {
+   "clock": "12:27",
+   "do": "whisper:sena:dev",
+   "cmd": {
+    "type": "whisper",
+    "to": "dev",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "12:30",
+   "do": "situation:afwaah",
+   "cmd": {
+    "type": "situation",
+    "id": "afwaah"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "12:33",
+   "wait": 45
+  },
+  {
+   "clock": "13:18",
+   "wait": 10
+  },
+  {
+   "clock": "13:28",
+   "do": "say:afwaah:forward:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": -13.249856443533725,
+    "z": -32.827736305909745
+   }
+  },
+  {
+   "clock": "13:29",
+   "wait": 3
+  },
+  {
+   "clock": "13:32",
+   "do": "whisper:minister:mira",
    "cmd": {
     "type": "whisper",
     "to": "mira",
-    "rumour": "biryani"
+    "rumour": "minister"
    },
    "at": {
     "x": 0,
@@ -45,72 +160,7 @@
    }
   },
   {
-   "clock": "10:09",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": 6.2,
-    "z": -37.2
-   }
-  },
-  {
-   "clock": "10:11",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "10:13",
-   "wait": 10
-  },
-  {
-   "clock": "10:23",
-   "do": "whisper:minister:nikhil",
-   "cmd": {
-    "type": "whisper",
-    "to": "nikhil",
-    "rumour": "minister"
-   },
-   "at": {
-    "x": -3.401935196114413,
-    "z": 28.25120949757151
-   }
-  },
-  {
-   "clock": "10:26",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:29",
-   "do": "whisper:sena:nikhil",
-   "cmd": {
-    "type": "whisper",
-    "to": "nikhil",
-    "rumour": "sena"
-   },
-   "at": {
-    "x": -2.165830397236572,
-    "z": 32.726961082326106
-   }
-  },
-  {
-   "clock": "10:31",
+   "clock": "13:34",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -122,7 +172,66 @@
    }
   },
   {
-   "clock": "10:34",
+   "clock": "13:35",
+   "do": "goal:afwaah",
+   "cmd": null,
+   "at": {
+    "x": 38,
+    "z": -4.5
+   },
+   "hold": 1
+  },
+  {
+   "clock": "13:39",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": 37.40971759642173,
+    "z": -4.7803841416996775
+   }
+  },
+  {
+   "clock": "13:39",
+   "do": "whisper:cannon:kabir",
+   "cmd": {
+    "type": "whisper",
+    "to": "kabir",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -4.6,
+    "z": -2.4
+   }
+  },
+  {
+   "clock": "13:42",
+   "do": "drop:sanaTent",
+   "cmd": {
+    "type": "drop",
+    "x": -9.5,
+    "z": -9
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:43",
+   "do": "situation:mummy-call",
+   "cmd": {
+    "type": "situation",
+    "id": "mummy-call"
+   },
+   "at": {
+    "x": 33,
+    "z": -1.5
+   }
+  },
+  {
+   "clock": "13:46",
    "finish": true
   }
  ]

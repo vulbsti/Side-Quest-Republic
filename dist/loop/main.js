@@ -1174,9 +1174,26 @@ function runOpportunity(o) {
   }
   if (o.cmd) runCmd(o.cmd);
 }
+// What a refused command means, in words (the engine answers with a short code).
+const SAY = {
+  'detained': 'Not from inside the bus. Talk your way out first.',
+  'already-dead': 'Nobody believes that one any more.',
+  'too-far': 'Get closer first.',
+  'annoyed': 'He has had enough of you for now. Give him half an hour.',
+  'obliged': 'He actually does it. You are on the bus.',
+  'no-crowd': 'Get closer to a crowd of students first.',
+  'need-aura': 'Nobody follows a stranger. Make people laugh first (aura 30).',
+  'too-much-nuisance': 'They have seen you make trouble all day. Help someone first.',
+  'crew-full': 'Your crew is as big as it gets.',
+  'nothing-to-film': 'Nothing worth filming here. Get within 12 m of something happening.',
+  'protected': 'He is protected. You are not.',
+  'no-camera': 'You need a camera on him: put down what you carry, or get Zoya live nearby.',
+  'never-reached': 'You could not get there.',
+};
+const words = (code) => (code ? SAY[code] ?? (/^[a-z]+(-[a-z]+)*$/.test(code) ? 'Not now.' : code) : null);
 function runCmd(cmd) {
   const r = act(day, cmd);
-  if (!r?.ok && r?.say) toast(r.say, 3);
+  if (!r?.ok && r?.say) toast(words(r.say), 3);
   return r;
 }
 function take(object) { act(day, { type: 'take', object, witnesses: witnesses() }); }
@@ -1186,7 +1203,7 @@ function talk(id) {
   // The engine picks what they say (story.js: their conversation for now, a reaction, or a brush-off),
   // so what you hear is what the verifier hears. A conversation opens its own card (updateConvo).
   const r = act(day, { type: 'talk', to: id });
-  if (!r?.ok) { if (r?.say) toast(r.say, 2.5); return; }
+  if (!r?.ok) { if (r?.say) toast(words(r.say), 2.5); return; }
   if (day.story?.convo) return;
   const line = r.line;
   if (!r.said && line) say(id, line, 7); // the old one-line talk (no story content for them yet)
@@ -1208,7 +1225,7 @@ function openChoices({ key, said, saidBy, title, list, leave = null }) {
   $('#choicesSaid').classList.toggle('hidden', !said);
   $('#choicesTitle').textContent = title;
   $('#choicesList').innerHTML = list.map((o, i) => `<li><button data-i="${i}"${o.locked ? ' class="locked"' : ''}><kbd>${i + 1}</kbd> ${o.label}${o.note ? `<small>${o.note}</small>` : ''}</button></li>`).join('')
-    + `<li><button data-i="-1"><kbd>Esc</kbd> ${leave ? 'Walk away' : 'Leave it'}</button></li>`;
+    + `<li><button data-i="-1"><kbd>Esc</kbd> ${leave ? (day.player.detained ? 'Not now' : 'Walk away') : 'Leave it'}</button></li>`;
   for (const b of $('#choicesList').querySelectorAll('button')) b.onclick = () => choose(Number(b.dataset.i));
   $('#choices').classList.remove('hidden');
   $('#hud').classList.add('choosing');
@@ -1244,7 +1261,7 @@ function openPester(to, b, line) {
     label,
     run: () => {
       const r = act(day, { type: 'pester', to, how });
-      if (!r?.ok) toast(r?.say || `${name[0].toUpperCase() + name.slice(1)} pretends he didn't hear you.`, 3);
+      if (!r?.ok) toast(words(r?.say) || `${name[0].toUpperCase() + name.slice(1)} pretends he didn't hear you.`, 3);
     },
   }));
   openChoices({ key: to, said: line, saidBy: R.OFFICER_NAMES?.[to]?.toUpperCase() ?? '', title: `Pester ${name}`, list });
@@ -1263,7 +1280,7 @@ function openProvocateur(b) {
 }
 function provAct(b, how) {
   const r = act(day, { type: 'provocateur', id: b.pid, how });
-  if (!r?.ok) toast(r?.say || (how === 'expose' ? 'You need a camera on him: film it, or get Zoya live within 12 m.' : 'He looks straight through you.'), 3.5);
+  if (!r?.ok) toast(words(r?.say) || (how === 'expose' ? 'You need a camera on him: film it, or get Zoya live within 12 m.' : 'He looks straight through you.'), 3.5);
 }
 function openStance() {
   const opts = [['hold', 'Hold the ground, sit down'], ['scatter', 'Scatter, laughing'], ['block', 'Block the road'], ['protect', 'Protect each other, get the injured out']];
@@ -1273,7 +1290,7 @@ function rally() {
   const r = act(day, { type: 'rally' });
   if (r?.ok) { toast('Students fall in behind you.', 3); return; }
   const aura = S.rep(day)?.aura ?? 0;
-  toast(r?.say || (aura < 30 ? `Nobody follows a stranger. You need more aura (${Math.round(aura)}/30): make people laugh.` : 'Get closer to a crowd of students first.'), 3.5);
+  toast(words(r?.say) || (aura < 30 ? `Nobody follows a stranger. You need more aura (${Math.round(aura)}/30): make people laugh.` : 'Get closer to a crowd of students first.'), 3.5);
 }
 let recT = 0;
 function film() {
@@ -1282,7 +1299,7 @@ function film() {
   if (r?.ok) {
     recT = 1.6;
     $('#recFlash').classList.remove('hidden');
-  } else toast(r?.say || 'Nothing worth filming here. Get within 12 m of something happening.', 3);
+  } else toast(words(r?.say) || 'Nothing worth filming here. Get within 12 m of something happening.', 3);
 }
 
 // --- opportunities: one objective card -------------------------------------------------
@@ -1554,7 +1571,7 @@ function openConvo(c) {
     title: c.title || (c.who ? nameOf(c.who) : 'What do you do?'),
     list: c.options.map((o) => ({
       label: o.intent, locked: !o.ok, note: o.ok ? '' : o.why,
-      run: () => { const r = act(day, { type: 'say', option: o.i }); if (r?.ok === false) toast(r.say || 'Not yet.', 3); },
+      run: () => { const r = act(day, { type: 'say', option: o.i }); if (r?.ok === false) toast(words(r.say) || 'Not yet.', 3); },
     })),
     leave: () => act(day, { type: 'leave' }),
   });

@@ -1,0 +1,181 @@
+{
+ "name": "cover 31",
+ "note": "1 covered keys",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "10:36",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:38",
+   "wait": 45
+  },
+  {
+   "clock": "11:23",
+   "wait": 45
+  },
+  {
+   "clock": "12:08",
+   "do": "say:tomar-m1:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 17.184753313074808,
+    "z": -12.719707387613344
+   }
+  },
+  {
+   "clock": "12:09",
+   "wait": 10
+  },
+  {
+   "clock": "12:19",
+   "wait": 20
+  },
+  {
+   "clock": "12:39",
+   "do": "drop:barricade",
+   "cmd": {
+    "type": "drop",
+    "x": 34,
+    "z": -6
+   },
+   "at": {
+    "x": 34,
+    "z": -6
+   }
+  },
+  {
+   "clock": "12:41",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "12:43",
+   "wait": 20
+  },
+  {
+   "clock": "13:03",
+   "do": "whisper:sena:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "13:04",
+   "do": "situation:afwaah",
+   "cmd": {
+    "type": "situation",
+    "id": "afwaah"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "13:06",
+   "do": "say:afwaah:forward:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -13.266894251520092,
+    "z": -32.83265833932803
+   }
+  },
+  {
+   "clock": "13:07",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "13:10",
+   "do": "say:afwaah:stage:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 0,
+    "z": -6.149408134566739
+   }
+  }
+ ]
+}

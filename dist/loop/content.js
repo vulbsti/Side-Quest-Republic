@@ -541,8 +541,6 @@ Object.assign(LINES, {
   'detained-aftermath': [['street', 'Two constables take an arm each. The bus door hisses open.']],
   'detained-asked': [['street', 'He looks at you for a long second. "Theek hai." He actually does it.']],
   'detained-asked-friends': [['sharma', 'Andar.']],
-  'plead-works': [['sharma', 'Arre tum toh wahi ho. Reel wale. Jao jao, ye bus bhar gayi hai waise bhi.']],
-  'plead-fails': [['street', 'You make your case. The constable writes something down. It is not your release.']],
   'released-1730': [['wireless', 'Rao: Sabko chhod do. Paperwork kaun karega. Over.'], ['street', 'The bus door opens and everyone files out, blinking, into the evening.']],
   'released-story': [['street', 'The bus door folds open and you step down into the noise like nothing happened.']],
   'detained-story': [['street', 'Two hands, one elbow, and you are on the bus before you finish your sentence.']],

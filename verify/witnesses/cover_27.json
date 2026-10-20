@@ -1,0 +1,201 @@
+{
+ "name": "cover 27",
+ "note": "1 covered keys",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "wait": 20
+  },
+  {
+   "clock": "10:53",
+   "wait": 20
+  },
+  {
+   "clock": "11:13",
+   "wait": 3
+  },
+  {
+   "clock": "11:16",
+   "do": "pester:c1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "11:18",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "11:21",
+   "wait": 10
+  },
+  {
+   "clock": "11:31",
+   "do": "say:chabi:intro:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -13.249856443533723,
+    "z": -32.827736305909745
+   }
+  },
+  {
+   "clock": "11:32",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "11:35",
+   "do": "talk:kabir",
+   "cmd": {
+    "type": "talk",
+    "to": "kabir"
+   },
+   "at": {
+    "x": -4.6,
+    "z": -2.4
+   }
+  },
+  {
+   "clock": "11:36",
+   "do": "say:kabir-m-arrive:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -2.9199978733614387,
+    "z": -3.7628738267344137
+   }
+  },
+  {
+   "clock": "11:37",
+   "wait": 45
+  },
+  {
+   "clock": "12:22",
+   "do": "whisper:cannon:sana",
+   "cmd": {
+    "type": "whisper",
+    "to": "sana",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:23",
+   "wait": 10
+  },
+  {
+   "clock": "12:33",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "12:34",
+   "do": "situation:mira-mic",
+   "cmd": {
+    "type": "situation",
+    "id": "mira-mic"
+   },
+   "at": {
+    "x": 2,
+    "z": -5
+   }
+  },
+  {
+   "clock": "12:35",
+   "wait": 20
+  },
+  {
+   "clock": "12:55",
+   "wait": 10
+  },
+  {
+   "clock": "13:05",
+   "wait": 20
+  },
+  {
+   "clock": "13:25",
+   "do": "say:mira-mic:speech:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 2.16179883518036,
+    "z": -9.732911947289283
+   }
+  },
+  {
+   "clock": "13:26",
+   "finish": true
+  }
+ ]
+}

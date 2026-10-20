@@ -1,0 +1,1924 @@
+{
+ "name": "cover 12",
+ "note": "6 covered keys",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "whisper:cannon:sana",
+   "cmd": {
+    "type": "whisper",
+    "to": "sana",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "10:03",
+   "wait": 8
+  },
+  {
+   "clock": "10:11",
+   "do": "whisper:sena:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "10:12",
+   "do": "pester:c3:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:14",
+   "do": "whisper:sena:sana",
+   "cmd": {
+    "type": "whisper",
+    "to": "sana",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "10:16",
+   "do": "whisper:biryani:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "10:17",
+   "do": "whisper:minister:dev",
+   "cmd": {
+    "type": "whisper",
+    "to": "dev",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:18",
+   "do": "whisper:cannon:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "10:19",
+   "do": "whisper:minister:zoya",
+   "cmd": {
+    "type": "whisper",
+    "to": "zoya",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": -3,
+    "z": 30
+   }
+  },
+  {
+   "clock": "10:22",
+   "do": "pester:c3:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:24",
+   "do": "whisper:cannon:ravi",
+   "cmd": {
+    "type": "whisper",
+    "to": "ravi",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -19.5,
+    "z": -31.5
+   }
+  },
+  {
+   "clock": "10:27",
+   "do": "pester:sharma:career",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "career"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "10:31",
+   "do": "whisper:cannon:zoya",
+   "cmd": {
+    "type": "whisper",
+    "to": "zoya",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -7.5,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:34",
+   "do": "pester:sharma:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "10:38",
+   "wait": 14
+  },
+  {
+   "clock": "10:52",
+   "do": "pester:sharma:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "10:52",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:55",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "10:58",
+   "do": "say:chabi:intro:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -13.45347177575478,
+    "z": -32.886558512995826
+   }
+  },
+  {
+   "clock": "10:59",
+   "do": "situation:career-counselling",
+   "cmd": {
+    "type": "situation",
+    "id": "career-counselling"
+   },
+   "at": {
+    "x": 38,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "11:02",
+   "do": "say:career-counselling:intro:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 33.857610828187916,
+    "z": -6.4676348566107364
+   }
+  },
+  {
+   "clock": "11:03",
+   "do": "pester:c3:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:05",
+   "do": "talk:c5",
+   "cmd": {
+    "type": "talk",
+    "to": "c5"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "11:08",
+   "do": "say:career-counselling:panel:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 54.85099960776705,
+    "z": -1.7163334640776569
+   }
+  },
+  {
+   "clock": "11:08",
+   "do": "say:career-counselling:tomar:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": 54.85099960776705,
+    "z": -1.7163334640776569
+   }
+  },
+  {
+   "clock": "11:09",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "11:13",
+   "do": "pester:c3:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "career"
+   },
+   "at": {
+    "x": 18,
+    "z": -14
+   }
+  },
+  {
+   "clock": "11:14",
+   "do": "pester:c3:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 18,
+    "z": -14
+   }
+  },
+  {
+   "clock": "11:15",
+   "do": "pester:sharma:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "11:17",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -1.5,
+    "z": -33.5
+   }
+  },
+  {
+   "clock": "11:23",
+   "do": "say:meera-m-content:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 0.17373352576670476,
+    "z": -31.826266474233286
+   }
+  },
+  {
+   "clock": "11:23",
+   "wait": 11
+  },
+  {
+   "clock": "11:34",
+   "wait": 7
+  },
+  {
+   "clock": "11:41",
+   "do": "pester:c3:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "career"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:44",
+   "do": "pester:c5:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "11:46",
+   "do": "pester:c4:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "11:50",
+   "wait": 7
+  },
+  {
+   "clock": "11:57",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "11:58",
+   "do": "pester:c5:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "cute"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "12:02",
+   "do": "pester:c4:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "cute"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "12:06",
+   "do": "pester:c5:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "12:09",
+   "do": "pester:c1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "12:14",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "12:16",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "12:19",
+   "do": "say:chabi:rishta:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -13.20212525870457,
+    "z": -32.8139472969591
+   }
+  },
+  {
+   "clock": "12:19",
+   "do": "pester:c1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "12:23",
+   "wait": 4
+  },
+  {
+   "clock": "12:27",
+   "do": "pester:sharma:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "12:31",
+   "do": "lane",
+   "cmd": null,
+   "at": {
+    "x": 10,
+    "z": -13.240000000000023
+   },
+   "hold": 3
+  },
+  {
+   "clock": "12:36",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "12:37",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -5.3,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "12:38",
+   "do": "say:meera-d-viral:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -3.2037991814240305,
+    "z": -6.666561395872838
+   }
+  },
+  {
+   "clock": "12:39",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "12:40",
+   "do": "hide:stage",
+   "cmd": null,
+   "at": {
+    "x": 0,
+    "z": -5.5
+   },
+   "hold": 3
+  },
+  {
+   "clock": "12:43",
+   "do": "stance:block",
+   "cmd": {
+    "type": "stance",
+    "stance": "block"
+   },
+   "at": {
+    "x": 0.42331707941763486,
+    "z": -6.365940904428546
+   }
+  },
+  {
+   "clock": "12:44",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "12:45",
+   "do": "say:mira-mic:speech:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.165658482331968,
+    "z": -4.548342590756944
+   }
+  },
+  {
+   "clock": "12:45",
+   "do": "pester:c4:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "12:46",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:47",
+   "do": "say:bus-andar:inside:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:48",
+   "wait": 14
+  },
+  {
+   "clock": "13:02",
+   "do": "say:mira-mic:neta:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:03",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:03",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:04",
+   "do": "say:bus-andar:pandey:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:05",
+   "do": "say:bus-andar:pandey:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:06",
+   "do": "say:bus-andar:inside:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:06",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:07",
+   "wait": 14
+  },
+  {
+   "clock": "13:21",
+   "wait": 13
+  },
+  {
+   "clock": "13:34",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:35",
+   "do": "say:bus-andar:uncle:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:36",
+   "do": "take:megaphone",
+   "cmd": {
+    "type": "take",
+    "object": "megaphone"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  },
+  {
+   "clock": "13:36",
+   "do": "pester:c1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "13:39",
+   "do": "pester:c3:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "cute"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "13:41",
+   "do": "pester:sharma:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "cute"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "13:43",
+   "do": "drop:cp",
+   "cmd": {
+    "type": "drop",
+    "x": -4,
+    "z": -33
+   },
+   "at": {
+    "x": -4,
+    "z": -33
+   }
+  },
+  {
+   "clock": "13:49",
+   "do": "situation:mummy-call",
+   "cmd": {
+    "type": "situation",
+    "id": "mummy-call"
+   },
+   "at": {
+    "x": 33,
+    "z": -1.5
+   }
+  },
+  {
+   "clock": "13:52",
+   "do": "say:mummy-call:call:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 29.325311447647085,
+    "z": -4.562240460294101
+   }
+  },
+  {
+   "clock": "13:53",
+   "do": "pester:c3:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "cute"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "13:54",
+   "do": "pester:c5:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "cute"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "13:58",
+   "do": "pester:c1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "14:02",
+   "do": "film:mummy-call@null",
+   "cmd": {
+    "type": "film"
+   },
+   "at": {
+    "x": 29.325311447647085,
+    "z": -4.562240460294101
+   }
+  },
+  {
+   "clock": "14:04",
+   "do": "lane",
+   "cmd": null,
+   "at": {
+    "x": 10,
+    "z": 5.8399999999999626
+   },
+   "hold": 3
+  },
+  {
+   "clock": "14:08",
+   "do": "pester:r5:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r5",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 57,
+    "z": -3.4000000000000004
+   }
+  },
+  {
+   "clock": "14:12",
+   "do": "situation:cannon-request",
+   "cmd": {
+    "type": "situation",
+    "id": "cannon-request"
+   },
+   "at": {
+    "x": 38,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "14:13",
+   "do": "say:cannon-request:heat:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 42.72426892102669,
+    "z": -4.349503798842954
+   }
+  },
+  {
+   "clock": "14:14",
+   "wait": 11
+  },
+  {
+   "clock": "14:25",
+   "do": "pester:c1:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cute"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "14:29",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "14:31",
+   "do": "prov:p3:join",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p3",
+    "how": "join"
+   },
+   "at": {
+    "x": 2.228231510434656,
+    "z": -5.466830720289985
+   }
+  },
+  {
+   "clock": "14:32",
+   "do": "talk:r1",
+   "cmd": {
+    "type": "talk",
+    "to": "r1"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:35",
+   "do": "say:pandey-t3:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 36.46681691928934,
+    "z": -7.243847468552683
+   }
+  },
+  {
+   "clock": "14:35",
+   "do": "pester:c4:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 6.8,
+    "z": 6.2
+   }
+  },
+  {
+   "clock": "14:38",
+   "do": "pester:c2:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "14:41",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "14:41",
+   "do": "say:bus-andar:inside:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "14:42",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "14:43",
+   "wait": 7
+  },
+  {
+   "clock": "14:50",
+   "do": "pester:sharma:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "14:53",
+   "do": "prov:p2:join",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p2",
+    "how": "join"
+   },
+   "at": {
+    "x": 1.8,
+    "z": -4.3
+   }
+  },
+  {
+   "clock": "14:56",
+   "do": "pester:r3:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r3",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 57,
+    "z": -6.2
+   }
+  },
+  {
+   "clock": "14:59",
+   "do": "pester:r3:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "r3",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 57,
+    "z": -6.2
+   }
+  },
+  {
+   "clock": "15:00",
+   "wait": 10
+  },
+  {
+   "clock": "15:10",
+   "do": "pester:c3:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "15:12",
+   "do": "talk:sana",
+   "cmd": {
+    "type": "talk",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "15:14",
+   "do": "say:sana-water-arrived:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -7.308456983861174,
+    "z": -9.01398928673471
+   }
+  },
+  {
+   "clock": "15:15",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": -8.4,
+    "z": -8.4
+   }
+  },
+  {
+   "clock": "15:16",
+   "do": "pester:c2:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "15:18",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "15:19",
+   "do": "pester:r6:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r6",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -2
+   }
+  },
+  {
+   "clock": "15:23",
+   "do": "film:pester-cannon@parliament",
+   "cmd": {
+    "type": "film"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -2
+   }
+  },
+  {
+   "clock": "15:24",
+   "do": "pester:r1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "15:25",
+   "do": "prov:p1:expose",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p1",
+    "how": "expose"
+   },
+   "at": {
+    "x": -0.4,
+    "z": 1.6
+   }
+  },
+  {
+   "clock": "15:29",
+   "do": "pester:r1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "15:32",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "15:32",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "15:33",
+   "do": "say:bus-andar:pandey:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "15:34",
+   "do": "pester:r2:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r2",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -7.6
+   }
+  },
+  {
+   "clock": "15:38",
+   "do": "pester:r5:career",
+   "cmd": {
+    "type": "pester",
+    "to": "r5",
+    "how": "career"
+   },
+   "at": {
+    "x": 57,
+    "z": -3.4000000000000004
+   }
+  },
+  {
+   "clock": "15:39",
+   "wait": 9
+  },
+  {
+   "clock": "15:48",
+   "wait": 12
+  },
+  {
+   "clock": "16:00",
+   "do": "pester:r2:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r2",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 37.13156095807989,
+    "z": -4.603589363494585
+   }
+  },
+  {
+   "clock": "16:01",
+   "do": "pester:c1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 21.412943372285593,
+    "z": -12.247407457474973
+   }
+  },
+  {
+   "clock": "16:04",
+   "do": "rally:barricade",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 32.6,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "16:08",
+   "do": "pester:c1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "16:11",
+   "do": "take:key",
+   "cmd": {
+    "type": "take",
+    "object": "key"
+   },
+   "at": {
+    "x": 8.55,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:13",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:13",
+   "do": "say:bus-andar:inside:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:14",
+   "wait": 4
+  },
+  {
+   "clock": "16:18",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:19",
+   "wait": 15
+  },
+  {
+   "clock": "16:34",
+   "do": "pester:c4:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "cute"
+   },
+   "at": {
+    "x": 6.8,
+    "z": 6.2
+   }
+  },
+  {
+   "clock": "16:35",
+   "do": "pester:r6:career",
+   "cmd": {
+    "type": "pester",
+    "to": "r6",
+    "how": "career"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -2
+   }
+  },
+  {
+   "clock": "16:39",
+   "do": "pester:r6:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r6",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -2
+   }
+  },
+  {
+   "clock": "16:39",
+   "do": "pester:r1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "16:41",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:42",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:42",
+   "do": "say:bus-andar:pandey:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:43",
+   "do": "pester:r1:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "16:46",
+   "do": "pester:c2:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "16:49",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:50",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:50",
+   "wait": 14
+  },
+  {
+   "clock": "17:04",
+   "do": "say:bus-andar:pandey:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:05",
+   "do": "say:bus-andar:inside:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:06",
+   "do": "prov:p2:join",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p2",
+    "how": "join"
+   },
+   "at": {
+    "x": 1.8,
+    "z": -4.3
+   }
+  },
+  {
+   "clock": "17:07",
+   "do": "prov:p3:report:c4",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p3",
+    "how": "report",
+    "to": "c4"
+   },
+   "at": {
+    "x": 3.55,
+    "z": -0.6499999999999999
+   }
+  },
+  {
+   "clock": "17:08",
+   "do": "pester:r6:career",
+   "cmd": {
+    "type": "pester",
+    "to": "r6",
+    "how": "career"
+   },
+   "at": {
+    "x": 55.4,
+    "z": -2
+   }
+  },
+  {
+   "clock": "17:12",
+   "do": "pester:c5:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "17:12",
+   "do": "talk:c2",
+   "cmd": {
+    "type": "talk",
+    "to": "c2"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "17:16",
+   "do": "say:meena-a1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 4.779703379307396,
+    "z": -26.644741281570465
+   }
+  },
+  {
+   "clock": "17:17",
+   "do": "pester:r5:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "r5",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 57,
+    "z": -3.4000000000000004
+   }
+  },
+  {
+   "clock": "17:21",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:22",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:23",
+   "do": "say:bus-andar:pandey:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:24",
+   "do": "say:bus-andar:inside:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:24",
+   "do": "say:bus-andar:uncle:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:25",
+   "do": "say:bus-andar:inside:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:26",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:27",
+   "wait": 13
+  },
+  {
+   "clock": "17:40",
+   "do": "take:key",
+   "cmd": {
+    "type": "take",
+    "object": "key"
+   },
+   "at": {
+    "x": 8.55,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:40",
+   "do": "plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:41",
+   "do": "say:bus-andar:inside:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:42",
+   "do": "say:bus-andar:inside:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:43",
+   "do": "say:bus-andar:pandey:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:43",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "17:45",
+   "do": "take:key",
+   "cmd": {
+    "type": "take",
+    "object": "key"
+   },
+   "at": {
+    "x": 8.55,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:46",
+   "wait": 14
+  }
+ ]
+}

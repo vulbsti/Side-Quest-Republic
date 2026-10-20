@@ -10,72 +10,23 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
-   },
-   "at": {
-    "x": -18,
-    "z": -30.8
-   }
+   "wait": 20
   },
   {
-   "clock": "10:05",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": 6.2,
-    "z": -37.2
-   }
-  },
-  {
-   "clock": "10:06",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:09",
-   "do": "whisper:cannon:nikhil",
-   "cmd": {
-    "type": "whisper",
-    "to": "nikhil",
-    "rumour": "cannon"
-   },
-   "at": {
-    "x": -5.703777163340657,
-    "z": 34.95123999245342
-   }
-  },
-  {
-   "clock": "10:12",
-   "do": "pester:c3:cannon",
+   "clock": "10:20",
+   "do": "pester:c4:cannon",
    "cmd": {
     "type": "pester",
-    "to": "c3",
+    "to": "c4",
     "how": "cannon"
    },
    "at": {
-    "x": 19,
-    "z": -11
+    "x": 7,
+    "z": 1
    }
   },
   {
-   "clock": "10:15",
-   "wait": 3
-  },
-  {
-   "clock": "10:18",
+   "clock": "10:22",
    "finish": true
   }
  ]

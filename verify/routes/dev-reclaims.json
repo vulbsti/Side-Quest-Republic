@@ -1,0 +1,13 @@
+{
+ "name": "route dev-reclaims",
+ "note": "Take Dev's megaphone while he is on his chai break and still be holding it by the stage when he comes back for it at 14:45.",
+ "tempo": "long",
+ "expect": { "history": "said:dev-reclaims" },
+ "trace": [
+  { "do": "go:stage", "cmd": null, "at": { "x": -3, "z": -9 }, "hold": 1 },
+  { "wait": 258 },
+  { "do": "take:megaphone", "cmd": { "type": "take", "object": "megaphone" }, "at": null },
+  { "wait": 30 },
+  { "finish": true }
+ ]
+}

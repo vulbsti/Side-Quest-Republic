@@ -10,42 +10,38 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "whisper:biryani:asha",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
    "cmd": {
-    "type": "whisper",
-    "to": "asha",
-    "rumour": "biryani"
+    "type": "talk",
+    "to": "dev"
    },
    "at": {
-    "x": -18,
-    "z": -34.2
+    "x": 5.2,
+    "z": -3.2
    }
   },
   {
-   "clock": "10:05",
-   "do": "hide:stage",
-   "cmd": null,
-   "at": {
-    "x": 0,
-    "z": -5.5
-   },
-   "hold": 1
+   "clock": "10:22",
+   "wait": 10
   },
   {
-   "clock": "10:08",
-   "do": "whisper:biryani:mira",
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
    "cmd": {
-    "type": "whisper",
-    "to": "mira",
-    "rumour": "biryani"
+    "type": "say",
+    "option": 1
    },
    "at": {
-    "x": 0,
-    "z": -14.5
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
    }
   },
   {
-   "clock": "10:09",
+   "clock": "10:33",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -57,7 +53,20 @@
    }
   },
   {
-   "clock": "10:11",
+   "clock": "10:36",
+   "do": "pester:c2:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "10:37",
    "do": "rally:stage",
    "cmd": {
     "type": "rally"
@@ -68,15 +77,20 @@
    }
   },
   {
-   "clock": "10:13",
-   "wait": 10
+   "clock": "10:39",
+   "do": "pester:c4:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
   },
   {
-   "clock": "10:23",
-   "wait": 20
-  },
-  {
-   "clock": "10:43",
+   "clock": "10:40",
    "finish": true
   }
  ]

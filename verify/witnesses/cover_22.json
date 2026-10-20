@@ -1,0 +1,140 @@
+{
+ "name": "cover 22",
+ "note": "2 covered keys",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "whisper:biryani:asha",
+   "cmd": {
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "10:05",
+   "wait": 10
+  },
+  {
+   "clock": "10:15",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:17",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "10:20",
+   "do": "give:sana",
+   "cmd": {
+    "type": "give",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "10:22",
+   "do": "whisper:cannon:ravi",
+   "cmd": {
+    "type": "whisper",
+    "to": "ravi",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -19.5,
+    "z": -31.5
+   }
+  },
+  {
+   "clock": "10:24",
+   "do": "take:speaker",
+   "cmd": {
+    "type": "take",
+    "object": "speaker"
+   },
+   "at": {
+    "x": -18,
+    "z": -30.8
+   }
+  },
+  {
+   "clock": "10:25",
+   "wait": 20
+  },
+  {
+   "clock": "10:45",
+   "do": "pester:c3:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:48",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:50",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": -8.4,
+    "z": -8.4
+   }
+  },
+  {
+   "clock": "10:51",
+   "do": "film:pester-detainme@null",
+   "cmd": {
+    "type": "film"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:52",
+   "finish": true
+  }
+ ]
+}

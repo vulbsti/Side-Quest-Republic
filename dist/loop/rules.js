@@ -848,6 +848,8 @@ function detainPlayer(s, why) {
     pl.carrying = null;
   }
   disbandCrew(s, true);
+  const n = s.people.nikhil; // he can't follow you onto a police bus
+  if (n.mode === 'follow') { n.mode = 'lost'; n.path = []; emit(s, 'nikhil-lost-again'); }
   for (const p of s.provocateurs) if (p.state === 'joined') { p.state = 'acting'; goTo(p, p.slot); }
   pl.detained = true; pl.stance = null;
   if (s.police.charge && !s.police.charge.over && s.showdown) s.showdown.playerDetained = true; // taken in the charge
@@ -1210,7 +1212,10 @@ function updateAshaDevSana(s) {
   if (d.mode === 'backForMeg' && arrived(d)) {
     const m = s.objects.megaphone;
     if (onGround(m) && dist(m, d) < 3) { m.holder = 'dev'; d.carrying = 'megaphone'; }
-    else emit(s, 'dev-missing-meg');
+    else if (m.holder === 'player' && dist(s.player, d) < 6) { // caught you with it
+      m.holder = 'dev'; d.carrying = 'megaphone'; s.player.carrying = null;
+      emit(s, 'dev-reclaims', { link: 'owner-reclaims' });
+    } else emit(s, 'dev-missing-meg');
     d.mode = 'stage'; goTo(d, SPOTS.devStage);
   }
   if (d.mode === 'toBarricade' && arrived(d)) d.mode = 'waiting';

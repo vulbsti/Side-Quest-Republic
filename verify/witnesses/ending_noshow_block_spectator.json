@@ -10,11 +10,67 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "whisper:biryani:asha",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
    "cmd": {
-    "type": "whisper",
-    "to": "asha",
-    "rumour": "biryani"
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "wait": 20
+  },
+  {
+   "clock": "10:53",
+   "wait": 20
+  },
+  {
+   "clock": "11:13",
+   "wait": 3
+  },
+  {
+   "clock": "11:16",
+   "do": "pester:c1:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "detainme"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "11:18",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
    },
    "at": {
     "x": -18,
@@ -22,28 +78,23 @@
    }
   },
   {
-   "clock": "10:05",
-   "do": "whisper:minister:ravi",
-   "cmd": {
-    "type": "whisper",
-    "to": "ravi",
-    "rumour": "minister"
-   },
-   "at": {
-    "x": -19.5,
-    "z": -31.5
-   }
-  },
-  {
-   "clock": "10:07",
-   "wait": 20
-  },
-  {
-   "clock": "10:27",
+   "clock": "11:21",
    "wait": 10
   },
   {
-   "clock": "10:37",
+   "clock": "11:31",
+   "do": "say:chabi:intro:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -13.249856443533723,
+    "z": -32.827736305909745
+   }
+  },
+  {
+   "clock": "11:32",
    "do": "rally:stage",
    "cmd": {
     "type": "rally"
@@ -54,7 +105,57 @@
    }
   },
   {
-   "clock": "10:40",
+   "clock": "11:35",
+   "do": "talk:kabir",
+   "cmd": {
+    "type": "talk",
+    "to": "kabir"
+   },
+   "at": {
+    "x": -4.6,
+    "z": -2.4
+   }
+  },
+  {
+   "clock": "11:36",
+   "do": "say:kabir-m-arrive:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -2.9199978733614387,
+    "z": -3.7628738267344137
+   }
+  },
+  {
+   "clock": "11:37",
+   "do": "pester:c3:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:38",
+   "do": "whisper:minister:meera",
+   "cmd": {
+    "type": "whisper",
+    "to": "meera",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": -1.5,
+    "z": -33.5
+   }
+  },
+  {
+   "clock": "11:41",
    "do": "rally:stage",
    "cmd": {
     "type": "rally"
@@ -65,11 +166,15 @@
    }
   },
   {
-   "clock": "10:41",
-   "wait": 3
+   "clock": "11:43",
+   "wait": 10
   },
   {
-   "clock": "10:44",
+   "clock": "11:53",
+   "wait": 45
+  },
+  {
+   "clock": "12:38",
    "finish": true
   }
  ]

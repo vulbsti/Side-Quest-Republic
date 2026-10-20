@@ -6,6 +6,7 @@
 //   s      the engine's day (rules.js createDay), plain JSON, clones exactly
 //   trace  the macro steps that led here, replayable from 10:00 with replay()
 //   log    what the player saw or heard: [{ t, clock, kind, channel, who, key, text, seen }]
+import { readFileSync } from 'node:fs';
 import * as R from '../../dist/loop/rules.js';
 import { routeEvent, engineView, chatFor, tickerFor, reelsFor } from '../../dist/loop/present.js';
 import { createDriver, targetOf as driveTarget, ticksFor, STEP, JOG, FEEDBACK_SECONDS } from '../../dist/loop/drive.js';
@@ -87,15 +88,21 @@ export { targetOf };
  * What the client itself shows after a command, before any engine line (main.js: talk bubble, toasts,
  * the record flash, the carrying HUD, a scene's cinematic). raw: the client would toast a machine code.
  */
+// The codes the client turns into words (main.js SAY); anything else would reach the screen as a code.
+const CLIENT_WORDS = (() => {
+  const m = readFileSync(new URL('../../dist/loop/main.js', import.meta.url), 'utf8').match(/const SAY = \{([\s\S]*?)\n\};/);
+  return new Set(m ? [...m[1].matchAll(/'([a-z-]+)':/g)].map((x) => x[1]) : []);
+})();
 export function clientFeedback(cmd, r, before, s) {
   const code = r && !r.ok && r.say ? r.say : null;
-  const raw = code && /^[a-z]+(-[a-z]+)*$/.test(code) ? code : null;
+  const raw = code && /^[a-z]+(-[a-z]+)*$/.test(code) && !CLIENT_WORDS.has(code) ? code : null;
   switch (cmd.type) {
     case 'take': case 'drop': case 'give': return { shown: before.carrying !== s.player.carrying, raw: null };
     case 'talk': return { shown: !!r?.line, raw: null };
     case 'film': case 'rally': case 'stance': return { shown: true, raw };
     case 'pester': case 'provocateur': case 'whisper': return { shown: !r?.ok, raw };
-    case 'say': case 'leave': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
+    case 'leave': return { shown: true, raw: null }; // the card closes
+    case 'say': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
 
     default: return { shown: false, raw };
   }

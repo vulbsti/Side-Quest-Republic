@@ -1,0 +1,61 @@
+{
+ "name": "situation career-counselling:fail",
+ "note": "",
+ "tempo": "long",
+ "expect": {
+  "history": "situation:career-counselling:fail"
+ },
+ "trace": [
+  {
+   "clock": "10:00",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:23",
+   "do": "situation:career-counselling",
+   "cmd": {
+    "type": "situation",
+    "id": "career-counselling"
+   },
+   "at": {
+    "x": 38,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "10:26",
+   "do": "say:career-counselling:intro:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 33.78295994653939,
+    "z": -6.503094025393784
+   }
+  }
+ ]
+}

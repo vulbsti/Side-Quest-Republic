@@ -43,8 +43,11 @@ const step = async (label, fn, wait = 3000) => { await page.evaluate(fn); await 
 await step('2-yadav', () => { const L = window.__loop, d = L.day, o = d.officers.c1; Object.assign(L.sim.player, { x: o.x + 1.5, z: o.z }); Object.assign(d.player, { x: o.x + 1.5, z: o.z }); L.act(d, { type: 'talk', to: 'c1' }); });
 // Detained at 14:30: the bus-andar card.
 await step('3-detained', () => { const L = window.__loop, d = L.day; L.advance(d, L.at(14, 30) - d.t); L.snap(); const o = d.officers.c3; Object.assign(d.player, { x: o.x, z: o.z }); d.player.rep.heat = 60; L.act(d, { type: 'pester', to: 'c3', how: 'detainme' }); }, 2000);
-await step('4-bus-andar', () => { const L = window.__loop; L.act(L.day, { type: 'plead' }); }, 9000);
-const state = await page.evaluate(() => ({ convo: window.__loop.day.story.convo?.id ?? null, choices: !document.querySelector('#choices').classList.contains('hidden'), title: document.querySelector('#choicesTitle')?.textContent, items: [...document.querySelectorAll('#choicesList button')].map((b) => b.textContent.trim()) }));
+// The card opens once the opening beats have played. Software GL runs at a frame or two a second, so play them on the engine clock.
+await page.evaluate(() => { const L = window.__loop; L.act(L.day, { type: 'plead' }); L.advance(L.day, 12); });
+await page.waitForFunction(() => !document.querySelector('#choices').classList.contains('hidden'), null, { timeout: 180000, polling: 1000 }).catch(() => {});
+await shot('4-bus-andar');
+const state = await page.evaluate(() => ({ convo: window.__loop.day.story.convo?.id ?? null, mode: window.__loop.mode, cine: !!window.__loop.cine.active, queue: (window.__loop.day.story.queue || []).length, t: window.__loop.day.t, choices: !document.querySelector('#choices').classList.contains('hidden'), title: document.querySelector('#choicesTitle')?.textContent, items: [...document.querySelectorAll('#choicesList button')].map((b) => b.textContent.trim()) }));
 console.log(JSON.stringify(state, null, 1));
 console.log(errors.length ? `errors:\n${[...new Set(errors)].join('\n')}` : 'no page errors');
 await browser.close(); server.close();
