@@ -9,6 +9,7 @@ const FOV_BASE = 57;
 const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), tmpDir = new THREE.Vector3(), tmpPerp = new THREE.Vector3(), tmpFace = new THREE.Vector3();
 const camFrom = new THREE.Vector3(), lookFrom = new THREE.Vector3(), camTo = new THREE.Vector3(), lookTo = new THREE.Vector3(), lookNow = new THREE.Vector3();
 
+const SWING = [0, 0.6, -0.6, 1.2, -1.2, Math.PI / 2, -Math.PI / 2, 2.2, -2.2];
 const beatLength = (b) => (b.line ? THREE.MathUtils.clamp(1.5 + b.line.length * 0.052, 2, 6.8) : 1.4);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -18,7 +19,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
  *  nameOf(id) -> display name
  *  onReact(kind, beat) called for 'laugh' | 'silence' | 'cut' and for every spoken beat ('line')
  */
-export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onReact = () => {} }) {
+export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onReact = () => {}, clear = null }) {
   const el = {
     root: dom, caps: dom.querySelector('#cineCaps'), title: dom.querySelector('#cineTitle'),
     frame: dom.querySelector('#cineFrame'), timer: dom.querySelector('#cineTimer'), skip: dom.querySelector('#cineSkip'),
@@ -130,7 +131,22 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
     tmpDir.normalize();
     const F = faceOf(who, tmpDir, tmpFace);
     tmpPerp.set(F.z, 0, -F.x);
-    if (kind === 'close') { out.copy(S).addScaledVector(F, 1.35).addScaledVector(tmpPerp, 0.3); out.y = S.y + 0.02; look.copy(S); look.y -= 0.05; return 36; }
+    if (kind === 'close') {
+      // In front of the face; if a seat back, a wall or another body is in the way, swing round the face
+      // (a bus window, a three-quarter angle) until the eye line is clear.
+      look.copy(S); look.y -= 0.05;
+      let best = null, bestFree = -1;
+      for (const a of SWING) {
+        const c = Math.cos(a), s = Math.sin(a), fx = F.x * c - F.z * s, fz = F.x * s + F.z * c;
+        tmpB.set(S.x + fx * 1.35 + fz * 0.3, S.y + 0.02, S.z + fz * 1.35 - fx * 0.3);
+        const len = tmpB.distanceTo(look), free = clear ? Math.min(len, clear(look, tmpB)) / len : 1;
+        if (free > bestFree + 0.05) { bestFree = free; best = tmpPerp.clone().copy(tmpB); }
+        if (free >= 0.98) break;
+      }
+      out.copy(best);
+      if (bestFree < 0.98) out.lerpVectors(look, out, Math.max(0.35, bestFree - 0.08));
+      return 36;
+    }
     if (kind === 'ots') {
       // Behind the listener only if the speaker is actually facing them; otherwise a two-shot from the speaker's front.
       if (F.dot(tmpDir) > 0.5) { out.copy(L).addScaledVector(tmpDir, 0.8).addScaledVector(tmpPerp, -0.45); out.y = L.y + 0.1; look.copy(S); look.y -= 0.05; return 42; }
@@ -217,6 +233,11 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
       else if (phase === 'laugh') fov = shot('wide', it.b.who, it.listener, camTo, lookTo);
       else if (phase === 'cut' || phase === 'silence') fov = it.listener ? shot('close', it.listener, it.b.who, camTo, lookTo) : false;
       else fov = false; // hold: keep the last shot
+      if (fov && clear) {
+        // Never cut to a camera inside a wall or a body: pull it in along the eye line until it is clear.
+        const len = camTo.distanceTo(lookTo), free = clear(lookTo, camTo);
+        if (free < len) camTo.lerpVectors(lookTo, camTo, Math.max(0.3, (free - 0.15) / len));
+      }
       if (fov) {
         // Hard cut: jump straight there, then push in slowly.
         camFrom.copy(camTo).addScaledVector(tmpDir.subVectors(camTo, lookTo).normalize(), 0.35);

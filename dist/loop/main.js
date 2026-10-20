@@ -9,13 +9,13 @@ import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES 
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
 import * as R from './rules.js?v=6';
-import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=6';
+import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=7';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
   equipCap, equipProvocateur, BARRICADE_LINES,
 } from './props.js?v=2';
-import { createCinematic } from './cinematic.js?v=2';
+import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 
 const { createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
@@ -276,7 +276,8 @@ function placeProps() {
   world.obstacles.push(shuttleObstacle);
   shuttle.rotation.y = 0;
   shuttleSigns = new THREE.Group();
-  for (const side of [-1, 1]) { const s = sign('DELHI POLICE · DETENTION', 4.2, 0.5, '#f1f1ea', '#1d3d7a'); s.position.set(side * 1.45, 2.55, 0); s.rotation.y = side * Math.PI / 2; shuttleSigns.add(s); }
+  // Banners above the windows (not across them), so you can see who is inside.
+  for (const side of [-1, 1]) { const s = sign('DELHI POLICE · DETENTION', 4.2, 0.42, '#f1f1ea', '#1d3d7a'); s.position.set(side * 1.72, 3.02, 0); s.rotation.y = side * Math.PI / 2; shuttleSigns.add(s); }
   shuttleSigns.visible = false;
   world.scene.add(shuttleSigns);
 
@@ -1440,7 +1441,7 @@ function showEnding() {
       <div class="endcard">
         <div class="role role-${esc(e.role || 'spectator')}"><small>YOUR ROLE</small><b>${esc(role[0])}</b><span>${esc(role[1])}</span></div>
         <dl>
-          <dt>Where it broke out</dt><dd>${esc(where)}</dd>
+          <dt>${when ? 'Where it broke out' : 'Where the day ended up'}</dt><dd>${esc(where)}</dd>
           <dt>How bad</dt><dd><span class="sev"><i style="width:${clamp(sv.n, 3, 100)}%"></i></span>${esc(sv.word)}</dd>
           <dt>Who they went after</dt><dd>${esc(targets)}</dd>
           <dt>What the protesters did</dt><dd>${esc(stance)}</dd>
@@ -1613,6 +1614,20 @@ function lockWhy(req) {
   if (m) return `needs ${nameOf(m[0])} ${m[1].join(' or ')}`;
   if (req.flags?.length) return 'something has to happen first';
   return 'not yet';
+}
+/** How far the eye line from look toward cam is clear of solid, visible things (for cutting cinematic shots). */
+const shotRay = new THREE.Raycaster(), _sd = new THREE.Vector3();
+function isShown(o) { for (let x = o; x; x = x.parent) if (!x.visible) return false; return true; }
+function shotClear(look, cam) {
+  _sd.subVectors(cam, look); const len = _sd.length(); if (len < 1e-3) return 0;
+  shotRay.set(look, _sd.normalize()); shotRay.near = 0.28; shotRay.far = len;
+  for (const h of shotRay.intersectObjects(world.scene.children, true)) {
+    const o = h.object, m = o.material;
+    if (!o.isMesh || o.isInstancedMesh && o.count === 0 || (m && (m.transparent && m.opacity < 0.6 || m.visible === false))) continue;
+    if (!isShown(o)) continue;
+    return h.distance;
+  }
+  return len;
 }
 // Dev hook: play a scene by id (or a scene object) without the engine.
 function devPlayScene(idOrData) {
@@ -1802,15 +1817,17 @@ function camera(dt) {
   if (S.detained(day)) {
     if (playerSeated) {
       // Through the window, close: you on your seat, the others behind you, the street beyond the glass.
-      camTarget.set(playerModel.position.x + 0.2, playerModel.position.y + 0.95, playerModel.position.z + 0.3);
-      camDesired.set(shuttle.position.x - 3.6, playerModel.position.y + 1.7, playerModel.position.z + 2.6);
+      camTarget.set(playerModel.position.x + 0.3, playerModel.position.y + 0.9, playerModel.position.z + 0.6);
+      camDesired.set(shuttle.position.x - 3.2, playerModel.position.y + 1.15, playerModel.position.z + 2.4);
     } else {
       // Looking in at the van from the pavement.
       const dp = R.detentionPos ? R.detentionPos(day) : day.bus;
       camTarget.set(dp.x, 1.6, dp.z);
       camDesired.set(dp.x - 6.5, 3.4, dp.z + 4.5);
     }
-    world.camera.position.lerp(camDesired, 1 - Math.exp(-dt * 4));
+    // A cut, not a long swoop, when you are put on the bus; then a gentle settle.
+    if (world.camera.position.distanceTo(camDesired) > 6) world.camera.position.copy(camDesired);
+    else world.camera.position.lerp(camDesired, 1 - Math.exp(-dt * 4));
     world.camera.lookAt(camTarget);
     return;
   }
@@ -2068,7 +2085,7 @@ function setupInput() {
     world.scene.add(playerModel);
     phone = createPhone($('#phone'), $('#phonePill'), { clock: () => (day ? clockText(day.t) : ''), nameOf: (id) => PEOPLE[id]?.name ?? id });
     cine = createCinematic({
-      camera: world.camera, dom: $('#cine'), actor: actorOf, nameOf,
+      camera: world.camera, dom: $('#cine'), actor: actorOf, nameOf, clear: shotClear,
       onReact: (kind, beat) => {
         const at = actorOf(beat.who) || sim.player;
         if (kind === 'sfx') { const c = SCENE_SFX[beat.sfx]; if (c) audio.cue(c, { pos: at }); }
