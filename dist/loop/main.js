@@ -44,7 +44,7 @@ if (LONG) (R.setTempo ?? R.setSecondsPerMinute)?.(4.0);
 
 // --- optional content and integrations (the writing, audio and asset workstreams) ---------
 const optional = async (path) => { try { return await import(path); } catch { return null; } };
-let SCENES = {}, BARKS = null, PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null }, demo = null;
+let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null }, demo = null;
 /** Audio swap point: the audio workstream provides cue(name, data), phase(name), music(name), chase(on). */
 let audio = { cue() {}, phase() {}, music() {}, chase() {} };
 async function loadOptional() {
@@ -55,9 +55,12 @@ async function loadOptional() {
   demo = dm;
   SCENES = sc?.SCENES ?? dm?.SCENES ?? {};
   BARKS = bk?.BARKS ?? dm?.BARKS ?? null;
+  CALLBACK_BARKS = bk?.CALLBACK_BARKS ?? {};
+  REAL_REELS = ph?.REAL_REELS ?? [];
   PHONE = {
     CAPTIONS: ph?.CAPTIONS ?? dm?.CAPTIONS ?? {}, CHAT: ph?.CHAT ?? dm?.CHAT ?? {}, TICKER: ph?.TICKER ?? dm?.TICKER ?? {},
-    REAL: new Set(ph?.REAL ?? ph?.REAL_INSPIRED ?? dm?.REAL ?? ['bus-key', 'pester-cannon', 'detain-me', 'mummy-call', 'cannon-dance', 'chase']),
+    // Clip kinds that recreate a real reel: from REAL_REELS ids ('real-bus-key' -> 'bus-key') plus the known ones.
+    REAL: new Set([...(ph?.REAL_REELS ?? []).map((r) => String(r.id || '').replace(/^real-/, '')), 'bus-key', 'pester-cannon', 'cannon-dance', 'detain-me', 'chase']),
   };
   const a = au?.createAudio?.() ?? au?.default ?? au?.audio ?? null;
   if (a) setAudio(a);
@@ -84,6 +87,7 @@ const S = {
   provocateurs: (d) => d.provocateurs ?? [],
   director: (d) => d.director ?? null,
   scene: (d) => d.scene ?? null,
+  flags: (d) => (Array.isArray(d.flags) ? d.flags : d.flags && typeof d.flags === 'object' ? Object.keys(d.flags).filter((k) => d.flags[k]) : []),
   barricades: (d) => d.police?.barricades ?? [],
   raf: (d) => d.police?.raf ?? 0,
   cues: (d) => (R.drainCues ? R.drainCues(d) : Array.isArray(d.cues) ? d.cues.splice(0) : []),
@@ -842,11 +846,46 @@ function ambient(dt) {
 // Barks: the crowd and the police talk among themselves, drawn from a shuffled bag per phase and speaker type.
 const bags = {};
 function nextBark(type) {
-  const pool = BARKS?.[phaseNow]?.[type];
-  if (!pool?.length) return null;
+  const base = BARKS?.[phaseNow]?.[type] || [];
+  const extra = flagBarks[type] || [];
+  if (!base.length && !extra.length) return null;
   const k = phaseNow + ':' + type;
-  if (!bags[k]?.length) { bags[k] = pool.slice(); for (let i = bags[k].length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bags[k][i], bags[k][j]] = [bags[k][j], bags[k][i]]; } }
+  if (!bags[k]?.length) { bags[k] = base.concat(extra); for (let i = bags[k].length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bags[k][i], bags[k][j]] = [bags[k][j], bags[k][i]]; } }
   return bags[k].pop();
+}
+// Once a flag is set the crowd remembers: CALLBACK_BARKS lines join that speaker type's bag
+// (mixed into the current bag at once, so they come up soon, and into every refill after).
+const flagBarks = {};
+const flagsSeen = new Set();
+const pendingLines = []; // scene callbacks[flag]: [who, line] said once that person is near you
+function updateFlags() {
+  for (const f of S.flags(day)) {
+    if (flagsSeen.has(f)) continue;
+    flagsSeen.add(f);
+    chatTrigger('flag:' + f);
+    for (const [type, line] of CALLBACK_BARKS[f] || []) {
+      (flagBarks[type] ??= []).push(line);
+      for (const [k, bag] of Object.entries(bags)) if (k.endsWith(':' + type)) bag.splice(Math.floor(Math.random() * (bag.length + 1)), 0, line);
+    }
+    for (const sc of Object.values(SCENES)) for (const l of sc.callbacks?.[f] || []) pendingLines.push(l);
+  }
+  for (let i = pendingLines.length - 1; i >= 0; i--) {
+    const [who, line] = pendingLines[i];
+    const b = bodies[who];
+    if (b?.model.visible && dist(b, sim.player) < 12 && !speakingNow(b)) { say(who, line, 5); pendingLines.splice(i, 1); break; }
+  }
+}
+// Overheard: you hear a scene before you see its marker, from about 15 m away.
+const overheardDone = new Set();
+function overheard() {
+  for (const [id, sc] of Object.entries(SCENES)) {
+    if (overheardDone.has(id) || !sc.overheard?.length) continue;
+    const o = oppCache && oppCache.cmd?.type === 'scene' && oppCache.cmd.id === id ? oppCache : null;
+    const near = o ? o.d < 15 : S.scene(day)?.id === id && S.scene(day)?.state === 'available';
+    if (!near) continue;
+    overheardDone.add(id);
+    sc.overheard.forEach(([who, line], i) => setTimeout(() => { if (mode === 'play') say(who, line, 5); }, i * 2600));
+  }
 }
 const BARK_TYPE = { students: 'student', party: 'party', sena: 'sena', opp: 'opp', constable: 'constable', raf: 'raf' };
 let barkClock = 4;
@@ -937,6 +976,10 @@ function onPhase(ph) {
   phaseBanner(ph);
   chatTrigger('phase:' + ph);
   for (const line of PHONE.TICKER[ph] || []) phone.ticker(line);
+  realReels(ph);
+}
+function realReels(ph) {
+  for (const r of REAL_REELS) if (r.phase === ph) phone.feed({ caption: r.caption, by: r.page || 'reel', kind: r.id?.replace(/^real-/, ''), real: true, realLabel: r.label, comments: r.comments });
 }
 
 // --- player actions ---------------------------------------------------------
@@ -1150,6 +1193,9 @@ function resetDay() {
   ambientClock = 12; talked = {}; blockedFor = 0; streamText = '';
   phaseNow = null; lastClips = 0; sceneShown = null; stung = new Set(); crewBlock = null; detainedShown = false;
   chatQueue.length = 0; lastStingT = -99;
+  flagsSeen.clear(); pendingLines.length = 0; overheardDone.clear();
+  for (const k of Object.keys(flagBarks)) delete flagBarks[k];
+  for (const k of Object.keys(bags)) delete bags[k];
   closeChoices();
   phone.reset();
   for (const b of bubbles.splice(0)) b.el.remove();
@@ -1181,6 +1227,7 @@ function startLoop() {
   phone.chat('Pinky', '⚠️ Forwarded many times: "water cannon aa raha hai Jantar pe??" Kisi ko pata hai?');
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
+  realReels(phaseNow);
   toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, south of here. The stage is in between. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
@@ -1293,13 +1340,24 @@ function closeBoard() {
 
 // --- scenes (reel cinematics) ------------------------------------------------------
 
+function nearestOf(list, pos, pred = () => true) {
+  let best = null, bd = 1e9;
+  for (const b of list) if (b.model.visible && pred(b)) { const d = dist(b, pos); if (d < bd) { bd = d; best = b; } }
+  return best;
+}
 const actorOf = (id) => {
   if (id === 'player') return sim.player;
+  const here = PLACES[cine?.scene?.place] || sim.player;
+  if (id === 'mummy') return bodies.kabir?.model.visible ? bodies.kabir : null; // her voice comes out of Kabir's phone
+  if (id === 'wireless') return nearestOf(police, here) || (bodies.sharma.model.visible ? bodies.sharma : null);
+  if (id === 'raf') return nearestOf(police, here, (b) => b.kind === 'raf') || nearestOf(police, here);
+  if (id === 'crowd') return nearestOf(crowd, here);
   if (bodies[id]) return bodies[id].model.visible ? bodies[id] : null;
   if (officerById.has(id)) return officerById.get(id);
   return null;
 };
-const nameOf = (id) => (id === 'player' ? 'You' : PEOPLE[id]?.name ?? (officerById.get(id)?.label || String(id).replace(/^\w/, (c) => c.toUpperCase())));
+const SPECIAL_NAME = { mummy: 'Mummy', wireless: 'Inspector Rao', raf: 'RAF jawan', crowd: 'Crowd' };
+const nameOf = (id) => (id === 'player' ? 'You' : SPECIAL_NAME[id] ?? PEOPLE[id]?.name ?? (officerById.get(id)?.label || String(id).replace(/^\w/, (c) => c.toUpperCase())));
 let sceneOptionsOpen = null, chatterT = 0;
 /** Watch s.scene: when the engine starts one, play its beats; at the end show its options. */
 function updateScene(dt) {
@@ -1318,7 +1376,8 @@ function updateScene(dt) {
     if (chatterT <= 0) {
       chatterT = 3.6;
       const b = cine.chatterLine(sceneOptionsOpen.data);
-      if (b && bodies[b.who]) say(b.who, b.line, 3.4);
+      const a = b && actorOf(b.who);
+      if (a?.model) bubble(b.who === 'mummy' ? 'kabir' : 'idle:' + b.who, a, nameOf(b.who).toUpperCase() + (b.who === 'mummy' ? ' (PHONE)' : ''), b.line, 3.4);
     }
     const place = PLACES[sceneOptionsOpen.data.place];
     if (place && dist(sim.player, place) > place.r + 8 && choices?.key === 'scene') closeChoices();
@@ -1369,7 +1428,7 @@ function step(dt) {
     day.player.z = sim.player.z;
     busWaits();
     tick(day, STEP);
-    demo?.fill?.(day, STEP);
+    demo?.fill?.(day, STEP, clockMinutes);
     const ph = S.phase(day);
     if (ph !== phaseNow) onPhase(ph);
     handleEvents();
@@ -1414,6 +1473,8 @@ function step(dt) {
   playerModel.rotation.y += turn * Math.min(1, dt * 14);
   ambient(dt);
   barks(dt);
+  updateFlags();
+  overheard();
   updateScene(dt);
   if (choices && bodies[choices.key] && (day.people[choices.key].hidden || dist(sim.player, bodies[choices.key]) > 4)) closeChoices();
   // Chat messages trickle in.
@@ -1663,6 +1724,7 @@ function frame(now) {
     lighting.update(clockMinutes(day.t), dt, { gas: props.gasAt(world.camera.position.x, world.camera.position.z), focus: sim.player });
   }
   camera(dt);
+  document.body.classList.toggle('cine-on', cine.active);
   updateBubbles(dt);
   if (toastTime > 0 && (toastTime -= dt) <= 0) { $('#toast').style.opacity = 0; $('#hud').classList.remove('toasting'); }
   world.renderer.render(world.scene, world.camera);
@@ -1760,7 +1822,7 @@ function setupInput() {
     cine = createCinematic({
       camera: world.camera, dom: $('#cine'), actor: actorOf, nameOf,
       onReact: (kind, beat) => {
-        audio.cue('scene-' + kind, beat);
+        audio.cue(kind === 'sfx' ? 'sfx-' + beat.sfx : 'scene-' + kind, beat);
         if (kind === 'laugh') react('crowd-laugh', actorOf(beat.who) || sim.player);
         if (kind === 'silence') react('awkward-silence', actorOf(beat.who) || sim.player);
       },
@@ -1781,6 +1843,7 @@ function setupInput() {
       startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
       snap: () => { crowdSnap = true; crowdClock = 0; policeClock = 0; },
       playScene: devPlayScene, setAudio,
+      view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },
       showEnding,
     };

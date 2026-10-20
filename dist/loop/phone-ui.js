@@ -81,8 +81,8 @@ export function createPhone(root, pill, { clock = () => '', nameOf = (id) => id,
     const label = String(clip.kind || 'reel').replace(/-/g, ' ').toUpperCase();
     const hue = THUMB[(label.length * 7) % THUMB.length];
     li.innerHTML = `<div class="th" style="background:linear-gradient(160deg,${hue},#0d1714)"><span>${esc(label)}</span>${clip.mine ? '<em>YOUR CLIP</em>' : ''}${clip.later ? '<em class="re">REPOSTED</em>' : ''}</div>
-      <div class="meta"><b>@${esc(clip.by || 'jantar.mantar.memes')}</b>${clip.real ? '<i>inspired by a real reel</i>' : ''}
-      <p>${esc(clip.caption || '')}</p><small>${esc(clip.place || '')}${clip.place ? ' · ' : ''}${esc(clock())} · ${n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n} views</small></div>`;
+      <div class="meta"><b>@${esc(clip.by || 'jantar.mantar.memes')}</b>${clip.real ? `<i>${esc(clip.realLabel || 'inspired by a real reel')}</i>` : ''}
+      <p>${esc(clip.caption || '')}</p><small>${esc(clip.place || '')}${clip.place ? ' · ' : ''}${esc(clock())} · ${n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n} views</small>${clip.comments?.length ? `<q>${esc(clip.comments[0])}</q>` : ''}</div>`;
     add('feed', li, `${clip.mine ? 'Your clip' : '@' + (clip.by || 'reel')}: ${clip.caption || label}`);
   }
   /** A satirical ticker headline. */

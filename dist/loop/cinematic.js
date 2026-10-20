@@ -178,7 +178,8 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
     let html = '', key = '';
     for (const x of timeline) if (T >= x.start && T < x.end && x.b.line) {
       key += x.start;
-      html += `<div class="cap${x.b.who === 'player' ? ' you' : ''}"><b>${esc(nameOf(x.b.who))}</b>${esc(x.b.line)}</div>`;
+      const via = x.b.via === 'phone' ? ' · on the phone' : x.b.via === 'wireless' ? ' · on the wireless' : x.b.via === 'window' ? ' · through the window' : '';
+      html += `<div class="cap${x.b.who === 'player' ? ' you' : ''}${x.b.aside ? ' aside' : ''}"><b>${esc(nameOf(x.b.who))}${via}${x.b.aside ? ' · whispers' : ''}</b>${esc(x.b.line)}</div>`;
     }
     if (key !== captionKey) { captionKey = key; el.caps.innerHTML = html; }
     if (el.timer) el.timer.textContent = `00:${String(Math.floor(T)).padStart(2, '0')}`;
@@ -187,7 +188,7 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
     if (it && T >= it.end) phase = it.b.react || 'hold';
     const shotKey = cur * 10 + (phase === 'line' ? 0 : 1);
     if (shotKey !== lastShot && it) {
-      if (phase === 'line') onReact('line', it.b);
+      if (phase === 'line') { onReact('line', it.b); if (it.b.sfx) onReact('sfx', it.b); }
       else if (it.b.react) onReact(it.b.react, it.b);
       lastShot = shotKey;
       shotIdx++;
@@ -216,7 +217,8 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
   /** While the options are open, people keep talking: the next line to show as a bubble. */
   let chatterI = 0;
   function chatterLine(sceneData) {
-    const pool = (sceneData?.chatter || sceneData?.beats || []).filter((b) => b.line && b.who && b.who !== 'player');
+    const src = sceneData?.idle || sceneData?.chatter || sceneData?.beats || [];
+    const pool = src.map((b) => (Array.isArray(b) ? { who: b[0], line: b[1] } : b)).filter((b) => b.line && b.who && b.who !== 'player');
     if (!pool.length) return null;
     return pool[chatterI++ % pool.length];
   }
