@@ -673,6 +673,7 @@ export const INTENTS = {
 
 // What the protesters did when the charge came, or that it never came.
 export const SHOWDOWNS = {
+  riot: { title: 'Jantar Mantar on fire', text: 'The charge hit the {place} at {t}, and by then nobody was protesting anything. Stones, lathis, smoke. Tomorrow\'s headlines will blame the students.' },
   sitin: { title: 'Sit-in at dusk', text: 'It never boiled over. The crowd sat down at the {place} and stayed into the evening.' },
   hold: { title: 'They held', text: 'The charge hit the {place} at {t}. The protesters sat and linked arms, and the bus filled with the ones who wouldn\'t move.' },
   scatter: { title: 'Everyone ran', text: 'The charge hit the {place} at {t}. Everyone ran, phones up, and spent the evening finding each other.' },

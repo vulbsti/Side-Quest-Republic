@@ -1840,7 +1840,7 @@ export function playerRole(s) {
 /** The ending card, built from the showdown, the player's role, and 3–5 named callbacks. */
 export function endingCard(s) {
   const sd = s.showdown || { charge: false, place: s.director.hotspot, intensity: s.director.intensity, band: s.director.band, target: s.director.target, stance: s.director.stance, chargeAt: null, t: s.t };
-  const outcome = sd.charge ? sd.stance : 'sitin';
+  const outcome = !sd.charge ? 'sitin' : intensityBand(sd.intensity ?? 0) === 'riot' ? 'riot' : sd.stance;
   const role = playerRole(s);
   const fill = (text, d = {}) => text.replace(/\{(\w+)\}/g, (_, k) => (k === 'place' ? PLACES[d.place || sd.place]?.name ?? '' : k === 't' || k === 'at' ? clockText(d[k]) : d[k] ?? ''));
   const mine = s.callbacks.filter((c) => !c.key.startsWith('world-') && CALLBACKS[c.key]);
