@@ -1,0 +1,19 @@
+{
+ "name": "fails no-raw-code",
+ "note": "\"need-aura\"",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  }
+ ]
+}

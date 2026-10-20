@@ -1,0 +1,114 @@
+{
+ "name": "fails prompt-works",
+ "note": "\"Try talking your way off the bus\" (plead) is accepted but shows nothing",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "whisper:biryani:asha",
+   "cmd": {
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "10:05",
+   "wait": 10
+  },
+  {
+   "clock": "10:15",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:17",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "10:20",
+   "wait": 45
+  },
+  {
+   "clock": "11:05",
+   "do": "whisper:sena:nikhil",
+   "cmd": {
+    "type": "whisper",
+    "to": "nikhil",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": -11,
+    "z": 33
+   }
+  },
+  {
+   "clock": "11:09",
+   "do": "drop:stageSpeaker",
+   "cmd": {
+    "type": "drop",
+    "x": 3.2,
+    "z": -10.4
+   },
+   "at": {
+    "x": 3.2,
+    "z": -10.4
+   }
+  },
+  {
+   "clock": "11:13",
+   "do": "pester:c2:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "11:14",
+   "do": "take:key",
+   "cmd": {
+    "type": "take",
+    "object": "key"
+   },
+   "at": {
+    "x": 8.55,
+    "z": -31
+   }
+  },
+  {
+   "clock": "11:15",
+   "do": "prompt:plead",
+   "cmd": {
+    "type": "plead"
+   },
+   "at": {
+    "x": 22,
+    "z": -9
+   }
+  }
+ ]
+}

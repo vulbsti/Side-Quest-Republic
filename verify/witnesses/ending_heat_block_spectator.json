@@ -1,0 +1,56 @@
+{
+ "name": "ending heat · block · spectator",
+ "note": "",
+ "tempo": "long",
+ "expect": {
+  "ending": "heat",
+  "outcome": "block",
+  "role": "spectator"
+ },
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "whisper:biryani:asha",
+   "cmd": {
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "10:05",
+   "wait": 10
+  },
+  {
+   "clock": "10:15",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:17",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "10:20",
+   "finish": true
+  }
+ ]
+}

@@ -2,7 +2,7 @@
 // and a director that turns the day into a showdown the player can bend.
 // Pure module (no DOM, no Three.js) so the whole day can be played by tests.
 // Every value here is either drawn on screen or read by a rule; nothing is decorative.
-import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, PROVOCATEUR_TELLS } from './content.js';
+import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, PROVOCATEUR_TELLS, TALK, AGAIN } from './content.js';
 import { SCENES } from './scenes.js';
 import { CAPTIONS } from './phone.js';
 
@@ -115,9 +115,10 @@ const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const BARRICADE_JAWAN = 'r1'; // the RAF jawan who stands at the barricade beside Sharma from 14:00
 const FRIENDS = ['kabir', 'nikhil', 'mira', 'dev', 'zoya'];
 
-export const dist = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
+export const dist = (a, b) => { const dx = a.x - b.x, dz = a.z - b.z; return Math.sqrt(dx * dx + dz * dz); };
+const PLACE_LIST = Object.entries(PLACES);
 export function placeAt(p) {
-  for (const [id, pl] of Object.entries(PLACES)) if (dist(p, pl) <= pl.r) return id;
+  for (let i = 0; i < PLACE_LIST.length; i++) { const pl = PLACE_LIST[i][1]; if (dist(p, pl) <= pl.r) return PLACE_LIST[i][0]; }
   return null;
 }
 const clamp = (n, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, n));
@@ -210,6 +211,9 @@ export function createDay(opts = {}) {
     clash: null, // { place, live, t, over }
     timers: { arrival: 0, party: 0, speech: 0, march: 0, calm: 0, chase: 0, push: 0, line: 0, leave: 0, lose: 0, block: 0 },
     fired: {}, // rule latches
+    history: {}, // first time each rule fired, each ending: { 'rule:march': t, 'ending:march': t } (read by the verifier)
+    seq: { crew: 0 }, // id counters live in the day, so a cloned or replayed day numbers things the same way
+    talked: {}, // how often the player has heard each person's line for a situation: { 'ravi:searching': 2 }
     schedule: 0,
     events: [],
     cues: [],
@@ -316,7 +320,7 @@ export function detentionPos(s) {
 const ppos = (s) => (s.player.detained ? detentionPos(s) : s.player);
 
 // Routes between named areas. Walkers go via the CP post between CP and the stage, and via midway to the barricade.
-function route(from, to) {
+export function route(from, to) {
   const a = placeAt(from), pts = [];
   const toPlace = placeAt(to);
   if (a === 'metro' && toPlace !== 'metro') pts.push(SPOTS.metroPath);
@@ -375,12 +379,14 @@ function placeLearns(s, rid, place) {
 }
 function spreadRumours(s, dt, cdt) {
   const people = Object.values(s.people).filter((p) => !p.hidden);
+  const placeOf = {};
+  for (const p of people) placeOf[p.id] = placeAt(p);
   for (const [rid, r] of Object.entries(s.rumours)) {
     if (r.dead) continue;
     const knowers = people.filter((p) => r.people[p.id]);
     for (const p of people) {
       if (r.people[p.id] || p.id === 'sharma') continue;
-      const pl = placeAt(p);
+      const pl = placeOf[p.id];
       const near = knowers.some((q) => dist(p, q) <= (q.id === 'asha' ? 6 : 3.5));
       const crowdTells = pl && r.places[pl] && crowdAt(s, pl) >= 4;
       if (near || crowdTells) {
@@ -389,7 +395,7 @@ function spreadRumours(s, dt, cdt) {
       } else r.exposure[p.id] = 0;
     }
     for (const q of knowers) {
-      const pl = placeAt(q);
+      const pl = placeOf[q.id];
       if (!pl || !CROWD_PLACES.includes(pl) || r.places[pl] || crowdAt(s, pl) < 3) continue;
       const k = '@' + pl;
       r.exposure[k] = (r.exposure[k] || 0) + dt;
@@ -402,7 +408,7 @@ function spreadRumours(s, dt, cdt) {
 
 // --- routines (things that happen at a time of day) ----------------------
 
-const SCHEDULE = [
+export const SCHEDULE = [
   [10, 20, (s) => { const z = s.people.zoya; z.mode = 'toFilm'; z.target = 'stage'; walkTo(z, FILM_SPOTS.stage); }],
   [10, 30, (s) => {
     const r = s.people.ravi, sp = s.objects.speaker;
@@ -1227,8 +1233,18 @@ function placeSpeakerOnStage(s) {
   r.mode = 'stage';
 }
 
+/** The player standing in the lane 4–8 m ahead of a moving shuttle: Iqbal stops and honks. */
+export function playerBlocksBus(s) {
+  const b = s.bus, p = s.player;
+  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
+  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
+  const ahead = (p.z - b.z) * dir;
+  return moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8 && !p.detained;
+}
+
 function updateBus(s, dt) {
   const b = s.bus, w = s.objects.water;
+  b.blocked = playerBlocksBus(s);
   if (b.phase === 'parked' || b.phase === 'detention') return;
   b.timer -= dt;
   if (b.phase === 'cp') {
@@ -1245,7 +1261,7 @@ function updateBus(s, dt) {
     if (b.timer <= 0) { if (b.detention) startDetentionBus(s); else b.phase = 'toCP'; }
   } else {
     const target = b.phase === 'toJantar' ? SPOTS.busJantar : SPOTS.busCP;
-    // The client sets blocked while the player stands in the lane ahead; crewBlocked is your crew sitting on the road.
+    // blocked: the player stands in the lane ahead; crewBlocked: your crew sitting on the road.
     const d = target.z - b.z, step = b.blocked || b.crewBlocked ? 0 : BUS.speed * dt;
     if (Math.abs(d) <= step) {
       b.z = target.z;
@@ -1762,6 +1778,7 @@ function runRules(s, cdt) {
     const hot = rule.when(s);
     if (hot && !s.fired[rule.id]) {
       s.fired[rule.id] = true;
+      if (!(('rule:' + rule.id) in s.history)) s.history['rule:' + rule.id] = s.t;
       rule.then(s);
     } else if (!hot && rule.repeat) s.fired[rule.id] = false;
   }
@@ -1806,6 +1823,7 @@ export function finish(s, ending = null) {
   s.over = true;
   s.ending = ending ?? chooseEnding(s);
   s.outcome = endingCard(s);
+  if (s.history) Object.assign(s.history, { ['ending:' + s.ending]: s.t, ['outcome:' + s.outcome.outcome]: s.t, ['role:' + s.outcome.role]: s.t });
   return s;
 }
 
@@ -1881,6 +1899,21 @@ export function levers(s) {
 }
 
 const OWNERS = { key: 'iqbal', speaker: 'ravi', megaphone: 'dev', phone: 'zoya', water: 'sana' };
+// How far each watcher notices you taking something. Officers notice from 12 m.
+export const WITNESS_RANGE = { sharma: 14, iqbal: 9, ravi: 9, zoya: 8, dev: 8, officer: 12 };
+/**
+ * Who can see the player right now: everyone in range, minus anyone canSee(id, body) rules out.
+ * The client passes a sight-line test (walls, buses, kiosks); without one, everyone in range sees you.
+ */
+export function witnesses(s, canSee = () => true) {
+  const out = [], pl = s.player;
+  for (const [id, r] of Object.entries(WITNESS_RANGE)) {
+    const p = s.people[id];
+    if (p && !p.hidden && dist(p, pl) < r && canSee(id, p)) out.push(id);
+  }
+  for (const o of Object.values(s.officers)) if (!o.hidden && dist(o, pl) < WITNESS_RANGE.officer && canSee(o.id, o)) out.push(o.id);
+  return out;
+}
 const REACH = 5; // how close you must be to an officer, a provocateur or a crowd to act on them
 const MOODS = ['bored', 'amused', 'soft'];
 
@@ -1899,7 +1932,7 @@ export function act(s, cmd) {
     const fromDetentionBus = cmd.object === 'key' && s.bus.phase === 'detention' && o.holder === 'hook';
     o.holder = 'player'; pl.carrying = cmd.object;
     if (cmd.object === 'speaker') o.on = false;
-    const seen = new Set(cmd.witnesses || []);
+    const seen = new Set(cmd.witnesses ?? witnesses(s));
     const police = [...seen].filter((id) => isOfficer(s, id) && officerById(s, id).mode !== 'chase');
     const owner = OWNERS[cmd.object];
     if (cmd.object !== 'key') addRep(s, { nuisance: cmd.object === 'water' ? 0 : 8 });
@@ -1990,8 +2023,9 @@ export function act(s, cmd) {
   if (cmd.type === 'talk') {
     const p = s.people[cmd.to];
     if (!p || p.hidden) return { ok: false };
+    const said = talkLine(s, cmd.to);
     if (cmd.to === 'nikhil' && p.mode === 'lost') { p.mode = 'follow'; emit(s, s.nikhilFound ? 'nikhil-follows-again' : 'nikhil-follows'); }
-    return { ok: true };
+    return { ok: true, ...said };
   }
   if (cmd.type === 'whisper') {
     const p = s.people[cmd.to], r = s.rumours[cmd.rumour];
@@ -2063,7 +2097,6 @@ function pester(s, { to, how }) {
   return { ok: true, mood: o.mood };
 }
 
-let crewSeq = 0;
 function rally(s) {
   const pl = s.player, place = placeAt(pl);
   if (!place || !CROWD_PLACES.includes(place) || crowdAt(s, place) < 4 || !nearPlace(pl, place, 0)) return { ok: false, say: 'no-crowd' };
@@ -2075,7 +2108,7 @@ function rally(s) {
   const n = crowdTake(s, place, Math.max(0, Math.min(want, crowdAt(s, place) - 2)));
   if (!n) return { ok: false, say: 'crew-full' };
   for (let i = 0; i < n; i++) {
-    const id = `k${++crewSeq}`;
+    const id = `k${++s.seq.crew}`;
     const c = CROWD_CENTERS[place];
     s.crew[id] = { id, x: c.x + (i % 3) - 1, z: c.z + Math.floor(i / 3), path: [], mode: 'follow' };
     pl.crew.push(id);
@@ -2336,6 +2369,91 @@ export function opportunities(s, pos = s.player, radius = 10) {
   // unless the best thing is something rare or urgent.
   const worth = real[0] && (s.t < at(14, 0) || (URGENT[real[0].kind] ?? 0) < 0);
   return [worth && real[0].d < go.d ? real[0] : go];
+}
+
+// --- the whole action space ------------------------------------------------------
+
+const DROP_SPOTS = {
+  here: null, sanaTent: SPOTS.sanaTent, stageSpeaker: SPOTS.stageSpeaker, cp: { x: -4, z: -33 },
+  metro: SPOTS.metro, barricade: { x: 34, z: -6 },
+};
+/**
+ * Every command the player could try right now, and where to stand to try it: [{ id, kind, cmd, at }].
+ * cmd null means "just go there" (hide in a crowd, stand in the shuttle lane, sit at a line with your crew).
+ * opportunities() is the ranked, nearby slice of this that the HUD shows; the verifier explores all of it.
+ * Being listed is not a promise: act() still decides (a constable may be too far by the time you arrive).
+ */
+export function affordances(s) {
+  const out = [], pl = s.player;
+  const add = (id, kind, cmd, p) => out.push({ id, kind, cmd, at: p ? { x: p.x, z: p.z } : { x: pl.x, z: pl.z } });
+  if (s.over) return out;
+  if (pl.detained) {
+    add('plead', 'plead', { type: 'plead' }, null);
+    for (const id of Object.keys(SCENES)) if (s.scene?.id === id) s.scene.options.forEach((o) => add(`scene:${id}:${o.i}`, 'scene-choice', { type: 'scene', id, option: o.i }, null));
+    return out;
+  }
+  if (s.scene) s.scene.options.forEach((o) => add(`scene:${s.scene.id}:${o.i}`, 'scene-choice', { type: 'scene', id: s.scene.id, option: o.i }, null));
+  for (const id of Object.keys(SCENES)) {
+    if (s.fired['scene:' + id] || s.scene) continue;
+    const p = id === 'mummy-call' ? s.people.kabir : id === 'cannon-request' ? s.people.sharma : detentionPos(s);
+    add(`scene:${id}`, 'scene', { type: 'scene', id }, id === 'detain-me' ? offset(p, -2, 2) : p);
+  }
+  if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) add(`take:${id}`, 'take', { type: 'take', object: id }, o);
+  if (pl.carrying) {
+    const gives = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] }[pl.carrying];
+    for (const id of gives) { const p = s.people[id]; if (!p.hidden && !p.carrying) add(`give:${id}`, 'give', { type: 'give', to: id }, p); }
+    for (const [id, p] of Object.entries(DROP_SPOTS)) add(`drop:${id}`, 'drop', p ? { type: 'drop', x: p.x, z: p.z } : { type: 'drop' }, p);
+  }
+  for (const p of Object.values(s.people)) {
+    if (p.hidden) continue;
+    if (p.id !== 'sharma') add(`talk:${p.id}`, 'talk', { type: 'talk', to: p.id }, p);
+    if (p.id !== 'sharma') for (const rid of Object.keys(s.rumours)) if (!s.rumours[rid].dead && !s.rumours[rid].people[p.id]) add(`whisper:${rid}:${p.id}`, 'whisper', { type: 'whisper', to: p.id, rumour: rid }, p);
+  }
+  for (const o of allOfficers(s)) {
+    if (o.mode === 'chase' || o.mode === 'charge' || o.hidden) continue;
+    for (const how of ['career', 'cute', 'cannon', 'detainme']) add(`pester:${o.id}:${how}`, 'pester', { type: 'pester', to: o.id, how }, o);
+  }
+  for (const place of CROWD_PLACES) {
+    if (crowdAt(s, place) < 4) continue;
+    const c = CROWD_CENTERS[place];
+    add(`rally:${place}`, 'rally', { type: 'rally' }, c);
+    add(`hide:${place}`, 'go', null, c);
+  }
+  const done = new Set(pl.clips.map((c) => `${c.kind}@${c.place}`));
+  for (const h of s.recent) if (s.t - h.t <= mins(10) && !done.has(`${h.kind}@${h.place}`)) add(`film:${h.kind}@${h.place}`, 'film', { type: 'film' }, h);
+  for (const p of s.provocateurs) {
+    if (!['hidden', 'acting'].includes(p.state)) continue;
+    add(`prov:${p.id}:join`, 'provocateur', { type: 'provocateur', id: p.id, how: 'join' }, p);
+    add(`prov:${p.id}:expose`, 'provocateur', { type: 'provocateur', id: p.id, how: 'expose' }, p);
+    const o = allOfficers(s).filter((x) => x.mode !== 'chase' && x.mode !== 'charge').sort((a, b) => dist(a, p) - dist(b, p))[0];
+    if (o) add(`prov:${p.id}:report:${o.id}`, 'provocateur', { type: 'provocateur', id: p.id, how: 'report', to: o.id }, { x: (p.x + o.x) / 2, z: (p.z + o.z) / 2 });
+  }
+  if (pl.crew.length || s.t >= at(15, 0)) for (const st of ['hold', 'scatter', 'block', 'protect']) if (pl.stance !== st) add(`stance:${st}`, 'stance', { type: 'stance', stance: st }, null);
+  if (pl.crew.length >= 3 && !pl.blocking) {
+    const fronts = new Set(['barricade', ...s.police.barricades, ...(s.police.line ? [s.police.line] : [])]);
+    for (const f of fronts) add(`block:${f}`, 'go', null, LINE_FRONT[f]);
+    add('block:road', 'go', null, { x: SPOTS.busJantar.x, z: (SPOTS.busCP.z + SPOTS.busJantar.z) / 2 });
+  }
+  const b = s.bus;
+  if (b.phase === 'toJantar' || b.phase === 'toCP') add('lane', 'go', null, { x: b.x, z: b.z + 6 * (b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z)) });
+  return out;
+}
+
+/**
+ * What someone says when the player talks to them: their line for the situation, then the next one,
+ * then the short "you again" lines. Counts live in the day (s.talked), so the verifier hears what you hear.
+ */
+export function talkLine(s, who) {
+  const all = TALK[who] || [];
+  if (!all.length) return { line: null, hint: null, state: null };
+  const state = talkState(s, who);
+  const byState = (w) => all.filter((t) => t.when === w);
+  const pool = byState(state).length ? byState(state) : byState('default').length ? byState('default') : [all[0]];
+  const key = who + ':' + pool[0].when, n = s.talked[key] = (s.talked[key] || 0) + 1;
+  const entry = pool[n - 1];
+  const again = AGAIN[who] || [];
+  const line = entry ? entry.line : again.length ? again[(n - pool.length - 1) % again.length] : pool[pool.length - 1].line;
+  return { line, hint: entry?.hint ?? null, state, repeat: !entry };
 }
 
 /** Which talk line applies right now. */

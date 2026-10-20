@@ -9,7 +9,7 @@ import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES 
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
 import * as R from './rules.js?v=6';
-import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=7';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=7';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -17,12 +17,19 @@ import {
 } from './props.js?v=2';
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
+import { routeEvent } from './present.js?v=1';
+import { createDriver } from './drive.js?v=1';
 
-const { createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
+const { createDay, tick, act, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
 const QS = new URLSearchParams(location.search);
 const LONG = QS.has('long'), DEV = QS.has('dev');
 const STEP = 0.1;
+// ?replay or ?drawlog: every line routed to the screen is logged here, for the verifier's playback check.
+const DRAWN = QS.has('replay') || QS.has('drawlog') ? (window.__drawn = []) : null;
+// ?replay=<trace.json>[&speed=N]: play a verifier witness (verify/witnesses/*.json) exactly as Node played it.
+const REPLAY = QS.get('replay');
+let replayer = null;
 const CROWD_POOL = 52, CONSTABLES = 8, RAF_POOL = 10, CREW_POOL = 8, PROV_POOL = 3, KIDS = 6, DETAINEES = 10;
 // Crowd bodies per group: each group wears its own outfits (characters.js variants), so pools are per kind.
 const CROWD_KINDS = { students: 36, party: 12, sena: 10, opp: 8 };
@@ -168,7 +175,6 @@ const items = {};
 let shuttle, shuttleObstacle, shuttleSigns;
 const occluders = [];
 const overhead = [];
-let talked = {};
 const ray = new THREE.Raycaster();
 let memory = loadMemory();
 let loopLinks = new Set();
@@ -793,11 +799,8 @@ function updateItems(t) {
 
 let honked = false, blockedFor = 0;
 function busWaits() {
-  const b = day.bus, p = sim.player;
-  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
-  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
-  const ahead = (p.z - b.z) * dir;
-  b.blocked = moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8 && !S.detained(day);
+  const b = day.bus;
+  b.blocked = R.playerBlocksBus ? R.playerBlocksBus(day) : false; // the engine decides; this only honks
   if (b.blocked && !honked) toast('Poooon! Iqbal honks and waits for you to get out of the way.', 3);
   blockedFor = b.blocked ? blockedFor + STEP : 0;
   if (blockedFor >= 10) { blockedFor = 0; toast('Iqbal leans out: "Bhai, side ho jao! Poora schedule tumhare peeche ruka hai."', 4); }
@@ -875,26 +878,31 @@ function chatTrigger(trigger) { const lines = PHONE.CHAT[trigger]; if (lines) qu
 const pick = (a, seed = 0) => (Array.isArray(a) && a.length ? a[(Math.floor(day.t * 7) + seed) % a.length] : null);
 
 let streamText = '';
+// The client's bodies, as present.js routeEvent() wants to see them.
+const clientView = {
+  get now() { return day.t; },
+  get player() { return { x: sim.player.x, z: sim.player.z, visible: playerModel?.visible !== false }; },
+  get place() { return placeAt(sim.player); },
+  body: (id) => (bodies[id] ? { x: bodies[id].x, z: bodies[id].z, visible: bodies[id].model.visible } : null),
+  officer: (id) => { const b = officerById.get(id); return b ? { x: b.x, z: b.z, visible: b.model.visible } : null; },
+  policeNear: (r) => (bodies.sharma && dist(sim.player, bodies.sharma) < r) || police.some((b) => b.model.visible && dist(b, sim.player) < r),
+};
 function handleEvents() {
   for (const e of drainEvents(day)) {
-    const near = e.pos ? dist(sim.player, e.pos) < 26 : false;
-    const here = e.place && placeAt(sim.player) === e.place;
-    const kind = e.kind && e.kind !== 'line' ? e.kind : ({ wireless: 'wireless', feed: 'feed', stream: 'stream', chat: 'chat', ticker: 'ticker' }[e.who] ?? e.kind ?? null);
-    const onPhone = kind === 'wireless' || kind === 'feed' || kind === 'stream' || kind === 'chat' || kind === 'ticker';
-    const heard = onPhone || near || here || (bodies[e.who] && dist(sim.player, bodies[e.who]) < 26);
-    // After a time skip the queue holds lines said long ago; only the phone keeps a history.
-    if (!onPhone && day.t - e.t > 8) { if (e.link && heard) learnLink(e.link); continue; }
-    if (kind === 'wireless') radio(e.text);
-    else if (kind === 'feed') phone.feed({ caption: e.text.replace(/^[^:]{0,40}: /, ''), by: e.by || 'jantar.updates', kind: e.key || 'forward', place: e.place && PLACES[e.place]?.name });
-    else if (kind === 'stream') { streamText = e.text.replace(/^Zoya Live: |^Zoya: /, ''); phone.live({ on: day.stream.live, text: streamText, viewers: day.stream.viewers }); }
-    else if (kind === 'chat') phone.chat(e.who, e.text);
-    else if (kind === 'ticker') phone.ticker(e.text);
-    else if (kind === 'bark') barkAt(e.who, e.text, e.pos);
-    else if (e.who === 'player' && e.text) bubble('player', playerAnchor, 'YOU', e.text, 5);
-    else if (bodies[e.who]) say(e.who, e.text, 6);
-    else if (officerById.has(e.who)) { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
-    else if (e.who === 'street' && e.text && heard) toast(e.text, 5);
-    if (e.link && heard) learnLink(e.link);
+    // present.js decides where each line goes (and whether you can notice it); this only draws it.
+    const r = routeEvent(e, clientView);
+    if (DRAWN) DRAWN.push({ t: day.t, at: e.t, key: e.key, who: e.who, text: e.text, channel: r.channel, seen: r.seen });
+    if (r.channel === 'radio') radio(e.text);
+    else if (r.channel === 'feed') phone.feed({ caption: e.text.replace(/^[^:]{0,40}: /, ''), by: e.by || 'jantar.updates', kind: e.key || 'forward', place: e.place && PLACES[e.place]?.name });
+    else if (r.channel === 'stream') { streamText = e.text.replace(/^Zoya Live: |^Zoya: /, ''); phone.live({ on: day.stream.live, text: streamText, viewers: day.stream.viewers }); }
+    else if (r.channel === 'chat') phone.chat(e.who, e.text);
+    else if (r.channel === 'ticker') phone.ticker(e.text);
+    else if (r.channel === 'bark') barkAt(e.who, e.text, e.pos);
+    else if (r.channel === 'player') bubble('player', playerAnchor, 'YOU', e.text, 5);
+    else if (r.channel === 'bubble') say(e.who, e.text, 6);
+    else if (r.channel === 'officer') { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
+    else if (r.channel === 'toast') toast(e.text, 5);
+    if (r.learn) learnLink(e.link);
   }
 }
 
@@ -1117,15 +1125,12 @@ function realReels(ph) {
 
 // --- player actions ---------------------------------------------------------
 
+// Who sees you: the engine owns the ranges (R.witnesses); the client only adds the sight-line test.
 function witnesses() {
-  const out = [];
-  const ranges = { sharma: 14, iqbal: 9, ravi: 9, zoya: 8, dev: 8 };
-  for (const [id, r] of Object.entries(ranges)) {
-    const b = bodies[id];
-    if (!day.people[id].hidden && dist(b, sim.player) < r && visible(b, sim.player, world.obstacles)) out.push(id);
-  }
-  for (const b of police) if (b.model.visible && b.oid && dist(b, sim.player) < 12 && visible(b, sim.player, world.obstacles)) out.push(b.oid);
-  return out;
+  return R.witnesses(day, (id) => {
+    const b = bodies[id] || officerById.get(id);
+    return !!b && b.model.visible !== false && visible(b, sim.player, world.obstacles);
+  });
 }
 const PICKUP = { speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone', phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate' };
 const OWNER = { speaker: 'ravi', key: 'iqbal', megaphone: 'dev', phone: 'zoya', water: 'sana' };
@@ -1187,17 +1192,13 @@ function take(object) { act(day, { type: 'take', object, witnesses: witnesses() 
 function drop() { const p = sim.player; act(day, { type: 'drop', x: p.x + Math.sin(p.yaw) * 0.9, z: p.z + Math.cos(p.yaw) * 0.9 }); }
 function give(to) { act(day, { type: 'give', to }); }
 function talk(id) {
-  act(day, { type: 'talk', to: id });
-  const state = talkState(day, id);
-  const byState = (w) => TALK[id].filter((t) => t.when === w);
-  const pool = byState(state).length ? byState(state) : byState('default').length ? byState('default') : [TALK[id][0]];
-  const key = id + ':' + pool[0].when, n = talked[key] = (talked[key] || 0) + 1;
-  const entry = pool[n - 1];
-  const line = entry ? entry.line : AGAIN[id][(n - pool.length - 1) % AGAIN[id].length];
-  say(id, line, 7);
-  if (entry?.hint && HINTS[entry.hint]) {
-    const fresh = learnHint(entry.hint);
-    toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[entry.hint].text}`, 5);
+  // The engine picks the line (rules.js talkLine), so what you hear is what the verifier hears.
+  const r = act(day, { type: 'talk', to: id });
+  const line = r?.line;
+  if (line) say(id, line, 7);
+  if (r?.hint && HINTS[r.hint]) {
+    const fresh = learnHint(r.hint);
+    toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[r.hint].text}`, 5);
   }
   if (id === 'sharma') openPester('sharma', bodies.sharma, line);
   else openWhisper(id, line);
@@ -1340,7 +1341,7 @@ function resetDay() {
   for (const b of crowd) { b.cluster = null; b.model.visible = false; b.ox = b.oz = 0; b.flee = 0; b.fainted = 0; }
   for (const b of [...police, ...crew, ...provs, ...kids]) b.model.visible = false;
   crowdClock = 0; crowdSnap = true; policeSnap = true; policeClock = 0;
-  ambientClock = 12; talked = {}; blockedFor = 0; streamText = '';
+  ambientClock = 12; blockedFor = 0; streamText = '';
   phaseNow = null; lastClips = 0; sceneShown = null; stung = new Set(); crewBlock = null; detainedShown = false;
   chatQueue.length = 0; lastStingT = -99;
   flagsSeen.clear(); pendingLines.length = 0; overheardDone.clear();
@@ -1543,7 +1544,7 @@ let chaseOn = false;
 /** Tell the engine which scene beat is playing, so beat-timed effects (detain-me's escape) land on the line. */
 function reportBeat(beat) {
   const sc = S.scene(day);
-  if (!sc || sceneOptionsOpen) return;
+  if (!sc || sceneOptionsOpen || replayer) return; // a replay keeps the engine's own beat clock, as Node does
   const i = SCENES[sc.id]?.beats?.indexOf(beat) ?? -1;
   if (i >= 0 && i > (sc.beat ?? -1)) act(day, { type: 'scene', id: sc.id, beat: i });
 }
@@ -1635,18 +1636,27 @@ function devPlayScene(idOrData) {
 
 const sepList = [];
 function step(dt) {
-  const fast = keys.t && !cine.active ? 8 : 1;
+  const fast = replayer ? (replayer.paused ? 0 : replayer.speed) : keys.t && !cine.active ? 8 : 1;
   // The engine asks the client whether the chaser can still see you (walls, buses, kiosks).
+  // A replay leaves sight lines out, as the verifier does.
   const chaser = S.chasedBy(day);
-  if (day.player) {
+  if (day.player && !replayer) {
     const cb = chaser ? officerById.get(chaser) || bodies[chaser] : null;
     day.player.unseen = !!(cb && cb.model?.visible !== false && !visible(cb, sim.player, world.obstacles));
   }
   accumulator += dt * fast;
   while (accumulator >= STEP) {
     accumulator -= STEP;
-    day.player.x = sim.player.x;
-    day.player.z = sim.player.z;
+    if (replayer) {
+      // The driver walks the engine's player; the body follows it.
+      const cmd = replayer.drive.before(day);
+      sim.player.x = day.player.x; sim.player.z = day.player.z;
+      if (cmd) replayAct(cmd);
+      if (replayer.pauseAt != null && (replayer.index > replayer.pauseAt || replayer.drive.done)) { replayer.paused = true; accumulator = 0; break; }
+    } else {
+      day.player.x = sim.player.x;
+      day.player.z = sim.player.z;
+    }
     busWaits();
     tick(day, STEP);
     const ph = S.phase(day);
@@ -1973,6 +1983,30 @@ function updateDev(dt) {
   ].join('\n');
 }
 
+/** One command from a replayed trace, through the same client paths a key press takes. */
+function replayAct(cmd) {
+  replayer.acts.push({ t: day.t, cmd });
+  if (cmd.type === 'talk') talk(cmd.to);
+  else runCmd(cmd); // no witnesses: the engine's own ranges, as in Node
+}
+async function startReplay() {
+  const data = await (await fetch(REPLAY)).json();
+  R.setTempo(data.tempo || 'long');
+  startLoop();
+  stingsOn = false;
+  replayer = { data, speed: Number(QS.get('speed') || 1), paused: false, index: -1, pauseAt: null, acts: [] };
+  replayer.drive = createDriver(R, data.trace, { onStep: (st, i) => { replayer.index = i; } });
+  window.__replay = {
+    get index() { return replayer.index; }, get steps() { return data.trace.length; }, get done() { return replayer.drive.done || day.over; },
+    get t() { return day.t; }, get clock() { return clockText(day.t); }, get history() { return day.history; },
+    get ending() { return day.over ? { ending: day.ending, outcome: day.outcome?.outcome, role: day.outcome?.role } : null; },
+    get drawn() { return window.__drawn; }, get acts() { return replayer.acts; }, get paused() { return replayer.paused; },
+    pauseAfter: (i) => { replayer.pauseAt = i; }, resume: () => { replayer.paused = false; replayer.pauseAt = null; },
+    speed: (n) => { replayer.speed = n; },
+    data,
+  };
+}
+
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.1, last ? (now - last) / 1000 : 1 / 60);
@@ -2101,7 +2135,7 @@ function setupInput() {
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
     $('#loading').classList.add('hidden');
     if (DEV) $('#dev').classList.remove('hidden');
-    showTitle();
+    if (REPLAY) await startReplay(); else showTitle();
     requestAnimationFrame(frame);
     // For debugging and automated browser checks.
     window.__loop = {
