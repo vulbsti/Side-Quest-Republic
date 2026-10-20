@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';import {FrameClock,animationInterval} from '../dist/frame-clock.js';import {Simulation,verticalStep,moveWithCollisions,separateBodies,dist,steer} from '../dist/simulation.js';
+const results=[];for(const fps of [15,20,30,60]){const clock=new FrameClock(),sim=new Simulation([]);sim.police=[];for(let i=0;i<fps*3;i++)clock.feed(1/fps,dt=>sim.step(dt,{x:1}));results.push(sim.player.x);assert.ok(Math.abs(clock.simulated-3)<1e-8);assert.equal(clock.dropped,0);}for(const x of results)assert.ok(Math.abs(x-results[0])<1e-8);
+const c=new FrameClock();let steps=0;const stall=c.feed(4,()=>steps++);assert.equal(steps,15);assert.equal(stall.dropped,3.75);c.feed(8,()=>assert.fail(),{paused:true});assert.equal(c.accumulator,0);assert.ok(c.telemetry().p95Ms>0);
+const thin=[{x:0,z:0,w:.05,d:10,h:2}],p={x:-2,z:0,y:0};moveWithCollisions(p,10,0,thin);assert.ok(p.x<-.35);
+for(const fps of [15,30,60]){const clock=new FrameClock(),s=new Simulation([{x:0,z:0,w:3,d:1.4,h:.7}]);s.police=[];s.player={...s.player,x:0,z:0,y:1.9,vy:-1,grounded:false};for(let i=0;i<fps;i++)clock.feed(1/fps,dt=>s.step(dt,{}));assert.equal(s.player.y,.7);assert.ok(s.player.grounded);}
+assert.equal(animationInterval(100,true,true),0);assert.ok(animationInterval(100)>animationInterval(5));console.log('PASS: frame-rate-independent 15–60fps movement, stall/paused clock accounting, thin wall and bench landing');
+
+const target={x:1,z:1},npc={x:.7,z:1,y:0};steer(npc,target,5,.25,[]);assert.ok(Math.abs(npc.x-1)<1e-9,'NPC must not overshoot nearby goal on slow frame');const bad={x:1,z:2};moveWithCollisions(bad,NaN,1,[]);assert.deepEqual(bad,{x:1,z:2});

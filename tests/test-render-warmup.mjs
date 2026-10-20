@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {warmupRenderer} from '../dist/render-warmup.js';
+const scene={name:'unchanged',time:0},camera={x:7,y:4,z:20},events=[];let ticks=0,removed=0,added=0;
+const renderer={domElement:{addEventListener(){added++;},removeEventListener(){removed++;}},extensions:{has:()=>true},compileAsync:async(s,c)=>{assert.equal(s,scene);assert.equal(c,camera);events.push('compile');},render(s,c){assert.equal(s,scene);assert.equal(c,camera);events.push('render');}};
+const result=await warmupRenderer({renderer,scene,camera,onProgress:s=>events.push(s),yieldFrame:async()=>events.push('yield'),now:()=>++ticks});
+assert(result.compiled&&result.drawn&&result.parallelCompile);assert.equal(scene.time,0);assert.deepEqual(camera,{x:7,y:4,z:20});assert(events.indexOf('compile')<events.indexOf('render'));assert(events.slice(0,3).every(e=>e!=='compile'));assert.equal(events.filter(e=>e==='render').length,1);assert.equal(added,removed);
+let didDraw=false;
+await assert.rejects(warmupRenderer({renderer:{compileAsync:()=>new Promise(()=>{}),render(){didDraw=true;}},scene,camera,timeoutMs:1,yieldFrame:async()=>{}}),/timed out/);assert.equal(didDraw,false);
+await assert.rejects(warmupRenderer({renderer:{compileAsync:async()=>{throw Error('compile failure');},render(){}},scene,camera,yieldFrame:async()=>{}}),/compile failure/);
+let lostCallback,unsubscribed=false;
+await assert.rejects(warmupRenderer({renderer:{domElement:{addEventListener(k,f){lostCallback=f;},removeEventListener(){unsubscribed=true;}},compileAsync:async()=>lostCallback(),render(){throw Error('must not render');}},scene,camera,yieldFrame:async()=>{}}),/context was lost/);assert(unsubscribed);
+console.log('Render warmup passed: deferred loading paint, compile before first draw, unchanged camera/day, timeout/error/context-loss cleanup.');
