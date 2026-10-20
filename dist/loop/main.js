@@ -40,16 +40,20 @@ const clockMinutes = R.clockMinutes ?? ((t) => 600 + t / 1.25);
 const phaseFromClock = (m) => (m < 720 ? 'morning' : m < 840 ? 'midday' : m < 960 ? 'tense' : m < 1020 ? 'showdown' : 'aftermath');
 
 // ?long: the owner's full-day tempo. The engine exports a tempo setter; call it if present.
-if (LONG) (R.setTempo ?? R.setSecondsPerMinute)?.(4.0);
+if (LONG) { if (R.setTempo) R.setTempo(R.TEMPO?.long ? 'long' : 4.0); else R.setSecondsPerMinute?.(4.0); }
 
 // --- optional content and integrations (the writing, audio and asset workstreams) ---------
+// Model swap point: flip MODELS_READY when loop/models.js exists (until then ?models tries it), so the
+// default page makes no 404 request.
+const MODELS_READY = false;
 const optional = async (path) => { try { return await import(path); } catch { return null; } };
 let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null }, demo = null;
-/** Audio swap point: the audio workstream provides cue(name, data), phase(name), music(name), chase(on). */
-let audio = { cue() {}, phase() {}, music() {}, chase() {} };
+/** Audio swap point: audio.js createAudio() (or anything with the same methods, via __loop.setAudio). */
+const NOOP = () => {};
+let audio = { cue: NOOP, phase: NOOP, music: NOOP, chase: NOOP, intensity: NOOP, crowd: NOOP, update: NOOP, unlock: NOOP, silence: NOOP, duck: NOOP };
 async function loadOptional() {
   const [sc, bk, ph, au, mo, dm] = await Promise.all([
-    optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), optional('./models.js'),
+    optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js') : null,
     DEMO ? optional('./dev-demo.js') : null,
   ]);
   demo = dm;
@@ -71,7 +75,13 @@ async function loadOptional() {
   } catch (e) { console.warn('models.js could not be applied', e); }
 }
 function setAudio(a) {
-  audio = { cue: a.cue?.bind(a) ?? (() => {}), phase: a.phase?.bind(a) ?? (() => {}), music: a.music?.bind(a) ?? (() => {}), chase: a.chase?.bind(a) ?? (() => {}) };
+  const f = (...names) => { for (const n of names) if (typeof a[n] === 'function') return a[n].bind(a); return NOOP; };
+  audio = {
+    cue: f('cue'), phase: f('setPhase', 'phase'), music: f('music'), chase: f('chase'), intensity: f('setIntensity'), crowd: f('setCrowd'),
+    update: f('update'), unlock: f('unlock'), silence: f('silence'), duck: f('duckFor'),
+  };
+  const unlock = () => { audio.unlock(); removeEventListener('pointerdown', unlock); removeEventListener('keydown', unlock); };
+  addEventListener('pointerdown', unlock); addEventListener('keydown', unlock);
 }
 
 // --- engine reads (one place, so the lead can reconcile with rules.js) ------------------
@@ -92,7 +102,8 @@ const S = {
   raf: (d) => d.police?.raf ?? 0,
   cues: (d) => (R.drainCues ? R.drainCues(d) : Array.isArray(d.cues) ? d.cues.splice(0) : []),
   opportunities: (d, pos) => { try { return R.opportunities ? R.opportunities(d, pos) : null; } catch (e) { console.warn(e); return null; } },
-  ending: (d) => (d.ending && typeof d.ending === 'object' ? d.ending : R.endingCard?.(d) ?? R.buildEnding?.(d) ?? null),
+  ending: (d) => (d.outcome && typeof d.outcome === 'object' ? d.outcome : d.ending && typeof d.ending === 'object' ? d.ending : R.endingCard?.(d) ?? R.buildEnding?.(d) ?? null),
+  crewBlocking: (d) => !!d.player?.blocking || Object.values(d.crew ?? {}).some((m) => m?.mode === 'block'),
 };
 
 let world, sim, day, mode = 'loading';
@@ -353,7 +364,7 @@ function slot(cl, i) {
   const a = i * 2.399, r = cl.r * Math.sqrt((i + 0.5) / 18);
   return { x: cl.center.x + Math.cos(a) * r, z: cl.center.z + Math.sin(a) * r };
 }
-let crowdClock = 0, crowdSnap = true;
+let crowdClock = 0, crowdSnap = true, policeSnap = true;
 const freeList = [], memberList = [];
 function updateCrowd(dt) {
   crowdClock -= dt;
@@ -462,7 +473,12 @@ function planOfficers() {
   if (engine) {
     for (const [id, o] of Object.entries(engine)) {
       if (!o || o.hidden || o.x === undefined) continue;
-      officerPlan.push({ id, kind: o.kind === 'raf' ? 'raf' : 'constable', x: o.x, z: o.z, yaw: o.yaw, posture: postureOf(o.mode, ph, o.kind), mood: o.mood, name: o.name });
+      const posture = postureOf(o.mode, ph, o.kind);
+      const ci = posture === 'seat' ? Number(String(id).replace(/\D/g, '')) - 1 : -1;
+      // Seated at their post, facing the road; the chair is pooled (one per constable).
+      const chair = ci >= 0 && ci < CHAIRS.length ? ci : undefined;
+      const yaw = o.yaw ?? (posture === 'seat' ? (ci * 1.3) % (Math.PI * 2) - Math.PI / 2 : undefined);
+      officerPlan.push({ id, kind: o.kind === 'raf' ? 'raf' : 'constable', x: o.x, z: o.z, yaw, posture, chair, mood: o.mood, name: o.name });
     }
     return officerPlan;
   }
@@ -497,7 +513,9 @@ function postureOf(m, ph, kind) {
   if (/chase/.test(s)) return 'chase';
   if (/charge|lathi|beat/.test(s)) return 'charge';
   if (/line|hold|shield|guard/.test(s)) return 'line';
-  if (/walk|move|patrol|go/.test(s)) return 'walk';
+  if (/walk|move|patrol|^to[A-Z]|^back|escort|search|leav|fetch|carry|drive/.test(s)) return 'walk';
+  // At their post: lounging on plastic chairs in the morning, standing at midday, a shield line from 14:00.
+  if (s === 'post' && kind !== 'raf') return ph === 'morning' ? 'seat' : ph === 'midday' ? 'stand' : 'line';
   if (/stand|post|watch|idle/.test(s)) return ph === 'morning' && kind !== 'raf' ? 'stand' : ph === 'morning' || ph === 'midday' ? 'stand' : 'line';
   return ph === 'tense' || ph === 'showdown' ? 'line' : 'stand';
 }
@@ -518,12 +536,15 @@ function updatePolice(dt) {
       if (b.oid !== o.id || !b.model.visible) {
         b.oid = o.id;
         // New arrivals walk in from the Parliament Street end, not out of thin air.
-        if (!b.model.visible) { b.x = o.x + 14; b.z = o.z + (b.idx % 3 - 1) * 2; if (crowdSnap || o.posture === 'seat') { b.x = o.x; b.z = o.z; } }
+        if (!b.model.visible) { b.x = o.x + 14; b.z = o.z + (b.idx % 3 - 1) * 2; if (policeSnap || o.posture === 'seat') { b.x = o.x; b.z = o.z; } }
+        else if (policeSnap) { b.x = o.x; b.z = o.z; }
       }
       b.plan = o; b.model.visible = true;
       officerById.set(o.id, b);
     }
     for (const b of police) if (!used.has(b)) { b.model.visible = false; b.oid = null; b.plan = null; }
+    if (policeSnap) for (const b of police) if (b.plan) { b.x = b.plan.x; b.z = b.plan.z; }
+    policeSnap = false;
     for (let i = 0; i < CHAIRS.length; i++) props.chair(i, CHAIRS[i][0], CHAIRS[i][1], CHAIRS[i][2], false);
   }
   const chasedBy = S.chasedBy(day), ch = props.charge;
@@ -558,7 +579,7 @@ let crewBlock = null;
 function updateCrew(dt) {
   const ids = S.crew(day), n = Math.min(CREW_POOL, ids.length || 0), p = sim.player;
   if (crewBlock && dist(p, crewBlock) > 6) crewBlock = null;
-  const blocking = day.player?.blocking ?? day.player?.crewBlock ?? !!crewBlock;
+  const blocking = S.crewBlocking(day) || !!crewBlock;
   crew.forEach((b, i) => {
     if (i >= n || S.detained(day)) { if (b.model.visible) { b.model.visible = false; } return; }
     if (!b.model.visible) { b.model.visible = true; b.x = p.x + Math.sin(i) * 3; b.z = p.z + Math.cos(i) * 3; }
@@ -719,6 +740,8 @@ function bubble(key, anchor, name, text, duration = 5) {
   b.el.style.display = 'block'; b.el.style.left = '-9999px'; b.el.style.top = '0px';
   b.w = b.el.offsetWidth || 230; b.h = b.el.offsetHeight || 50;
 }
+/** The player as a bubble anchor (sim.player has no model). */
+const playerAnchor = { get x() { return sim.player.x; }, get z() { return sim.player.z; }, get y() { return sim.player.y; }, get model() { return playerModel; } };
 function say(id, text, duration = 5) {
   const b = bodies[id];
   if (!b || !b.model.visible) return;
@@ -748,7 +771,7 @@ function handleEvents() {
   for (const e of drainEvents(day)) {
     const near = e.pos ? dist(sim.player, e.pos) < 26 : false;
     const here = e.place && placeAt(sim.player) === e.place;
-    const kind = e.kind || (e.who === 'wireless' ? 'wireless' : e.who === 'feed' ? 'feed' : e.who === 'stream' ? 'stream' : null);
+    const kind = e.kind && e.kind !== 'line' ? e.kind : ({ wireless: 'wireless', feed: 'feed', stream: 'stream', chat: 'chat', ticker: 'ticker' }[e.who] ?? e.kind ?? null);
     const onPhone = kind === 'wireless' || kind === 'feed' || kind === 'stream' || kind === 'chat' || kind === 'ticker';
     const heard = onPhone || near || here || (bodies[e.who] && dist(sim.player, bodies[e.who]) < 26);
     if (kind === 'wireless') radio(e.text);
@@ -757,6 +780,7 @@ function handleEvents() {
     else if (kind === 'chat') phone.chat(e.who, e.text);
     else if (kind === 'ticker') phone.ticker(e.text);
     else if (kind === 'bark') barkAt(e.who, e.text, e.pos);
+    else if (e.who === 'player' && e.text) bubble('player', playerAnchor, 'YOU', e.text, 5);
     else if (bodies[e.who]) say(e.who, e.text, 6);
     else if (officerById.has(e.who)) { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
     else if (e.who === 'street' && e.text && heard) toast(e.text, 5);
@@ -927,14 +951,14 @@ const STINGS = {
   'sena-bikes': ['bikes', 'BIKES ON PARLIAMENT STREET', 'Saffron scarves and a megaphone.'],
   'barricades-up': ['barricade', 'BARRICADES GO UP', 'Two o\'clock. The police have new orders.'],
 };
-let lastStingT = -99;
+let lastStingT = -99, stingsOn = !QS.has('nostings'); // ?nostings: for screenshots and testing
 function handleCues() {
   let list = S.cues(day);
   if (demo?.drainCues) list = list.concat(demo.drainCues());
   for (const c of list) {
     if (!c || !c.cue) continue;
     props.cue(c);
-    audio.cue(c.cue, c);
+    audio.cue(c.cue, { pos: c.pos, data: c.data });
     chatTrigger(c.cue);
     const name = c.cue;
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
@@ -945,7 +969,7 @@ function handleCues() {
     if (name === 'caught') toast('Caught. Into the detention bus you go.', 4);
     if (name === 'phase' && c.data) onPhase(c.data.phase ?? c.data);
     const st = STINGS[name];
-    if (st && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
+    if (st && stingsOn && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
       stung.add(name);
       if (name === 'arrival-wave') stung.add('party-suv');
       const target = () => props.focus[st[0]];
@@ -1003,7 +1027,7 @@ function findPrompt() {
   const options = [];
   if (S.detained(day)) {
     const o = nearestOpportunity(true);
-    return o?.cmd ? { d: 0, text: o.label, run: () => runCmd(o.cmd) } : null;
+    return o?.cmd || o?.choices ? { d: 0, text: o.label, run: () => runOpportunity(o) } : null;
   }
   if (!carrying) {
     for (const id of OBJECTS) {
@@ -1029,10 +1053,20 @@ function findPrompt() {
     options.push({ d: dist(p, b) - 0.5, text: 'The man in box-fresh shoes, with an earpiece', run: () => openProvocateur(b) });
   }
   // Anything else the engine says you can do right here (scenes, detention, rally spots).
+  // (Talk, take, give, pester and provocateur have their own richer prompts above.)
   const o = nearestOpportunity(true);
-  if (o?.cmd && o.d < 2.6) options.push({ d: o.d - 0.2, text: o.label, run: () => runCmd(o.cmd) });
+  if ((o?.cmd || o?.choices) && o.d < 2.6 && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
+}
+const LOCAL_KINDS = new Set(['talk', 'take', 'give', 'pester', 'provocateur', 'drop', 'scene-choice']);
+/** An engine opportunity: one command, or a card of its choices. */
+function runOpportunity(o) {
+  if (o.choices?.length) {
+    openChoices({ key: 'opp:' + (o.kind || ''), title: o.label, list: o.choices.map((c) => ({ label: c.text, locked: c.ok === false, note: c.ok === false ? 'not yet' : '', run: () => runCmd(c.cmd) })) });
+    return;
+  }
+  if (o.cmd) runCmd(o.cmd);
 }
 function runCmd(cmd) {
   const r = act(day, cmd);
@@ -1076,6 +1110,7 @@ function openChoices({ key, said, saidBy, title, list }) {
 function choose(i) {
   const c = choices;
   closeChoices();
+  if (c && i >= 0 && c.list[i]?.locked) { toast(c.list[i].note ? `Not yet: ${c.list[i].note}.` : 'Not yet.', 2.5); return; }
   if (c && i >= 0 && c.list[i]) c.list[i].run();
 }
 function closeChoices() {
@@ -1140,7 +1175,6 @@ function film() {
   if (r?.ok) {
     recT = 1.6;
     $('#recFlash').classList.remove('hidden');
-    audio.cue('film', { pos: p });
   } else toast(r?.say || 'Nothing worth filming here. Get within 12 m of something happening.', 3);
 }
 
@@ -1160,7 +1194,7 @@ function nearestOpportunity(fresh = false) {
       if (!o) continue;
       const x = o.x ?? o.pos?.x, z = o.z ?? o.pos?.z;
       const d = x === undefined ? (o.d ?? o.dist ?? 0) : Math.hypot(x - _oppPos.x, z - _oppPos.z);
-      if (d < bd) { bd = d; best = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind }; }
+      if (d < bd) { bd = d; best = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null }; }
     }
   } else best = localOpportunity();
   oppCache = best;
@@ -1189,7 +1223,7 @@ function resetDay() {
   for (const [id, b] of Object.entries(bodies)) Object.assign(b, { x: day.people[id].x, z: day.people[id].z });
   for (const b of crowd) { b.cluster = null; b.model.visible = false; b.ox = b.oz = 0; b.flee = 0; b.fainted = 0; }
   for (const b of [...police, ...crew, ...provs, ...kids]) b.model.visible = false;
-  crowdClock = 0; crowdSnap = true; policeClock = 0;
+  crowdClock = 0; crowdSnap = true; policeSnap = true; policeClock = 0;
   ambientClock = 12; talked = {}; blockedFor = 0; streamText = '';
   phaseNow = null; lastClips = 0; sceneShown = null; stung = new Set(); crewBlock = null; detainedShown = false;
   chatQueue.length = 0; lastStingT = -99;
@@ -1237,6 +1271,7 @@ const ROLE = {
   protector: ['Protector', 'You got people out.'], detained: ['Detained', 'You saw the end through a bus window.'],
   filmer: ['Filmer', 'Your footage is the version people believe.'], peacemaker: ['Peacemaker', 'You turned the temperature down.'],
 };
+const TARGET_NAME = { player: 'you', crew: 'your crew', stream: 'Zoya and her live stream', crowd: 'whoever was at the front', students: 'the students', party: 'the party workers', sena: 'the sena boys' };
 const STANCE = { hold: 'held their ground', scatter: 'scattered, laughing', block: 'blocked the road', protect: 'protected each other' };
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function severity(e) {
@@ -1271,17 +1306,20 @@ function showEnding() {
   let body;
   if (e) {
     const sv = severity(e);
-    const role = ROLE[e.role] || [String(e.role || 'Spectator'), ''];
-    const targets = [].concat(e.targets ?? e.target ?? []).map((x) => (x === 'player' ? 'you' : x === 'crew' ? 'your crew' : PEOPLE[x]?.name || x)).join(', ') || 'whoever was nearest';
+    const role = e.roleTitle ? [e.roleTitle, e.roleText ?? ''] : ROLE[e.role] || [String(e.role || 'Spectator'), ''];
+    const targets = [].concat(e.targets ?? e.target ?? []).map((x) => (TARGET_NAME[x] ?? PEOPLE[x]?.name ?? x)).join(', ') || 'whoever was nearest';
     const callbacks = [].concat(e.callbacks ?? []).slice(0, 5).map((c) => `<li>${esc(typeof c === 'string' ? c : c.text ?? '')}${c.t !== undefined ? `<small>${timeText(c.t)}</small>` : ''}</li>`).join('');
-    const where = WHERE_NAME[e.where] || PLACES[e.where]?.name || e.where || 'nowhere in particular';
+    const at = e.place ?? e.where;
+    const where = WHERE_NAME[at] || PLACES[at]?.name || at || 'nowhere in particular';
     const stance = STANCE[e.stance] || e.stance || 'did what they could';
-    const when = timeText(e.chargeAt ?? e.when ?? e.timing ?? e.t);
+    const when = e.chargeClock ?? timeText(e.chargeAt ?? e.when ?? e.timing);
+    const bandWord = { calm: 'Calm', rising: 'Rising', high: 'Ugly', riot: 'A riot' }[e.band];
+    if (bandWord) sv.word = bandWord;
     body = `<span class="tiny">${clockText(day.t)} · LOOP ${memory.loops - 1} ENDS</span>
       <h2>${esc(e.title ?? flavour?.title ?? `${sv.word} at ${where}`)}</h2>
-      <p class="headline">${esc(e.headline ?? flavour?.headline ?? '')}</p>
+      ${(e.headline !== undefined ? e.headline : flavour?.headline) ? `<p class="headline">${esc(e.headline !== undefined ? e.headline : flavour.headline)}</p>` : ''}
       <div class="endcard">
-        <div class="role role-${esc(e.role || 'spectator')}"><small>YOUR ROLE</small><b>${esc(role[0])}</b><span>${esc(e.roleText ?? role[1])}</span></div>
+        <div class="role role-${esc(e.role || 'spectator')}"><small>YOUR ROLE</small><b>${esc(role[0])}</b><span>${esc(role[1])}</span></div>
         <dl>
           <dt>Where it broke out</dt><dd>${esc(where)}</dd>
           <dt>How bad</dt><dd><span class="sev"><i style="width:${clamp(sv.n, 3, 100)}%"></i></span>${esc(sv.word)}</dd>
@@ -1379,25 +1417,62 @@ function updateScene(dt) {
       const a = b && actorOf(b.who);
       if (a?.model) bubble(b.who === 'mummy' ? 'kabir' : 'idle:' + b.who, a, nameOf(b.who).toUpperCase() + (b.who === 'mummy' ? ' (PHONE)' : ''), b.line, 3.4);
     }
-    const place = PLACES[sceneOptionsOpen.data.place];
-    if (place && dist(sim.player, place) > place.r + 8 && choices?.key === 'scene') closeChoices();
+    // Walk away from the scene and the options go (the scene still plays out in the engine).
+    if (dist(sim.player, sceneOptionsOpen.at) > 14 && choices?.key === 'scene') closeChoices();
   }
+}
+// Scene beat sfx -> audio cue names (the rest are covered by the scene's own sound or not voiced yet).
+const SCENE_SFX = { 'phone-ring': 'phone-ring', 'phone-buzz': 'phone-chat', horn: 'bus-horn' };
+let chaseOn = false;
+/** Tell the engine which scene beat is playing, so beat-timed effects (detain-me's escape) land on the line. */
+function reportBeat(beat) {
+  const sc = S.scene(day);
+  if (!sc || sceneOptionsOpen) return;
+  const i = SCENES[sc.id]?.beats?.indexOf(beat) ?? -1;
+  if (i >= 0 && i > (sc.beat ?? -1)) act(day, { type: 'scene', id: sc.id, beat: i });
+}
+let strideD = 0, crowdN = 0, crowdT = 0;
+const _ear = { x: 0, z: 0, yaw: 0 }, _foot = { x: 0, z: 0 };
+/** Per frame: phase, director intensity, crowd density, chase, listener; footsteps on strides. */
+function updateAudio(dt) {
+  const p = sim.player;
+  if (phaseNow) audio.phase(phaseNow);
+  audio.intensity(S.director(day)?.intensity ?? 0);
+  crowdT -= dt;
+  if (crowdT <= 0) {
+    crowdT = 0.5; crowdN = 0;
+    for (const b of crowd) if (b.model.visible && Math.abs(b.x - p.x) < 14 && Math.abs(b.z - p.z) < 14 && dist(b, p) < 14) crowdN++;
+    for (const b of police) if (b.model.visible && dist(b, p) < 14) crowdN++;
+  }
+  audio.crowd(crowdN);
+  if (!!S.chasedBy(day) !== chaseOn) { chaseOn = !chaseOn; audio.chase(chaseOn); }
+  _ear.x = p.x; _ear.z = p.z; _ear.yaw = yaw;
+  audio.update(dt, _ear);
+  const v = Math.hypot(p.vx || 0, p.vz || 0);
+  if (p.grounded !== false && v > 0.6 && !S.detained(day)) {
+    strideD += v * dt;
+    if (strideD > (v > 4.5 ? 1.15 : 0.8)) { strideD = 0; _foot.x = p.x; _foot.z = p.z; audio.cue('footstep', { pos: _foot, data: { run: v > 4.5 } }); }
+  } else strideD = 0.5;
 }
 function playScene(id, data, sc) {
   closeChoices();
-  audio.music(data.music);
+  audio.duck((data.beats?.length || 4) * 2.4);
   cine.play(data, {
     phone: data.camera === 'phone',
     title: data.title,
     onDone: () => {
-      const options = sc?.options ?? data.options ?? [];
+      // The engine's live copy says which options are open now (options[i].ok); the scene data has the words.
+      const live = S.scene(day);
+      const options = (live && live.id === id ? live.options : null) ?? sc?.options ?? data.options ?? [];
       if (!options.length) return;
-      sceneOptionsOpen = { id, data };
+      sceneOptionsOpen = { id, data, at: { x: sim.player.x, z: sim.player.z } };
       chatterT = 1.2;
       openChoices({
         key: 'scene', title: data.title || 'What do you do?',
         list: options.map((o, i) => ({
-          label: o.intent || o.label, locked: o.available === false, note: o.available === false ? o.why || 'not yet' : '',
+          label: o.intent || data.options?.[i]?.intent || o.label,
+          locked: o.ok === false || o.available === false,
+          note: o.ok === false || o.available === false ? o.why || lockWhy(data.options?.[i]?.requires) : '',
           run: () => {
             const r = act(day, { type: 'scene', id, option: i });
             sceneOptionsOpen = null;
@@ -1410,6 +1485,16 @@ function playScene(id, data, sc) {
     },
   });
 }
+/** A short reason an option is locked, from its requires block. */
+function lockWhy(req) {
+  if (!req) return 'not yet';
+  const r = req.rep || {};
+  for (const k of ['aura', 'help', 'heat', 'nuisance']) { const v = req[k] ?? r[k]; if (v != null) return `needs ${k} ${v}+`; }
+  const m = Object.entries(req.mood || {})[0];
+  if (m) return `needs ${nameOf(m[0])} ${m[1].join(' or ')}`;
+  if (req.flags?.length) return 'something has to happen first';
+  return 'not yet';
+}
 // Dev hook: play a scene by id (or a scene object) without the engine.
 function devPlayScene(idOrData) {
   const data = typeof idOrData === 'string' ? SCENES[idOrData] : idOrData;
@@ -1421,6 +1506,12 @@ function devPlayScene(idOrData) {
 const sepList = [];
 function step(dt) {
   const fast = keys.t && !cine.active ? 8 : 1;
+  // The engine asks the client whether the chaser can still see you (walls, buses, kiosks).
+  const chaser = S.chasedBy(day);
+  if (day.player) {
+    const cb = chaser ? officerById.get(chaser) || bodies[chaser] : null;
+    day.player.unseen = !!(cb && cb.model?.visible !== false && !visible(cb, sim.player, world.obstacles));
+  }
   accumulator += dt * fast;
   while (accumulator >= STEP) {
     accumulator -= STEP;
@@ -1445,7 +1536,8 @@ function step(dt) {
   keys[' '] = false;
   if (detained) {
     // On the detention bus: you sit inside, by the door.
-    sim.player.x = day.bus.x - 0.6; sim.player.z = day.bus.z + 2; sim.player.vx = sim.player.vz = 0;
+    const dp = R.detentionPos ? R.detentionPos(day) : { x: day.bus.x - 0.6, z: day.bus.z + 2 };
+    sim.player.x = dp.x; sim.player.z = dp.z; sim.player.vx = sim.player.vz = 0;
     if (!detainedShown) { detainedShown = true; closeChoices(); }
   } else if (detainedShown) { detainedShown = false; sim.player.x = day.bus.x - 2.4; sim.player.z = day.bus.z + 3; toast('You\'re off the bus. Walk, don\'t run.', 3); }
   playerModel.visible = !detained;
@@ -1476,6 +1568,7 @@ function step(dt) {
   updateFlags();
   overheard();
   updateScene(dt);
+  updateAudio(dt);
   if (choices && bodies[choices.key] && (day.people[choices.key].hidden || dist(sim.player, bodies[choices.key]) > 4)) closeChoices();
   // Chat messages trickle in.
   chatT -= dt;
@@ -1664,7 +1757,6 @@ function updateHUD(dt) {
     const d = who ? Math.round(dist(who, sim.player)) : null;
     setText('#chaseText', `${PEOPLE[ch]?.name?.toUpperCase() || 'A CONSTABLE'} IS CHASING YOU${d !== null ? ` · ${d} M` : ''}`);
   }
-  audio.chase(!!ch);
   // Detained card.
   $('#detained').classList.toggle('hidden', !S.detained(day));
   // The one objective card: the nearest opportunity, with a compass arrow.
@@ -1700,7 +1792,8 @@ function updateDev(dt) {
   const groups = Object.entries(S.groups(day)).map(([k, g]) => `${k}:${g?.size ?? 0}@${g?.place ?? '-'}${g?.mood ? '/' + g.mood : ''}`).join(' ');
   $('#dev').textContent = [
     `${clockText(day.t)} ${phaseNow}  fps ${fps.toFixed(0)}  calls ${world.renderer.info.render.calls}`,
-    `director  intensity ${d.intensity ?? '-'}  hotspot ${d.hotspot ?? '-'}  target ${d.target ?? '-'}  stance ${d.stance ?? '-'}  chargeAt ${d.chargeAt !== undefined ? clockText(d.chargeAt) : '-'}`,
+    `director  intensity ${d.intensity ?? '-'}  hotspot ${d.hotspot ?? '-'}  target ${d.target ?? '-'}  stance ${d.stance ?? '-'}  chargeAt ${d.chargeAt != null ? clockText(d.chargeAt) : '-'}`,
+    `why  ${Array.isArray(d.why) ? d.why.slice(-4).join(' | ') : typeof d.why === 'object' && d.why ? JSON.stringify(d.why) : d.why ?? '-'}`,
     `rep  aura ${rep.aura ?? '-'} heat ${rep.heat ?? '-'} help ${rep.help ?? '-'} nuisance ${rep.nuisance ?? '-'}  crew ${S.crew(day).length}  chased ${S.chasedBy(day) ?? '-'}  detained ${S.detained(day)}`,
     `groups  ${groups || '-'}`,
     `police  line ${pol.line ?? '-'} watch ${pol.watch ?? '-'} barricades [${(pol.barricades || []).join(',')}] raf ${pol.raf ?? 0} cannon ${pol.cannon?.state ?? '-'} gas ${pol.gas ? 'yes' : '-'} charge ${pol.charge?.place ?? '-'}`,
@@ -1822,9 +1915,11 @@ function setupInput() {
     cine = createCinematic({
       camera: world.camera, dom: $('#cine'), actor: actorOf, nameOf,
       onReact: (kind, beat) => {
-        audio.cue(kind === 'sfx' ? 'sfx-' + beat.sfx : 'scene-' + kind, beat);
-        if (kind === 'laugh') react('crowd-laugh', actorOf(beat.who) || sim.player);
-        if (kind === 'silence') react('awkward-silence', actorOf(beat.who) || sim.player);
+        const at = actorOf(beat.who) || sim.player;
+        if (kind === 'sfx') { const c = SCENE_SFX[beat.sfx]; if (c) audio.cue(c, { pos: at }); }
+        if (kind === 'line') reportBeat(beat);
+        if (kind === 'laugh') { react('crowd-laugh', at); audio.cue('crowd-laugh', { pos: at }); }
+        if (kind === 'silence') { react('awkward-silence', at); audio.silence(1.9); }
       },
     });
     day = createDay();
@@ -1841,8 +1936,8 @@ function setupInput() {
     window.__loop = {
       get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; },
       startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
-      snap: () => { crowdSnap = true; crowdClock = 0; policeClock = 0; },
-      playScene: devPlayScene, setAudio,
+      snap: () => { crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; },
+      playScene: devPlayScene, setAudio, stings: (on) => { stingsOn = !!on; },
       view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },
       showEnding,

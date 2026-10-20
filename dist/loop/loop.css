@@ -56,7 +56,7 @@ kbd{font:10px 'DM Sans',sans-serif;border:1px solid #ffffff60;background:#ffffff
 #detained span{font-size:12px;line-height:1.45;color:#dfe4ff}
 #radio{position:absolute;top:120px;left:50%;transform:translateX(-50%);width:min(420px,calc(100vw - 32px));background:#2b1d0ed8;border-left:3px solid var(--radio);border-radius:0 7px 7px 0;padding:7px 12px;font-size:12px;line-height:1.45;font-style:italic}
 #radio small{display:block;font-style:normal;font-size:9px;letter-spacing:2px;font-weight:700;color:var(--radio)}
-#phaseBanner{position:absolute;top:22%;left:50%;transform:translate(-50%,10px);text-align:center;opacity:0;transition:opacity .6s,transform .6s;width:min(520px,calc(100vw - 32px))}
+#phaseBanner{position:absolute;top:max(22%,188px);left:50%;transform:translate(-50%,10px);text-align:center;opacity:0;transition:opacity .6s,transform .6s;width:min(520px,calc(100vw - 32px))}
 #phaseBanner.on{opacity:1;transform:translate(-50%,0)}
 #phaseBanner small{font-size:11px;letter-spacing:3px;color:var(--lime);font-weight:700}
 #phaseBanner b{display:block;font:900 clamp(48px,8vw,84px)/.9 'Barlow Condensed';letter-spacing:1px;text-transform:uppercase;text-shadow:0 3px 22px #0009}
@@ -81,7 +81,8 @@ kbd{font:10px 'DM Sans',sans-serif;border:1px solid #ffffff60;background:#ffffff
 .bubble b{display:block;font-size:9px;letter-spacing:1px;color:#61824f;margin-bottom:3px}
 
 #toast{position:absolute;left:50%;bottom:170px;transform:translateX(-50%);max-width:min(520px,calc(100vw - 30px));background:#182d24ed;padding:12px 18px;border-radius:7px;border:1px solid #d8ed9766;text-align:center;opacity:0;transition:opacity .25s;line-height:1.5;font-size:13px}
-#hud.choosing #toast{bottom:auto;top:160px}
+#hud.choosing #toast{bottom:auto;top:178px}
+#hud.choosing #phaseBanner{opacity:0}
 #toast.linked{border-color:var(--lime);background:#24402ef2}
 
 #prompt{position:absolute;left:50%;bottom:120px;transform:translateX(-50%);background:#f7f2df;color:#1c3529;padding:10px 16px;border-radius:7px;display:flex;align-items:center;gap:10px;font-weight:600;text-shadow:none;box-shadow:0 5px 20px #0003;max-width:calc(100vw - 28px);pointer-events:auto;cursor:pointer}
@@ -221,5 +222,5 @@ kbd{font:10px 'DM Sans',sans-serif;border:1px solid #ffffff60;background:#ffffff
 
 #dev{position:absolute;z-index:8;left:8px;bottom:8px;margin:0;max-width:calc(100vw - 16px);background:#000b;color:#b8ffb0;font:10px/1.45 ui-monospace,monospace;padding:6px 8px;border-radius:5px;pointer-events:none;white-space:pre-wrap}
 
-@media(max-width:860px){.board-grid{grid-template-columns:1fr}#keys{display:none}#clock b{font-size:34px}#objective{top:100px;left:16px;right:auto;width:calc(100vw - 32px)}#phonePill{top:16px;right:16px}#phone{left:8px;right:8px;width:auto;top:60px;height:calc(100vh - 250px)}#prompt,#choices{bottom:186px}#carrying{bottom:250px}#toast,#hud.choosing #toast{top:156px;bottom:auto;left:16px;right:16px;transform:none;max-width:none;font-size:12px;padding:9px 12px}#rep{top:56px}#place{display:none}#radio,#detained,#recFlash{top:156px}}
+@media(max-width:860px){.board-grid{grid-template-columns:1fr}#keys{display:none}#clock b{font-size:34px}#objective{top:100px;left:16px;right:auto;width:calc(100vw - 32px)}#phonePill{top:16px;right:16px}#phone{left:8px;right:8px;width:auto;top:60px;height:calc(100vh - 250px)}#prompt,#choices{bottom:186px}#carrying{bottom:250px}#toast,#hud.choosing #toast{top:234px;bottom:auto;left:16px;right:16px;transform:none;max-width:none;font-size:12px;padding:9px 12px}#rep{top:56px}#place{display:none}#radio,#detained,#recFlash{top:156px}#phonePill{max-width:calc(100vw - 196px)}#phaseBanner{top:316px}}
 body.cine-on #hud,body.cine-on #phone,body.cine-on #vignette{visibility:hidden}
