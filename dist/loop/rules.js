@@ -331,7 +331,7 @@ export function route(from, to) {
   if ((a === 'barricade' || a === 'parliament') !== (toPlace === 'barricade' || toPlace === 'parliament')) pts.push(SPOTS.midway);
   if (toPlace === 'metro' && a !== 'metro') pts.push(SPOTS.metroPath);
   pts.push(to);
-  return pts;
+  return pts.filter((q, i) => i === pts.length - 1 || dist(from, q) > 1.5); // standing on a waypoint: go on from it
 }
 function walkTo(p, to) { goTo(p, ...route(p, to)); }
 function offset(p, dx = 0, dz = 0) { return { x: p.x + dx, z: p.z + dz }; }
@@ -1375,11 +1375,16 @@ export function directorNow(s) {
   if (s.moment === 'roast') add('everyone is laughing at Rao', -10);
   if (police.cannon?.state === 'dance') add('kids dancing in the cannon spray', -20);
   if (s.provocateurs.some((p) => p.exposed)) add('provocateur exposed', -10);
+  const lv = s.story?.levers || {};
+  // The side stories nudge the day (story.js levers), at half weight and at most ±15, so they bend the showdown
+  // without outweighing what is physically in the street.
+  add("the day's side stories", clamp((lv.intensity || 0) / 2, -15, 15));
   // Hotspot: a stone pulls it, then a blocking crew, then a viral camera, then the biggest crowd.
   let hotspot = biggestCrowd(s);
   if (s.stream.viral && police.watch) hotspot = police.watch;
   // The chant and the cannon you ordered pull it to the barricade.
   if (s.flags['cannon-to-barricade'] || s.flags['paani-chant'] || s.flags['crowd-at-barricade']) hotspot = 'barricade';
+  if (lv.hotspot && CROWD_PLACES.includes(lv.hotspot)) hotspot = lv.hotspot;
   if (pl.blocking) hotspot = pl.blocking === 'road' ? 'stage' : pl.blocking;
   if (police.stone) hotspot = police.stone.place;
   if (police.charge) hotspot = police.charge.place;
@@ -1390,12 +1395,13 @@ export function directorNow(s) {
   const target = rep(s).heat >= targetHeat && !pl.detained && !sharmaFavour(s) ? 'player'
     : pl.blocking && pl.crew.length ? 'crew'
       : s.stream.viral && s.stream.live ? 'stream'
-        : s.moment === 'singalong' && !s.people.mira.hidden ? 'mira' : 'crowd';
+        : s.moment === 'singalong' && !s.people.mira.hidden ? 'mira'
+          : lv.target && lv.target !== 'crowd' && !(lv.target === 'player' && pl.detained) && !(lv.target === 'mira' && s.people.mira.hidden) ? lv.target : 'crowd';
   const holder = s.objects.megaphone.holder;
   const playerThere = !pl.detained && nearPlace(pl, hotspot, 4);
   const stance = playerThere && (pl.stance || pl.crew.length) ? pl.stance || 'hold'
     : holder === 'mira' ? 'hold' : holder === 'kabir' ? 'scatter' : holder === 'dev' ? 'block'
-      : holder === 'player' && playerThere ? pl.stance || 'hold' : 'scatter';
+      : holder === 'player' && playerThere ? pl.stance || 'hold' : lv.stance || 'scatter';
   let chargeAt = at(16, 30);
   if (intensity >= 70) chargeAt = at(16, 0);
   if (police.stone) chargeAt = Math.min(chargeAt, police.stone.t + mins(15));
@@ -1813,9 +1819,20 @@ export function tick(s, dt) {
   s.director = directorNow(s);
   updateGroups(s);
   runRules(s, cdt);
+  storyFlags(s);
   STORY.tick(s, dt);
   if (!s.over && s.t >= at(18, 0)) finish(s);
   return s;
+}
+
+/** Things the world did, as flags the story can require (speech-big, moment-roast, charge-started, gas-fired). */
+function storyFlags(s) {
+  const f = s.flags;
+  if (s.speech && !f['speech-' + s.speech]) f['speech-' + s.speech] = true;
+  if (s.moment && !f['moment-' + s.moment]) f['moment-' + s.moment] = true;
+  if (s.police.charge && !f['charge-started']) f['charge-started'] = true;
+  if (s.police.gas && !f['gas-fired']) f['gas-fired'] = true;
+  if (s.police.stone && !f['stone-thrown']) f['stone-thrown'] = true;
 }
 
 /** Fast-forward in fixed steps; used by tests and the "wait" action. */
@@ -2097,10 +2114,11 @@ function pester(s, { to, how }) {
     cue(s, 'awkward-silence', { pos: o, data: { who: o.id } });
     return { ok: true, say: 'annoyed' };
   }
-  o.mood = MOODS[Math.min(2, Math.max(0, MOODS.indexOf(o.mood)) + 1)];
+  const was = MOODS.includes(o.mood) ? o.mood : 'bored'; // he answers in the mood you found him in
+  o.mood = MOODS[Math.min(2, MOODS.indexOf(was) + 1)];
   addRep(s, { aura: how === 'cannon' ? 12 : how === 'detainme' ? 8 : 10, heat: how === 'cannon' || how === 'detainme' ? 0 : 2 });
   // Each officer has their own answers (talks.js PESTER_BY), and doesn't give the same one twice running.
-  const lines = own[how]?.[o.mood] ?? PESTER[how][o.mood] ?? PESTER[how].bored;
+  const lines = own[how]?.[was] ?? PESTER[how][o.mood] ?? PESTER[how].bored;
   o.said = (o.said || 0) + 1;
   say(s, o.id, lines[o.said % lines.length], { key: `pester-${how}`, link: o.mood === 'soft' ? 'pester-soft' : null });
   cue(s, 'crowd-laugh', { pos: o, data: { who: o.id, how } });
@@ -2204,7 +2222,7 @@ function meets(s, req = {}) {
   for (const [k, v] of Object.entries(min)) if (r[k] < v) return false;
   for (const f of req.flags || []) if (!(f === 'water-delivered' ? s.waterOk : s.flags[f])) return false;
   if (req.anyFlags?.length && !req.anyFlags.some((f) => s.flags[f])) return false;
-  for (const f of req.notFlags || []) if (s.flags[f]) return false;
+  for (const f of req.notFlags || []) if (f === 'water-delivered' ? s.waterOk : s.flags[f]) return false;
   return true;
 }
 function applyFlag(s, f) {
@@ -2233,7 +2251,17 @@ function giveObject(s, id, who, pos = null) {
   if (was === 'player') s.player.carrying = null;
   else if (s.people[was]) s.people[was].carrying = null;
   if (who === 'player') { if (s.player.carrying) giveObject(s, s.player.carrying, null, s.player); o.holder = 'player'; s.player.carrying = id; return; }
-  if (who && s.people[who]) { const p = s.people[who]; if (p.carrying) giveObject(s, p.carrying, null, p); o.holder = who; p.carrying = id; Object.assign(o, { x: p.x, z: p.z }); return; }
+  if (who && s.people[who]) {
+    const p = s.people[who];
+    if (p.carrying) giveObject(s, p.carrying, null, p);
+    o.holder = who; p.carrying = id; Object.assign(o, { x: p.x, z: p.z });
+    // Back to its owner: they do what they'd do if you handed it over yourself (act give).
+    if (id === 'water' && who === 'sana' && !s.waterOk) { p.mode = 'carry'; walkTo(p, SPOTS.sanaTent); }
+    if (id === 'speaker' && who === 'ravi') { p.mode = 'toStage'; goTo(p, SPOTS.raviStage); }
+    if (id === 'key' && who === 'iqbal') { if (p.mode === 'search') { p.mode = 'toBusWithKey'; goTo(p, SPOTS.busDoor); } else { o.holder = 'hook'; p.carrying = null; Object.assign(o, SPOTS.keyHook); } }
+    if (id === 'phone' && who === 'zoya' && p.mode === 'search') { p.mode = 'chase'; p.target = null; s.timers.chase = 0; }
+    return;
+  }
   o.holder = null; if (pos) Object.assign(o, { x: pos.x, z: pos.z });
   if (id === 'speaker') o.on = true;
 }
@@ -2245,6 +2273,31 @@ function releasePerson(s, id) {
   p.hidden = false; p.mode = 'story'; Object.assign(p, offset(d, -1.5, 1.5)); p.path = [];
   cue(s, 'detainees-escape', { pos: d, data: { people: [id] } }); // the client draws them stepping off
 }
+/** The story's hands on the provocateurs (naye-joote): expose, report, join, or they just leave. */
+function storyProvocateurs(s, how) {
+  const live = s.provocateurs.filter((p) => ['hidden', 'acting'].includes(p.state));
+  if (!live.length) return;
+  if (how === 'expose') {
+    for (const p of live) { p.state = 'exposed'; p.exposed = true; goTo(p, SPOTS.suv); }
+    Object.assign(s.groups.party, { place: null, size: 0, mood: 'embarrassed' });
+    memo(s, 'exposed', { tell: live[0].tell }); callback(s, 'expose', 'exposed');
+    cue(s, 'crowd-gasp', { pos: live[0] }); happen(s, 'provocateur-exposed', live[0]);
+  } else if (how === 'report') {
+    for (const p of live) { p.state = 'reported'; goTo(p, SPOTS.suv); }
+    memo(s, 'reported', { tell: live[0].tell });
+  } else if (how === 'join') {
+    live[0].state = 'joined'; memo(s, 'joined', { tell: live[0].tell }); happen(s, 'provocateur-joined', live[0]);
+  } else if (how === 'gone') for (const p of live) { p.state = 'gone'; goTo(p, SPOTS.suv); }
+}
+/** A rumour from the story: plant it at a place, tell one person, or kill it. */
+function storyRumour(s, rid, where, who = null) {
+  const r = s.rumours[rid];
+  if (!r) return;
+  if (where === 'dead') { r.dead = true; memo(s, `rumour-${rid}-killed`); return; }
+  if (where === 'learn') { learn(s, rid, who); memo(s, `rumour-${rid}`, { to: who }); return; }
+  memo(s, `rumour-${rid}`, { to: where });
+  placeLearns(s, rid, where);
+}
 function nikhilFoundByPlayer(s) {
   const n = s.people.nikhil;
   if (n.hidden || n.mode === 'detained') return;
@@ -2253,7 +2306,8 @@ function nikhilFoundByPlayer(s) {
 const STORY = createStory({
   at, mins, dist, placeAt, phaseAt, SPOTS, PLACES, CROWD_CENTERS,
   officerById, meets, say, cue, memo, callback, addRep, happen, walkTo, sendHome, startChase,
-  detainPlayer, detainPerson, releasePlayer, releasePerson, giveObject, placeLearns, crowdAdd, crowdTake, applyFlag,
+  detainPlayer, detainPerson, releasePlayer, releasePerson, giveObject, crowdAdd, crowdTake, applyFlag,
+  provocateurs: storyProvocateurs, rumour: storyRumour,
   nikhilFound: nikhilFoundByPlayer,
 });
 /** Every situation and where it stands: [{ id, title, act, state, card, goal, marker }]. */

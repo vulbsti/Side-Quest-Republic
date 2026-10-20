@@ -59,7 +59,10 @@ export function createStory(api) {
     if (req.holding && s.player.carrying !== req.holding) return false;
     if (req.after && s.t < clock(req.after) - 1e-9) return false;
     if (req.before && s.t >= clock(req.before) - 1e-9) return false;
-    for (const d of req.did || []) if (story(s).sits[d]?.state !== 'done') return false;
+    const ended = (d) => { const x = story(s).sits[d]; return x?.state === 'done' || x?.state === 'fail' ? x.state : x?.last ?? null; };
+    for (const d of req.did || []) if (ended(d) !== 'done') return false;
+    for (const d of req.failed || []) if (ended(d) !== 'fail') return false;
+    for (const d of req.notDid || []) if (ended(d) === 'done') return false;
     if (req.phase && ![].concat(req.phase).includes(phaseAt(s.t))) return false;
     if (req.detained != null && !!s.player.detained !== req.detained) return false;
     if (req.near && !(req.near.every?.((id) => { const b = visibleBody(s, id); return b && dist(b, s.player) <= START_RANGE * 2; }))) return false;
@@ -86,6 +89,9 @@ export function createStory(api) {
       case 'hidden': { const o = body(s, a); return !!o && !!o.hidden; }
       case 'chase-lost': return !s.player.chasedBy && !!s.memo.chase && !s.player.detained;
       case 'done': return story(s).sits[a]?.state === 'done';
+      case 'friend': return story(s).friends[a] === b; // friend:<kabir|nikhil|meera>:<ok|hurt|detained|missing>
+      case 'prov': return a === 'live' ? s.provocateurs.some((x) => ['hidden', 'acting'].includes(x.state)) : s.provocateurs.some((x) => x.state === a || (a === 'exposed' && x.exposed)); // prov:<live|exposed|reported|joined|gone>
+      case 'here': { const x = body(s, a); return !!x && !x.hidden; } // here:<who>: in the world right now
       default: return false;
     }
   }
@@ -141,7 +147,9 @@ export function createStory(api) {
       case 'feed': { const f = FEED_TIMELINE.find((x) => x.id === a); if (f) postFeed(s, f); break; }
       // A situation's own callback (its `callbacks` table), timed from when the situation started.
       case 'callback': if (ctx.id && SITUATIONS[ctx.id]?.callbacks?.[a]) api.callback(s, `sit:${ctx.id}:${a}`, `situation:${ctx.id}`); else api.callback(s, a, null); break;
-      case 'rumour': api.placeLearns(s, a, b || 'stage'); break;
+      case 'rumour': api.rumour(s, a, b || 'stage'); break; // rumour:<rid>:<place|dead>
+      case 'learn': api.rumour(s, a, 'learn', b); break; // learn:<rid>:<who>: tell one person
+      case 'provocateurs': api.provocateurs(s, a); break; // provocateurs:<expose|report|join|gone>
       case 'crowd': api.crowdAdd(s, a, Number(b) >= 0 ? Number(b) : 0); if (Number(b) < 0) api.crowdTake(s, a, -Number(b)); break;
       case 'intensity': st.levers.intensity += Number(a); break;
       case 'hotspot': st.levers.hotspot = a; break;
@@ -170,6 +178,7 @@ export function createStory(api) {
     const st = story(s);
     if (!node) { st.convo = null; return; }
     speak(s, node.beats, { key: `${kind}:${id}:${nodeId}` });
+    doAll(s, node.do, { id }); // what happens as the node plays (an end node with only beats, say)
     if (node.goal) {
       const sit = st.sits[id];
       if (sit) { sit.node = nodeId; sit.goalSince = s.t; }
@@ -215,6 +224,7 @@ export function createStory(api) {
     st.convo = null;
     speak(s, o.beats, { key: `${c.kind}:${c.id}:${c.node}:${i}` });
     apply(s, o, { id: c.id });
+    if (o.payoff?.caption) postFeed(s, { by: o.payoff.by, caption: o.payoff.caption, kind: c.id, id: `${c.id}-${c.node}-${i}` });
     api.memo(s, `said:${c.id}:${c.node}:${i}`);
     if (c.kind === 'situation') api.memo(s, `situation:${c.id}:${c.node}:${i}`);
     if (o.next) open(s, c.kind, c.id, c.who, def, o.next);
@@ -226,8 +236,8 @@ export function createStory(api) {
     if (!st.convo) return { ok: false };
     const c = st.convo;
     st.convo = null;
-    const def = c.kind === 'situation' ? SITUATIONS[c.id] : null;
-    const bye = def?.nodes?.[c.node]?.leave;
+    const def = c.kind === 'situation' ? SITUATIONS[c.id] : (TALKS[c.who] || []).find((t) => t.id === c.id);
+    const bye = def?.nodes?.[c.node]?.leave ?? def?.leave;
     if (bye) speak(s, bye, { key: `${c.kind}:${c.id}:leave` });
     return { ok: true, said: !!bye };
   }
@@ -351,9 +361,17 @@ export function createStory(api) {
           api.cue(s, 'situation-hook', { pos: marker(s, def, sit), data: { id, card: def.hook?.card } });
         }
       }
+      // Settled some other way (you did it with the plain verbs, or the world moved): endsWhen { done: [...], fail: [...] }.
+      if (['hooked', 'active'].includes(sit.state) && def.endsWhen) {
+        const e = def.endsWhen;
+        if (e.done?.length && e.done.every((x) => holds(s, x))) { endSituation(s, id, 'done'); continue; }
+        if (e.fail?.length && e.fail.every((x) => holds(s, x))) { endSituation(s, id, 'fail'); continue; }
+      }
       if (sit.state === 'hooked') {
-        if (def.auto && !sit.auto && now >= clock(def.auto.at) - 1e-9) {
+        const autoAt = def.auto ? Math.max(clock(def.auto.at), def.auto.after != null ? sit.hookedAt + api.mins(def.auto.after) : 0) : 0;
+        if (def.auto && !sit.auto && now >= autoAt - 1e-9) {
           sit.auto = true;
+          chatLines(s, def.auto.chat, `auto:${id}`);
           speak(s, def.auto.beats, { key: `auto:${id}`, kind: 'line', place: def.place });
           doAll(s, def.auto.do, { id });
           sit.state = def.auto.end === 'done' ? 'done' : def.auto.end === 'fail' ? 'fail' : 'missed';
@@ -381,7 +399,9 @@ export function createStory(api) {
     if (st.chatterT <= 0 && !st.queue.length && !st.convo) {
       st.chatterT = 6;
       const phase = phaseAt(now);
-      const c = CHATTER.find((x) => !st.played[x.id] && (!x.phase || x.phase.includes(phase)) && meets(s, x.requires) && chatterHere(s, x));
+      // The exchange whose people are nearest you, so the pair beside you talks, not one across the square.
+      const near = (x) => Math.min(...(x.cast || []).map((id) => { const b = visibleBody(s, id); return b ? dist(b, s.player) : 1e9; }));
+      const c = CHATTER.filter((x) => !st.played[x.id] && (!x.phase || x.phase.includes(phase)) && meets(s, x.requires) && chatterHere(s, x)).sort((a, b) => near(a) - near(b))[0];
       if (c) { st.played[c.id] = true; speak(s, c.beats, { key: 'chatter:' + c.id, kind: 'line', place: c.place }); }
     }
     // The phone's running timeline.

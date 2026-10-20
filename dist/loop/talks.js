@@ -15,6 +15,6 @@ export const CHATTER = parts.flatMap((p) => p.CHATTER || []);
 // Speakers who are not a body in the world (bus extras, voices on a phone), for the conversation panel.
 export const SPEAKERS = {
   player: 'You', mummy: 'Mummy (phone)', crowd: 'Crowd', wireless: 'Wireless', raf: 'RAF jawan',
-  uncle: 'Banana uncle', student: 'Student on the bus', fixer: 'The fixer', neta: 'LJM neta', papa: 'Papa (phone)',
+  uncle: 'Banana uncle', student: 'Student on the bus', fixer: 'The fixer', neta: 'LJM neta', drs: 'DRS biker', papa: 'Papa (phone)',
   sharma: 'Sharma', c1: 'Yadav', c2: 'Meena', c3: 'Tomar', c4: 'Rawat', c5: 'Gill', r1: 'Pandey',
 };

@@ -24,6 +24,7 @@ export default {
     },
     // Nobody pulls Nikhil away: he takes the charger, stands with the fixer's boys, and when Tomar sweeps
     // the SUV at quarter past three the boys melt away and the kid with 3% battery is the one on the bus.
+    endsWhen: { done: ['prov:exposed'], fail: ['prov:joined'] }, // settled with the plain verbs (expose or join him yourself)
     auto: {
       at: '15:15',
       beats: [

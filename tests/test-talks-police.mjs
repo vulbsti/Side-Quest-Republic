@@ -149,11 +149,11 @@ for (const who of OFFICERS) {
   R.act(s, { type: 'pester', to: 'c3', how: 'cute' });
   const ev = R.drainEvents(s).filter((e) => e.text);
   ok(ev.some((e) => e.who === 'player' && e.text === PESTER_BY.c3.say.cute), 'you say your Tomar line');
-  ok(ev.some((e) => e.who === 'c3' && PESTER_BY.c3.cute.amused.includes(e.text)), 'Tomar answers in his own words');
+  ok(ev.some((e) => e.who === 'c3' && PESTER_BY.c3.cute.bored.includes(e.text)), 'Tomar answers in his own words, in the mood you found him in');
   runTo(s, '14:05');
   stand(s, 'r3');
   R.act(s, { type: 'pester', to: 'r3', how: 'career' });
-  ok(R.drainEvents(s).some((e) => e.who === 'r3' && PESTER_BY.raf.career.amused.includes(e.text)), 'a faceless RAF jawan uses the RAF lines');
+  ok(R.drainEvents(s).some((e) => e.who === 'r3' && PESTER_BY.raf.career.bored.includes(e.text)), 'a faceless RAF jawan uses the RAF lines');
 }
 
 // 5. Shape and distinctness: counts, and no line shared between two officers.

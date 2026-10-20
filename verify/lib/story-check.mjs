@@ -24,7 +24,7 @@ const OBJECTS = Object.keys(day.objects);
 const PLACE_IDS = new Set([...Object.keys(R.PLACES), ...Object.keys(R.SPOTS)]);
 const PHASES = R.PHASES.map(([id]) => id);
 const RUMOURS = Object.keys(day.rumours);
-const HAPPEN = new Set([...rulesSrc.matchAll(/happen\(s, '([a-z-]+)'/g)].map((m) => m[1]).concat(['pester-career', 'pester-cute', 'pester-cannon', 'pester-detainme', 'speaker-party', 'roast', 'singalong', 'faint', 'mummy-call', 'detain-me']));
+const HAPPEN = new Set([...rulesSrc.matchAll(/happen\(s, '([a-z-]+)'/g)].map((m) => m[1]).concat(['big-speech', 'small-speech', 'pester-career', 'pester-cute', 'pester-cannon', 'pester-detainme', 'speaker-party', 'roast', 'singalong', 'faint', 'mummy-call', 'detain-me']));
 const CUES = new Set([...clientSrc.matchAll(/['"]([a-z][a-z-]+)['"]/g)].map((m) => m[1]).filter((c) => rulesSrc.includes(`cue(s, '${c}'`)));
 const MOODS = new Set(['bored', 'amused', 'soft', 'annoyed', 'grateful', 'sulking', 'shook', 'proud', 'scared', 'angry', 'happy', 'sad', 'chill']);
 const DO = {
@@ -32,17 +32,17 @@ const DO = {
   give: ['object', 'person'], take: ['object'], drop: ['object', 'where'],
   detain: ['personOrPlayer'], release: ['personOrPlayer'], chase: ['officer'], calm: ['officer'],
   cue: ['cue'], clip: ['happen'], chat: ['chat'], feed: ['feedId'], callback: ['key'],
-  rumour: ['rumour', 'where'], crowd: ['crowdPlace', 'int'], intensity: ['int'], hotspot: ['crowdPlace'],
+  rumour: ['rumour', 'rumourWhere'], learn: ['rumour', 'person'], provocateurs: [['expose', 'report', 'join', 'gone']], crowd: ['crowdPlace', 'int'], intensity: ['int'], hotspot: ['crowdPlace'],
   target: [['player', 'crew', 'stream', 'mira', 'none']], stance: [['hold', 'scatter', 'block', 'protect']],
   situation: ['situation', ['start', 'done', 'fail']], nikhil: [['found', 'lost']],
   friend: [FRIENDS, ['ok', 'hurt', 'detained', 'missing']], flag: ['flag'],
 };
 const PRED = {
-  near: ['bodyOrObject', 'bodyOrObject'], at: ['bodyOrObjectOrPlayer', 'place'], with: ['person'], holding: ['object'],
+  near: ['bodyOrObjectOrPlayer', 'bodyOrObjectOrPlayer'], friend: [FRIENDS, ['ok', 'hurt', 'detained', 'missing']], here: ['body'], prov: [['live', 'exposed', 'reported', 'joined', 'gone']], at: ['bodyOrObjectOrPlayer', 'place'], with: ['person'], holding: ['object'],
   given: ['object', 'person'], flag: ['flag'], '!flag': ['flag'], time: ['hh', 'mm'], detained: [], free: [], crew: ['int'],
   filmed: ['happen'], mood: ['body', 'mood'], hidden: ['body'], 'chase-lost': [], done: ['situation'],
 };
-const REQ_KEYS = new Set(['mood', 'rep', 'aura', 'help', 'heat', 'nuisance', 'flags', 'anyFlags', 'notFlags', 'with', 'holding', 'after', 'before', 'did', 'phase', 'detained', 'near', 'holds']);
+const REQ_KEYS = new Set(['mood', 'rep', 'aura', 'help', 'heat', 'nuisance', 'flags', 'anyFlags', 'notFlags', 'with', 'holding', 'after', 'before', 'did', 'phase', 'detained', 'near', 'holds', 'failed', 'notDid']);
 const EFFECT_KEYS = new Set(['aura', 'heat', 'help', 'nuisance', 'mood', 'flags']);
 const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const HHMM = /^(1[0-7]|18):[0-5]\d$/;
@@ -56,7 +56,7 @@ export function storyCheck() {
     place: (v) => PLACE_IDS.has(v), crowdPlace: (v) => CROWD_PLACES.includes(v), bodyOrObject: (v) => BODIES.has(v) || OBJECTS.includes(v),
     bodyOrObjectOrPlayer: (v) => v === 'player' || BODIES.has(v) || OBJECTS.includes(v),
     cue: (v) => CUES.has(v), happen: (v) => HAPPEN.has(v), chat: (v) => !!CHAT[v], feedId: (v) => feedIds.has(v), key: (v) => !!v,
-    rumour: (v) => RUMOURS.includes(v), int: (v) => /^[+-]?\d+$/.test(v), situation: (v) => !!SITUATIONS[v], flag: (v) => /^[a-z0-9-]+$/.test(v || ''),
+    rumour: (v) => RUMOURS.includes(v), rumourWhere: (v) => v === 'dead' || PLACE_IDS.has(v), int: (v) => /^[+-]?\d+$/.test(v), situation: (v) => !!SITUATIONS[v], flag: (v) => /^[a-z0-9-]+$/.test(v || ''),
     mood: (v) => MOODS.has(v), hh: (v) => /^(1[0-8])$/.test(v), mm: (v) => v === undefined || /^[0-5]\d$/.test(v),
   };
   const argOk = (kind, v) => (Array.isArray(kind) ? kind.includes(v) : ARG[kind](v));
@@ -82,7 +82,7 @@ export function storyCheck() {
     for (const id of r.with || []) if (!PEOPLE.includes(id)) f('error', 'requires-with', `${where}: requires.with "${id}"`);
     if (r.holding && !OBJECTS.includes(r.holding)) f('error', 'requires-holding', `${where}: requires.holding "${r.holding}"`);
     for (const id of Object.keys(r.mood || {})) if (!BODIES.has(id)) f('error', 'requires-mood', `${where}: requires.mood "${id}"`);
-    for (const d of r.did || []) if (!SITUATIONS[d]) f('error', 'requires-did', `${where}: requires.did "${d}"`);
+    for (const k of ['did', 'failed', 'notDid']) for (const d of r[k] || []) if (!SITUATIONS[d]) f('error', 'requires-did', `${where}: requires.${k} "${d}"`);
     for (const p of r.holds || []) checkPred(where, p);
     if (r.phase) for (const p of [].concat(r.phase)) if (!PHASES.includes(p)) f('error', 'requires-phase', `${where}: phase "${p}"`);
   };
@@ -155,6 +155,7 @@ export function storyCheck() {
     if (sit.place && sit.place !== 'player' && !PLACE_IDS.has(sit.place) && !BODIES.has(sit.place)) f('error', 'place', `${w}: place "${sit.place}"`);
     for (const c of sit.cast || []) if (!BODIES.has(c) && !VOICES.has(c)) f('error', 'cast', `${w}: cast "${c}"`);
     checkReq(w, sit.requires);
+    for (const k of ['done', 'fail']) for (const x of sit.endsWhen?.[k] || []) checkPred(`${w}.endsWhen.${k}`, x);
     if (!sit.hook?.card) f('error', 'hook', `${w}: hook.card is the objective-card text and is required`);
     if (!(sit.hook?.chat?.length || sit.hook?.overheard?.length)) f('warn', 'hook', `${w}: announces itself with neither a chat ping nor an overheard line`);
     for (const [who] of sit.hook?.chat || []) if (!['kabir', 'nikhil', 'meera', 'zoya', 'mummy', 'mira', 'dev'].includes(who)) f('warn', 'hook-chat', `${w}: chat from "${who}"; the group chat is Kabir, Nikhil and Meera`);
