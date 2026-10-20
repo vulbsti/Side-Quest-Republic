@@ -1,0 +1,59 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "constable-on-stage",
+  "title": "The constable who took the stage",
+  "status": "sourced-secondary",
+  "situation": "A suspended Uttarakhand constable takes the protest stage, says he resigned to join, urges peace and asks Delhi Police not to act against protesters. His force dismisses his claims and cites his criminal history.",
+  "where": "Jantar Mantar stage, New Delhi",
+  "when": {
+    "event": "late July 2026",
+    "published": "2026-07"
+  },
+  "who": {
+    "protester": "off-duty constable",
+    "officer": "his own department (response)",
+    "others": []
+  },
+  "comicMechanism": [
+    "goal_reversal"
+  ],
+  "lines": [
+    {
+      "text": "I had resigned 15 days ago. It has not been accepted yet, so I took leave and came here.",
+      "speaker": "Sher Singh",
+      "kind": "quoted-in-source",
+      "via": "ThePrint"
+    },
+    {
+      "text": "\"Send them packing through our votes.\"",
+      "speaker": "Sher Singh",
+      "kind": "paraphrased",
+      "via": "ThePrint"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "midday",
+  "emotion": [
+    "surprise"
+  ],
+  "actorTypes": [
+    "constable",
+    "speaker"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Possible late-game Sharma arc: if very soft, he takes off his cap at the mic; it is risky for him.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/feature/uttarakhand-cop-resigned-join-jantar-mantar-protests-police-suspended/2996105/",
+      "publisher": "ThePrint",
+      "published": "2026-07",
+      "access": "fetched"
+    }
+  ]
+}

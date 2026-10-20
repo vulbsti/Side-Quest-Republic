@@ -1,0 +1,63 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "parliament-doorbell",
+  "title": "\"Parliament ki doorbell baja ke bhag gaya!\"",
+  "status": "sourced-secondary",
+  "situation": "A clip of a protester fleeing police, set to Chak De India, captioned as if he rang Parliament's doorbell and ran.",
+  "where": "Parliament Street area, New Delhi",
+  "when": {
+    "event": "2026-07-20",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "fleeing protester",
+    "officer": "Delhi Police",
+    "others": []
+  },
+  "comicMechanism": [
+    "borrowed_confidence",
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Parliament ki doorbell baja ke bhag gaya!",
+      "speaker": "reel caption",
+      "kind": "caption",
+      "via": "National Herald"
+    }
+  ],
+  "reactionBeats": null,
+  "music": "Chak De India (DT Next).",
+  "commentMood": null,
+  "phase": "showdown",
+  "emotion": [
+    "cheek"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Touch the barricade at the Parliament Street end and sprint back: a \"ding-dong-ditch\" verb that raises aura and heat at once.",
+    "cast": [
+      "player",
+      "kabir"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "publisher": "National Herald",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    }
+  ]
+}

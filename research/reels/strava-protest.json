@@ -1,0 +1,46 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "strava-protest",
+  "title": "Strava receipt of the protest",
+  "status": "sourced-secondary",
+  "situation": "Someone posts a Strava screenshot of kilometres covered during the protest.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-08-01"
+  },
+  "who": {
+    "protester": "student",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "aftermath",
+  "emotion": [
+    "wry"
+  ],
+  "actorTypes": [
+    "gen-z-protester"
+  ],
+  "context": "Newslaundry headline on Oct 11 is literally \"Around Jantar Mantar in 15,967 steps\".",
+  "buildThis": {
+    "flag": false,
+    "situation": "Ending card stat: \"You ran 3.2 km. Delhi Police thanks you for the cardio.\"",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    }
+  ]
+}

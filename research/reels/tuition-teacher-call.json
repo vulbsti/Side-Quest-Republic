@@ -1,0 +1,51 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "tuition-teacher-call",
+  "title": "Officer as tuition teacher on mummy's call",
+  "status": "unverified-owner-lead",
+  "situation": "A student asks a police officer to pretend to be his tuition teacher on a call with his mother.",
+  "where": null,
+  "when": {
+    "event": null,
+    "published": null
+  },
+  "who": {
+    "protester": "student",
+    "officer": "police officer",
+    "others": [
+      "mother on phone"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "bureaucratic_literalism"
+  ],
+  "lines": [],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "panic",
+    "farce"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable",
+    "parent-offscreen"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Kabir's mummy calls at 10:40; hand the phone to Sharma and he improvises \"civics ka practical chal raha hai\".",
+    "cast": [
+      "kabir",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "any detail; present as fiction"
+  ],
+  "searchLog": "Searched 2026-10-15 and 2026-10-20 (English and Hinglish variants); no original clip or report found.",
+  "sources": []
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "kolkata-father",
+  "title": "The father who came instead of his son",
+  "status": "sourced-secondary",
+  "situation": "A smiling father from Kolkata comes to Jantar Mantar on behalf of his son stuck in London, joking he would take a police beating in his place, and asks the reporter where to go.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-08-01"
+  },
+  "who": {
+    "protester": "middle-aged father",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "goal_reversal"
+  ],
+  "lines": [
+    {
+      "text": "Willing to take a police beating in his son's place.",
+      "speaker": "father",
+      "kind": "paraphrased",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "warmth",
+    "gallows-humour"
+  ],
+  "actorTypes": [
+    "parent",
+    "first-timer"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "An uncle wanders in \"on behalf of my son in Canada\" and asks the player where to stand; he becomes the person the player has to keep safe at 16:00.",
+    "cast": [
+      "player"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    }
+  ]
+}

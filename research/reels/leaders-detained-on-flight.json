@@ -1,0 +1,59 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "leaders-detained-on-flight",
+  "title": "Police board the plane",
+  "status": "sourced-secondary",
+  "situation": "The three protest leaders are detained after police board their flight on landing in Delhi; supporters gather at the airport.",
+  "where": "IGI Airport, New Delhi",
+  "when": {
+    "event": "2026-10-10 10:30",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": "CJP leaders",
+    "officer": "Delhi Police",
+    "others": [
+      "supporters at the airport"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "If they want to detain or arrest me, let them go ahead.",
+      "speaker": "Abhijeet Dipke, before boarding",
+      "kind": "quoted-in-source",
+      "via": "ThePrint (live blog)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "tension"
+  ],
+  "actorTypes": [
+    "organiser",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Ticker item: \"Organiser detained at 30,000 feet. Protest leadership passes to whoever has the megaphone.\"",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    },
+    {
+      "url": "https://thesouthfirst.com/beyond-south/the-road-to-jantar-mantar-a-day-inside-indias-sealed-capital/",
+      "publisher": "The South First",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

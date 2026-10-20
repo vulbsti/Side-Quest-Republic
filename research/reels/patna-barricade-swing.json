@@ -1,0 +1,62 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "patna-barricade-swing",
+  "title": "Barricade as a swing",
+  "status": "sourced-secondary",
+  "situation": "Students climb a police barricade and use it like a swing.",
+  "where": "Patna, Bihar",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "students",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "goal_reversal"
+  ],
+  "lines": [
+    {
+      "text": "झूले की तरह",
+      "speaker": "article description",
+      "kind": "caption",
+      "via": "Navbharat Live"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "midday",
+  "emotion": [
+    "playful"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "barricade"
+  ],
+  "context": "TOI headline also mentions \"a stolen gate\"; body not read.",
+  "buildThis": {
+    "flag": false,
+    "situation": "Ambient: kids swinging on a barricade that a constable keeps telling them off for.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://navbharatlive.com/viral/patna-neet-ug-2026-protest-students-dance-under-water-cannon-viral-videos-cjp-1883900.html",
+      "publisher": "Navbharat Live",
+      "published": "2026-07-23",
+      "access": "fetched",
+      "note": "Hindi article."
+    },
+    {
+      "url": "https://timesofindia.indiatimes.com/india/water-cannon-tug-of-war-and-a-stolen-gate-patna-neet-protest-goes-viral/articleshow/132577095.cms",
+      "publisher": "Times of India",
+      "published": "2026-07-23",
+      "access": "blocked",
+      "note": "Headline only; recorded in protest-incidents.json."
+    }
+  ]
+}

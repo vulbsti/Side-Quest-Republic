@@ -1,0 +1,625 @@
+{
+  "schema": "sqr-reel-index/1",
+  "built": "2026-10-20",
+  "method": "Cloud container; Instagram, YouTube and many news sites blocked for curl. Sources read with WebSearch and WebFetch (a summarising fetch). Quotes marked quoted-in-source are as printed by the publisher and extracted by that tool; spot-check against the page before shipping a line. No reel video or audio was watched or heard in this pass. clipRanges stay null until the owner-machine pipeline runs (reel-pipeline-runbook.md).",
+  "statusKey": {
+    "sourced-secondary": "Described by at least one news/fact-check page read today",
+    "prior-direct-observation": "Instagram page read by the root agent on 2026-10-15/16 (earlier repo files); not re-read",
+    "unverified-owner-lead": "Owner idea with no source found"
+  },
+  "accessKey": {
+    "fetched": "page text read 2026-10-20",
+    "search-only": "URL and title from search only",
+    "blocked": "fetch refused today",
+    "prior": "recorded in an earlier repo file"
+  },
+  "counts": {
+    "total": 55,
+    "sourced-secondary": 49,
+    "prior-direct-observation": 4,
+    "unverified-owner-lead": 2,
+    "buildThis": 43
+  },
+  "entries": [
+    {
+      "id": "bus-key-snatch",
+      "title": "The detention bus that could not leave",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "scale_collision",
+        "social_permission"
+      ],
+      "buildThis": true,
+      "nSources": 5
+    },
+    {
+      "id": "police-push-bus",
+      "title": "Police push the keyless bus",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "scale_collision",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "detain-me-too",
+      "title": "\"Sir, mujhe bhi detain kar lo\"",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "goal_reversal",
+        "literal_service_request",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "gandhi-lookalike-chase",
+      "title": "\"Gandhiji, kahan bhaag rahe ho?\"",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [
+        "scale_collision",
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "imran-van-selfie",
+      "title": "\"Apparently I'm going for a drive\"",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "borrowed_confidence",
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "rohtak-villagers-detain-police",
+      "title": "Villagers detain the police who came to detain",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "goal_reversal",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "koi-media-nahin-hai",
+      "title": "\"Koi media nahin hai\"",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "hungry-police-bus",
+      "title": "\"Please feed us\"",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "section-163-loudspeaker",
+      "title": "The loop of the prohibitory order",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "bureaucratic_literalism",
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "detained-not-movement",
+      "title": "\"I am in detention. The movement is not.\"",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "not-getting-down-from-car",
+      "title": "\"I am not getting down from the car\"",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "bureaucratic_literalism"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "counter-mobilisation-posts",
+      "title": "\"NOW THE REAL FUN BEGINS!\"",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "leaders-detained-on-flight",
+      "title": "Police board the plane",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [],
+      "buildThis": false,
+      "nSources": 2
+    },
+    {
+      "id": "reclaimed-gyanu-bro",
+      "title": "\"Gyanu, you're done bro!\"",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "patna-water-cannon-dance",
+      "title": "Water cannon as a weather service",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [
+        "literal_service_request",
+        "goal_reversal"
+      ],
+      "buildThis": true,
+      "nSources": 5
+    },
+    {
+      "id": "tear-gas-arrangement",
+      "title": "\"Koi tear gas ka intezaam nahi kiye?\"",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [
+        "literal_service_request"
+      ],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "patna-rope-tug-of-war",
+      "title": "Tug of war with the police rope",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [
+        "goal_reversal",
+        "social_permission"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "patna-barricade-swing",
+      "title": "Barricade as a swing",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [
+        "goal_reversal"
+      ],
+      "buildThis": false,
+      "nSources": 2
+    },
+    {
+      "id": "patna-anthem-halt",
+      "title": "The anthem stops the advance",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "social_permission",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "subway-surfer-irl",
+      "title": "\"Subway Surfer IRL at Jantar Mantar Protest\"",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 4
+    },
+    {
+      "id": "parliament-doorbell",
+      "title": "\"Parliament ki doorbell baja ke bhag gaya!\"",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "borrowed_confidence",
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "chase-bollywood-edits",
+      "title": "Running reels with Bhag Milkha and Gangnam Style",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "superhero-cosplay",
+      "title": "Batman leaves Gotham",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 4
+    },
+    {
+      "id": "pk-alien-costume",
+      "title": "The PK alien who stood in for the real one",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "grwm-to-get-detained",
+      "title": "Get ready with me: detention edition",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision",
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "placards-ghosted",
+      "title": "\"Even my ex didn't ghost me this badly!\"",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "tear-gas-online-jokes",
+      "title": "\"I cried remembering them in the fog of the tear gas\"",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "scale_collision",
+        "literal_service_request"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "survival-tips",
+      "title": "Thermocol in the jeans",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "literal_service_request"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "gujarat-nashta",
+      "title": "\"Sir ji, nashta hoga?\"",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "literal_service_request",
+        "goal_reversal"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "rhiya-ahir-van",
+      "title": "The woman in front of the van",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "chembur-van-latch",
+      "title": "Someone just opens the latch",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "scale_collision",
+        "social_permission"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "pookie-cop",
+      "title": "The \"pookie\" cop blushes",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "social_permission",
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "ink-attack-blue",
+      "title": "\"Blue is my colour. Jai Bhim.\"",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "burger-spokesperson",
+      "title": "The spokesperson's burger",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [
+        "scale_collision"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "dcp-slap",
+      "title": "The slap and \"lost his cool\"",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "men-without-nameplates",
+      "title": "Men without names or uniforms",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "stone-truck",
+      "title": "Who parked a truck of stones?",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "constable-on-stage",
+      "title": "The constable who took the stage",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [
+        "goal_reversal"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "night-fans-sadda-haq",
+      "title": "Fans, food and \"Sadda Haq\" at 2:30 am",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "heat-medical-camp",
+      "title": "Paracetamol under a streetlight",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "food-wrapper-tracing",
+      "title": "Cops trace the biryani",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 2
+    },
+    {
+      "id": "mumbai-drug-threat",
+      "title": "\"50 grams of powder\"",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "kolkata-father",
+      "title": "The father who came instead of his son",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision",
+        "goal_reversal"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "strava-protest",
+      "title": "Strava receipt of the protest",
+      "status": "sourced-secondary",
+      "phase": "aftermath",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "patna-party-clash",
+      "title": "Two parties fight with lathis outside a party office",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "b-team-of-terrorists",
+      "title": "\"B-team of terrorists\"",
+      "status": "sourced-secondary",
+      "phase": "midday",
+      "mechanisms": [],
+      "buildThis": false,
+      "nSources": 2
+    },
+    {
+      "id": "fakes-and-deepfakes",
+      "title": "Deepfake DCP resigns; Rath Yatra passed off as protest",
+      "status": "sourced-secondary",
+      "phase": "tense",
+      "mechanisms": [],
+      "buildThis": true,
+      "nSources": 3
+    },
+    {
+      "id": "insaaniyat-pr",
+      "title": "\"Farq sirf uniform ka hai\"",
+      "status": "sourced-secondary",
+      "phase": "morning",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "ladakh-2025",
+      "title": "Leh, September 2025",
+      "status": "sourced-secondary",
+      "phase": "showdown",
+      "mechanisms": [],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "dosti-over-detention",
+      "title": "\"Dosti > detention\"",
+      "status": "prior-direct-observation",
+      "phase": "showdown",
+      "mechanisms": [
+        "goal_reversal",
+        "social_permission"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "dalli-police-sawaal",
+      "title": "\"Dalli police se ek zaroori sawaal\"",
+      "status": "prior-direct-observation",
+      "phase": "aftermath",
+      "mechanisms": [
+        "literal_service_request",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 1
+    },
+    {
+      "id": "baddies-of-resistance",
+      "title": "\"BADDIES of RESISTANCE, Part 2\"",
+      "status": "prior-direct-observation",
+      "phase": "aftermath",
+      "mechanisms": [],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "mantarjantar-launch-reel",
+      "title": "Players retell their detentions",
+      "status": "prior-direct-observation",
+      "phase": "aftermath",
+      "mechanisms": [
+        "borrowed_confidence"
+      ],
+      "buildThis": false,
+      "nSources": 1
+    },
+    {
+      "id": "tuition-teacher-call",
+      "title": "Officer as tuition teacher on mummy's call",
+      "status": "unverified-owner-lead",
+      "phase": "morning",
+      "mechanisms": [
+        "scale_collision",
+        "bureaucratic_literalism"
+      ],
+      "buildThis": true,
+      "nSources": 0
+    },
+    {
+      "id": "cute-uncle",
+      "title": "\"Uncle, aap cute ho\"",
+      "status": "unverified-owner-lead",
+      "phase": "morning",
+      "mechanisms": [
+        "social_permission"
+      ],
+      "buildThis": true,
+      "nSources": 0
+    }
+  ]
+}

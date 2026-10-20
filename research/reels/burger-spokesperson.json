@@ -1,0 +1,78 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "burger-spokesperson",
+  "title": "The spokesperson's burger",
+  "status": "sourced-secondary",
+  "situation": "During the 20 July clashes, the movement's spokesperson is filmed eating a burger away from the march. His defence video (\"I'm not accountable\") makes it worse; the party removes him the next day.",
+  "where": "Near the march route, New Delhi",
+  "when": {
+    "event": "2026-07-20",
+    "published": "2026-07-21"
+  },
+  "who": {
+    "protester": "party spokesperson",
+    "officer": null,
+    "others": [
+      "online critics"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Why did I eat a burger? This is a big issue today.",
+      "speaker": "Vijeta Dahiya",
+      "kind": "quoted-in-source",
+      "via": "Outlook"
+    },
+    {
+      "text": "Go hold the government accountable!",
+      "speaker": "Vijeta Dahiya",
+      "kind": "quoted-in-source",
+      "via": "Outlook"
+    },
+    {
+      "text": "We strongly condemn the deeply insensitive actions of our spokesperson Vijeta Dahiya",
+      "speaker": "CJP statement on X",
+      "kind": "quoted-in-source",
+      "via": "Outlook"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "angry",
+      "mocking"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Users asked why he was absent while supporters faced police."
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "cringe"
+  ],
+  "actorTypes": [
+    "spokesperson",
+    "critic"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Dev disappears for \"five minutes\" at 16:00; if the player films him at the CP burger counter during the charge, the clip ends his negotiating role.",
+    "cast": [
+      "dev"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.outlookindia.com/national/why-cjp-removed-vijeta-dahiya-as-its-spokesperson-for-having-a-burger",
+      "publisher": "Outlook",
+      "published": "2026-07-21",
+      "access": "fetched"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "pookie-cop",
+  "title": "The \"pookie\" cop blushes",
+  "status": "sourced-secondary",
+  "situation": "A creator films a light-hearted exchange with a constable to an unreleased Lana Del Rey \"good girl\" audio; he goes viral as the \"pookie cop\". Shown his own reel, he blushes. Protesters recreate similar clips with police across sites.",
+  "where": "Shivaji Park, Mumbai",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-27"
+  },
+  "who": {
+    "protester": "creators and young protesters",
+    "officer": "constable Vinod Kalukhe",
+    "others": []
+  },
+  "comicMechanism": [
+    "social_permission",
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Protesters call officers \"pookie\" while lip-syncing to the audio.",
+      "speaker": "trend description",
+      "kind": "paraphrased",
+      "via": "Free Press Journal"
+    }
+  ],
+  "reactionBeats": "Shy smile and blush when he sees himself.",
+  "music": "Unreleased Lana Del Rey \"good girl\" audio.",
+  "commentMood": {
+    "mood": [
+      "wholesome"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Users called him \"pookie\" and praised his calm, humble response."
+    ]
+  },
+  "phase": "morning",
+  "emotion": [
+    "wholesome",
+    "flirty-cheeky"
+  ],
+  "actorTypes": [
+    "creator",
+    "constable"
+  ],
+  "relatedOwnerLead": "cute-uncle (closest sourced analogue)",
+  "buildThis": {
+    "flag": true,
+    "situation": "Pester \"cute\": tell Sharma he is \"pookie\" on camera; he tries to stay stern, fails, and an hour later shows the player his own reel on his phone.",
+    "cast": [
+      "meera",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://newsable.asianetnews.com/india/pookie-cop-goes-viral-meet-mumbai-policeman-who-won-gen-z-hearts-during-cjp-protest-watch-articleshow-8gmbx2g",
+      "publisher": "Asianet Newsable",
+      "published": "2026-07-27",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.freepressjournal.in/viral/mumbai-cop-goes-viral-after-good-girl-officer-trend-mumbai-constables-blushing-reaction-wins-the-internet-video",
+      "publisher": "Free Press Journal",
+      "published": "2026-07-27",
+      "access": "fetched"
+    }
+  ]
+}

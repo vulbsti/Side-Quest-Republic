@@ -1,0 +1,94 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "subway-surfer-irl",
+  "title": "\"Subway Surfer IRL at Jantar Mantar Protest\"",
+  "status": "sourced-secondary",
+  "situation": "A student films himself being chased by a policeman and posts it with Subway Surfers framing; reported at over 54.8 million views.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "around the 2026-07-20 Parliament march",
+    "published": "2026-07-24"
+  },
+  "who": {
+    "protester": "male student filming himself",
+    "officer": "Delhi Police constable chasing",
+    "others": []
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "Subway Surfer IRL at Jantar Mantar Protest",
+      "speaker": "reel caption",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "Bro thought he can outrun me",
+      "speaker": "reel on-screen text",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "Thanks for the cardio, Delhi Police!",
+      "speaker": "caption on Subway Surfers-music clips",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": "Subway Surfers game soundtrack (reported across sources).",
+  "commentMood": {
+    "mood": [
+      "amused"
+    ],
+    "quoted": [],
+    "paraphrased": []
+  },
+  "phase": "showdown",
+  "emotion": [
+    "adrenaline",
+    "bravado"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable",
+    "self-filmer"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "When a constable chases you, the music snaps to a looping runner track; lose him through the chai stall and Meera's posted clip is captioned \"Bro thought he can outrun me\".",
+    "cast": [
+      "player",
+      "meera"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.onmanorama.com/news/india/2026/07/24/cjp-gen-z-protest-neet-leak-memes-subway-surfers-gta-rhiya-ahir.html",
+      "publisher": "Onmanorama",
+      "published": "2026-07-24",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "publisher": "National Herald",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    }
+  ]
+}
