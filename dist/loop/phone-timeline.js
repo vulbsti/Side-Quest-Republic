@@ -1,4 +1,275 @@
 // The phone's running day: world clips on a schedule, and the friends' group chat.
 // Format: plans/story-rebuild.md, "Phone timeline". Played by story.js.
-export const FEED_TIMELINE = [];
-export const CHAT_TIMELINE = [];
+//
+// FEED_TIMELINE: one unconditional post at least every 5 game minutes from 10:00 to 18:00, following what
+// the world does by itself (rules.js SCHEDULE), plus posts that only appear after something you did
+// (`requires`). Every handle is a made-up account. `real: true` marks posts inspired by a real 2025-26
+// reel or report in research/reels (paraphrased; no real people's names or handles).
+//
+// CHAT_TIMELINE: "Jantar Updates 🔥", the group chat of you, Kabir, Nikhil and Meera. Mummy's forwards
+// arrive relayed by Kabir. Entries at the same minute with opposite `requires` are the two versions of one
+// moment (e.g. Kabir stays or Kabir goes home at 14:00). `nikhil-found` is set by the nikhil-lost situation.
+
+const F = (at, by, kind, caption, extra = {}) => ({ at, by, kind, caption, ...extra });
+const NIKHIL_LOST = { notFlags: ['nikhil-found'] };
+const NIKHIL_LEFT = { flags: ['nikhil-left'], notFlags: ['nikhil-found'] };
+const KABIR_HERE = { anyFlags: ['kabir-stays', 'nikhil-found'] };
+const KABIR_HOME = { notFlags: ['kabir-stays', 'nikhil-found'] };
+
+export const FEED_TIMELINE = [
+  // --- 10:00–12:00, timepass ---
+  F('10:00', 'delhi.abhi.tak', 'news', 'Jantar Mantar, 10 baje: 12 protesters, 9 police, 1 chai stall. Ratio abhi police ke favour mein.', { id: 'feed-morning-count', place: 'stage' }),
+  F('10:05', 'ncr.mausam.memes', 'weather', 'Aaj ka forecast: 41°C, humidity 60%, sabr 0%. Chhata le jao. Ya placard, dono kaam karta hai.'),
+  F('10:10', 'grwm.with.tanvi', 'vlog', 'GRWM to (maybe) get detained 💅 step 1: comfortable joote. step 2: aadhaar ki photocopy. step 3: power bank, emotional bhi physical bhi.', { place: 'metro', real: true }),
+  F('10:15', 'rajiv.chowk.diaries', 'reel', 'Exit pe ek ladka 20 minute se "kaunsa gate hai" pooch raha hai. Bhai tu gate pe hi khada hai.', { place: 'metro' }),
+  F('10:20', 'survival.tips.dilli', 'reel', 'Protest survival kit: jeans ke andar thermocol (lathi ke liye), nimbu (gas ke liye), aur ek dost jo tujhse tez bhaagta ho.', { real: true }),
+  F('10:25', 'jantar.ki.awaaz', 'live', 'Stage set ho raha hai. Mic aa gaya. Speaker... raaste mein hai. Hopefully.', { place: 'stage' }),
+  F('10:30', 'the.chai.critic', 'food', 'CP stop wali chai: 8/10. Didi ki gossip: 10/10. Glass ka size: 2/10, emotionally 10/10.', { place: 'cp' }),
+  F('10:35', 'du.confessions.hub', 'meme', 'Confession #4417: mummy ko bola library ja raha hoon. Library ke bachche bhi yahin hain.'),
+  F('10:40', 'delhi.abhi.tak', 'news', 'Loudspeaker pe ek hi announcement loop mein: "Prohibitory order lagu hai, kripya ikattha na hon." Log ikattha hoke sun rahe hain.', { place: 'stage', real: true }),
+  F('10:45', 'placard.ki.duniya', 'reel', 'Aaj ka best placard: "Itna toh mere ex ne bhi ghost nahi kiya tha." Runner-up: "Goverment" (spelling bhi protest pe hai).', { place: 'stage', real: true }),
+  F('10:50', 'chacha.forwards', 'forward', '*VERY IMPORTANT* Jantar Mantar pe aaj 5G radiation se crowd control hoga. Sabhi log phone flight mode pe rakhein. 10 groups mein forward karein 🙏🙏'),
+  F('10:55', 'cp.shuttle.updates', 'news', 'CP shuttle time pe hai. Driver uncle ne bataya chai break "policy matter" hai, discuss nahi hoga.', { place: 'cp' }),
+  F('11:00', 'gen.z.dilli', 'meme', 'Batman bhi aaya hai Jantar Mantar. Gotham mein shayad garmi kam thi 🦇', { place: 'stage', real: true }),
+  F('11:05', 'rohit.ssc.2027', 'vlog', 'Barricade wale uncle se career advice li. SSC ka form bharne ko bola. Unhone khud teen baar bhara hai. Teeno baar "agli baar".', { place: 'barricade' }),
+  F('11:10', 'protest.ki.pathshala', 'reel', 'Police bus ke andar se awaaz aayi: "koi kuch khilao yaar." Students ne Parle-G diye. Itihaas mein pehla gathbandhan.', { real: true }),
+  F('11:15', 'breaking.bharat.24', 'news', 'BREAKING: Jantar Mantar pe "bheed jama" ho rahi hai. Bheed abhi 40 log. Hamare reporter ki jaan khatre mein (dhoop).'),
+  F('11:20', 'the.pk.alien', 'reel', 'Ek banda alien ka costume pehen ke aaya hai, kaan bade bade. Bolta hai "asli wala busy tha, main proxy hoon".', { place: 'stage', real: true }),
+  F('11:25', 'bhai.ki.reels', 'meme', 'Driver chai pe, chabi hook pe, didi gossip pe. CP stop is a heist movie waiting to happen 🎬', { place: 'cp' }),
+  F('11:30', 'jantar.ki.awaaz', 'news', 'Noon speech confirmed: 12 baje, Mira bolegi. Speaker aa gaya toh sab sunenge, warna sirf aage wale paanch log.', { place: 'stage' }),
+  F('11:35', 'ncr.mausam.memes', 'weather', '11:35 update: 42°C. Suraj ne bhi barricade todne ka socha hai.'),
+  F('11:40', 'fact.check.karo', 'fact-check', 'FACT CHECK: "5G radiation se crowd control" wala forward FAKE hai. Rajiv Chowk pe toh 4G bhi struggle karta hai.'),
+  F('11:45', 'fit.check.dilli', 'outfit', 'Protest fit check: kurta + sneakers + "mummy ko mat batana" energy 👟 10/10 would get detained in.', { place: 'metro' }),
+  F('11:50', 'breaking.bharat.24', 'news', 'Sources: protest "foreign-funded" ho sakta hai. Ek student ke bag mein Korean ramen dekha gaya.'),
+  F('11:55', 'cp.shuttle.updates', 'news', 'Shuttle full. Ek uncle ne apni kele ki theli ke liye alag seat maangi. Mili nahi. Kele khade hoke jaayenge.', { place: 'cp' }),
+
+  // conditional, morning
+  F('11:32', 'rajiv.chowk.diaries', 'reel', 'UPDATE: gate wala ladka mil gaya! Ek dost aaya, "pillar ke paas" wala pillar dhundh liya. Pillar ab famous hai.', { id: 'feed-nikhil-found', place: 'metro', requires: { did: ['nikhil-lost'] } }),
+  F('11:42', 'bhai.ki.reels', 'meme', 'Heist movie ho gayi 💀 CP shuttle khadi hai, chabi gayab, driver uncle ki chai thandi. Sequel kab?', { id: 'feed-chabi', place: 'cp', requires: { did: ['chabi'] } }),
+  F('11:47', 'rohit.ssc.2027', 'vlog', 'Barricade pe teen constables ka career counselling session viral 😭 "SSC better hai" ab ek sound hai.', { id: 'feed-career', place: 'barricade', requires: { did: ['career-counselling'] } }),
+  F('11:58', 'gen.z.dilli', 'meme', 'Koi subah se har constable ko pareshaan kar raha hai. Funny hai. Constables ke liye nahi.', { id: 'feed-nuisance', requires: { nuisance: 30 } }),
+
+  // --- 12:00–14:00, bheed ---
+  F('12:00', 'jantar.ki.awaaz', 'live', 'LIVE: Mira stage pe. "Hum yahan sunne nahi, sunaane aaye hain."', { id: 'feed-speech', place: 'stage' }),
+  F('12:05', 'rup.digital.yoddha', 'it-cell', 'Jantar Mantar pe "so-called students". Asli students toh is waqt tuition mein hain 🇮🇳 #DeshKeYuva'),
+  F('12:10', 'delhi.abhi.tak', 'news', 'Bheed 12 se 400 ho gayi do ghante mein. Chai wali didi ne rate nahi badhaya. Asli hero.', { place: 'stage' }),
+  F('12:15', 'meme.mantar', 'meme', 'Speech ke beech ek uncle chillaaye "awaaz nahi aa rahi!" Speech ka topic tha: humari awaaz koi nahi sunta.', { place: 'stage' }),
+  F('12:20', 'du.confessions.hub', 'meme', 'Confession #4420: crush bhi protest pe hai. Main bhi. Dono stage ke alag alag side pe. Beech mein 300 log aur ek ideology.'),
+  F('12:25', 'chacha.forwards', 'forward', 'Jantar Mantar pe FREE biryani 1 baje. Source: mere friend ke cousin ka driver. Sach hai 🙏'),
+  F('12:30', 'delhi.abhi.tak', 'news', 'Ek safed SUV aayi hai "VIP" sticker ke saath. Kisi ki nahi hai. Sab uski taraf dekh rahe hain.', { id: 'feed-suv', place: 'stage' }),
+  F('12:35', 'drs.sena.official', 'it-cell', 'Hamari bike rally "shanti banaye rakhne" ke liye pahunchi. 30 bikes, 30 horn, 0 silencer. Shanti 🙏', { place: 'barricade' }),
+  F('12:40', 'bhai.ki.reels', 'meme', 'Bike rally ka horn sun ke 300 saal purana yantra bhi time batana bhool gaya.', { place: 'stage' }),
+  F('12:45', 'meme.mantar', 'meme', 'Counter-group ka post: "NOW THE REAL FUN BEGINS!" Bhai fun ke liye Adventure Island ja.', { real: true }),
+  F('12:50', 'gen.z.dilli', 'meme', 'Patna wala police-rope tug-of-war reel phir trending. Jantar Mantar pe log rope dhundh rahe hain. Police rope chhupa rahi hai.', { real: true }),
+  F('12:55', 'ncr.mausam.memes', 'weather', '1 baje ka mausam: 43°C. Paani ki bottle ki keemat: emotional.'),
+  F('13:00', 'ljm.yuva.morcha', 'it-cell', 'Hamare neta ji Jantar Mantar pe yuvaon ke beech. Photo credit: neta ji ka photographer. #YuvaKeSaath', { place: 'stage' }),
+  F('13:05', 'delhi.abhi.tak', 'news', 'Stage pe paani khatam. Medical tent wali volunteer ORS ke packet gin rahi hai. Teen baar gin chuki hai.', { place: 'stage' }),
+  F('13:10', 'the.chai.critic', 'food', 'Didi ab stage pe chai bech rahi hai. CP stop sooni. Market follows the crowd 📈', { place: 'stage' }),
+  F('13:15', 'fact.check.karo', 'fact-check', 'Free biryani forward trace kiya: koi biryani nahi hai. Bas ek wrapper hai aur 400 believers.', { real: true }),
+  F('13:20', 'breaking.bharat.24', 'news', 'Primetime preview: "Kya protest hinsak hone wala hai?" Anchor ko pata hai. Anchor ko hamesha pehle pata hota hai.'),
+  F('13:25', 'heat.camp.volunteers', 'news', 'Medical camp update: 6 chakkar, 2 dehydration, 1 "crush ne seen karke chhod diya". Paracetamol limited, sympathy unlimited.', { place: 'stage', real: true }),
+  F('13:30', 'meme.mantar', 'meme', 'LJM neta ji ki "1 minute ki baat" 14 minute se chal rahi hai.', { place: 'stage' }),
+  F('13:35', 'cp.shuttle.updates', 'news', 'Driver uncle phir chai break pe. Bus CP pe khadi. Chabi hook pe. Bas bata rahe hain, kuch keh nahi rahe.', { place: 'cp' }),
+  F('13:40', 'du.confessions.hub', 'meme', 'Confession #4425: mummy ka call aaya, bola tuition mein hoon. Peeche se "inquilab zindabad" aa gaya. Bola civics ki class hai.'),
+  F('13:45', 'delhi.abhi.tak', 'news', 'Sansad Marg pe truck se naye barricades utar rahe hain. Police: "routine hai." Routine itna bada kabhi nahi tha.', { place: 'parliament' }),
+  F('13:50', 'rup.digital.yoddha', 'it-cell', 'Desh ke dushman ek baar phir ek jagah ikattha. Hum dekh rahe hain 👀'),
+  F('13:55', 'ncr.mausam.memes', 'weather', '2 baje: 44°C. Ab garmi bhi protest kar rahi hai. Uski demand: AC.'),
+
+  // conditional, midday
+  F('12:02', 'jantar.ki.awaaz', 'live', 'Speaker time pe pahuncha! Mira ki awaaz CP tak ja rahi hai. Jisne bhi speaker dhoya, dil se shukriya 🔊', { id: 'feed-speaker', place: 'stage', requires: { did: ['speaker-run'] } }),
+  F('12:32', 'fact.check.karo', 'fact-check', 'Bike wale gusse mein kyun aaye? Kisi ne forward bheja tha ki stage pe unke khilaaf naare lag rahe hain. Nahi lag rahe the. Ab lag rahe hain.', { id: 'feed-sena-called', requires: { flags: ['senaCalled'] } }),
+  F('13:18', 'meme.mantar', 'meme', 'Neta ji ko mic nahi mila. Mira ne mic nahi chhoda. "Photo-op cancelled" trending 🎤', { id: 'feed-mic', place: 'stage', requires: { did: ['mira-mic'] } }),
+  F('13:48', 'fact.check.karo', 'fact-check', 'Chai stall pe ek afwaah ka post-mortem hua. Constable bhi shaamil the. Forward ki maut, natural causes.', { id: 'feed-afwaah', requires: { did: ['afwaah'] } }),
+  F('13:58', 'du.confessions.hub', 'meme', 'Ek ladke ki mummy ne uske "tuition teacher" se phone pe baat ki. Teacher ki uniform khaki thi. Mummy satisfied.', { id: 'feed-tuition', real: true, requires: { flags: ['kabir-stays'] } }),
+
+  // --- 14:00–16:00, tension ---
+  F('14:00', 'delhi.abhi.tak', 'news', '14:00: barricades double, RAF ki company pahunchi. CP shuttle ab detention bus hai.', { id: 'feed-raf', place: 'barricade' }),
+  F('14:05', 'bhai.ki.reels', 'meme', 'Subah wali shuttle ab detention bus. Same driver, same seat, naya career.', { place: 'stage' }),
+  F('14:10', 'gen.z.dilli', 'meme', 'RAF ki neeli vardi aur mummy ka gussa: dono ek hi shade.', { place: 'parliament' }),
+  F('14:15', 'meme.mantar', 'meme', '"Koi media nahi hai!" bolke ek uncle ne camera ke saamne 20 minute interview diya.', { real: true }),
+  F('14:20', 'breaking.bharat.24', 'news', 'Sources: police ko "fresh orders" mile hain. Orders fresh hain, details baasi.'),
+  F('14:25', 'the.chai.critic', 'food', 'Shuttle wale bhaiya ab chai pe hi baithe hain. Bus jail ban gayi, toh chai stall unka office.', { place: 'cp' }),
+  F('14:30', 'chacha.forwards', 'forward', '3 baje Jantar Mantar pe PATHAR chalenge. Sabhi bachche ghar jao. Mere jaankar ne bola 🙏🙏'),
+  F('14:35', 'delhi.abhi.tak', 'news', 'Bheed mein kuch log bilkul naye joote pehne hain. Itni dhool mein bhi chamak rahe hain. Sawal poochna mana hai?', { place: 'stage' }),
+  F('14:40', 'fact.check.karo', 'fact-check', 'Viral "Jantar Mantar pe aag" wala video asal mein ek purani yatra ka hai. Please check karke forward karein.', { real: true }),
+  F('14:45', 'rohit.ssc.2027', 'vlog', 'RAF wale bhaiya se SSC GD ka cutoff poocha. Unhone sirf "peeche hato" bola. Valid answer.', { place: 'barricade' }),
+  F('14:50', 'rup.digital.yoddha', 'it-cell', 'Agar protest peaceful hai, toh water cannon kyun aa rahi hai? Socho 🤔'),
+  F('14:55', 'ncr.mausam.memes', 'weather', 'Chetavni: 3:30 se 4 baje ke beech Jantar Mantar pe "paani ki halki bauchhar" sambhav. Vajra-adharit.'),
+  F('15:00', 'delhi.abhi.tak', 'news', '15:00: police line ban gayi. Inspector ka wireless har 4 second mein "over".', { id: 'feed-line', place: 'stage' }),
+  F('15:05', 'fit.check.dilli', 'outfit', 'Police line ke saamne outfit transition 👗➡️👕 Algorithm ne approve kiya, Inspector ne nahi.'),
+  F('15:10', 'drs.sena.official', 'it-cell', 'Hamare karyakarta bhajan sandhya ke liye aaye the. Koi bhi aarop jhootha hai 🙏 (bhajan ki list jaldi share karenge)'),
+  F('15:15', 'meme.mantar', 'meme', 'Police line ke peeche ek constable reel dekh raha hai. Reel mein police line hai. Usi police line ki.'),
+  F('15:20', 'breaking.bharat.24', 'news', 'LIVE: "Tanav badh raha hai." Hamare anchor ne tanav dekh liya hai. Studio se.'),
+  F('15:25', 'du.confessions.hub', 'meme', 'Confession #4431: mummy ne location maangi. Jantar Mantar ka pin bheja, naam badal ke "City Library".'),
+  F('15:30', 'jantar.ki.awaaz', 'live', 'Stage pe megaphone kiske haath mein hai, abhi poori bheed wahi dekh rahi hai.', { place: 'stage' }),
+  F('15:35', 'chacha.forwards', 'forward', 'Jantar Mantar pe sab theek hai. Bas thodi garmi. Thodi police. Thoda tanav. Baaki sab theek 🙏'),
+  F('15:40', 'delhi.abhi.tak', 'news', 'Vajra water cannon aage aa rahi hai. Officials: "mausam ke hisaab se position kiya hai."', { id: 'feed-cannon', place: 'parliament' }),
+  F('15:45', 'gen.z.dilli', 'meme', 'Patna ke bachchon ne garmi mein police se water cannon chalane ki request ki thi. Delhi wale soch rahe hain 🤔💦', { real: true }),
+  F('15:50', 'bhai.ki.reels', 'meme', 'Water cannon ka truck khada hai. Kuch log peeche hate, kuch aage aaye, ek uncle ne sabun nikaala.', { place: 'stage' }),
+  F('15:55', 'breaking.bharat.24', 'news', 'BREAKING: Jantar Mantar pe "halka" bal prayog ki khabar. "Halka" ki definition pe charcha jaari.'),
+
+  // conditional, tension
+  F('14:32', 'gen.z.dilli', 'meme', 'Kisi ne police se garmi ki wajah se water cannon MAANGI 😭 Police: "upar baat karte hain."', { id: 'feed-cannon-asked', place: 'barricade', real: true, requires: { flags: ['cannon-requested'] } }),
+  F('15:08', 'rup.digital.yoddha', 'it-cell', 'Ek "student" ka naam police register mein aa gaya hai. Hum naam nahi lenge. Abhi.', { id: 'feed-register', requires: { flags: ['name-in-register'] } }),
+  F('15:22', 'delhi.abhi.tak', 'news', 'EXCLUSIVE: naye joote wale log SUV se utre, cash liya, bheed mein ghuse. Video mein sab saaf. SUV ab gayab.', { id: 'feed-shoes', place: 'stage', requires: { did: ['naye-joote'] } }),
+  F('15:52', 'meme.mantar', 'meme', 'Water cannon chali aur Jantar Mantar Holi party ban gaya 💦 "Protest hai ya pool party?"', { id: 'feed-cannon-dance', real: true, requires: { flags: ['cannon-requested'] } }),
+
+  // --- 16:00–17:00, showdown ---
+  F('16:00', 'delhi.abhi.tak', 'news', 'Aansu gas. Yantra ke paas dhuan. Log chai wali gali ki taraf bhaag rahe hain.', { id: 'feed-gas', place: 'stage' }),
+  F('16:05', 'cp.dukaan.wale', 'reel', 'CP ki dukaanon ke shutter aadhe neeche. Andar students. Aunty bol rahi: "baith jao, paani piyo, bahar mat jao."', { place: 'cp', real: true }),
+  F('16:10', 'gen.z.dilli', 'meme', 'Subway Surfers IRL: Jantar Mantar edition 🏃 Inspector = woh guard.', { real: true }),
+  F('16:15', 'meme.mantar', 'meme', 'Lathi charge ke beech "Bhaag Milkha Bhaag" wala edit aa bhi gaya. Internet ko 4 minute lage.', { real: true }),
+  F('16:20', 'rup.digital.yoddha', 'it-cell', 'Dekhiye kaise "shantipurn" pradarshankari police par hamla kar rahe hain. (video 3 second ka, pehle ke 3 minute nahi milenge)'),
+  F('16:25', 'heat.camp.volunteers', 'news', 'Medical tent: aankhon ke liye saaf paani chahiye, doodh NAHI. Doodh se sirf chai banti hai.', { place: 'stage' }),
+  F('16:30', 'fact.check.karo', 'fact-check', 'Pathar "protesters ki taraf" se aaya, jahan safed SUV bhi khadi thi. Ye detail har jagah chhote font mein likhi ja rahi hai.'),
+  F('16:35', 'ljm.yuva.morcha', 'it-cell', 'Neta ji AC gaadi se sthiti par lagataar nazar rakh rahe hain. Hum yuvaon ke saath hain (gaadi se).'),
+  F('16:40', 'meme.mantar', 'meme', 'Ek spokesperson ne TV pe "hinsa ki kadi ninda" ki. Ek haath mein burger. Doosre mein bhi burger.', { real: true }),
+  F('16:45', 'delhi.abhi.tak', 'news', 'Detention bus bhar gayi. Police: "aur bus mangwa rahe hain." Driver: "pehle chabi toh dhundho."', { place: 'stage' }),
+  F('16:50', 'dosti.over.detention', 'reel', 'Dost ko bus mein daala toh doosra dost darwaze pe khada ho gaya: "isko le jaoge toh mujhe bhi." Dosti > detention.', { real: true }),
+  F('16:55', 'ncr.mausam.memes', 'weather', '5 baje: 39°C. Suraj bhi thak gaya. Gas abhi bhi hawa mein hai, AQI ne resign kar diya.'),
+
+  // conditional, showdown
+  F('16:12', 'cp.dukaan.wale', 'reel', 'RAF ke ek jawan ne chupchaap gali khol di. Bachche nikal gaye. Usne kuch nahi bola, bas side ho gaya.', { id: 'feed-gali', requires: { flags: ['raf-muzaffarpur'] } }),
+  F('16:22', 'jantar.ki.awaaz', 'news', 'Dhuan mein dost bichhad gaye? Rajiv Chowk exit pe milo. Phone 1% pe ho toh ek hi message bhejo: jagah ka naam. "Pillar" nahi.', { id: 'feed-separated', place: 'metro', requires: { flags: ['separated'] } }),
+  F('16:42', 'delhi.abhi.tak', 'news', 'Ek group ko saath mein uthaya gaya, sab ek doosre ka haath pakde the. Bus mein bhi nahi chhoda.', { id: 'feed-crew-detained', requires: { flags: ['crewDetained'] } }),
+
+  // --- 17:00–18:00, aftermath ---
+  F('17:00', 'jantar.ki.awaaz', 'news', '17:00: dhoop dhal rahi hai. Jo yahan hai, stage ke paas baitho. Jo nahi mil raha, uska naam batao.', { id: 'feed-dusk', place: 'stage' }),
+  F('17:05', 'rup.digital.yoddha', 'it-cell', 'Subah ka "masoom" video dekhiye. Ab shaam ko dekhiye. Same log. Sach saamne hai #Expose'),
+  F('17:10', 'du.confessions.hub', 'meme', 'Confession #4440: mummy ko sab pata chal gaya. News pe dekh liya. Main peeche tha, dupatte mein. Mummy ne dupatta pehchaan liya.'),
+  F('17:15', 'gen.z.dilli', 'meme', 'Gas ke dhuan mein unki yaad aayi aur ro diya. Aansu gas ki wajah se the. Shayad.', { real: true }),
+  F('17:20', 'delhi.abhi.tak', 'news', 'Sthiti "niyantran mein", official ne kaha. Students ab bhi apne doston ko dhundh rahe hain.'),
+  F('17:25', 'the.chai.critic', 'food', 'Didi ne aaj ki aakhri chai free di. Rating: aansu. Is baar gas ki wajah se nahi.', { place: 'cp' }),
+  F('17:30', 'delhi.abhi.tak', 'news', '17:30: detention bus se sabko chhoda gaya. Ek uncle utar ke seedha kele ki dukaan gaye.', { id: 'feed-release', place: 'stage' }),
+  F('17:35', 'strava.ka.sipahi', 'reel', 'Aaj ki Strava: 14.2 km, average pace "police ke peeche". Personal best 🏅', { real: true }),
+  F('17:40', 'meme.mantar', 'meme', 'Release ke baad ek ladke ne pucha: "sir ji, nashta hoga?" Constable ne bola "ghar jao." Haste hue.', { real: true }),
+  F('17:45', 'breaking.bharat.24', 'news', 'Kal raat primetime: "Jantar Mantar ka sach." Anchor ne sach likh liya hai, video abhi aana baaki.'),
+  F('17:50', 'rajiv.chowk.diaries', 'reel', 'Rajiv Chowk exit pe shaam ko wahi log wapas. Subah sab fresh the. Ab sab ek hi rang ke: dhool.', { place: 'metro' }),
+  F('17:55', 'jantar.ki.awaaz', 'news', 'Aaj ke liye bas. Ghar pahunch ke group mein "pahunch gaya" bhejna. Sab. Haan, tum bhi.'),
+
+  // conditional, aftermath
+  F('17:07', 'cp.dukaan.wale', 'reel', 'Dhuan mein ek ne apne dost ko lathi se bachaya. Video blurry hai, intention HD.', { id: 'feed-dhuan', requires: { did: ['dhuan'] } }),
+  F('17:12', 'rup.digital.yoddha', 'it-cell', 'Ye wahi hai jo subah se har jagah dikh raha tha. "Mastermind"? Aap hi decide karein 🔍', { id: 'feed-mastermind', requires: { heat: 60 } }),
+  F('17:13', 'gen.z.dilli', 'meme', 'Aaj ka hero: woh jo har jagah tha aur sabko hasa raha tha. Naam kisi ko nahi pata. Aura pata hai ✨', { id: 'feed-aura', requires: { aura: 50 } }),
+  F('17:37', 'heat.camp.volunteers', 'news', 'Aaj jisne bhi paani ka crate tent tak pahunchaya: aapki wajah se teen log behosh nahi hue. Shukriya.', { id: 'feed-water', place: 'stage', requires: { flags: ['water-delivered'] } }),
+].sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+
+const C = (at, msgs, requires) => (requires ? { at, requires, msgs } : { at, msgs });
+const fwd = (text, after) => [['kabir', 'mummy ka forward 👇'], ['kabir', text], ...(after ? [['kabir', after]] : [])];
+
+export const CHAT_TIMELINE = [
+  // --- morning: Nikhil is lost, Kabir is on his way, Meera has a plan ---
+  C('10:02', [['nikhil', 'update: metro ka gate bahut bada hai. main uske andar hoon ya bahar, pata nahi']], NIKHIL_LOST),
+  C('10:04', [['meera', 'nikhil wahan sab pillar hi hain'], ['nikhil', 'haan. ye wala bhi pillar hai']], NIKHIL_LOST),
+  C('10:07', [['kabir', 'nikal raha hoon ghar se. mummy ko bola tuition ja raha hoon'], ['meera', 'tuition wale sir ko bataya?'], ['kabir', 'mere koi tuition wale sir nahi hain. isliye tension hai']]),
+  C('10:12', [['nikhil', 'update: ek board pe "Exit" likha hai. doosre pe bhi "Exit". sab exit hai. main kahin nahi ja pa raha']], NIKHIL_LOST),
+  C('10:16', [['meera', 'aaj ka content plan: 1) arrival vlog 2) fit check 3) kuch viral 4) ghar'], ['meera', 'order flexible hai. ghar fixed hai']]),
+  C('10:19', fwd('"Jantar Mantar pe aaj danga hoga. Bachchon ko ghar se mat nikalne do. Aage bhejo 🙏"', 'mummy ne ye mujhe hi bheja hai. bachcha main hi hoon')),
+  C('10:23', [['nikhil', 'update: ab ek aur pillar. pehle wale se thoda chhota']], NIKHIL_LOST),
+  C('10:27', [['meera', 'nikhil photo bhej'], ['nikhil', '[photo: pillar]'], ['meera', 'wow. thanks. bahut help hui']], NIKHIL_LOST),
+  C('10:31', [['nikhil', 'phone 3%. battery saver on. ab sirf important updates bhejunga'], ['nikhil', 'update: battery saver on kar diya']]),
+  C('10:35', [['kabir', 'metro mein ek aunty ne pucha "tuition ka bag itna halka?" bhai Delhi mein sab jaasoos hain']]),
+  C('10:39', [['nikhil', 'update: ek dog hai. bahut cute. main uske saath hoon'], ['meera', 'NIKHIL LANDMARK BOL'], ['nikhil', 'dog hi landmark hai']], NIKHIL_LOST),
+  C('10:44', [['meera', 'CP stop wali didi ne meri reel pe IRL comment kiya: "beta chai thandi ho rahi hai"'], ['meera', 'best engagement of my life']]),
+  C('10:48', [['kabir', 'opening line socha: "main tuition padhne aaya tha, yahan civics ka practical chal raha hai"'], ['meera', 'theek hai. thoda better ho sakta hai'], ['kabir', 'thoda?']]),
+  C('10:46', [['nikhil', 'update: ek aadmi se pucha jantar mantar kidhar hai. usne bola "aap uske upar khade ho." main ab confuse hoon']], NIKHIL_LOST),
+  C('10:53', [['nikhil', 'update: samosa uncle ke peeche peeche CP aa gaya. ek chai wali didi ne bola baith ja. baith gaya']], NIKHIL_LEFT),
+  C('10:57', [['kabir', 'rajiv chowk pahunch gaya. auto wala 10 minute ke 40 rupay bol raha hai'], ['meera', 'paidal aa. 10 minute'], ['kabir', 'paidal 10 minute ka 0 rupay. deal']]),
+  C('11:03', [['meera', 'main CP stop jaa rahi hu. driver uncle chai pe baithe hain. aesthetic hai. golden hour ke bina golden hour']]),
+  C('11:08', [['kabir', 'mummy ka call aaya. nahi uthaya. message kiya "sir ki class mein phone off"'], ['kabir', 'mummy: "konse sir?"'], ['kabir', 'soch raha hoon']]),
+  C('11:12', [['nikhil', 'update: didi ne bina pooche meri poori kundli bata di. 3% wala phone bhi. ye aunty CBI hai']], NIKHIL_LEFT),
+  C('11:17', [['meera', 'kabir sir ka naam soch liya?'], ['kabir', 'verma sir. har mohalle mein ek verma sir hota hai. mummy check nahi kar sakti']]),
+  C('11:22', [['kabir', 'stage pe hoon. mic hai. speaker nahi hai. bina speaker mic bas ek dandi hai'], ['meera', 'deep']]),
+  C('11:26', [['nikhil', 'update: ek bhaiya ne bola "tu wahi hai na jo ek ghante se yahin baitha hai". haan. main wahi hoon']], NIKHIL_LEFT),
+  C('11:33', [['nikhil', 'update: mil gaya. matlab mujhe dhundh liya gaya. ab main kisi ke peeche hoon, literally'], ['meera', 'FINALLY 😭'], ['kabir', 'pillar ko thank you bol de']], { flags: ['nikhil-found'] }),
+  C('11:37', [['meera', 'didi ne meri reel ka thumbnail approve kiya. main ab unstoppable hoon']]),
+  C('11:42', fwd('"Garmi mein nimbu paani piyo, cold drink se kidney fail hoti hai. Bade doctor ki salah 🙏"', 'mummy main tuition mein hoon. garmi kahan')),
+  C('11:46', [['meera', '12 baje speech hai. sab stage pe aao. crowd shot chahiye. kam se kam 4 log']]),
+  C('11:51', [['nikhil', 'update: ab bheed aa rahi hai. pehle pillar dikhta tha, ab log dikhte hain']], NIKHIL_LOST),
+  C('11:55', [['kabir', 'mira di bolne wali hain. main aage khada hoon'], ['kabir', 'agar main TV pe aaya toh mummy mujhe TV ke andar hi maar degi']]),
+
+  // --- midday: the crowd fills up ---
+  C('12:04', [['meera', 'speech chal rahi hai aur ek uncle ne mere frame mein chhata khol diya'], ['kabir', 'uncle bhi content hai']]),
+  C('12:08', [['kabir', 'speaker aa gaya!! awaaz CP tak ja rahi hai. shayad tuition tak bhi 😭']], { did: ['speaker-run'] }),
+  C('12:12', [['nikhil', 'update: speech sun raha hoon. samajh bhi aa raha hai. ye pehli baar hai']]),
+  C('12:17', [['kabir', 'mummy online hai. main bhi online hoon. hum dono ek doosre ka "online" dekh rahe hain']]),
+  C('12:22', [['meera', 'subah 34GB free tha. ab 2GB. ye protest meri storage pe hua hai']]),
+  C('12:27', [['kabir', 'kisi ne free biryani bola. main bhookha hoon par itna bhi nahi'], ['nikhil', 'kahan?'], ['kabir', 'itna bhi nahi Nikhil']]),
+  C('12:33', [['meera', 'safed SUV wale uncle ne mujhe ghura. maine bhi ghura. ab hum dushman hain']]),
+  C('12:37', [['nikhil', 'update: bike wale aaye. ek ne pucha petrol pump kidhar hai. maine bola "pillar ke paas"']]),
+  C('12:42', fwd('"Aaj Jantar Mantar pe bike rally hai. Sab bachche tuition se seedha ghar aayein."', 'mummy ko pata hai. ya nahi pata. ye forward double meaning hai')),
+  C('12:47', [['meera', 'kabir tera set kab hai'], ['kabir', 'jab bheed mood mein ho'], ['meera', 'bheed 43 degree mein hai'], ['kabir', 'toh shaam ko']]),
+  C('12:52', [['nikhil', 'phone 2%. kisi ke paas charger?'], ['meera', 'mere paas power bank hai jo khud charge nahi hai']]),
+  C('12:58', [['kabir', 'LJM wale neta aa rahe hain. unka photographer pehle aa gaya. neta baad mein. priorities']]),
+  C('13:03', [['meera', 'neta ji ne mere camera ki taraf haath hilaya. maine camera neeche kiya. unhone haath bhi neeche kar diya']]),
+  C('13:08', [['kabir', 'stage pe paani khatam. sana di ka tent ab sabse popular jagah hai. club jaisi line hai']]),
+  C('13:13', [['nikhil', 'update: ek aunty ne mujhe ek nimbu diya. pata nahi kyun. rakh liya hai']]),
+  C('13:17', [['meera', 'MIRA DI NE MIC NAHI CHHODA 😭 neta ji ka photo-op cancel. ye 1M jayega']], { did: ['mira-mic'] }),
+  C('13:22', [['kabir', 'mummy ne video call kiya. camera pe angootha rakh diya. "network issue mummy"'], ['meera', 'angootha bhi ek network issue hai']]),
+  C('13:27', [['meera', 'zoya ka phone didi ki dukaan pe charge ho raha hai. pehli baar uske haath khaali dekhe. ajeeb lag raha']]),
+  C('13:32', [['nikhil', 'update: ek naara yaad kiya. galat yaad kiya shayad. sab hans rahe hain']]),
+  C('13:37', [['kabir', 'bhai mummy ka call phir aa raha hai. ab uthana padega 😭 koi constable uncle verma sir ban jaaye please']]),
+  C('13:44', [['meera', 'kabir barricade ke paas "haan mummy. haan mummy. haan mummy" bol raha hai. record kar liya. kabhi nahi dikhaungi. shayad']]),
+  C('13:49', [['kabir', 'BHAI. sharma uncle verma sir ban gaye. mummy ne unko thank you bola. mujhe nahi bola']], { flags: ['kabir-stays'] }),
+  C('13:49', [['kabir', 'mummy ko shak ho gaya. "tuition mein itna shor?" maine bola group study. 2 baje tak ghar bulaya hai']], { notFlags: ['kabir-stays'] }),
+  C('13:53', [['nikhil', 'update: barricade double ho rahe hain. pucha kyun. bole "routine"']]),
+  C('13:58', [['meera', 'RAF aa rahi hai. trucks mein. sab ek jaise. unke helmets ka fit check karungi'], ['kabir', 'mat kar']]),
+
+  // --- tension: 14:00, Kabir stays or goes; the SUV, the shoes, the cannon ---
+  C('14:04', [['kabir', 'main ruk raha hoon. mummy ne permission de di. ya call kaat diya. dono same hai']], KABIR_HERE),
+  C('14:04', [['kabir', 'main ja raha hoon guys 😭 mummy ne live location maangi hai'], ['meera', 'KABIR NAHI. tera set'], ['kabir', 'set agle protest pe. agar mummy ne jaane diya']], KABIR_HOME),
+  C('14:08', [['meera', 'shuttle bus ab detention bus hai. same bus. same driver uncle. bus ka career change ho gaya']]),
+  C('14:13', [['nikhil', 'update: ek RAF bhaiya ko paani diya. thank you nahi bola. aankhon se bola']]),
+  C('14:18', [['kabir', 'dev bhaiya megaphone stage pe chhod ke chai pe chale gaye. megaphone akela hai. main usko dekh raha hoon. woh mujhe']], KABIR_HERE),
+  C('14:18', [['kabir', 'metro mein hoon. mummy ne pucha "itna pasina?" bola tuition ka AC kharab hai. ab AC bhi mere jhooth mein shaamil']], KABIR_HOME),
+  C('14:23', [['meera', 'ek constable ne mujhe bina wajah ghura. maine bina wajah smile kiya. tension 📈']]),
+  C('14:28', [['nikhil', 'update: SUV se 3 log utre. naye joote. bahut naye. ek pe dukaan ka sticker abhi bhi laga hai']]),
+  C('14:33', fwd('"3 baje Jantar Mantar pe pathar chalenge. Sab bachche ghar."', 'mummy ko ye kahan se pata jo humein nahi pata')),
+  C('14:38', [['meera', 'kisi ne police se WATER CANNON MAANGI garmi ki wajah se 😭😭 police soch rahi hai. SOCH rahi hai']], { flags: ['cannon-requested'] }),
+  C('14:42', [['nikhil', 'update: naye joote walon ne charger offer kiya. bole "bas thodi der humare saath khade ho". charger chahiye par'], ['meera', 'NIKHIL NAHI']]),
+  C('14:47', [['meera', 'meri reel 10k pe. ek comment: "behen tu kahan nahi hai". har jagah hoon. yahi toh kaam hai']]),
+  C('14:52', [['kabir', 'mira di ne bola 3:30 pe megaphone pe 2 minute. mere haath kaanp rahe hain. ya garmi hai']], KABIR_HERE),
+  C('14:57', [['nikhil', 'phone 1%. bas itna: main theek hoon. pillar ke paas nahi hoon. pehli baar']]),
+  C('15:03', [['meera', 'police line ban gayi. sab line mein khade hain jaise school assembly. abhi koi "saavdhan" bolega']]),
+  C('15:08', [['kabir', 'mummy ne papa ko bata diya. papa ka message: "?"'], ['kabir', 'sirf question mark. ye sabse dangerous punctuation hai']]),
+  C('15:13', [['meera', 'naye joote walon ka poora video hai mere paas. SUV, cash, sab. zoya ko bhej diya']], { did: ['naye-joote'] }),
+  C('15:18', [['nikhil', 'update: ek RAF bhaiya Muzaffarpur ke hain. litchi ki baat ki toh muskuraye. phir yaad aaya duty pe hain']]),
+  C('15:24', [['kabir', 'ek uncle ne bola "beta ghar jao". wahi uncle subah bole the "beta aage aao". uncle ka bhi stance change ho gaya']]),
+  C('15:28', [['meera', 'sab chup ho gaye achanak. mera phone bhi chup. 4% 😭 kuch hone wala hai']]),
+  C('15:33', [['kabir', 'megaphone pe kaun bol raha hai?? awaaz pehchaani lag rahi hai'], ['meera', 'sun. bas sun']]),
+  C('15:38', [['nikhil', 'update: ek bada truck aaya. paani wala. pehle laga tanker hai. tanker nahi hai']]),
+  C('15:43', [['meera', 'water cannon ka angle perfect hai. main ruki hoon. ye galat decision hai par reel sahi hogi']]),
+  C('15:48', fwd('"Water cannon ka paani naale ka hota hai. Bachche door rahein 🙏"', 'ye wala shayad sach hai')),
+  C('15:54', [['meera', 'WATER CANNON MEIN LOG NAACH RAHE HAIN 😭💦 october mein holi']], { flags: ['cannon-requested'] }),
+  C('15:58', [['nikhil', 'kuch dikh nahi raha']]),
+
+  // --- showdown ---
+  C('16:03', [['meera', 'GAS. aankh jal rahi hai. phone nahi gira. priorities sahi hain'], ['nikhil', 'kahan ho sab']]),
+  C('16:07', [['kabir', 'bhaag raha hoon. ek joota gaya. ek hai. ek joota bhi kaafi hai']], KABIR_HERE),
+  C('16:07', [['kabir', 'TV pe gas dikh raha hai. mummy ne TV band karke mujhe dekha. main ghar pe hoon. tum log theek ho??']], KABIR_HOME),
+  C('16:12', [['nikhil', 'update: pata nahi kahan hoon. ek pillar ke paas hoon. jaise subah'], ['meera', 'NIKHIL KAUNSA PILLAR']], { flags: ['separated'] }),
+  C('16:12', [['nikhil', 'update: zinda hoon. aankhein laal. dil bhi']], { notFlags: ['separated'] }),
+  C('16:17', [['meera', 'ek aunty ne dukaan ke andar bula liya. paani diya. bolin "meri beti bhi aisi hi hai". ro rahi hoon. gas ki wajah se. aunty ki wajah se bhi']]),
+  C('16:22', [['kabir', 'roll call abhi mat karo. pehle bhaago. phir roll call']]),
+  C('16:27', [['nikhil', 'update: ek RAF bhaiya ne chupke se gali dikha di. main bahar hoon. unka naam nahi pucha. puchna chahiye tha']], { flags: ['raf-muzaffarpur'] }),
+  C('16:32', [['meera', 'lathi wale wapas ja rahe hain. ek constable apni lathi ko aise dekh raha tha jaise "tune kya kiya"']]),
+  C('16:37', [['kabir', 'mummy ka message: "ghar aa jao bas. kuch nahi kahungi."'], ['kabir', 'bhai ye sabse dangerous line hai']]),
+  C('16:42', [['meera', 'bus mein log window se peace sign kar rahe hain. main bhi kar rahi hoon. driver uncle bhi kar rahe hain']]),
+  C('16:47', [['nikhil', 'update: teen logon ko paani diya. ek ne mujhe "bhaiya" bola. aaj main bhaiya ban gaya']]),
+  C('16:52', [['kabir', 'naya joke: tuition mein lathi charge hua. mummy boli "acha hua, ab padhai mein dhyaan dega"'], ['meera', 'ye wala chalega']]),
+  C('16:57', [['meera', 'aaj ki saari videos ek folder mein: "jantar 😭". 214 videos. 3 kaam ki']]),
+
+  // --- aftermath ---
+  C('17:04', [['meera', 'subah wala clip ek IT cell page ne repost kiya. naya caption. same video. alag kahani'], ['kabir', 'internet ki attendance bhi meri tuition jaisi hai. sab fake']]),
+  C('17:09', [['nikhil', 'update: metro exit pe hoon. wahi pillar. ab is pillar se dosti ho gayi']]),
+  C('17:14', fwd('"Jantar Mantar ke pradarshankari videshi agent hain. Pehchano inhe."', 'mummy ne is forward mein mujhe tag kiya hai. ye passive aggressive hai')),
+  C('17:19', [['meera', 'sana di ke tent pe line hai. sab theek ho na? haath utha ke batao. matlab emoji']]),
+  C('17:24', [['nikhil', 'update: phone mar raha hai. last message: thank you guys. aaj achha tha. ajeeb tha. achha tha']]),
+  C('17:29', [['kabir', 'bus se sab chhoot rahe hain. ek uncle kele ki theli ke saath utre. kele bach gaye. izzat nahi']]),
+  C('17:34', [['meera', 'sab metro exit pe aao. roll call. bina roll call koi ghar nahi jayega']]),
+  C('17:39', [['kabir', 'jo bus mein the unka group photo bus ke saamne. sab muskura rahe hain. police wale bhi. thoda thoda']], { flags: ['crewDetained'] }),
+  C('17:44', [['kabir', 'papa ka message aaya: "khana kha liya?"'], ['kabir', 'laga papa gussa honge. papa ne bas khana pucha. main ro dunga']]),
+  C('17:49', [['meera', 'final reel ka caption: "gaye the tuition, aaye the..." aage kya likhu'], ['kabir', '"...aur wapas bhi aaye"'], ['meera', 'ye achha hai']]),
+  C('17:54', [['meera', 'nikhil ka phone mar gaya. last seen: "pillar ke paas"'], ['kabir', 'subah pillar ke paas mila, shaam ko pillar ke paas gaya. full circle']]),
+  C('17:58', [['kabir', 'ghar pahunch ke batana sab. sirf "pahunch gaya" likhna. mummy ki tarah']]),
+].sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));

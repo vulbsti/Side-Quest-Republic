@@ -830,6 +830,7 @@ function detainPerson(s, id) {
   if (!p || p.hidden || p.mode === 'detained') return;
   if (p.carrying) { const o = s.objects[p.carrying]; o.holder = null; Object.assign(o, { x: p.x, z: p.z }); p.carrying = null; }
   p.mode = 'detained'; p.hidden = true; p.path = [];
+  if (id === 'kabir' || id === 'nikhil') s.flags[`${id}-on-bus`] = true; // detain-me (story/detain-me.js) hooks on these
   Object.assign(p, detentionPos(s));
   s.detention.people.push(id);
 }
@@ -1010,6 +1011,7 @@ function updateOfficers(s, dt) {
     if (o.mode === 'chase') continue;
     walk(o, dt, o.mode === 'charge' ? WALK * 1.5 : WALK);
     if (o.mode === 'toPost' && arrived(o)) o.mode = 'post';
+    if (o.mode === 'away' && s.t >= (o.backAt ?? 0)) { o.mode = 'toPost'; walkTo(o, o.post); }
   }
   // An annoyed officer cools off after half an hour.
   for (const o of allOfficers(s)) if (o.mood === 'annoyed' && s.t - (o.annoyedAt ?? 0) >= mins(30)) o.mood = 'bored';
@@ -1867,7 +1869,9 @@ export function endingCard(s) {
   const text = (key) => CALLBACKS[key] ?? STORY.callbackText(key);
   const mine = s.callbacks.filter((c) => !c.key.startsWith('world-') && text(c.key));
   const world = s.callbacks.filter((c) => c.key.startsWith('world-') && text(c.key));
-  const picked = [...mine.slice(0, 5), ...world].slice(0, Math.max(3, Math.min(5, mine.length)));
+  // Five at most: the day's first causes and its last consequences (the 17:00 repost, the smoke), not just the morning.
+  const kept = mine.length > 5 ? [...mine.slice(0, 2), ...mine.slice(-3)] : mine;
+  const picked = [...kept, ...world].slice(0, Math.max(3, Math.min(5, kept.length)));
   return {
     outcome,
     title: SHOWDOWNS[outcome]?.title ?? outcome,
@@ -2033,11 +2037,12 @@ export function act(s, cmd) {
   if (cmd.type === 'talk') {
     const p = s.people[cmd.to] || officerById(s, cmd.to);
     if (!p || p.hidden) return { ok: false };
+    // A lost Nikhil falls in behind whoever finally talks to him, whatever the conversation is about.
+    if (cmd.to === 'nikhil' && p.mode === 'lost') { p.mode = 'follow'; emit(s, s.nikhilFound ? 'nikhil-follows-again' : 'nikhil-follows'); }
     const story = STORY.talk(s, cmd.to);
     if (story) return story;
     if (!s.people[cmd.to]) return { ok: false };
     const said = talkLine(s, cmd.to);
-    if (cmd.to === 'nikhil' && p.mode === 'lost') { p.mode = 'follow'; emit(s, s.nikhilFound ? 'nikhil-follows-again' : 'nikhil-follows'); }
     return { ok: true, ...said };
   }
   if (cmd.type === 'whisper') {
@@ -2238,6 +2243,7 @@ function releasePerson(s, id) {
   s.detention.people.splice(i, 1);
   const p = s.people[id], d = detentionPos(s);
   p.hidden = false; p.mode = 'story'; Object.assign(p, offset(d, -1.5, 1.5)); p.path = [];
+  cue(s, 'detainees-escape', { pos: d, data: { people: [id] } }); // the client draws them stepping off
 }
 function nikhilFoundByPlayer(s) {
   const n = s.people.nikhil;

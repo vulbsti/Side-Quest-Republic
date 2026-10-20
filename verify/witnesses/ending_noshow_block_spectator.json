@@ -36,42 +36,40 @@
   },
   {
    "clock": "10:07",
-   "do": "take:speaker",
+   "wait": 20
+  },
+  {
+   "clock": "10:27",
+   "wait": 10
+  },
+  {
+   "clock": "10:37",
+   "do": "rally:stage",
    "cmd": {
-    "type": "take",
-    "object": "speaker"
+    "type": "rally"
    },
    "at": {
-    "x": -18,
-    "z": -30.8
+    "x": 0,
+    "z": -5.5
    }
   },
   {
-   "clock": "10:08",
-   "do": "scene:detain-me",
+   "clock": "10:40",
+   "do": "rally:stage",
    "cmd": {
-    "type": "scene",
-    "id": "detain-me"
+    "type": "rally"
    },
    "at": {
-    "x": 20,
-    "z": -7
+    "x": 0,
+    "z": -5.5
    }
   },
   {
-   "clock": "10:11",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
-   },
-   "at": {
-    "x": 3.2,
-    "z": -10.4
-   }
+   "clock": "10:41",
+   "wait": 3
   },
   {
-   "clock": "10:13",
+   "clock": "10:44",
    "finish": true
   }
  ]

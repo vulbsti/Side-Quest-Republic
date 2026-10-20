@@ -1,8 +1,9 @@
 // Plays whole looping days with scripted players and checks the rules actually change the outcome.
 import assert from 'node:assert/strict';
-import { createDay, advance, act, at, SPOTS, RULES, drainEvents, dist } from '../dist/loop/rules.js';
+import { createDay, advance, act, at, SPOTS, RULES, drainEvents, dist, setTempo } from '../dist/loop/rules.js';
 import { LINKS, LINES, ENDINGS, HINTS, TALK, AGAIN, RUMOURS, PEOPLE, AMBIENT } from '../dist/loop/content.js';
 
+setTempo('slice'); // these chains were tuned on the 10-minute slice; verify/ checks the full day
 const runUntil = (s, t) => advance(s, t - s.t);
 const moveTo = (s, spot) => Object.assign(s.player, { x: spot.x, z: spot.z });
 const links = (events) => new Set(events.map((e) => e.link).filter(Boolean));

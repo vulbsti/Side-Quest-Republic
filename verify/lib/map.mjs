@@ -5,7 +5,9 @@
 import { readFileSync } from 'node:fs';
 import * as H from './harness.mjs';
 import * as C from '../../dist/loop/content.js';
-import { SCENES } from '../../dist/loop/scenes.js';
+import { SITUATIONS } from '../../dist/loop/situations.js';
+import { TALKS, BRUSHOFF, PESTER_BY, CHATTER } from '../../dist/loop/talks.js';
+import { FEED_TIMELINE, CHAT_TIMELINE } from '../../dist/loop/phone-timeline.js';
 import * as PH from '../../dist/loop/phone.js';
 import { rng } from './explore.mjs';
 
@@ -172,19 +174,28 @@ export function buildMap({ record = true } = {}) {
     endings: Object.keys(C.ENDINGS),
     outcomes: Object.keys(C.SHOWDOWNS),
     roles: Object.keys(C.ROLES),
-    scenes: Object.entries(SCENES).map(([id, sc]) => ({ id, options: sc.options.map((o, i) => ({ i, intent: o.intent })) })),
-    talk: Object.fromEntries(Object.keys(C.TALK).map((p) => [p, {
+    // Situations: each node with options is a choice point (coverage counts 'choice:<id>:<node>:<i>').
+    situations: Object.entries(SITUATIONS).map(([id, sc]) => ({
+      id, title: sc.title, act: sc.act,
+      nodes: Object.entries(sc.nodes).map(([nid, n]) => ({ id: nid, options: (n.options || []).map((o, i) => ({ i, intent: o.intent })), goal: n.goal?.text ?? null })),
+    })),
+    conversations: Object.fromEntries(Object.entries(TALKS).map(([who, l]) => [who, { count: l.length, brushoffs: (BRUSHOFF[who] || []).length }])),
+    talk: Object.fromEntries(Object.keys(C.TALK).filter((p) => !TALKS[p]?.length).map((p) => [p, { // the old one-line talk, for anyone with no conversations yet
       lines: C.TALK[p].length, again: (C.AGAIN[p] || []).length,
       states: [...(talkStates[p] || [])].sort(),
       statesWithLines: [...new Set(C.TALK[p].map((t) => t.when))].sort(),
     }])),
-    pester: { hows: Object.keys(C.PESTER.say), responses: Object.values(C.PESTER).flatMap((v) => (Array.isArray(v) ? v : typeof v === 'object' ? Object.values(v).flat() : [])).length, perOfficer: false },
+    pester: { hows: Object.keys(C.PESTER.say), responses: Object.values(C.PESTER).flatMap((v) => (Array.isArray(v) ? v : typeof v === 'object' ? Object.values(v).flat() : [])).length, perOfficer: ['sharma', 'c1', 'c2', 'c3', 'c4', 'c5', 'raf'].every((id) => PESTER_BY[id]) },
     intents: { defined: Object.keys(C.INTENTS), used: [...intentsUsed.literal], usedPatterns: intentsUsed.patterns.map(String) },
     sayCodes,
     phone: { chatTriggers: Object.keys(PH.CHAT), tickerPhases: Object.keys(PH.TICKER), realReels: PH.REAL_REELS.length, captions: Object.keys(PH.CAPTIONS) },
     content: {
       barks: Object.values((src('dist/loop/barks.js').match(/'[^']{12,}'/g) || [])).length,
-      sceneBeats: Object.values(SCENES).reduce((n, sc) => n + sc.beats.length, 0),
+      situationBeats: Object.values(SITUATIONS).reduce((n, sc) => n + Object.values(sc.nodes).reduce((m, nd) => m + (nd.beats || []).length + (nd.options || []).reduce((k, o) => k + (o.beats || []).length, 0), 0), 0),
+      conversations: Object.values(TALKS).flat().length,
+      chatter: CHATTER.length,
+      feedTimeline: FEED_TIMELINE.length,
+      chatTimeline: CHAT_TIMELINE.length,
       talkLines: Object.values(C.TALK).flat().length,
       againLines: Object.values(C.AGAIN).flat().length,
       lines: Object.keys(C.LINES).length,

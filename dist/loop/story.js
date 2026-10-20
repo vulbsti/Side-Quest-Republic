@@ -124,7 +124,8 @@ export function createStory(api) {
     switch (k) {
       case 'follow': if (a === 'nikhil') { s.people.nikhil.mode = 'follow'; } else if (!st.followers.includes(a) && s.people[a]) { st.followers.push(a); s.people[a].mode = 'follow'; } break;
       case 'unfollow': st.followers = st.followers.filter((x) => x !== a); if (s.people[a]?.mode === 'follow') s.people[a].mode = 'story'; break;
-      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = p.kind ? 'toPost' : 'story'; api.walkTo(p, to); } break; }
+      // An officer sent somewhere by the story goes back to his post after a while (rules.js updateOfficers).
+      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = s.officers[a] ? 'away' : p.kind ? 'toPost' : 'story'; if (s.officers[a]) p.backAt = s.t + api.mins(25); api.walkTo(p, to); } break; }
       case 'leave': { const p = s.people[a]; if (p && !p.hidden) { p.mode = 'storyLeave'; api.walkTo(p, SPOTS.metro); } break; }
       case 'return': { const p = s.people[a]; if (p && p.hidden && p.mode !== 'detained') { p.hidden = false; Object.assign(p, SPOTS.metro); p.mode = 'story'; api.walkTo(p, PLACES.stage); } break; }
       case 'give': api.giveObject(s, a, b); break;
@@ -182,7 +183,7 @@ export function createStory(api) {
         beats: (node.beats || []).map((b) => ({ who: b.who ?? b[0], line: b.line ?? b[1], react: b.react ?? null, via: b.via ?? null })),
         idle: node.idle || [],
         options: node.options.map((o, i) => { const ok = meets(s, o.requires); return { i, intent: o.intent, ok, why: ok ? '' : why(s, o.requires) }; }),
-        t: s.t,
+        t: s.t, at: { x: s.player.x, z: s.player.z },
       };
       if (st.sits[id]) st.sits[id].node = nodeId;
       api.cue(s, 'convo', { pos: s.player, data: { kind, id, node: nodeId } });
@@ -297,6 +298,7 @@ export function createStory(api) {
     if (out?.caption) postFeed(s, { by: out.by || 'jantar.ki.awaaz', caption: out.caption, kind: id, place: def.place && PLACES[def.place] ? def.place : null });
     if (out?.callback) api.callback(s, `sit:${id}:${sit.state}`, `situation:${id}`);
     doAll(s, out?.do, { id });
+    if (def.clip && sit.state === 'done') api.happen(s, def.clip, s.player); // something worth filming (and a clip Meera posts)
     api.cue(s, 'situation-end', { pos: s.player, data: { id, end: sit.state } });
   }
   /** Callback text for the ending card. */
@@ -329,10 +331,10 @@ export function createStory(api) {
     const st = story(s), now = s.t;
     // Situations open, announce themselves, run themselves if you never come, and check goals.
     // Walk away from a conversation and it ends.
-    if (st.convo && st.convo.who && st.convo.camera === 'none') {
-      const b = visibleBody(s, st.convo.who);
-      if (!s.player.detained && (!b || dist(b, s.player) > START_RANGE * 2)) leave(s);
-    }
+    // (On the bus you can't walk away, so it stays until you answer.)
+    // Walk away and stay away (20 real seconds, so a quick step back doesn't drop it) and it ends.
+    if (st.convo && !s.player.detained && dist(st.convo.at, s.player) > START_RANGE * 2) { st.convo.away = (st.convo.away || 0) + dt; if (st.convo.away > 20) leave(s); }
+    else if (st.convo) st.convo.away = 0;
     for (const [id, def] of Object.entries(SITUATIONS)) {
       const sit = (st.sits[id] ??= { state: 'waiting' });
       // A repeatable situation (bus-andar) re-arms once its requirements stop holding.

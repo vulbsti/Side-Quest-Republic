@@ -33,7 +33,7 @@ const mark = (s, key) => { if (!(key in s.history)) s.history[key] = s.t; };
 export function observe(run) {
   const s = run.s, log = run.log;
   const nf = Object.keys(s.flags).length, nm = Object.keys(s.memo).length;
-  const quiet = !s.events.length && !s.cues.length && s.callbacks.length === run._cb && nf === run._nf && nm === run._nm && !s.scene;
+  const quiet = !s.events.length && !s.cues.length && s.callbacks.length === run._cb && nf === run._nf && nm === run._nm && !s.story.convo && !s.story.queue.length;
   if (quiet) return;
   run._cb = s.callbacks.length; run._nf = nf; run._nm = nm;
   const v = engineView(s, R.placeAt);
@@ -64,7 +64,13 @@ export function observe(run) {
   }
   for (const c of s.callbacks) mark(s, 'callback:' + c.key);
   for (const k of Object.keys(s.memo)) mark(s, 'memo:' + k);
-  if (s.scene) mark(s, 'scene:' + s.scene.id);
+  const st = s.story;
+  if (st.convo) mark(s, `node:${st.convo.kind}:${st.convo.id}:${st.convo.node}`);
+  for (const [id, x] of Object.entries(st.sits)) {
+    if (x.state !== 'waiting') mark(s, `situation:${id}:${x.state}`);
+    if (x.node) mark(s, `node:situation:${id}:${x.node}`);
+    if (x.last) mark(s, `situation:${id}:${x.last}`);
+  }
 }
 
 /** Let the world run for some real seconds, watching (outside any trace: for probes and finishing a day). */
@@ -89,14 +95,14 @@ export function clientFeedback(cmd, r, before, s) {
     case 'talk': return { shown: !!r?.line, raw: null };
     case 'film': case 'rally': case 'stance': return { shown: true, raw };
     case 'pester': case 'provocateur': case 'whisper': return { shown: !r?.ok, raw };
-    case 'scene': return { shown: !!r?.ok && cmd.option == null, raw: null }; // a starting scene plays its cinematic
-    case 'plead': return { shown: !r?.ok && !!r?.say, raw };
+    case 'say': case 'leave': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
+
     default: return { shown: false, raw };
   }
 }
 // Answers to a command show up where the player is looking: a bubble, a toast, the wireless. A chat line on a
 // closed phone is not an answer to "talk your way off the bus".
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
 const seenTexts = (log, from, to = log.length) => new Set(log.slice(from, to).filter((i) => i.seen && ON_SCREEN.has(i.channel)).map((i) => `${i.channel}|${i.who}|${i.text}`));
 
 /**
@@ -122,11 +128,12 @@ export function perform(run, step) {
         for (let k = ticksFor(FEEDBACK_SECONDS); k > 0 && !ghost.s.over; k--) { R.tick(ghost.s, STEP); observe(ghost); }
         without = seenTexts(ghost.log, 0);
         before = { carrying: s.player.carrying };
+        run._convo = s.story.convo ? `${s.story.convo.id}:${s.story.convo.node}` : null;
         const r = (run.act || R.act)(s, cmd) || { ok: false }; // run.act: the map's recording proxy
         out.r = r;
         out.verb = cmd.type + (cmd.how ? ':' + cmd.how : '');
         mark(s, `verb:${out.verb}:${r.ok ? 'ok' : 'no'}`);
-        if (cmd.type === 'scene' && cmd.option != null && r.ok) mark(s, `choice:${cmd.id}:${cmd.option}`);
+        if (cmd.type === 'say' && r.ok) mark(s, `choice:${run._convo}:${cmd.option}`);
         fb = clientFeedback(cmd, r, before, s);
         from = run.log.length;
         observe(run);

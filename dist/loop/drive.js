@@ -13,10 +13,10 @@ export const STEP = 0.1; // the client's fixed step
 export const JOG = 4.7; // the player's jog, m/s
 export const FEEDBACK_SECONDS = 3; // after a command, watch this long for an answer
 export const WALK_LIMIT = 150; // give up walking after this many seconds
-export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, scene: 4, film: 10, rally: 1, drop: 0.6, go: 1 };
+export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1 };
 export const reachOf = (cmd) => (cmd ? REACH[cmd.type] ?? 1.5 : REACH.go);
 // Commands that work wherever you are, so they are tried even if the walk didn't get there.
-const ANYWHERE = (cmd) => cmd.type === 'stance' || cmd.type === 'plead' || (cmd.type === 'scene' && cmd.option != null);
+const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave'].includes(cmd.type);
 
 /** How many STEP ticks `for (t = 0; t < seconds; t += STEP)` runs (floating point included). */
 export function ticksFor(seconds) {
@@ -31,7 +31,7 @@ export function targetOf(R, s, cmd, at) {
   if (cmd.type === 'provocateur') { const p = s.provocateurs.find((x) => x.id === cmd.id); if (p) return cmd.how === 'report' ? at : p; }
   if (cmd.type === 'take') return s.objects[cmd.object];
   if (cmd.type === 'pester') return R.officerById(s, cmd.to) || at;
-  if (cmd.type === 'talk' || cmd.type === 'give' || cmd.type === 'whisper') return s.people[cmd.to] || at;
+  if (cmd.type === 'talk' || cmd.type === 'give' || cmd.type === 'whisper') return s.people[cmd.to] || R.officerById(s, cmd.to) || at;
   return at;
 }
 

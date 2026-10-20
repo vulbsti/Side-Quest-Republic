@@ -23,21 +23,29 @@
   },
   {
    "clock": "10:05",
-   "wait": 10
-  },
-  {
-   "clock": "10:15",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
+   "do": "hide:stage",
+   "cmd": null,
    "at": {
     "x": 0,
     "z": -5.5
+   },
+   "hold": 1
+  },
+  {
+   "clock": "10:08",
+   "do": "whisper:biryani:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
    }
   },
   {
-   "clock": "10:17",
+   "clock": "10:09",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -49,7 +57,26 @@
    }
   },
   {
-   "clock": "10:20",
+   "clock": "10:11",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "10:13",
+   "wait": 10
+  },
+  {
+   "clock": "10:23",
+   "wait": 20
+  },
+  {
+   "clock": "10:43",
    "finish": true
   }
  ]

@@ -6,7 +6,7 @@ import * as H from './harness.mjs';
 import { checkInvariants, checkEndingCard } from './properties.mjs';
 
 const { R } = H;
-const MILESTONE = /^(rule|memo|flag|callback|scene|ending|outcome|role|link):/;
+const MILESTONE = /^(rule|memo|flag|callback|situation|node|choice|ending|outcome|role|link):/;
 
 export function rng(seed = 1) {
   let a = seed >>> 0;
@@ -61,7 +61,7 @@ export function explore({ steps: budget = 2500, seconds = 600, seed = 7, tempo =
     run.prev = { phase: s.phase };
     if (s.player.chasedBy && s.memo.chase && R.clockMinutes(s.t) - R.clockMinutes(s.memo.chase.t) > 10) record(violations, 'chase-ends', run, { id: 'chase-ends', msg: `chased since ${R.clockText(s.memo.chase.t)}` });
     if (s.player.detained && s.detention.since != null && R.clockMinutes(s.t) - R.clockMinutes(s.detention.since) > 30 && R.clockMinutes(s.t) < 17 * 60) {
-      record(violations, 'detention-exit', run, { id: 'detention-exit', msg: `on the bus since ${R.clockText(s.detention.since)} (aura ${Math.round(s.player.rep.aura)}, help ${Math.round(s.player.rep.help)}): pleading needs aura 50, a friend needs help 30` });
+      record(violations, 'detention-exit', run, { id: 'detention-exit', msg: `on the bus since ${R.clockText(s.detention.since)} (aura ${Math.round(s.player.rep.aura)}, help ${Math.round(s.player.rep.help)}): no way off the bus worked` });
     }
     if (s.over) {
       days++;

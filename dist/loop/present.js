@@ -24,7 +24,7 @@ export const PHONE_KINDS = new Set(['wireless', 'feed', 'stream', 'chat', 'ticke
  *   policeNear(range): bool   any visible officer (or Sharma) within range of the player,
  * }
  * Returns { kind, channel, seen, learn }.
- *   channel: 'radio' | 'feed' | 'stream' | 'chat' | 'ticker' | 'bark' | 'player' | 'bubble' | 'officer' | 'toast' | 'none'
+ *   channel: 'convo' | 'radio' | 'feed' | 'stream' | 'chat' | 'ticker' | 'bark' | 'player' | 'bubble' | 'officer' | 'toast' | 'none'
  *   seen: the player can actually notice it (on screen, in range, or on the phone)
  *   learn: the event's chaos-board link is learned
  */
@@ -39,6 +39,8 @@ export function routeEvent(e, v) {
   const learn = !!e.link && heard;
   if (!onPhone && v.now - e.t > STALE) return { kind, channel: 'none', seen: false, learn, why: 'stale' };
   const inView = (b) => !!b && b.visible !== false && dist(p, b) <= BUBBLE_RANGE;
+  // A conversation's beats are on screen while you're in it (the options card, the reel frame, bubbles).
+  if (kind === 'beat') return { kind, channel: 'convo', seen: !!e.text, learn: !!e.link };
   if (kind === 'wireless') return { kind, channel: 'radio', seen: v.policeNear(RADIO_RANGE), learn };
   if (onPhone) return { kind, channel: kind, seen: true, learn };
   if (kind === 'bark') return { kind, channel: 'bark', seen: !!e.pos && dist(p, e.pos) <= BUBBLE_RANGE, learn };

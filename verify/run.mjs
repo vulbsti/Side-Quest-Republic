@@ -80,8 +80,10 @@ const coverage = {
   rules: cover('Rules ("when X, Y does Z")', map.rules.map((r) => r.id), 'rule:'),
   callbacks: cover('Ending-card callbacks', map.callbacks.map((c) => c.id), 'callback:'),
   links: cover('Chaos-board links learned', map.links.map((l) => l.id), 'link:'),
-  scenes: cover('Scenes started', map.scenes.map((s) => s.id), 'scene:'),
-  choices: cover('Scene choices taken', map.scenes.flatMap((s) => s.options.map((o) => `${s.id}:${o.i}`)), 'choice:'),
+  situationsDone: cover('Situations played to done', map.situations.map((s) => s.id + ':done'), 'situation:'),
+  situationsFail: cover('Situations played to fail', map.situations.map((s) => s.id + ':fail'), 'situation:'),
+  nodes: cover('Situation stages reached', map.situations.flatMap((s) => s.nodes.map((n) => `${s.id}:${n.id}`)), 'node:situation:'),
+  choices: cover('Situation choices taken', map.situations.flatMap((s) => s.nodes.flatMap((n) => n.options.map((o) => `${s.id}:${n.id}:${o.i}`))), 'choice:'),
   lines: cover('Lines the player saw or heard', map.lines.filter((l) => l.emitted && l.speakers.length).map((l) => l.id), 'seen:'),
 };
 // A line that is said but never reaches the player is a hole in the screen.
@@ -121,7 +123,7 @@ const metrics = [
   metric('talk-repeat', 'Talking to someone gets a line you already heard', mean((m) => m.talkRepeat), 0.1, 'low', pct, 'share of talks, active bots'),
   metric('screen-repeat', 'Lines on screen that are repeats', mean((m) => m.lineRepeat), 0.15, 'low', pct, 'bubbles, toasts, wireless'),
   metric('constables-shared', 'Officer lines shared with another officer', probe.sharedFraction, 0.2, 'low', pct, `${probe.distinctLines} distinct lines across ${probe.officers} officers`),
-  metric('things-per-hour', 'New things to do per game hour (scenes, objects, people to help, provocateurs, crowds)', mean((m) => m.storyThingsPerHour), 6, 'high'),
+  metric('things-per-hour', 'New things to do per game hour (situations, objects, people to help, provocateurs, crowds)', mean((m) => m.storyThingsPerHour), 6, 'high'),
   metric('nothing-new', 'Longest stretch with nothing new to do (real seconds, 32-minute day)', Math.max(...active.map((d) => d.metrics.longestNothingNewSeconds)), 90, 'low', (x) => `${Math.round(x)} s`),
   metric('quiet', 'Longest stretch with nothing new on screen or phone (real seconds)', Math.max(...active.map((d) => d.metrics.longestQuietSeconds)), 60, 'low', (x) => `${Math.round(x)} s`),
   metric('phone-rate', 'Phone posts per game hour (feed, chat, ticker)', feedPerHour, 10, 'high'),
@@ -162,7 +164,7 @@ const saveWitness = (name, trace, expect, note = '') => {
 };
 for (const p of properties) if (!p.ok && p.example?.trace) p.witness = saveWitness(`fails ${p.id}`, p.example.trace, null, p.example.msg);
 for (const [k, e] of ex.endings) saveWitness(`ending ${k}`, e.trace, { ending: e.ending, outcome: e.outcome, role: e.role });
-for (const id of coverage.scenes.ids) saveWitness(`scene ${id}`, witnessOf('scene:' + id), { history: 'scene:' + id });
+for (const id of [...coverage.situationsDone.ids, ...coverage.situationsFail.ids]) saveWitness(`situation ${id}`, witnessOf('situation:' + id), { history: 'situation:' + id });
 
 // --- the report -------------------------------------------------------------------------------------
 const failing = properties.filter((p) => !p.ok), lintErrors = findings.filter((f) => f.level === 'error'), lintWarn = findings.filter((f) => f.level === 'warn');
@@ -204,7 +206,7 @@ if (unseenLines.length) L.push(`- **warn** said but never reached the player in 
 L.push('', '## Tempo', '', 'Each ending\'s witness replayed at the 10-minute tempo. Walking takes more game minutes when the clock runs faster, so some timing windows close.', '');
 L.push('| At 32 minutes | At 10 minutes | Same? |', '| --- | --- | --- |');
 for (const t of tempo) L.push(`| ${t.want} | ${t.got} | ${t.same ? 'yes' : 'no'} |`);
-L.push('', '## The system map', '', `${map.verbs.length} verbs, ${map.rules.length} rules, ${map.routines.length} timed routines, ${map.cues.length} cues, ${map.lines.length} line keys, ${map.links.length} board links, ${map.callbacks.length} callbacks, ${map.scenes.length} scenes, ${edges.length} cause→effect edges. Open \`verify/out/map.html\` for the whole map.`, '');
+L.push('', '## The system map', '', `${map.verbs.length} verbs, ${map.rules.length} rules, ${map.routines.length} timed routines, ${map.cues.length} cues, ${map.lines.length} line keys, ${map.links.length} board links, ${map.callbacks.length} callbacks, ${map.situations.length} situations, ${edges.length} cause→effect edges. Open \`verify/out/map.html\` for the whole map.`, '');
 writeFileSync(new URL('./report.md', DIR), L.join('\n') + '\n');
 const { clientMentions: _cm, ...mapJson } = map;
 writeFileSync(new URL('map.json', OUT), JSON.stringify({ ...mapJson, edges }, null, 1));

@@ -8,8 +8,9 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=6';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=7';
+import * as R from './rules.js?v=7';
+import { SPEAKERS } from './talks.js?v=1';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=8';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -17,13 +18,13 @@ import {
 } from './props.js?v=2';
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
-import { routeEvent } from './present.js?v=1';
-import { createDriver } from './drive.js?v=1';
+import { routeEvent } from './present.js?v=2';
+import { createDriver } from './drive.js?v=2';
 
 const { createDay, tick, act, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
 const QS = new URLSearchParams(location.search);
-const LONG = QS.has('long'), DEV = QS.has('dev');
+const LONG = !QS.has('short'), DEV = QS.has('dev');
 const STEP = 0.1;
 // ?replay or ?drawlog: every line routed to the screen is logged here, for the verifier's playback check.
 const DRAWN = QS.has('replay') || QS.has('drawlog') ? (window.__drawn = []) : null;
@@ -48,8 +49,8 @@ const PHASE_LINE = {
 const clockMinutes = R.clockMinutes ?? ((t) => 600 + t / 1.25);
 const phaseFromClock = (m) => (m < 720 ? 'morning' : m < 840 ? 'midday' : m < 960 ? 'tense' : m < 1020 ? 'showdown' : 'aftermath');
 
-// ?long: the owner's full-day tempo. The engine exports a tempo setter; call it if present.
-if (LONG) { if (R.setTempo) R.setTempo(R.TEMPO?.long ? 'long' : 4.0); else R.setSecondsPerMinute?.(4.0); }
+// The full day (4 s a game minute, 32 real minutes) is the default; ?short plays the 10-minute slice.
+R.setTempo(LONG ? 'long' : 'slice');
 
 // --- optional content and integrations (the writing, audio and asset workstreams) ---------
 // Model swap point: loop/models.js (vehicles, flags, placards, the detention bus).
@@ -892,7 +893,8 @@ function handleEvents() {
     // present.js decides where each line goes (and whether you can notice it); this only draws it.
     const r = routeEvent(e, clientView);
     if (DRAWN) DRAWN.push({ t: day.t, at: e.t, key: e.key, who: e.who, text: e.text, channel: r.channel, seen: r.seen });
-    if (r.channel === 'radio') radio(e.text);
+    if (r.channel === 'convo') showBeat(e);
+    else if (r.channel === 'radio') radio(e.text);
     else if (r.channel === 'feed') phone.feed({ caption: e.text.replace(/^[^:]{0,40}: /, ''), by: e.by || 'jantar.updates', kind: e.key || 'forward', place: e.place && PLACES[e.place]?.name });
     else if (r.channel === 'stream') { streamText = e.text.replace(/^Zoya Live: |^Zoya: /, ''); phone.live({ on: day.stream.live, text: streamText, viewers: day.stream.viewers }); }
     else if (r.channel === 'chat') phone.chat(e.who, e.text);
@@ -1015,18 +1017,6 @@ function updateFlags() {
     const [who, line] = pendingLines[i];
     const b = bodies[who];
     if (b?.model.visible && dist(b, sim.player) < 12 && !speakingNow(b)) { say(who, line, 5); pendingLines.splice(i, 1); break; }
-  }
-}
-// Overheard: you hear a scene before you see its marker, from about 15 m away.
-const overheardDone = new Set();
-function overheard() {
-  for (const [id, sc] of Object.entries(SCENES)) {
-    if (overheardDone.has(id) || !sc.overheard?.length) continue;
-    const o = oppCache && oppCache.cmd?.type === 'scene' && oppCache.cmd.id === id ? oppCache : null;
-    const near = o ? o.d < 15 : S.scene(day)?.id === id && S.scene(day)?.state === 'available';
-    if (!near) continue;
-    overheardDone.add(id);
-    sc.overheard.forEach(([who, line], i) => setTimeout(() => { if (mode === 'play') say(who, line, 5); }, i * 2600));
   }
 }
 const BARK_TYPE = { students: 'student', party: 'party', sena: 'sena', opp: 'opp', constable: 'constable', raf: 'raf' };
@@ -1160,7 +1150,8 @@ function findPrompt() {
   }
   for (const b of police) {
     if (!b.model.visible || !b.oid || dist(p, b) > 2.6) continue;
-    options.push({ d: dist(p, b), text: `Pester the ${b.kind === 'raf' ? 'RAF jawan' : 'constable'}${moodTag(b.plan?.mood)}`, run: () => openPester(b.oid, b) });
+    const named = R.OFFICER_NAMES?.[b.oid];
+    options.push({ d: dist(p, b), text: named ? `Talk to ${named}${moodTag(b.plan?.mood)}` : `Pester the RAF jawan${moodTag(b.plan?.mood)}`, run: () => (named ? talk(b.oid) : openPester(b.oid, b)) });
   }
   for (const b of provs) {
     if (!b.model.visible || dist(p, b) > 2.6 || b.state === 'exposed' || b.state === 'gone') continue;
@@ -1170,11 +1161,11 @@ function findPrompt() {
   // (Talk, take, give, pester and provocateur have their own richer prompts above.)
   const o = nearestOpportunity(true, true);
   // Scenes trigger from a few metres away (you walk up to a conversation, not into a person).
-  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'scene' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
 }
-const LOCAL_KINDS = new Set(['talk', 'take', 'give', 'pester', 'provocateur', 'drop', 'scene-choice']);
+const LOCAL_KINDS = new Set(['talk', 'take', 'give', 'pester', 'provocateur', 'drop', 'convo']);
 /** An engine opportunity: one command, or a card of its choices. */
 function runOpportunity(o) {
   if (o.choices?.length) {
@@ -1192,28 +1183,32 @@ function take(object) { act(day, { type: 'take', object, witnesses: witnesses() 
 function drop() { const p = sim.player; act(day, { type: 'drop', x: p.x + Math.sin(p.yaw) * 0.9, z: p.z + Math.cos(p.yaw) * 0.9 }); }
 function give(to) { act(day, { type: 'give', to }); }
 function talk(id) {
-  // The engine picks the line (rules.js talkLine), so what you hear is what the verifier hears.
+  // The engine picks what they say (story.js: their conversation for now, a reaction, or a brush-off),
+  // so what you hear is what the verifier hears. A conversation opens its own card (updateConvo).
   const r = act(day, { type: 'talk', to: id });
-  const line = r?.line;
-  if (line) say(id, line, 7);
-  if (r?.hint && HINTS[r.hint]) {
+  if (!r?.ok) { if (r?.say) toast(r.say, 2.5); return; }
+  if (day.story?.convo) return;
+  const line = r.line;
+  if (!r.said && line) say(id, line, 7); // the old one-line talk (no story content for them yet)
+  if (r.hint && HINTS[r.hint]) {
     const fresh = learnHint(r.hint);
     toast(`${fresh ? 'On the board: ' : ''}${PEOPLE[id].name}: ${HINTS[r.hint].text}`, 5);
   }
-  if (id === 'sharma') openPester('sharma', bodies.sharma, line);
-  else openWhisper(id, line);
+  // Brushed off: the quick verbs are still there (pester an officer; whisper to a gossip).
+  if (id === 'sharma' || officerById.has(id)) openPester(id, bodies[id] || officerById.get(id), line);
+  else if (['asha', 'meera', 'dev'].includes(id) && knownRumours().length) openWhisper(id, line);
 }
 
 // The options card. Options are intents ("Ask him for career advice"), never the spoken line.
-function openChoices({ key, said, saidBy, title, list }) {
+function openChoices({ key, said, saidBy, title, list, leave = null }) {
   if (!list.length) return;
-  choices = { key, list };
+  choices = { key, list, leave };
   $('#choicesSaid').innerHTML = said ? `<b>${saidBy}</b>` : '';
   if (said) $('#choicesSaid').append(said);
   $('#choicesSaid').classList.toggle('hidden', !said);
   $('#choicesTitle').textContent = title;
   $('#choicesList').innerHTML = list.map((o, i) => `<li><button data-i="${i}"${o.locked ? ' class="locked"' : ''}><kbd>${i + 1}</kbd> ${o.label}${o.note ? `<small>${o.note}</small>` : ''}</button></li>`).join('')
-    + '<li><button data-i="-1"><kbd>Esc</kbd> Leave it</button></li>';
+    + `<li><button data-i="-1"><kbd>Esc</kbd> ${leave ? 'Walk away' : 'Leave it'}</button></li>`;
   for (const b of $('#choicesList').querySelectorAll('button')) b.onclick = () => choose(Number(b.dataset.i));
   $('#choices').classList.remove('hidden');
   $('#hud').classList.add('choosing');
@@ -1221,8 +1216,9 @@ function openChoices({ key, said, saidBy, title, list }) {
 function choose(i) {
   const c = choices;
   closeChoices();
-  if (c && i >= 0 && c.list[i]?.locked) { toast(c.list[i].note ? `Not yet: ${c.list[i].note}.` : 'Not yet.', 2.5); return; }
+  if (c && i >= 0 && c.list[i]?.locked) { toast(c.list[i].note ? `Not yet: ${c.list[i].note}.` : 'Not yet.', 2.5); if (c.key === 'convo') convoOpen = null; return; }
   if (c && i >= 0 && c.list[i]) c.list[i].run();
+  else if (c?.leave) c.leave();
 }
 function closeChoices() {
   choices = null;
@@ -1243,7 +1239,7 @@ const PESTER = [
   ['detainme', 'Ask to be detained with your friends'],
 ];
 function openPester(to, b, line) {
-  const name = to === 'sharma' ? 'Sharma' : b?.kind === 'raf' ? 'the jawan' : 'the constable';
+  const name = R.OFFICER_NAMES?.[to] ?? (b?.kind === 'raf' ? 'the jawan' : 'the constable');
   const list = PESTER.filter(([how]) => how !== 'detainme' || clockMinutes(day.t) >= 14 * 60).map(([how, label]) => ({
     label,
     run: () => {
@@ -1251,7 +1247,7 @@ function openPester(to, b, line) {
       if (!r?.ok) toast(r?.say || `${name[0].toUpperCase() + name.slice(1)} pretends he didn't hear you.`, 3);
     },
   }));
-  openChoices({ key: to, said: line, saidBy: to === 'sharma' ? 'OFFICER SHARMA' : '', title: `Pester ${name}`, list });
+  openChoices({ key: to, said: line, saidBy: R.OFFICER_NAMES?.[to]?.toUpperCase() ?? '', title: `Pester ${name}`, list });
 }
 function openProvocateur(b) {
   const sharmaSoft = day.people.sharma?.mood === 'soft';
@@ -1344,7 +1340,7 @@ function resetDay() {
   ambientClock = 12; blockedFor = 0; streamText = '';
   phaseNow = null; lastClips = 0; sceneShown = null; stung = new Set(); crewBlock = null; detainedShown = false;
   chatQueue.length = 0; lastStingT = -99;
-  flagsSeen.clear(); pendingLines.length = 0; overheardDone.clear();
+  flagsSeen.clear(); pendingLines.length = 0; convoShown = null; convoOpen = null; 
   for (const k of Object.keys(flagBarks)) delete flagBarks[k];
   for (const k of Object.keys(bags)) delete bags[k];
   closeChoices();
@@ -1361,7 +1357,7 @@ function showTitle() {
     <p>It's 10:00 at the Rajiv Chowk exit. By evening something will have happened at Jantar Mantar: groups arrive, barricades go up, the water cannon rolls in. You can't stop it. You can bend it: how bad it gets, where it breaks out, who they go after.</p>
     <p>Pester the police, steal a bus key, rally a crew, film everything. When the day ends, it starts again. You keep everything you learned.</p>
     <div class="buttons"><button class="primary" id="go">${memory.loops > 1 ? `Start loop ${memory.loops}` : 'Start the day'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
-    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD move · Space jump · drag to look · E act · F film · R rally · C crew orders · P phone · Tab chaos board · hold T to let time pass. On a phone, use the on-screen buttons.${LONG ? ' · Full-length day (?long).' : ''}</p></div>`;
+    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD move · Space jump · drag to look · E act · F film · R rally · C crew orders · P phone · Tab chaos board · hold T to let time pass. On a phone, use the on-screen buttons.${LONG ? '' : ' · Short day (?short).'}</p></div>`;
   $('#screen').classList.remove('hidden');
   $('#hud').classList.add('hidden');
   $('#go').onclick = () => startLoop();
@@ -1512,42 +1508,69 @@ const actorOf = (id) => {
   return null;
 };
 const SPECIAL_NAME = { mummy: 'Mummy', wireless: 'Inspector Rao', raf: 'RAF jawan', crowd: 'Crowd' };
-const nameOf = (id) => (id === 'player' ? 'You' : SPECIAL_NAME[id] ?? PEOPLE[id]?.name ?? (officerById.get(id)?.label || String(id).replace(/^\w/, (c) => c.toUpperCase())));
-let sceneOptionsOpen = null, chatterT = 0;
-/** Watch s.scene: when the engine starts one, play its beats; at the end show its options. */
-function updateScene(dt) {
-  const sc = S.scene(day);
-  const id = sc?.id ?? null;
-  if (id && id !== sceneShown) {
-    sceneShown = id;
-    const data = SCENES[id] || sc.data || null;
-    if (data) playScene(id, data, sc);
-    else toast(sc.title || 'Something is happening here.', 3);
+const nameOf = (id) => (id === 'player' ? 'You' : SPECIAL_NAME[id] ?? PEOPLE[id]?.name ?? R.OFFICER_NAMES?.[id] ?? SPEAKERS[id] ?? (officerById.get(id)?.label || String(id).replace(/^\w/, (c) => c.toUpperCase())));
+let convoShown = null, convoOpen = null, chatterT = 0, convoCine = null;
+/**
+ * The conversation or situation node on screen (engine: s.story.convo). Its beats arrive as 'beat'
+ * events (bubbles, or the reel frame for camera 'phone'/'wide'); once they have been said the options
+ * card opens. Walking away, Esc, or "Walk away" leaves it; the engine also ends it if you wander off.
+ */
+function updateConvo(dt) {
+  const c = day.story?.convo ?? null;
+  if (!c) {
+    if (convoOpen) { convoOpen = null; if (choices?.key === 'convo') closeChoices(); }
+    convoShown = null;
+    return;
   }
-  if (!id && sceneShown) { sceneShown = null; if (sceneOptionsOpen) { sceneOptionsOpen = null; if (choices?.key === 'scene') closeChoices(); } }
-  // While the options are open, people keep talking.
-  if (sceneOptionsOpen && !cine.active) {
-    chatterT -= dt;
-    if (chatterT <= 0) {
-      chatterT = 3.6;
-      const b = cine.chatterLine(sceneOptionsOpen.data);
-      const a = b && actorOf(b.who);
-      if (a?.model) bubble(b.who === 'mummy' ? 'kabir' : 'idle:' + b.who, a, nameOf(b.who).toUpperCase() + (b.who === 'mummy' ? ' (PHONE)' : ''), b.line, 3.4);
+  if (c.seq !== convoShown) {
+    convoShown = c.seq; convoOpen = null;
+    if (choices?.key === 'convo') closeChoices();
+    // A big moment plays in the reel frame (Meera filming) or letterboxed; small talk stays in the world.
+    if (c.camera !== 'none' && c.beats.length >= 3 && !replayer) {
+      convoCine = c.seq;
+      audio.duck(c.beats.length * 2.4);
+      cine.play({ beats: c.beats, idle: c.idle, title: c.title }, { phone: c.camera === 'phone', title: c.title || '', onDone: () => { convoCine = null; } });
     }
-    // Walk away from the scene and the options go (the scene still plays out in the engine).
-    if (dist(sim.player, sceneOptionsOpen.at) > 14 && choices?.key === 'scene') closeChoices();
   }
+  // Options open once everything queued has been said (or the reel has played).
+  const saying = (day.story.queue || []).some((q) => q.kind === 'beat');
+  if (!convoOpen && !saying && !cine.active && mode === 'play') openConvo(c);
+  if (convoOpen && !cine.active) {
+    chatterT -= dt;
+    if (chatterT <= 0 && c.idle?.length) {
+      chatterT = 4.2;
+      const b = cine.chatterLine({ idle: c.idle });
+      const a = b && actorOf(b.who);
+      if (a?.model) bubble('idle:' + b.who, a, nameOf(b.who).toUpperCase(), b.line, 3.8);
+    }
+  }
+}
+function openConvo(c) {
+  convoOpen = c.seq; chatterT = 2;
+  const last = c.beats[c.beats.length - 1];
+  openChoices({
+    key: 'convo',
+    said: last && !cine.active ? last.line : '', saidBy: last ? nameOf(last.who).toUpperCase() : '',
+    title: c.title || (c.who ? nameOf(c.who) : 'What do you do?'),
+    list: c.options.map((o) => ({
+      label: o.intent, locked: !o.ok, note: o.ok ? '' : o.why,
+      run: () => { const r = act(day, { type: 'say', option: o.i }); if (r?.ok === false) toast(r.say || 'Not yet.', 3); },
+    })),
+    leave: () => act(day, { type: 'leave' }),
+  });
+}
+/** A beat said in a conversation: the reel frame shows it while it plays; otherwise a bubble on whoever said it. */
+function showBeat(e) {
+  if (convoCine && cine.active) return;
+  const a = actorOf(e.who);
+  const name = nameOf(e.who).toUpperCase();
+  if (e.who === 'player') bubble('player', playerAnchor, 'YOU', e.text, 5);
+  else if (a?.model && dist(a, sim.player) < 30) bubble('beat:' + e.who, a, name + (e.who === 'mummy' ? ' (PHONE)' : ''), e.text, 5.5);
+  else bubble('beat:' + e.who, playerAnchor, name, e.text, 5.5); // a voice with no body here: the bus extras, a phone
 }
 // Scene beat sfx -> audio cue names (the rest are covered by the scene's own sound or not voiced yet).
 const SCENE_SFX = { 'phone-ring': 'phone-ring', 'phone-buzz': 'phone-chat', horn: 'bus-horn' };
 let chaseOn = false;
-/** Tell the engine which scene beat is playing, so beat-timed effects (detain-me's escape) land on the line. */
-function reportBeat(beat) {
-  const sc = S.scene(day);
-  if (!sc || sceneOptionsOpen || replayer) return; // a replay keeps the engine's own beat clock, as Node does
-  const i = SCENES[sc.id]?.beats?.indexOf(beat) ?? -1;
-  if (i >= 0 && i > (sc.beat ?? -1)) act(day, { type: 'scene', id: sc.id, beat: i });
-}
 let strideD = 0, crowdN = 0, crowdT = 0;
 const _ear = { x: 0, z: 0, yaw: 0 }, _foot = { x: 0, z: 0 };
 /** Per frame: phase, director intensity, crowd density, chase, listener; footsteps on strides. */
@@ -1571,47 +1594,6 @@ function updateAudio(dt) {
     if (strideD > (v > 4.5 ? 1.15 : 0.8)) { strideD = 0; _foot.x = p.x; _foot.z = p.z; audio.cue('footstep', { pos: _foot, data: { run: v > 4.5 } }); }
   } else strideD = 0.5;
 }
-function playScene(id, data, sc) {
-  closeChoices();
-  audio.duck((data.beats?.length || 4) * 2.4);
-  cine.play(data, {
-    phone: data.camera === 'phone',
-    title: data.title,
-    onDone: () => {
-      // The engine's live copy says which options are open now (options[i].ok); the scene data has the words.
-      const live = S.scene(day);
-      const options = (live && live.id === id ? live.options : null) ?? sc?.options ?? data.options ?? [];
-      if (!options.length) return;
-      sceneOptionsOpen = { id, data, at: { x: sim.player.x, z: sim.player.z } };
-      chatterT = 1.2;
-      openChoices({
-        key: 'scene', title: data.title || 'What do you do?',
-        list: options.map((o, i) => ({
-          label: o.intent || data.options?.[i]?.intent || o.label,
-          locked: o.ok === false || o.available === false,
-          note: o.ok === false || o.available === false ? o.why || lockWhy(data.options?.[i]?.requires) : '',
-          run: () => {
-            const r = act(day, { type: 'scene', id, option: i });
-            sceneOptionsOpen = null;
-            if (r?.ok === false) { toast(r.say || 'It doesn\'t land.', 3); return; }
-            const opt = (data.options || [])[i];
-            if (opt?.beats?.length) cine.play(data, { beats: opt.beats, phone: data.camera === 'phone', title: data.title });
-          },
-        })),
-      });
-    },
-  });
-}
-/** A short reason an option is locked, from its requires block. */
-function lockWhy(req) {
-  if (!req) return 'not yet';
-  const r = req.rep || {};
-  for (const k of ['aura', 'help', 'heat', 'nuisance']) { const v = req[k] ?? r[k]; if (v != null) return `needs ${k} ${v}+`; }
-  const m = Object.entries(req.mood || {})[0];
-  if (m) return `needs ${nameOf(m[0])} ${m[1].join(' or ')}`;
-  if (req.flags?.length) return 'something has to happen first';
-  return 'not yet';
-}
 /** How far the eye line from look toward cam is clear of solid, visible things (for cutting cinematic shots). */
 const shotRay = new THREE.Raycaster(), _sd = new THREE.Vector3();
 function isShown(o) { for (let x = o; x; x = x.parent) if (!x.visible) return false; return true; }
@@ -1626,10 +1608,9 @@ function shotClear(look, cam) {
   }
   return len;
 }
-// Dev hook: play a scene by id (or a scene object) without the engine.
-function devPlayScene(idOrData) {
-  const data = typeof idOrData === 'string' ? SCENES[idOrData] : idOrData;
-  if (data) playScene(data.id || 'dev', data, null);
+// Dev hook: play some beats in the reel frame without the engine ({ beats, title, camera }).
+function devPlayScene(data) {
+  if (data?.beats) cine.play(data, { phone: data.camera !== 'wide', title: data.title || '' });
 }
 
 // --- frame -------------------------------------------------------------------
@@ -1715,8 +1696,7 @@ function step(dt) {
   ambient(dt);
   barks(dt);
   updateFlags();
-  overheard();
-  updateScene(dt);
+  updateConvo(dt);
   updateAudio(dt);
   if (choices && bodies[choices.key] && (day.people[choices.key].hidden || dist(sim.player, bodies[choices.key]) > 4)) closeChoices();
   // Chat messages trickle in.
@@ -1978,8 +1958,8 @@ function updateDev(dt) {
     `rep  aura ${rep.aura ?? '-'} heat ${rep.heat ?? '-'} help ${rep.help ?? '-'} nuisance ${rep.nuisance ?? '-'}  crew ${S.crew(day).length}  chased ${S.chasedBy(day) ?? '-'}  detained ${S.detained(day)}`,
     `groups  ${groups || '-'}`,
     `police  line ${pol.line ?? '-'} watch ${pol.watch ?? '-'} barricades [${(pol.barricades || []).join(',')}] raf ${pol.raf ?? 0} cannon ${pol.cannon?.state ?? '-'} gas ${pol.gas ? 'yes' : '-'} charge ${pol.charge?.place ?? '-'}`,
-    `provocateurs  ${S.provocateurs(day).map((p) => p.state).join(',') || '-'}  scene ${S.scene(day)?.id ?? '-'}  officers ${S.officers(day) ? Object.keys(S.officers(day)).length : 'fallback'}`,
-    `engine  phaseAt ${!!R.phaseAt} opportunities ${!!R.opportunities} drainCues ${!!R.drainCues} setTempo ${!!R.setTempo}  scenes ${Object.keys(SCENES).length} barks ${!!BARKS}`,
+    `provocateurs  ${S.provocateurs(day).map((p) => p.state).join(',') || '-'}  convo ${day.story?.convo?.id ?? '-'}  officers ${S.officers(day) ? Object.keys(S.officers(day)).length : 'fallback'}`,
+    `engine  phaseAt ${!!R.phaseAt} opportunities ${!!R.opportunities} drainCues ${!!R.drainCues} setTempo ${!!R.setTempo}  situations ${R.situations(day).filter((x) => x.state === 'active' || x.state === 'hooked').map((x) => x.id).join(',') || '-'} barks ${!!BARKS}`,
   ].join('\n');
 }
 
@@ -2048,7 +2028,7 @@ function setupInput() {
       if (mode === 'board') { closeBoard(); return; }
       if (cine.active) { cine.skip(); return; }
       if (phone.isOpen) { phone.close(); return; }
-      if (choices) { closeChoices(); return; }
+      if (choices) { choose(-1); return; }
     }
     if (e.repeat) return;
     if (phone.isOpen && /^[1-3]$/.test(k) && !choices) { phone.setTab(['chat', 'feed', 'ticker'][Number(k) - 1]); return; }
@@ -2122,7 +2102,6 @@ function setupInput() {
       onReact: (kind, beat) => {
         const at = actorOf(beat.who) || sim.player;
         if (kind === 'sfx') { const c = SCENE_SFX[beat.sfx]; if (c) audio.cue(c, { pos: at }); }
-        if (kind === 'line') reportBeat(beat);
         if (kind === 'laugh') { react('crowd-laugh', at); audio.cue('crowd-laugh', { pos: at }); }
         if (kind === 'silence') { react('awkward-silence', at); audio.silence(1.9); }
       },

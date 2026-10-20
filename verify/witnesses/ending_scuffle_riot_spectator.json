@@ -10,171 +10,29 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "talk:sana",
+   "do": "whisper:biryani:asha",
    "cmd": {
-    "type": "talk",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:02",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
    },
    "at": {
     "x": -18,
-    "z": -30.8
+    "z": -34.2
    }
   },
   {
    "clock": "10:05",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": 6.2,
-    "z": -37.2
-   }
-  },
-  {
-   "clock": "10:07",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
+   "do": "hide:stage",
+   "cmd": null,
    "at": {
     "x": 0,
     "z": -5.5
-   }
-  },
-  {
-   "clock": "10:10",
-   "do": "talk:ravi",
-   "cmd": {
-    "type": "talk",
-    "to": "ravi"
    },
-   "at": {
-    "x": 5.6,
-    "z": -9.6
-   }
+   "hold": 1
   },
   {
-   "clock": "10:11",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:12",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": -8.4,
-    "z": -8.4
-   }
-  },
-  {
-   "clock": "10:13",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "10:14",
-   "wait": 45
-  },
-  {
-   "clock": "10:59",
-   "do": "pester:c4:detainme",
-   "cmd": {
-    "type": "pester",
-    "to": "c4",
-    "how": "detainme"
-   },
-   "at": {
-    "x": 7,
-    "z": 1
-   }
-  },
-  {
-   "clock": "11:00",
-   "do": "whisper:minister:kabir",
-   "cmd": {
-    "type": "whisper",
-    "to": "kabir",
-    "rumour": "minister"
-   },
-   "at": {
-    "x": -5.3090616076168775,
-    "z": 29.70873929140258
-   }
-  },
-  {
-   "clock": "11:02",
-   "do": "film:pester-detainme@stage",
-   "cmd": {
-    "type": "film"
-   },
-   "at": {
-    "x": 7,
-    "z": 1
-   }
-  },
-  {
-   "clock": "11:03",
-   "do": "drop:barricade",
-   "cmd": {
-    "type": "drop",
-    "x": 34,
-    "z": -6
-   },
-   "at": {
-    "x": 34,
-    "z": -6
-   }
-  },
-  {
-   "clock": "11:06",
-   "wait": 20
-  },
-  {
-   "clock": "11:26",
-   "do": "pester:c1:cute",
-   "cmd": {
-    "type": "pester",
-    "to": "c1",
-    "how": "cute"
-   },
-   "at": {
-    "x": -4,
-    "z": 16
-   }
-  },
-  {
-   "clock": "11:30",
+   "clock": "10:08",
    "do": "whisper:biryani:mira",
    "cmd": {
     "type": "whisper",
@@ -187,61 +45,70 @@
    }
   },
   {
-   "clock": "11:32",
-   "do": "pester:c5:career",
+   "clock": "10:09",
+   "do": "talk:c3",
    "cmd": {
-    "type": "pester",
-    "to": "c5",
-    "how": "career"
+    "type": "talk",
+    "to": "c3"
    },
    "at": {
-    "x": 57,
-    "z": -1
+    "x": 19,
+    "z": -11
    }
   },
   {
-   "clock": "11:36",
-   "do": "pester:c1:cute",
-   "cmd": {
-    "type": "pester",
-    "to": "c1",
-    "how": "cute"
-   },
-   "at": {
-    "x": -4,
-    "z": 16
-   }
+   "clock": "10:10",
+   "wait": 20
   },
   {
-   "clock": "11:41",
-   "do": "whisper:sena:kabir",
+   "clock": "10:30",
+   "do": "whisper:minister:dev",
    "cmd": {
     "type": "whisper",
-    "to": "kabir",
+    "to": "dev",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:32",
+   "wait": 10
+  },
+  {
+   "clock": "10:42",
+   "do": "whisper:cannon:sana",
+   "cmd": {
+    "type": "whisper",
+    "to": "sana",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "10:43",
+   "do": "whisper:sena:asha",
+   "cmd": {
+    "type": "whisper",
+    "to": "asha",
     "rumour": "sena"
    },
    "at": {
-    "x": -4.6,
-    "z": -2.4
+    "x": -18,
+    "z": -34.2
    }
   },
   {
-   "clock": "11:42",
-   "do": "film:pester-career@parliament",
-   "cmd": {
-    "type": "film"
-   },
-   "at": {
-    "x": 57,
-    "z": -1
-   }
+   "clock": "10:46",
+   "wait": 10
   },
   {
-   "clock": "11:46",
-   "wait": 45
-  },
-  {
-   "clock": "12:31",
+   "clock": "10:56",
    "do": "pester:c5:cannon",
    "cmd": {
     "type": "pester",
@@ -254,7 +121,7 @@
    }
   },
   {
-   "clock": "12:35",
+   "clock": "11:01",
    "finish": true
   }
  ]

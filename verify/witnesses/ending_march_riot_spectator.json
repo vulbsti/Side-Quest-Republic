@@ -10,30 +10,42 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "talk:sana",
+   "do": "whisper:biryani:asha",
    "cmd": {
-    "type": "talk",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:02",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
    },
    "at": {
     "x": -18,
-    "z": -30.8
+    "z": -34.2
    }
   },
   {
    "clock": "10:05",
+   "do": "hide:stage",
+   "cmd": null,
+   "at": {
+    "x": 0,
+    "z": -5.5
+   },
+   "hold": 1
+  },
+  {
+   "clock": "10:08",
+   "do": "whisper:biryani:mira",
+   "cmd": {
+    "type": "whisper",
+    "to": "mira",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "10:09",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -45,7 +57,7 @@
    }
   },
   {
-   "clock": "10:07",
+   "clock": "10:11",
    "do": "rally:stage",
    "cmd": {
     "type": "rally"
@@ -56,19 +68,24 @@
    }
   },
   {
-   "clock": "10:10",
-   "do": "talk:ravi",
+   "clock": "10:13",
+   "wait": 10
+  },
+  {
+   "clock": "10:23",
+   "do": "whisper:minister:nikhil",
    "cmd": {
-    "type": "talk",
-    "to": "ravi"
+    "type": "whisper",
+    "to": "nikhil",
+    "rumour": "minister"
    },
    "at": {
-    "x": 5.6,
-    "z": -9.6
+    "x": -3.401935196114413,
+    "z": 28.25120949757151
    }
   },
   {
-   "clock": "10:11",
+   "clock": "10:26",
    "do": "give:sana",
    "cmd": {
     "type": "give",
@@ -80,7 +97,20 @@
    }
   },
   {
-   "clock": "10:12",
+   "clock": "10:29",
+   "do": "whisper:sena:nikhil",
+   "cmd": {
+    "type": "whisper",
+    "to": "nikhil",
+    "rumour": "sena"
+   },
+   "at": {
+    "x": -2.165830397236572,
+    "z": 32.726961082326106
+   }
+  },
+  {
+   "clock": "10:31",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -92,172 +122,30 @@
    }
   },
   {
-   "clock": "10:13",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "10:14",
-   "wait": 45
-  },
-  {
-   "clock": "10:59",
-   "do": "pester:c4:detainme",
+   "clock": "10:34",
+   "do": "pester:c2:cute",
    "cmd": {
     "type": "pester",
-    "to": "c4",
-    "how": "detainme"
+    "to": "c2",
+    "how": "cute"
    },
    "at": {
-    "x": 7,
-    "z": 1
+    "x": 2.5,
+    "z": -27
    }
   },
   {
-   "clock": "11:00",
-   "wait": 3
-  },
-  {
-   "clock": "11:03",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "11:04",
-   "do": "pester:c1:career",
-   "cmd": {
-    "type": "pester",
-    "to": "c1",
-    "how": "career"
-   },
-   "at": {
-    "x": -4,
-    "z": 16
-   }
-  },
-  {
-   "clock": "11:06",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "11:08",
-   "do": "pester:sharma:cannon",
-   "cmd": {
-    "type": "pester",
-    "to": "sharma",
-    "how": "cannon"
-   },
-   "at": {
-    "x": 40,
-    "z": -4.5
-   }
-  },
-  {
-   "clock": "11:11",
-   "do": "film:pester-cannon@barricade",
-   "cmd": {
-    "type": "film"
-   },
-   "at": {
-    "x": 40,
-    "z": -4.5
-   }
-  },
-  {
-   "clock": "11:12",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "11:15",
-   "wait": 20
-  },
-  {
-   "clock": "11:35",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
-   },
-   "at": {
-    "x": 3.2,
-    "z": -10.4
-   }
-  },
-  {
-   "clock": "11:36",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "11:37",
-   "do": "give:ravi",
-   "cmd": {
-    "type": "give",
-    "to": "ravi"
-   },
-   "at": {
-    "x": -19.5,
-    "z": -31.5
-   }
-  },
-  {
-   "clock": "11:39",
-   "do": "whisper:cannon:nikhil",
-   "cmd": {
-    "type": "whisper",
-    "to": "nikhil",
-    "rumour": "cannon"
-   },
-   "at": {
-    "x": -2.499498238341943,
-    "z": 30.836176649395657
-   }
-  },
-  {
-   "clock": "11:44",
-   "do": "block:road",
+   "clock": "10:36",
+   "do": "lane",
    "cmd": null,
    "at": {
     "x": 10,
-    "z": -16
+    "z": -26.560000000000002
    },
    "hold": 4
   },
   {
-   "clock": "11:51",
+   "clock": "10:40",
    "finish": true
   }
  ]

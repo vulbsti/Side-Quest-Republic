@@ -6,6 +6,19 @@
  "trace": [
   {
    "clock": "10:00",
+   "do": "whisper:biryani:asha",
+   "cmd": {
+    "type": "whisper",
+    "to": "asha",
+    "rumour": "biryani"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "10:05",
    "do": "rally:stage",
    "cmd": {
     "type": "rally"

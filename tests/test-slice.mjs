@@ -4,15 +4,23 @@
 import assert from 'node:assert/strict';
 import {
   createDay, advance, act, at, mins, SPOTS, LINE_FRONT, CROWD_CENTERS, drainEvents, drainCues, dist, phaseAt,
-  setTempo, TEMPO, opportunities, clockText, intensityBand, detentionPos, scenesAvailable,
+  setTempo, TEMPO, opportunities, clockText, intensityBand, detentionPos, situations,
 } from '../dist/loop/rules.js';
 import { LINES, LINKS, CALLBACKS, INTENTS, SHOWDOWNS, ROLES, TALK, HINTS } from '../dist/loop/content.js';
-import { SCENES } from '../dist/loop/scenes.js';
+// Pick the option on screen whose intent includes text (the conversation card, story.js).
+function sayIntent(s, text) {
+  const c = s.story.convo;
+  assert(c, `a conversation is open for "${text}"`);
+  const o = c.options.find((x) => x.intent.toLowerCase().includes(text.toLowerCase()));
+  assert(o, `option "${text}" in ${c.id}/${c.node}: ${c.options.map((x) => x.intent).join(' | ')}`);
+  return act(s, { type: 'say', option: o.i });
+}
+const sitState = (s, id) => situations(s).find((x) => x.id === id)?.state;
 
 const SPEC_CUES = ['arrival-wave', 'party-suv', 'sena-bikes', 'barricades-up', 'raf-arrive', 'provocateur-drop',
   'stone-thrown', 'cannon-roll', 'cannon-spray', 'cannon-dance', 'gas-fired', 'charge-start', 'charge-end',
   'chase-start', 'chase-lost', 'caught', 'bus-stalled', 'detainees-escape', 'crowd-laugh', 'crowd-gasp',
-  'awkward-silence', 'crew-join', 'crew-block', 'clip-posted', 'scene-start', 'scene-end', 'phase', 'faint', 'ambulance'];
+  'awkward-silence', 'crew-join', 'crew-block', 'clip-posted', 'situation-start', 'situation-end', 'phase', 'faint', 'ambulance'];
 const SPEC_CLIPS = ['bus-key', 'bus-stalled', 'detainees-escape', 'chase', 'caught', 'pester-career', 'pester-cute',
   'pester-cannon', 'detain-me', 'crew-block', 'speaker-party', 'big-speech', 'small-speech', 'biryani-rush',
   'cannon-scare', 'singalong', 'roast', 'minister-noshow', 'provocateur-exposed', 'provocateur-joined', 'stone-thrown',
@@ -170,17 +178,19 @@ const scenes = play([
   [at(13, 52), (s) => {
     assert.equal(s.people.kabir.mode, 'onCall', 'Kabir takes mummy\'s call by the barricade');
     moveTo(s, s.people.kabir);
-    assert(scenesAvailable(s).includes('mummy-call'));
-    ok(act(s, { type: 'scene', id: 'mummy-call' }), 'start mummy-call');
-    ok(act(s, { type: 'scene', id: 'mummy-call', option: 1 }), 'Sharma plays the tuition teacher');
+    assert.equal(sitState(s, 'mummy-call'), 'hooked');
+    ok(act(s, { type: 'talk', to: 'kabir' }), 'start mummy-call');
+    ok(sayIntent(s, 'Sharma to play the tuition teacher'), 'Sharma plays the tuition teacher');
+    advance(s, 6);
     assert(s.flags['kabir-stays'] && s.flags['sharma-tuition-teacher']);
     assert.equal(s.people.kabir.mood, 'grateful');
     film(s, 'mummy-call');
   }],
   [at(14, 5), (s) => {
     moveTo(s, s.people.sharma);
-    ok(act(s, { type: 'scene', id: 'cannon-request' }), 'start cannon-request');
-    ok(act(s, { type: 'scene', id: 'cannon-request', option: 3 }), 'room service');
+    ok(act(s, { type: 'talk', to: 'sharma' }), 'start cannon-request');
+    ok(sayIntent(s, 'room service'), 'room service');
+    advance(s, 6);
     film(s, 'cannon request');
   }],
   [at(14, 34), (s) => {
@@ -193,7 +203,7 @@ const scenes = play([
 ]);
 assert(scenes.s.flags['cannon-to-barricade'] && scenes.card.place === 'barricade', 'the cannon request pulls the showdown to the barricade');
 assert(scenes.s.events !== undefined);
-assert(scenes.cues.has('awkward-silence') && scenes.cues.has('scene-start') && scenes.cues.has('scene-end'));
+assert(scenes.cues.has('awkward-silence') && scenes.cues.has('situation-start') && scenes.cues.has('situation-end'));
 assert(scenes.card.callbacks.some((c) => c.key === 'repost'), 'the morning clip comes back at 17:00');
 assert(scenes.card.callbacks.some((c) => c.key === 'report-wrong'));
 assert(scenes.links.has('cannon-dance'), 'the cannon request turns into a dance');
@@ -242,24 +252,24 @@ const roast = play([
 assert.equal(roast.s.moment, 'roast');
 
 // Nikhil keeps Kabir all day; the charge drags Kabir onto the detention bus. "Sir mujhe bhi detain kar lo":
-// mid-scene the friends slip out the back, and you choose to stay on the bus and miss the showdown.
+// you tell them to try the back door, and they slip out.
 const detainMe = play([
   [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath, 4.5); walkPlayer(s, { x: -3, z: -1 }, 4.5); }],
   [at(15, 47), (s) => {
     assert(s.detention.people.includes('kabir'), 'the charge put Kabir on the bus');
     moveTo(s, detentionPos(s));
-    ok(act(s, { type: 'scene', id: 'detain-me' }), 'start detain-me');
-    assert(s.player.detained, '"Andar."');
-    advance(s, 33); // the beats play (the client reports beats; the engine also paces them itself)
-    assert(!s.detention.people.includes('kabir'), 'Kabir is out the back before the options');
-    film(s, 'detainees escape from inside');
-    ok(act(s, { type: 'scene', id: 'detain-me', option: 1 }), 'stay on the bus');
-    assert(s.player.detained && s.flags['player-stays-detained']);
+    assert.equal(sitState(s, 'detain-me'), 'hooked', 'your friends on the bus is a situation');
+    ok(act(s, { type: 'situation', id: 'detain-me' }), 'start detain-me');
+    ok(sayIntent(s, 'power bank'), 'pass Nikhil the power bank');
+    ok(sayIntent(s, 'try the back door'), 'the back door');
+    advance(s, 6);
+    assert(!s.detention.people.includes('kabir'), 'Kabir is out the back');
+    film(s, 'detainees escape');
     film(s, 'detain-me');
   }],
 ]);
 assert(detainMe.cues.has('detainees-escape'));
-assert(detainMe.card.callbacks.some((c) => c.key === 'detain-me'));
+assert(detainMe.card.callbacks.some((c) => c.key.startsWith('sit:detain-me:')));
 
 // Take the detention bus key while it holds detainees: they walk off.
 const busKey = play([
@@ -292,10 +302,13 @@ assert.deepEqual(missingClips, [], 'every clip kind in the spec is posted in som
       assert(o.length >= 1, 'always at least one card');
       for (const x of o) assert(x.text && !x.text.includes('{') && Number.isFinite(x.x), `intent text ${x.id}`);
       samples++;
-      if (o[0].d > 11) { misses++; worst = Math.max(worst, o[0].d); }
+      // A card pointing at a situation (the story's next stop) counts: it's somewhere to go with something to do.
+      if (o[0].d > 11 && !['situation', 'goal'].includes(o[0].kind)) { misses++; worst = Math.max(worst, o[0].d); }
     }
   }
-  assert(misses / samples < 0.1, `something within 10 m at ${samples - misses}/${samples} sampled spots (worst ${worst.toFixed(1)} m)`);
+  // 0.2, not 0.1: since the rebuild Nikhil leaves the Metro at 10:50 (nikhil-lost) and the CP stop empties after
+  // 14:00, so those two spots point at the stage. The objective card still always has a target (verify/ measures it).
+  assert(misses / samples < 0.2, `something within 10 m at ${samples - misses}/${samples} sampled spots (worst ${worst.toFixed(1)} m)`);
 }
 
 // --- the long tempo: same day, 32 real minutes ------------------------------------
@@ -314,10 +327,9 @@ setTempo(TEMPO.slice);
 for (const id of Object.keys(SHOWDOWNS)) assert(SHOWDOWNS[id].title);
 for (const id of ['spectator', 'instigator', 'protector', 'detained', 'filmer', 'peacemaker']) assert(ROLES[id], `role ${id}`);
 for (const k of ['sitin', 'hold', 'scatter', 'block', 'protect']) assert(SHOWDOWNS[k], `showdown ${k}`);
-for (const c of [idle, chaotic, helpful, scenes, caught, party, singalong, roast, detainMe, busKey]) for (const cb of c.card.callbacks) assert(CALLBACKS[cb.key]);
+for (const c of [idle, chaotic, helpful, scenes, caught, party, singalong, roast, detainMe, busKey]) for (const cb of c.card.callbacks) assert(cb.text, `callback ${cb.key} has text`);
 for (const st of ['hold', 'scatter', 'block', 'protect']) assert(LINES[`stance-${st}`] && LINES[`charge-${st}`]);
 for (const list of Object.values(TALK)) for (const t of list) assert(!t.hint || HINTS[t.hint], `hint ${t.hint}`);
-for (const id of Object.keys(SCENES)) assert(INTENTS[`scene-${id}`], `scene intent ${id}`);
 assert(Object.keys(LINKS).length > 50);
 assert.equal(intensityBand(24), 'calm'); assert.equal(intensityBand(70), 'riot');
 

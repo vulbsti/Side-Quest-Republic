@@ -2,6 +2,7 @@
 // Each finding is { level: 'error' | 'warn' | 'info', id, msg }. Errors fail `npm run verify`.
 import { readFileSync } from 'node:fs';
 import { CLIENT_FILES } from './map.mjs';
+import { storyCheck } from './story-check.mjs';
 
 const ROOT = new URL('../../', import.meta.url);
 const client = CLIENT_FILES.map((f) => readFileSync(new URL(f, ROOT), 'utf8')).join('\n');
@@ -20,7 +21,8 @@ export const LINT_RULES = {
   'raw-code': 'Messages the client toasts for a refused command are words, not codes',
   'intent-unknown': 'Every HUD intent the engine asks for has text (content.js INTENTS)',
   'field-unread': 'Every state field the engine writes is read by a rule, a verb or the client',
-  'scene-choices': 'Every scene offers at least two choices',
+  'situation-choices': 'Every situation choice point offers at least two choices',
+  'story': 'The story content matches its format (npm run story:check: ids, actions, goals, links, counts)',
 };
 
 export function lint(map) {
@@ -52,6 +54,7 @@ export function lint(map) {
     if (reads.has(w) || [...reads].some((r) => r.startsWith(w + '.'))) continue;
     if (!map.clientMentions(w)) f('info', 'field-unread', `"${w}" is written but nothing reads it`);
   }
-  for (const sc of map.scenes) if (sc.options.length < 2) f('warn', 'scene-choices', `scene "${sc.id}" has ${sc.options.length} choice(s)`);
+  for (const sc of map.situations) for (const n of sc.nodes) if (n.options.length === 1) f('warn', 'situation-choices', `situation "${sc.id}" node "${n.id}" has 1 choice`);
+  for (const x of storyCheck()) f(x.level, 'story', `${x.id}: ${x.msg}`);
   return out;
 }
