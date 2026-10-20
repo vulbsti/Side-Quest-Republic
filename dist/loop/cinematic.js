@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 
 const FOV_BASE = 57;
-const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), tmpDir = new THREE.Vector3(), tmpPerp = new THREE.Vector3();
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), tmpDir = new THREE.Vector3(), tmpPerp = new THREE.Vector3(), tmpFace = new THREE.Vector3();
 const camFrom = new THREE.Vector3(), lookFrom = new THREE.Vector3(), camTo = new THREE.Vector3(), lookTo = new THREE.Vector3(), lookNow = new THREE.Vector3();
 
 const beatLength = (b) => (b.line ? THREE.MathUtils.clamp(1.5 + b.line.length * 0.052, 2, 6.8) : 1.4);
@@ -102,11 +102,25 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
   }
   function skip() { if (mode === 'sting') next(); else if (mode === 'scene') finish(); }
 
+  /** Eye-line point of a cast member: the head bone when there is a skinned model, else feet + height. */
   function headOf(id, out) {
     const a = actor(id); if (!a) return null;
+    const m = a.model ?? a.userData?.model, head = m?.userData?.head;
+    if (head && m.visible !== false) { m.updateMatrixWorld(true); head.getWorldPosition(out); out.y += 0.06; return out; }
     return out.set(a.x, (a.y || 0) + (a.height || 1.62), a.z);
   }
-  /** Compute a camera shot: 'close' on the speaker, 'ots' over the listener's shoulder, 'wide' on the group. */
+  /** Which way a cast member's face points (flat): the model's forward, else toward the other person. */
+  function faceOf(id, fallback, out) {
+    const a = actor(id), m = a?.model;
+    if (m) { m.updateMatrixWorld(true); out.set(0, 0, 1).transformDirection(m.matrixWorld).setY(0); if (out.lengthSq() > 0.01) return out.normalize(); }
+    if (a?.yaw !== undefined) return out.set(Math.sin(a.yaw), 0, Math.cos(a.yaw));
+    return out.copy(fallback);
+  }
+  /**
+   * Compute a camera shot. Close-ups and reactions are framed from in front of the face at head height
+   * (the camera stands where the face points, a little off-axis, and looks back at the eyes);
+   * 'ots' looks past the listener's shoulder at the speaker's face; 'wide' takes in both and the crowd.
+   */
   function shot(kind, who, listener, out, look) {
     const S = headOf(who, tmpA);
     if (!S) return false;
@@ -114,9 +128,15 @@ export function createCinematic({ camera, dom, actor, nameOf = (id) => id, onRea
     tmpDir.subVectors(L, S).setY(0);
     if (tmpDir.lengthSq() < 0.04) tmpDir.set(0, 0, 1);
     tmpDir.normalize();
+    const F = faceOf(who, tmpDir, tmpFace);
+    tmpPerp.set(F.z, 0, -F.x);
+    if (kind === 'close') { out.copy(S).addScaledVector(F, 1.35).addScaledVector(tmpPerp, 0.3); out.y = S.y + 0.02; look.copy(S); look.y -= 0.05; return 36; }
+    if (kind === 'ots') {
+      // Behind the listener only if the speaker is actually facing them; otherwise a two-shot from the speaker's front.
+      if (F.dot(tmpDir) > 0.5) { out.copy(L).addScaledVector(tmpDir, 0.8).addScaledVector(tmpPerp, -0.45); out.y = L.y + 0.1; look.copy(S); look.y -= 0.05; return 42; }
+      out.copy(S).addScaledVector(F, 2.4).addScaledVector(tmpPerp, -0.9); out.y = S.y + 0.15; look.copy(S); look.y -= 0.1; return 44;
+    }
     tmpPerp.set(tmpDir.z, 0, -tmpDir.x);
-    if (kind === 'close') { out.copy(S).addScaledVector(tmpDir, 1.45).addScaledVector(tmpPerp, 0.38); out.y = S.y + 0.04; look.copy(S); look.y -= 0.04; return 38; }
-    if (kind === 'ots') { out.copy(L).addScaledVector(tmpDir, 0.75).addScaledVector(tmpPerp, -0.42); out.y = L.y + 0.12; look.copy(S); look.y -= 0.05; return 42; }
     // wide: both of them and the crowd behind
     look.lerpVectors(S, L, 0.5); look.y = 1.25;
     out.copy(look).addScaledVector(tmpPerp, 6.5).addScaledVector(tmpDir, -1.5); out.y = 2.6;
