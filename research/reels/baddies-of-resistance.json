@@ -1,0 +1,60 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "baddies-of-resistance",
+  "title": "\"BADDIES of RESISTANCE, Part 2\"",
+  "status": "prior-direct-observation",
+  "situation": "Meme-style series title over 20 July footage; the comments are mostly distress, accountability and remembrance.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "2026-07-20 (per caption)",
+    "published": null
+  },
+  "who": {
+    "protester": "women protesters",
+    "officer": "police",
+    "others": []
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "Part 2: BADDIES of RESISTANCE",
+      "speaker": "peeinghuman caption",
+      "kind": "caption",
+      "via": "peeinghuman (Instagram)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "distress",
+      "grief"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Accountability and remembrance dominate despite the playful title."
+    ]
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "grief"
+  ],
+  "actorTypes": [
+    "gen-z-protester"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Design rule: a funny caption on serious footage should make the feed comments turn sad, not laugh.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.instagram.com/peeinghuman/reel/DbiQK6GMi_v/",
+      "publisher": "peeinghuman (Instagram)",
+      "published": null,
+      "access": "prior",
+      "note": "Observed read-only on 2026-10-16."
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "stone-truck",
+  "title": "Who parked a truck of stones?",
+  "status": "sourced-secondary",
+  "situation": "The founder alleges stone-pelting was by ruling-party \"goons\", not students, and asks who parked a stone-laden truck at Jantar Mantar; he says police told him it was a municipal truck. Police separately say 2,873 people with criminal records were at the sites (facial recognition).",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "2026-07-20 to 2026-07-25",
+    "published": "2026-07-28 to 2026-07-31"
+  },
+  "who": {
+    "protester": "founder (claimant)",
+    "officer": "Delhi Police (claimant)",
+    "others": [
+      "\"habitual offenders\" (alleged)",
+      "municipal truck"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "He asked who brought a truck loaded with stones; police told him it was an MCD truck.",
+      "speaker": "Abhijeet Dipke",
+      "kind": "paraphrased",
+      "via": "Free Press Journal (IANS)"
+    },
+    {
+      "text": "We ourselves saw who brought the stones",
+      "speaker": "Abhijeet Dipke",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal (IANS)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "tense",
+  "emotion": [
+    "suspicion"
+  ],
+  "actorTypes": [
+    "provocateur",
+    "organiser",
+    "municipal-truck"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "A municipal dumper full of rubble is parked by the RUP SUV from 14:00; if nobody films or moves it, the provocateurs' first stones come from it.",
+    "cast": [
+      "dev",
+      "zoya"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "who actually threw stones; both sides' claims are unverified"
+  ],
+  "sources": [
+    {
+      "url": "https://www.freepressjournal.in/mumbai/bjp-goons-not-students-pelted-stones-at-police-cjp-founder-abhijeet-dipke-video",
+      "publisher": "Free Press Journal (IANS)",
+      "published": "2026-07-31",
+      "access": "fetched"
+    },
+    {
+      "url": "https://openthemagazine.com/india/delhi-police-identifies-2873-people-with-criminal-records-at-student-protest-sites-using-facial-recognition",
+      "publisher": "Open Magazine",
+      "published": "2026-07-28",
+      "access": "fetched"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/2026_Delhi_Jantar_Mantar_protests",
+      "publisher": "Wikipedia",
+      "published": "2026",
+      "access": "fetched",
+      "note": "Tertiary; used for timeline only."
+    }
+  ]
+}

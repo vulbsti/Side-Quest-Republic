@@ -1,0 +1,59 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "hungry-police-bus",
+  "title": "\"Please feed us\"",
+  "status": "sourced-secondary",
+  "situation": "Early morning: police personnel, brought in by bus and described as hungry, bang on their own bus shouting for food.",
+  "where": "Janpath market, on the road to Jantar Mantar",
+  "when": {
+    "event": "2026-10-10 early morning",
+    "published": "2026-10-11"
+  },
+  "who": {
+    "protester": null,
+    "officer": "rank-and-file Delhi Police, bussed in",
+    "others": []
+  },
+  "comicMechanism": [
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Please feed us, give us some food!",
+      "speaker": "police personnel (reported, English)",
+      "kind": "quoted-in-source",
+      "via": "Newslaundry"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "weary",
+    "human"
+  ],
+  "actorTypes": [
+    "constable",
+    "police-bus"
+  ],
+  "context": "The same report shows three protesters in oversized tees, studded Crocs and bandanas twirling for reels at the crossroads, and loudspeakers repeating the Section 163 order.",
+  "buildThis": {
+    "flag": true,
+    "situation": "Morning: a bus of hungry constables; bring Asha's chai and biscuits and they become \"soft\" for the rest of the day, or sell it at double rate.",
+    "cast": [
+      "asha",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.newslaundry.com/2026/10/11/around-jantar-mantar-in-15967-steps",
+      "publisher": "Newslaundry",
+      "published": "2026-10-11",
+      "access": "fetched",
+      "note": "Paywalled after the opening scenes."
+    }
+  ]
+}

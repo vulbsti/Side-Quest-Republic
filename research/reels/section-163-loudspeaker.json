@@ -1,0 +1,71 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "section-163-loudspeaker",
+  "title": "The loop of the prohibitory order",
+  "status": "sourced-secondary",
+  "situation": "Loudspeakers repeatedly play the Section 163 BNSS order banning gatherings while early protesters walk lane to lane trying to reach the site.",
+  "where": "Janpath, New Delhi",
+  "when": {
+    "event": "2026-10-10 morning",
+    "published": "2026-10-11"
+  },
+  "who": {
+    "protester": "early DU students",
+    "officer": "police PA system",
+    "others": []
+  },
+  "comicMechanism": [
+    "bureaucratic_literalism",
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "We had to walk from this lane, we had to walk from that lane.",
+      "speaker": "early protesters",
+      "kind": "quoted-in-source",
+      "via": "Newslaundry"
+    },
+    {
+      "text": "At least the weather is pleasant.",
+      "speaker": "Mohini, 20, DU student",
+      "kind": "quoted-in-source",
+      "via": "Newslaundry"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "bored",
+    "wry"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "pa-system"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "The police PA loops the Section 163 order; Ravi can hijack the PA cable, and what he plays over it changes the crowd's mood.",
+    "cast": [
+      "ravi",
+      "rao"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.newslaundry.com/2026/10/11/around-jantar-mantar-in-15967-steps",
+      "publisher": "Newslaundry",
+      "published": "2026-10-11",
+      "access": "fetched",
+      "note": "Paywalled after the opening scenes."
+    },
+    {
+      "url": "https://www.thequint.com/news/breaking-news/jantar-mantar-protest-second-day-detentions-neha-bora",
+      "publisher": "The Quint",
+      "published": "2026-10-03",
+      "access": "fetched"
+    }
+  ]
+}

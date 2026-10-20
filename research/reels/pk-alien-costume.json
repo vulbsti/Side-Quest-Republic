@@ -1,0 +1,52 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "pk-alien-costume",
+  "title": "The PK alien who stood in for the real one",
+  "status": "sourced-secondary",
+  "situation": "A man dressed as Aamir Khan's alien from PK says the real one was busy getting married, holding photos over his face.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "costumed protester",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Said \"the real one was busy getting married\".",
+      "speaker": "protester",
+      "kind": "paraphrased",
+      "via": "DT Next (agency copy, also in Outlook)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "silly"
+  ],
+  "actorTypes": [
+    "costumed-protester"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Ambient extra for the costume pool.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "koi-media-nahin-hai",
+  "title": "\"Koi media nahin hai\"",
+  "status": "sourced-secondary",
+  "situation": "Reporters from several outlets are detained while covering marches and their phones seized; police reportedly say there is no media here.",
+  "where": "Central Delhi",
+  "when": {
+    "event": "2026-10-10 (12:30 entry)",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": null,
+    "officer": "Delhi Police",
+    "others": [
+      "reporters from Newslaundry, Scroll and others"
+    ]
+  },
+  "comicMechanism": [
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "Koi media nahin hai.",
+      "speaker": "police (reported)",
+      "kind": "quoted-in-source",
+      "via": "ThePrint (live blog)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "angry"
+    ],
+    "quoted": [],
+    "paraphrased": []
+  },
+  "phase": "tense",
+  "emotion": [
+    "fear",
+    "outrage"
+  ],
+  "actorTypes": [
+    "journalist",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "A constable tells Zoya \"koi media nahin hai\" while she is live; the chat counter goes up as he says it, and the player can stand in front of her lens or film him saying it.",
+    "cast": [
+      "zoya"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    },
+    {
+      "url": "https://thesouthfirst.com/beyond-south/the-road-to-jantar-mantar-a-day-inside-indias-sealed-capital/",
+      "publisher": "The South First",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

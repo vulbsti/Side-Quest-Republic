@@ -1,0 +1,71 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "police-push-bus",
+  "title": "Police push the keyless bus",
+  "status": "sourced-secondary",
+  "situation": "A separate clip shows police physically pushing the stuck bus away from the protest site.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "2026-10-04 (same day as bus-key clip, per Aaj Tak)",
+    "published": "2026-10-05"
+  },
+  "who": {
+    "protester": null,
+    "officer": "several Delhi Police personnel pushing",
+    "others": [
+      "crowd watching"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "bureaucratic_literalism"
+  ],
+  "lines": [],
+  "reactionBeats": "Not described.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Reported alongside the key clip; no separate comments quoted."
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "absurd",
+    "relief"
+  ],
+  "actorTypes": [
+    "constable",
+    "bus"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "After the key goes missing, Rao orders \"push it\"; four constables strain against the bus while protesters cheer each metre, and the player can help push or \"help\" push backwards.",
+    "cast": [
+      "iqbal",
+      "sharma",
+      "rao"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "that it is the same bus as the key clip (NewsBytes and repo research both say this is unestablished)"
+  ],
+  "sources": [
+    {
+      "url": "https://www.aajtak.in/trending/story/jantar-mantar-woman-snatches-police-bus-key-viral-video-tstf-dskc-2661642-2026-10-05",
+      "publisher": "Aaj Tak",
+      "published": "2026-10-05",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.newsbytesapp.com/news/india/woman-halts-detainee-bus-by-seizing-keys-at-jantar-mantar/tldr",
+      "publisher": "NewsBytes",
+      "published": "2026-10-05",
+      "access": "fetched"
+    }
+  ]
+}

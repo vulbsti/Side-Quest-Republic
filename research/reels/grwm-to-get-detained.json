@@ -1,0 +1,84 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "grwm-to-get-detained",
+  "title": "Get ready with me: detention edition",
+  "status": "sourced-secondary",
+  "situation": "Influencers post \"GRWM to get detained\" and OOTD videos before marches; some creators criticise the trend as trivialising, others defend it as spreading the message.",
+  "where": "Instagram, about Jantar Mantar",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-23/24"
+  },
+  "who": {
+    "protester": "creators",
+    "officer": null,
+    "others": [
+      "critic influencers"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "I am wearing a spine, some jhumkas and my constitutional right to oh… Never mind!",
+      "speaker": "creator in an indigo kurta",
+      "kind": "quoted-in-source",
+      "via": "DT Next (agency copy, also in Outlook)"
+    },
+    {
+      "text": "Her eyeliner stayed intact thanks to a \"strong\" foundation, \"unlike the government\".",
+      "speaker": "OOTD poster",
+      "kind": "paraphrased",
+      "via": "DT Next (agency copy, also in Outlook)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "split: amused vs critical"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Two creators criticised the trend as trivialising; two defended it (Onmanorama)."
+    ]
+  },
+  "phase": "morning",
+  "emotion": [
+    "vanity",
+    "irony"
+  ],
+  "actorTypes": [
+    "creator"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Meera films \"GRWM for detention\" at 10:00; at 17:00 the same clip is reposted next to injury footage and her comments turn.",
+    "cast": [
+      "meera"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.onmanorama.com/news/india/2026/07/24/cjp-gen-z-protest-neet-leak-memes-subway-surfers-gta-rhiya-ahir.html",
+      "publisher": "Onmanorama",
+      "published": "2026-07-24",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "publisher": "National Herald",
+      "published": "2026-07-23",
+      "access": "fetched"
+    }
+  ]
+}

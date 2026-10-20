@@ -1,0 +1,97 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "detain-me-too",
+  "title": "\"Sir, mujhe bhi detain kar lo\"",
+  "status": "sourced-secondary",
+  "situation": "A young man asks police to detain him so he can be with two friends already on the detention bus. Police first refuse and tell him to leave; he insists; amused, they take him in through the front door. His two friends slip out of the rear door.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "early October 2026 (not stated)",
+    "published": "2026-10-05"
+  },
+  "who": {
+    "protester": "young man, loyal friend",
+    "officer": "Delhi Police loading detainees",
+    "others": [
+      "two friends inside the bus"
+    ]
+  },
+  "comicMechanism": [
+    "goal_reversal",
+    "literal_service_request",
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "Sir, mujhe bhi detain kar lo, mere dost andar hai.",
+      "speaker": "protester",
+      "kind": "quoted-in-source",
+      "via": "Vartha Bharati"
+    },
+    {
+      "text": "Mujhe bhi unke saath hi le chalo.",
+      "speaker": "protester",
+      "kind": "quoted-in-source",
+      "via": "Vartha Bharati"
+    }
+  ],
+  "reactionBeats": "Officers refuse, he insists, officers are amused and agree; helped in through the front door while friends leave by the rear (Vartha Bharati). NDTV reports he then asked to leave; that line is not quoted in any source read.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "wholesome"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Vartha Bharati says social media users were amused but quotes no comments."
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "loyalty",
+    "farce"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable",
+    "detainee"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Ask Sharma to detain you to reach Nikhil; as you climb in the front, Nikhil and Kabir climb out the back, and now you need a reason to be released.",
+    "cast": [
+      "player",
+      "nikhil",
+      "kabir",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "exact second request wording",
+    "filming date"
+  ],
+  "sources": [
+    {
+      "url": "https://english.varthabharati.in/india/delhi-sir-mujhe-bhi-detain-kar-lo-mere-dost-andar-hai-protesters-bus-takes-hilarious-twist-at-jantar-mantar-2280407",
+      "publisher": "Vartha Bharati",
+      "published": "2026-10-05",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.ndtv.com/india-news/jantar-mantar-protest-bus-key-dash-to-detain-me-please-how-protesters-outfoxed-delhi-cops-12144526",
+      "publisher": "NDTV",
+      "published": "2026-10-06",
+      "access": "blocked",
+      "note": "Recorded in protest-incidents.json on 2026-10-15; fetch blocked today."
+    },
+    {
+      "url": "https://www.instagram.com/reel/DeGcEyuhznq/",
+      "publisher": "Instagram (embedded by NDTV)",
+      "published": null,
+      "access": "prior",
+      "note": "Unavailable in the signed-in session on 2026-10-15."
+    }
+  ]
+}

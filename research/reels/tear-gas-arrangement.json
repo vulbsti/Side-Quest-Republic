@@ -1,0 +1,91 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "tear-gas-arrangement",
+  "title": "\"Koi tear gas ka intezaam nahi kiye?\"",
+  "status": "sourced-secondary",
+  "situation": "A Bihari student asks the bewildered police whether they have made no arrangement for tear gas, and suggests they at least run the water cannon. Three sources print slightly different wordings.",
+  "where": "Patna, Bihar",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-23 to 2026-08-01"
+  },
+  "who": {
+    "protester": "Bihari student",
+    "officer": "Bihar Police",
+    "others": []
+  },
+  "comicMechanism": [
+    "literal_service_request"
+  ],
+  "lines": [
+    {
+      "text": "Koi tear gas ka intejaam nahi kiye? Water cannon hee chala dijiye.",
+      "speaker": "student",
+      "kind": "quoted-in-source",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    },
+    {
+      "text": "Sir, tear gas ki vaivastha nahi hai? Paaani waani bhi nahi hai...Garmi hai",
+      "speaker": "student",
+      "kind": "quoted-in-source",
+      "via": "Republic World"
+    },
+    {
+      "text": "आंसू गैस का इंतजाम किया है? पानी भी इस्तेमाल करते नहीं दिख रहे।",
+      "speaker": "student",
+      "kind": "quoted-in-source",
+      "via": "Navbharat Live"
+    }
+  ],
+  "reactionBeats": "NH says the officers were \"bewildered\".",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused"
+    ],
+    "quoted": [],
+    "paraphrased": []
+  },
+  "phase": "midday",
+  "emotion": [
+    "deadpan"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Pester option \"ask about the arrangements\": Kabir asks Sharma, in a customer-service voice, whether tear gas is \"available today\"; Sharma checks with Rao on the wireless.",
+    "cast": [
+      "kabir",
+      "sharma",
+      "rao"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "exact audio: the three printed wordings differ"
+  ],
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.republicworld.com/viral/biharis-are-next-level-neet-protesters-ask-cops-to-use-water-cannons-amid-heat-break-into-impromptu-rain-dance-viral-videos-2026-07-24-133319",
+      "publisher": "Republic World",
+      "published": "2026-07-24",
+      "access": "fetched"
+    },
+    {
+      "url": "https://navbharatlive.com/viral/patna-neet-ug-2026-protest-students-dance-under-water-cannon-viral-videos-cjp-1883900.html",
+      "publisher": "Navbharat Live",
+      "published": "2026-07-23",
+      "access": "fetched",
+      "note": "Hindi article."
+    }
+  ]
+}

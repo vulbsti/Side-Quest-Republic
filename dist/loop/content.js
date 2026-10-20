@@ -2,17 +2,17 @@
 // Characters are fictional. Lines are original Hinglish.
 
 export const PEOPLE = {
-  ravi: { name: 'Ravi', role: 'sound volunteer', look: { color: '#d4b46b', pants: '#6f5e47', hat: true, gender: 'male' } },
-  iqbal: { name: 'Iqbal', role: 'shuttle driver', look: { color: '#5d7fa8', pants: '#2f3a44', gender: 'male' } },
+  ravi: { name: 'Ravi', role: 'sound volunteer', look: { variant: 'vendor', color: '#d4b46b', pants: '#6f5e47', hat: true, gender: 'male' } },
+  iqbal: { name: 'Iqbal', role: 'shuttle driver', look: { variant: 'uncle', color: '#5d7fa8', pants: '#2f3a44', gender: 'male' } },
   sharma: { name: 'Officer Sharma', role: 'constable', look: { police: true } },
-  mira: { name: 'Mira', role: 'organiser', look: { color: '#819777', pants: '#b6a080', gender: 'female' } },
-  asha: { name: 'Asha', role: 'chai seller, knows everything', look: { color: '#c9573f', pants: '#5a3c34', gender: 'female' } },
-  zoya: { name: 'Zoya', role: 'independent reporter', look: { color: '#2f4f6f', pants: '#1f2a33', gender: 'female', backpack: true } },
-  meera: { name: 'Meera', role: 'reel creator', look: { color: '#e08fb0', pants: '#3b3046', gender: 'female' } },
-  kabir: { name: 'Kabir', role: 'student, aspiring comic', look: { color: '#e3c449', pants: '#2b3a52', gender: 'male', backpack: true } },
-  nikhil: { name: 'Nikhil', role: 'first-timer, phone at 3%', look: { color: '#8fb6c9', pants: '#47505a', gender: 'male' } },
-  dev: { name: 'Dev', role: 'coalition negotiator', look: { color: '#f2efe6', pants: '#3e3a33', gender: 'male' } },
-  sana: { name: 'Sana', role: 'medical volunteer', look: { color: '#e8ecef', pants: '#4f6f6a', gender: 'female' } },
+  mira: { name: 'Mira', role: 'organiser', look: { variant: 'student-kurti', color: '#819777', pants: '#b6a080', gender: 'female' } },
+  asha: { name: 'Asha', role: 'chai seller, knows everything', look: { variant: 'aunty', color: '#c9573f', pants: '#5a3c34', gender: 'female' } },
+  zoya: { name: 'Zoya', role: 'independent reporter', look: { variant: 'student-shirt-f', color: '#2f4f6f', pants: '#1f2a33', gender: 'female', backpack: true } },
+  meera: { name: 'Meera', role: 'reel creator', look: { variant: 'student-tee-f', color: '#e08fb0', pants: '#3b3046', gender: 'female' } },
+  kabir: { name: 'Kabir', role: 'student, aspiring comic', look: { variant: 'student-hoodie', color: '#e3c449', pants: '#2b3a52', gender: 'male', backpack: true } },
+  nikhil: { name: 'Nikhil', role: 'first-timer, phone at 3%', look: { variant: 'student-kurta', color: '#8fb6c9', pants: '#47505a', gender: 'male' } },
+  dev: { name: 'Dev', role: 'coalition negotiator', look: { variant: 'student-kurta', color: '#f2efe6', pants: '#3e3a33', gender: 'male', hat: true } },
+  sana: { name: 'Sana', role: 'medical volunteer', look: { variant: 'student-tee-f', color: '#e8ecef', pants: '#4f6f6a', gender: 'female', backpack: true } },
   rao: { name: 'Inspector Rao', role: 'heard on the wireless', voice: true },
 };
 
@@ -183,7 +183,7 @@ export const LINKS = {
   'meera-reel': { from: 'Meera films the CP party', to: 'Her reel pulls even more people in', hint: 'Someone turns noise into views' },
   'sharma-kills-party': { from: 'Sharma reaches the party', to: 'He switches the speaker off', hint: 'What does a constable do with loud music?' },
   'rao-recalls': { from: 'CP calms down', to: 'Sharma goes back to the barricade', hint: 'Sharma doesn\'t stay away forever' },
-  'detained': { from: 'Sharma sees you take the key', to: 'You get detained', hint: 'Watch who is watching' },
+  'detained': { from: 'Caught, or reported to the wrong cop', to: 'You sit in the detention van', hint: 'Watch who is watching' },
   'owner-reclaims': { from: 'The owner catches you with it', to: 'They take it back', hint: 'People notice their own things' },
   'key-returned': { from: 'Key back with Iqbal', to: 'The shuttle runs again', hint: 'Can a stuck shuttle be fixed?' },
   'rumour-spreads': { from: 'Someone who believes a rumour stands in a crowd', to: 'The whole crowd believes it', hint: 'Whisper something to the right person' },
@@ -234,7 +234,6 @@ export const LINES = {
   'iqbal-finds': [['iqbal', 'Ye rahi! Chalo, sawari, chalo!']],
   'key-returned': [['iqbal', 'Shukriya bhai! Chalo, Jantar Mantar express!']],
   'ravi-missing': [['ravi', 'Mera speaker kahan gaya?! Abhi toh yahin tha!']],
-  'detained': [['sharma', 'Ruko! Bus ki chabi leke kahan? Chalo, van mein baitho.']],
   'sharma-shrug': [['sharma', 'Ye leke kahan bhaag rahe ho? Mera department nahi, chalo.']],
   'break-start': [['iqbal', 'Chai break! Chabi hook pe. Dus minute.']],
   'ravi-at-chai': [['ravi', 'Iqbal bhai, ek cutting meri bhi.'], ['iqbal', 'Aaj bheed kuch zyada hi hai, Ravi.']],
@@ -284,7 +283,7 @@ export const LINES = {
   'clash-live': [['dev', 'Minister ko bulao! Abhi! Yahin!'], ['stream', 'Zoya Live: Barricade pe dhakka-mukki, main live hoon, sab dekh rahe hain!'], ['wireless', 'Rao: Camera band karwao! …Nahi, camera band mat karwao, wo bhi live jaayega. Over.']],
   'clash-over': [['wireless', 'Rao: Area clear karo. Vans bhar gayi hain. Over.']],
   'dev-fizzles': [['dev', 'Bina megaphone ke koi sunta hi nahi. Chalo, ghar.'], ['street', 'The barricade crowd drifts home in twos and threes.']],
-  'wind-down': [['wireless', 'Rao: Saade chaar. Paanch baje tak area khaali chahiye. Over.']],
+  'wind-down': [['wireless', 'Rao: Paanch baj gaye. Bus bharo, road khaali karo, chai baad mein. Over.'], ['street', 'The sodium lamps flicker on. Phones come out: "kahan hai tu?"']],
 
   // Slice 4
   'heat': [['sana', 'Koi gir gaya! Paani! Kisi ke paas paani hai?'], ['wireless', 'Rao: Jantar Mantar pe ambulance bhejo. Line wahin rakhna. Over.'], ['street', 'Two people faint in the heat. The crowd thins as others look for shade.']],
@@ -387,4 +386,347 @@ export const ENDINGS = {
     headline: '"Small Gathering At Jantar Mantar Disperses Early"',
     text: 'Without the speaker, Mira\'s speech didn\'t carry and the crowd thinned out by tea time.',
   },
+};
+
+// ============================================================================================
+// The protest-day slice: talk states, hints, links and lines for the escalating day.
+// Kept together so the writer can polish one block. Player options are intents (INTENTS);
+// what the player actually says is written separately (PESTER.say), never the button read back.
+// ============================================================================================
+
+const moreTalk = {
+  sharma: [
+    { when: 'soft', line: 'Tum log theek ho. Bas barricade pe mat chadhna. Aur mere baare mein reel mat banana. …Achha bana lo, par achhi angle se.', hint: 'sharma-soft' },
+    { when: 'soft-tense', line: 'Suno. Chaar baje ke baad upar se order aayega. Tum log stage ke peeche rehna. Maine kuch nahi bola.', hint: 'rao-charge' },
+    { when: 'tense', line: 'RAF aa gayi hai. Ab main Sharma nahi, "force" hoon. Force se baat nahi karte.', hint: 'rao-charge' },
+    { when: 'annoyed', line: 'Naam kya hai tumhara? Nahi, bolo. Likh raha hoon.', hint: null },
+  ],
+  iqbal: [
+    { when: 'detention', line: 'Do baje se meri bus sarkari ho gayi. Detention bus. Main bas driver hoon, judge nahi. Chabi hook pe hai, main chai pe.', hint: 'iqbal-detention' },
+  ],
+  mira: [
+    { when: 'tense', line: 'Teen ladke aaye hain, naye joote, kaan mein kuch laga hai. Hamare nahi hain. Koi unko camera pe le aaye toh khud bhaag jaayenge.', hint: 'zoya-camera' },
+    { when: 'tense', line: 'Jab line aage badhe, log jo bhi karein saath karein. Baithe toh sab baithein, bhaage toh sab.', hint: 'mira-stance' },
+    { when: 'aftermath', line: 'Ginti kar rahi hoon. Kaun bus mein hai, kaun ghar, kaun bas phone nahi utha raha.', hint: null },
+  ],
+  zoya: [
+    { when: 'provocateurs', line: 'Woh helmet wala dekha? Protest mein helmet leke kaun aata hai, delivery wala? Camera pe lao, main live hoon.', hint: 'zoya-camera' },
+  ],
+  asha: [
+    { when: 'suv', line: 'Safed gaadi, upar jhanda, "VIP" sticker. Har saal aati hai. Dhai baje teen ladke utarte hain, naye joote pehen ke. Protest mein naye joote? Haan ji.', hint: 'asha-suv' },
+    { when: 'cold', line: 'Tum wahi ho na? Chai ki jagah gossip chahiye? Aaj nahi beta, aaj bahut ho gaya.', hint: null },
+  ],
+  kabir: [
+    { when: 'mummy', line: 'Bhai paune do baje mummy ka video call aata hai. Daily. Main barricade ke paas jaake uthata hoon, wahan shor kam hai. Pray for me.', hint: 'kabir-mummy' },
+    { when: 'grateful', line: 'Bhai tu legend hai. Mummy ab Sharma uncle ko "Verma sir" bolti hai. Main zindagi bhar tera karzdaar.', hint: null },
+    { when: 'sulking', line: 'Reel ban gayi na? Badhai ho. Mummy ne location maangi hai. Main jaa raha hoon.', hint: null },
+    { when: 'shook', line: 'Tune mummy ko sach bata diya. SACH. Chaar baje ghar. Ye meri aakhri protest hai, dost.', hint: null },
+  ],
+  nikhil: [
+    { when: 'lost-again', line: 'Update: main phir kho gaya. Lathi wale aaye, sab bhaage, main bhi bhaaga, galat taraf.', hint: 'nikhil-lost' },
+  ],
+  sana: [
+    { when: 'annoyed', line: 'Mera paani police ke bottle mein? Wah. Agla behosh hone wala tumhare naam pe girega.', hint: null },
+    { when: 'cold', line: 'Agar madad karni hai toh karo, warna tent ke saamne se hato. Bheed mat lagao.', hint: null },
+  ],
+  ravi: [
+    { when: 'cold', line: 'Tum mere speaker ke paas mat aana. Main tumhe pehchaan gaya hoon.', hint: null },
+  ],
+  meera: [
+    { when: 'fan', line: 'Tu toh content hai yaar. Aaj ka poora feed tera. Bas kuch illegal mat karna jab main record kar rahi hoon. …Ya karna.', hint: null },
+  ],
+};
+for (const [who, list] of Object.entries(moreTalk)) TALK[who].push(...list);
+
+Object.assign(HINTS, {
+  'asha-suv': { who: 'asha', text: 'The RUP party\'s white SUV parks at 12:30. At 14:30 it drops three men into the biggest crowd: new shoes, an earpiece, a helmet in a bag. At 15:30 one of them throws the first stone.' },
+  'rao-charge': { who: 'rao', text: 'The lathi charge comes at 16:30. At 16:00 if things are boiling, 15 minutes after the first stone. If it stays calm, there is no charge at all.' },
+  'sharma-soft': { who: 'sharma', text: 'Make Sharma laugh twice and he goes soft: at the showdown he lets your people through and never names you. Three times in ten minutes and he\'s annoyed.' },
+  'zoya-camera': { who: 'zoya', text: 'Film a provocateur, or catch him on Zoya\'s live, and the crowd turns on him. Report him to anyone but a soft Sharma and you\'re the one in the van.' },
+  'kabir-mummy': { who: 'kabir', text: 'Mummy video-calls at 13:40. He takes it by the barricade, next to Sharma.' },
+  'iqbal-detention': { who: 'iqbal', text: 'From 14:00 the shuttle is the detention bus at the Jantar stop. Key on the hook, Iqbal at chai. No key, no bus, and detainees walk off.' },
+  'mira-stance': { who: 'mira', text: 'Whoever holds the megaphone sets what the crowd does at the charge: Mira holds, Kabir scatters, Dev blocks. Stand there with a crew and it\'s your call.' },
+});
+
+RUMOURS.sena = {
+  label: '"DRS wale danda leke stage pe aa rahe hain"',
+  unlock: null,
+  feed: 'Golu (Jantar Updates 🔥): bhai DRS wale bikes pe aa rahe hain stage ki taraf, danda leke 😳 sab dhyan rakho',
+  reach: {
+    stage: 'The stage crowd hears the DRS are coming. Somebody starts a counter-chant in advance, just in case.',
+    cp: 'At the CP stop, someone says the DRS are on their way. Three people sit down on their bikes to wait for them.',
+    barricade: 'The word "DRS" goes round the barricade. Even Sharma looks up.',
+  },
+  reply: {
+    default: 'DRS? Yahan? Bhai phir toh scene hoga.',
+    zoya: 'Kisne bola? Source? …Ruko, agar unke group mein ye forward gaya toh woh sach mein aa jaayenge.',
+    kabir: 'DRS? Unke slogans ka rhythm achha hai, bas lyrics ki problem hai.',
+    asha: 'Haaye Ram. Sabko bata deti hoon, dukaan jaldi band karni padegi.',
+    meera: 'Clash reel?? Main front row pe.',
+    mira: 'Afwaah mat phailao. …Kahan se aa rahe hain? Kitne?',
+  },
+};
+
+Object.assign(LINKS, {
+  'chase': { from: 'Police see you take the key', to: 'A constable runs at you', hint: 'Who is watching the bus?' },
+  'chase-lost': { from: 'Get into a crowd of six, or out of sight', to: 'He loses you', hint: 'Where does a constable lose a kid?' },
+  'detainees-escape': { from: 'Detention bus without its key', to: 'The detainees walk off the back', hint: 'A bus needs a key to be a jail' },
+  'pester-soft': { from: 'Make an officer laugh twice', to: 'He goes soft on you', hint: 'Career advice, compliments, room service' },
+  'officer-annoyed': { from: 'Pester the same officer three times in a row', to: 'He takes your name', hint: 'There is such a thing as too much rizz' },
+  'cannon-dance': { from: 'Ask for the water cannon before 14:00', to: 'The kids dance in its spray', hint: 'Treat riot gear like a weather service' },
+  'sharma-lets-through': { from: 'Someone on the line likes you at the charge', to: 'Your people get through', hint: 'Who on the line likes you?' },
+  'provocateur-stone': { from: 'Nobody deals with the men in new shoes', to: 'The first stone, then the charge', hint: 'Who came in the white SUV?' },
+  'joined-stone': { from: 'Join a provocateur', to: 'The stone comes from your side, and so does the charge', hint: 'What if you just went with him?' },
+  'provocateur-exposed': { from: 'Film the provocateur', to: 'The crowd turns on him, he runs to the SUV', hint: 'What does a plant fear most?' },
+  'provocateur-reported': { from: 'Point him out to a soft Sharma', to: 'He walks him off quietly', hint: 'Who on the line would actually do something?' },
+  'report-wrong': { from: 'Report him to anyone else', to: 'He\'s protected, you\'re detained', hint: 'Whose men are they?' },
+  'provocateur-joined': { from: 'You join him', to: 'Heat, nuisance, and your area is the target', hint: 'The SUV boys are fun for about ten minutes' },
+  'crew-join': { from: 'Enough aura in a crowd', to: 'Students follow you', hint: 'People follow people they\'ve seen on the feed' },
+  'crew-block': { from: 'Your crew at a police line or on the road', to: 'They sit and block, the police come for them', hint: 'Ten people on a road is a statement' },
+  'sena-called': { from: 'The stage hears the DRS are coming', to: 'The DRS hear it too, and come', hint: 'Some rumours make themselves true' },
+  'opp-photo-op': { from: 'A camera at the stage at 13:00', to: 'The LJM leader grabs the mic for a photo', hint: 'Who only turns up for cameras?' },
+  'sitin': { from: 'The day never boils over', to: 'No charge, the protest ends as a sit-in', hint: 'What keeps a lathi in its holder?' },
+  'charge': { from: 'The director\'s time and place', to: 'Lathi charge', hint: 'When and where does it break?' },
+  'gas': { from: 'Still boiling at 16:00', to: 'Tear gas at the hotspot', hint: 'How hot is too hot?' },
+  'repost': { from: 'A clip you posted in the morning', to: 'Reposted at 17:00 with a nasty caption', hint: 'The internet never forgets, it just recaptions' },
+  'singing-no-stone': { from: 'The stage singing or laughing at 15:30', to: 'The provocateurs give up and leave', hint: 'Nobody throws a stone into a singalong' },
+  'friend-distracts': { from: 'You helped enough people today', to: 'A friend makes a scene and you slip off the bus', hint: 'Who would come for you?' },
+});
+
+Object.assign(LINES, {
+  // Arrivals
+  'arrival-wave': [['street', 'A white SUV with a saffron-green flag and a "VIP" sticker noses in by the Jantar stop. Behind it, a line of bikes, saffron scarves, a megaphone tied to a handlebar.'], ['wireless', 'Rao: RUP ki gaadi aa gayi, DRS bhi. Dono ko apni jagah rakho. Over.'], ['chat', 'Meera: guys DRS aa gaye bikes pe 😭 aur ek SUV jisme sab white kurte'], ['kabir', 'Bhai SUV ke andar AC hai. Hum log ke andar sirf hope hai.']],
+  'arrival-wave-angry': [['street', 'The DRS bikes don\'t stop at the barricade. They ride straight up to the stage, horns going, chanting before they\'ve parked.'], ['wireless', 'Rao: DRS stage ki taraf! Kisne bulaya inko? Over.'], ['mira', 'Koi jawab mat dena! Baitho! Bas baitho!']],
+  'sena-called': [['street', 'More bikes turn up. Then more. The DRS boys heard the rumour about themselves and decided to make it true.'], ['wireless', 'Rao: DRS ki doosri tukdi aa gayi, stage ke saamne. Over.'], ['kabir', 'Bhai inhone apni hi afwaah ka RSVP kar diya.']],
+  'sena-called-early': [['street', 'Someone forwards the DRS rumour into the wrong group. Somewhere, bikes are being started.']],
+  'opp-photo-op': [['street', 'A man in a white kurta with a ceiling-fan badge climbs onto the stage, takes the mic from nobody, and turns to the cameras.'], ['mira', 'Ji aap kaun? …Haan aap. Aap kaun?'], ['kabir', 'Bhai ye kaun hai? Kisi ne bulaya? Mera mic bhi nahi hai aur inka speech?'], ['street', 'A few students walk off. "Hum LJM ke liye nahi aaye."']],
+  'opp-no-camera': [['street', 'An LJM leader arrives, looks around for a camera, finds none, and starts checking his phone.']],
+  'opp-leaves': [['street', 'The LJM leader leaves for a "prior engagement". His flags stay behind, leaning on a pole.']],
+  // Police build-up
+  'barricades-up': [['wireless', 'Rao: Sansad Marg pe barricade lagao. RAF reserve wahin. Over.'], ['street', 'Steel barricades clang into place on Parliament Street. Blue camouflage, helmets, shields. The RAF are here.'], ['chat', 'Nikhil: Update: RAF aa gayi. Bahut log hain. Sab ke paas danda hai.']],
+  'detention-bus': [['iqbal', 'Lo ji. Ab ye shuttle nahi, sarkari bus hai. Main chai pe, chabi hook pe. Koi mat chhoona. …Kaun sunta hai.'], ['wireless', 'Rao: Shuttle ab detention duty pe, Jantar stop. Over.']],
+  'officer-bad-day': [['street', 'Tum. Haan tum. Kya dekh rahe ho? ID dikhao. Nahi, bas aise hi.']],
+  'provocateur-drop': [['street', 'The SUV door opens. Three men get out who look like they\'ve never been to a protest: new shoes, an earpiece, a helmet in a bag. They walk into the crowd like they own it.'], ['chat', 'Meera: bhai ye teen kaun hai?? ek ke joote ka tag abhi bhi laga hai']],
+  'provocateurs-act': [['street', 'The men from the SUV push to the front, shouting slogans one beat ahead of everyone else.'], ['mira', 'Peeche raho! Ye hamare log nahi hain!']],
+  // Stone, cannon, gas, charge
+  'stone-thrown': [['street', 'A stone arcs out of the crowd and clangs off a shield. For a second, everything goes very quiet.'], ['wireless', 'Rao: Pathar! Pathar chala! Sab units, ready raho. Over.'], ['mira', 'Kisne phenka?! Ye hum nahi hain! Ye HUM NAHI HAIN!']],
+  'singing-no-stone': [['street', 'The men in new shoes look around at a crowd that is singing, or laughing, and quietly walk back to the SUV.'], ['kabir', 'Dekho, gaane se gunde bhi bhaag gaye. Next time hum antakshari karenge.']],
+  'cannon-roll': [['street', 'A white-and-blue Vajra truck rolls up, nozzle swivelling. Somebody\'s phone plays a sad violin.'], ['wireless', 'Rao: Vajra position le raha hai. Over.']],
+  'cannon-spray': [['street', 'The Vajra opens up. A wall of water hits the front of the crowd, people slip, scatter, get back up.'], ['wireless', 'Rao: Thoda kam, thoda kam! Camera pe zyada lag raha hai. Over.']],
+  'cannon-dance': [['street', 'The Vajra opens up and the kids at the front start dancing in the spray. Arms up. Someone plays a song. The jawans look at each other.'], ['kabir', 'SHOWER MIL GAYA! Maine kaha tha na, room service!'], ['wireless', 'Rao: …Ye log naach kyun rahe hain? Band karo. Nahi, band karo toh aur bura lagega. Chalne do. Over.']],
+  'gas-fired': [['street', 'Pop. Pop. Grey smoke rolls across the crowd. Eyes burn, people run with their kurtas over their faces.'], ['sana', 'Aankhein mat ragdo! Paani! Idhar aao!'], ['chat', 'Nikhil: Update: aankh mein mirchi. Kuch nahi dikh raha. Sab theek hai.']],
+  'charge-hold': [['wireless', 'Rao: Charge! Clear karo! Over.'], ['street', 'The line surges. The protesters sit down and link arms. Lathis come down on backs, and people are dragged, one by one, towards the bus.']],
+  'charge-scatter': [['wireless', 'Rao: Charge! Clear karo! Over.'], ['street', 'The line surges and everyone runs: over benches, through the colonnade, phones up the whole way.']],
+  'charge-block': [['wireless', 'Rao: Charge! Clear karo! Over.'], ['street', 'The line surges into a crowd that won\'t move. It turns into a shoving match, shields against bodies, and the vans fill fast.']],
+  'charge-protect': [['wireless', 'Rao: Charge! Clear karo! Over.'], ['street', 'The line surges. The students close round the ones in front, pulling them back, taking the blows on bags and backs.']],
+  'charge-end': [['wireless', 'Rao: Bas. Ruko. Area clear hai. Over.'], ['street', 'The lathis go back down. Somebody\'s left a single chappal in the middle of the road.']],
+  'sharma-lets-through': [['sharma', 'Idhar se. Jaldi. Maine kuch nahi dekha.']],
+  'raf-gali': [['street', 'The RAF jawan from Muzaffarpur steps half a pace sideways and nods at a gap between two shops. Gali. Go.']],
+  'friends-separated': [['chat', 'Nikhil: Update: main kahan hoon? Koi bhi? Ek pan ki dukaan hai aur ek kutta.'], ['street', 'In the running, Nikhil goes one way and everyone else goes the other.']],
+  'nikhil-where': [['chat', 'Kabir: Nikhil kahan hai?? Kisi ko dikha? Uska phone 1% pe tha']],
+  'sitin': [['street', 'Nobody charges. The crowd sits down where it is and stays: chants, chai, a guitar, a dozen phones charging off one power bank.'], ['wireless', 'Rao: Sab baithe hain. Order hai bas dekhte raho. Over.']],
+  'bus-loads-you': [['wireless', 'Rao: Woh wala bhi, jiska reel chal raha hai. Bus mein. Over.']],
+  'repost': [['feed', 'An IT-cell page reposts your morning clip with a new caption. The comments turn, fast.'], ['chat', 'Meera: bhai tera subah wala reel kisi ne repost kiya hai 💀 caption padh']],
+  'kabir-phone-rings': [['kabir', 'Mummy. Video call. Bhai main barricade ki taraf jaata hoon, wahan shor kam hai. Agar main wapas na aaun toh mera insta tu chalana.']],
+  'kabir-stays-mummy': [['kabir', 'Mummy ne bola "Verma sir ki class achhi hai, der tak ruk ja". Bhai main aaj nahi jaa raha.']],
+  'kabir-curfew': [['kabir', 'Chaar baj gaye. Mummy ka order. Bhai main nikalta hoon, aage ki reel bhej dena.']],
+  'sharma-chases-friends': [['sharma', 'Oye! Tum dono! Ruko!'], ['chat', 'Nikhil: Update: Sharma uncle hamare peeche bhaag rahe hain. Cardio ho raha hai.']],
+  'sana-short-one': [['sana', 'Ek aur gir gaya! Paani kam pad gaya, kisi ne crate mein se police ke liye nikaal liya tha.']],
+  'no-heat': [['sana', 'Do baj gaye, dhoop full, aur koi nahi gira. Crate ka shukriya, jisne bhi laaya.']],
+  // Chase and detention
+  'chase-start': [['street', 'Oye! Ruk! Chabi wapas kar!'], ['chat', 'Meera: BHAI BHAAG 🏃‍♂️ main record kar rahi hoon']],
+  'chase-lost': [['street', 'The constable stops, hands on knees, scanning the crowd. Twenty identical kids in jeans scan him back.']],
+  'detained-caught': [['street', 'A hand on your collar. "Chalo." You\'re walked to the van, very politely, by a very sweaty man.'], ['chat', 'Kabir: bhai ko utha liya 😭 koi screenshot lo']],
+  'detained-reported': [['street', 'The constable listens, nods, looks at the man you pointed at, and then at you. "Tum chalo mere saath."'], ['wireless', 'Rao: Jo ladka shikayat kar raha hai, usko baitha do. Over.']],
+  'detained-aftermath': [['street', 'Two constables take an arm each. The bus door hisses open.']],
+  'detained-asked': [['street', 'He looks at you for a long second. "Theek hai." He actually does it.']],
+  'detained-asked-friends': [['sharma', 'Andar.']],
+  'plead-works': [['sharma', 'Arre tum toh wahi ho. Reel wale. Jao jao, ye bus bhar gayi hai waise bhi.']],
+  'plead-fails': [['street', 'You make your case. The constable writes something down. It is not your release.']],
+  'released-1730': [['wireless', 'Rao: Sabko chhod do. Paperwork kaun karega. Over.'], ['street', 'The bus door opens and everyone files out, blinking, into the evening.']],
+  'released-distraction': [['street', 'While the guard turns to deal with the noise, you step down off the bus and keep walking.']],
+  'detain-me-leave': [['street', 'You step off the bus. Behind you, Sharma is still writing your name in a register.']],
+  'friend-distracts': [['kabir', 'SIR! SIR! Mera phone kisi ne chura liya! Wahan! Woh! Nahi, woh!'], ['nikhil', 'Sir, ek sawaal tha. Bahut lamba sawaal hai. Pehle background deta hoon.'], ['sana', 'Sir, yahan koi behosh hai! Aapki zaroorat hai! Abhi!'], ['asha', 'Sharma ji, chai! Free! Aaj ke liye! Idhar aaiye na!']],
+  'detainees-escape': [['street', 'The detainees realise nobody is minding the back door. One by one, they step off the bus and melt into the crowd.'], ['chat', 'Kabir: bhai bahar aa gaye 😭😭 bus hi nahi chali']],
+  'detainees-released': [['street', 'The detainees climb down from the bus, stretching, already filming each other.']],
+  'bus-stalled-detention': [['street', 'The key is gone from the detention bus hook. The bus isn\'t going anywhere, and its guard is now looking for the key instead of the door.']],
+  // Pester, crew, stance
+  'rally-refused': [['street', 'The students look at you, then at each other. "Bhai tu kaun?" Nobody moves.']],
+  'rally-chamcha': [['street', '"Yahi tha na jo Sharma ki bottle bhar raha tha?" Nobody follows a chamcha.']],
+  'rally-cold': [['street', '"Tu wahi hai na jisne bus roki? Bhai humein ghar bhi jaana hai." They stay put.']],
+  'crew-join': [['street', 'A handful of students fall in behind you. One of them is already filming.'], ['chat', 'Meera: tera fan club ban gaya bhai 😭']],
+  'crew-block': [['street', 'Your crew sits down across the road, arms linked, chanting. Ten people make a lot of noise.'], ['wireless', 'Rao: Kuch bachche road pe baith gaye hain. Inko note karo. Over.']],
+  'stance-hold': [['street', 'Your crew links arms. "Koi nahi hilega."']],
+  'stance-scatter': [['street', 'Your crew checks the exits and tightens their shoelaces.']],
+  'stance-block': [['street', 'Your crew faces the line and squares up.']],
+  'stance-protect': [['street', 'Your crew moves to the front, around the youngest kids and the ones with injuries.']],
+  // Provocateurs
+  'provocateur-joined': [['street', 'He grins and hands you something heavy. "Bas ek, bhai. Phir dekhna."'], ['chat', 'Meera: bhai tu kis ke saath khada hai?? 😳']],
+  'provocateur-exposed': [['street', 'Your phone goes up: the earpiece, the tag on the shoes, the helmet in the bag. The crowd turns. He runs for the SUV, and his friends run with him.'], ['mira', 'Dekho! Dekho inko! Ye hamare nahi hain!']],
+  'provocateur-reported': [['sharma', 'Kaun? Woh? Hmm.'], ['street', 'Sharma walks over, says three quiet words, and walks the man back to his SUV.']],
+  'report-wrong': [['street', 'The constable looks at the man you pointed at. The man smiles at him. The constable looks back at you.']],
+});
+
+// Spoken by the player, then the officer's reaction by his new mood. The option text is in INTENTS.
+export const PESTER = {
+  say: {
+    career: 'Sir, honestly, ek career advice chahiye. UPSC ya police? Aapko dekh ke lagta hai aapne sahi decision liya.',
+    cute: 'Uncle, aap na… cute ho. Seriously. Ye moustache maintain kaise karte ho?',
+    cannon: 'Sir, garmi bahut hai. Water cannon ka kya bandobast hai? Token system hai ya line?',
+    detainme: 'Sir, ek kaam karo. Mujhe detain kar lo. Bas aise hi. Experience ke liye.',
+  },
+  career: {
+    amused: ['Career? …Pehle padhai karo. Phir protest. Phir naukri. Ulta mat karo.', 'RAF mein aa jao. Khaana time pe milta hai. Bas.'],
+    soft: ['Dekho beta, SSC nikaal lo. Pension hai. Aur protest mein mat aana. …Aaj ka chalega.', 'Mera bhai bhi tumhari umar ka hai. Usko bhi samajh nahi aata.'],
+  },
+  cute: {
+    amused: ['Kya? …Kya bola? Jao yahan se. (He is smiling.)', 'Helmet ke andar se kuch nahi dikhta, par suna maine.'],
+    soft: ['Tum log na. Ghar pe mummy ko bhi aise hi bolte ho? Chalo, paani piyo.', 'Theek hai, theek hai. Photo nahi.'],
+  },
+  cannon: {
+    amused: ['Water cannon. Bandobast. …Rao sir se poochhna padega. Nahi, mazaak mat karo.', 'Woh nahane ke liye nahi hai. …Mostly.'],
+    soft: ['Paanch baje ke baad aana, shayad mil jaaye. Main kuch nahi bol raha.', 'Order aaya toh pehle tumhe batayenge. Seedha line mein khade rehna.'],
+  },
+  detainme: {
+    amused: ['Kis baat pe? Form mein reason likhna padta hai. "Shauk" nahi likh sakte.', 'Bus full hai. Kal aana.'],
+    soft: ['Pagal ho kya. Ghar jao. …Achha, pehle chai pi lo.', 'Detain hone ka bhi number lagta hai, beta.'],
+  },
+  annoyed: [
+    'Bas. Bahut ho gaya. Naam bolo. Poora naam.',
+    'Ek aur mazaak aur tum seedha bus mein.',
+    'Main bola na. Hato.',
+  ],
+};
+
+export const PROVOCATEUR_TELLS = ['new shoes', 'an earpiece', 'a helmet in a bag'];
+
+// Short intents for the HUD's objective card and choice lists. {name}, {tell}, {place}, {what} are filled in.
+export const INTENTS = {
+  'pester-career': 'Ask {name} for career advice',
+  'pester-cute': 'Tell {name} he\'s cute',
+  'pester-cannon': 'Ask {name} about the water cannon',
+  'pester-detainme': 'Ask {name} to detain you',
+  'pester-annoyed': '{name} is annoyed. Maybe leave it',
+  'take-key': 'Pocket the bus key',
+  'take-speaker': 'Pick up Ravi\'s speaker',
+  'take-megaphone': 'Take Dev\'s megaphone',
+  'take-phone': 'Take Zoya\'s charging phone',
+  'take-water': 'Lift Sana\'s water crate',
+  'give-key': 'Give {name} his key back',
+  'give-speaker': 'Give {name} the speaker',
+  'give-megaphone': 'Hand {name} the megaphone',
+  'give-phone': 'Give {name} her phone',
+  'give-water': 'Give {name} the water crate',
+  drop: 'Put it down here',
+  talk: 'Talk to {name}',
+  'talk-nikhil-lost': 'Nikhil is lost, phone at 3%. Help him find Kabir',
+  film: 'Film it: {what}',
+  'film-bus-key': 'the bus key heist',
+  'film-bus-stalled': 'the bus going nowhere',
+  'film-detainees-escape': 'detainees walking off the bus',
+  'film-chase': 'the chase',
+  'film-caught': 'getting caught',
+  'film-pester-career': 'the career counselling',
+  'film-pester-cute': 'the uncle-cute moment',
+  'film-pester-cannon': 'the water cannon enquiry',
+  'film-detain-me': 'the detain-me reversal',
+  'film-crew-block': 'the sit-down',
+  'film-speaker-party': 'the CP dance party',
+  'film-big-speech': 'Mira\'s speech',
+  'film-small-speech': 'Mira\'s speech flopping',
+  'film-biryani-rush': 'the biryani rush',
+  'film-cannon-scare': 'the cannon panic',
+  'film-singalong': 'the singalong',
+  'film-roast': 'Kabir roasting Rao',
+  'film-minister-noshow': 'the minister not showing',
+  'film-provocateur-exposed': 'the provocateur running',
+  'film-provocateur-joined': 'you and the SUV guy',
+  'film-stone-thrown': 'the stone',
+  'film-cannon-spray': 'the water cannon',
+  'film-cannon-dance': 'the kids dancing in the spray',
+  'film-gas': 'the tear gas',
+  'film-charge': 'the lathi charge',
+  'film-faint': 'someone fainting',
+  'film-heat': 'the heat',
+  'film-mummy-call': 'Kabir\'s mummy call',
+  rally: 'Get the students to follow you',
+  'crowd-hide': 'Blend into the crowd',
+  'crew-block': 'Sit your crew down in front of the line',
+  stance: 'Tell your crew what to do when the line moves',
+  'stance-hold': 'Sit and hold the ground',
+  'stance-scatter': 'Run when they come',
+  'stance-block': 'Stand and block them',
+  'stance-protect': 'Get round the kids at the front',
+  'prov-notice': 'That guy has {tell}',
+  'prov-expose': 'Film his {tell} and call him out',
+  'prov-join': 'Go along with him',
+  'prov-report': 'Point him out to {name}',
+  'lose-him': 'Lose him in the crowd',
+  plead: 'Talk your way off the bus',
+  'plead-weak': 'Try talking your way off the bus',
+  'scene-mummy-call': 'Kabir\'s mummy is on video call',
+  'scene-cannon-request': 'Ask Sharma about the heat',
+  'scene-detain-me': 'Your friends are on the bus',
+  'scene-choose': 'Choose what you do',
+  go: 'Something is building at the {place}',
+};
+
+// What the protesters did when the charge came, or that it never came.
+export const SHOWDOWNS = {
+  riot: { title: 'Jantar Mantar on fire', text: 'The charge hit the {place} at {t}, and by then nobody was protesting anything. Stones, lathis, smoke. Tomorrow\'s headlines will blame the students.' },
+  sitin: { title: 'Sit-in at dusk', text: 'It never boiled over. The crowd sat down at the {place} and stayed into the evening.' },
+  hold: { title: 'They held', text: 'The charge hit the {place} at {t}. The protesters sat and linked arms, and the bus filled with the ones who wouldn\'t move.' },
+  scatter: { title: 'Everyone ran', text: 'The charge hit the {place} at {t}. Everyone ran, phones up, and spent the evening finding each other.' },
+  block: { title: 'Shields against bodies', text: 'The charge hit the {place} at {t} and met a crowd that pushed back. It got ugly, and the vans filled fast.' },
+  protect: { title: 'They looked after each other', text: 'The charge hit the {place} at {t}. The students closed round the ones at the front, and almost nobody got taken.' },
+};
+
+export const ROLES = {
+  spectator: { title: 'Spectator', text: 'You watched it happen. You were there, and that\'s on your camera roll too.' },
+  instigator: { title: 'Instigator', text: 'Some of today was your doing, and the police know your face.' },
+  protector: { title: 'Protector', text: 'When the line came, you stood in front of people.' },
+  detained: { title: 'Detained', text: 'You spent the showdown on a bus, listening to it through the window.' },
+  filmer: { title: 'Filmer', text: 'The day happened, and you posted it. Your clips will outlive the protest.' },
+  peacemaker: { title: 'Peacemaker', text: 'You took the heat out of the day before it could burn anyone.' },
+};
+
+// "Because you…" callbacks on the ending card. {t} is when you did it, {at} when it came back.
+export const CALLBACKS = {
+  'soft-lets-crew': 'Because you got Sharma laughing at {t}, he waved your crew through the line at {at}.',
+  'soft-lets-friend': 'Because you got Sharma laughing at {t}, he let {who} through the barricade at {at}.',
+  'soft-not-target': 'Because you went soft on Sharma at {t}, he never said your name to Rao.',
+  'raf-gali': 'Because you asked the RAF jawan where he was from, he opened a gali for you at {at}.',
+  'cannon-dance': 'Because you asked for the water cannon at {t}, the kids danced in its spray at {at}.',
+  'key-stall': 'Because you pocketed the bus key at {t}, the shuttle sat dead at CP and the stop filled up.',
+  'key-escape': 'Because you took the detention bus key at {t}, the detainees walked off the back at {at}.',
+  caught: 'Because a cop saw you take the key at {t}, he ran you down at {at}.',
+  'caught-charge': 'Because Rao had you down as the troublemaker, an RAF jawan picked you out of the charge at {t} and ran you down.',
+  'water-noheat': 'Because you carried Sana\'s water crate at {t}, nobody fainted at 14:00.',
+  'water-hidden': 'Because you moved Sana\'s water at {t}, people fainted at {at}.',
+  expose: 'Because you filmed the man with {tell} at {t}, all three ran for the SUV and nobody threw a stone.',
+  'report-soft': 'Because you pointed out the man with {tell} to Sharma at {t}, he quietly walked him off.',
+  'report-wrong': 'Because you reported the SUV men to the wrong cop at {t}, you were the one in the van.',
+  'joined-stone': 'Because you went along with the man with {tell} at {t}, the first stone came from your side at {at}, and the charge came for you.',
+  'saw-stone': 'You walked past the man with {tell} at {t}. At {at} he threw the first stone.',
+  'sena-stone': 'Because the DRS rumour started with you at {t}, it was a DRS man who threw the first stone at {at}.',
+  'sena-rumour': 'Because you whispered that the DRS were coming at {t}, they came, angry, at {at}.',
+  'cannon-rumour': 'Because you started the water cannon rumour at {t}, half the stage ran from a truck that wasn\'t there.',
+  'biryani-rumour': 'Because you whispered about free biryani at {t}, a dozen protesters spent {at} at the CP stop looking for it.',
+  'minister-rumour': 'Because you told Dev a minister was coming at {t}, he led a crowd to the barricade at {at}.',
+  'crew-target': 'Because your crew sat down in front of the line at {t}, the police went for them first at {at}.',
+  protect: 'Because you got round the kids at the front at {t}, almost nobody from your lot was taken.',
+  repost: 'Because you posted that clip at {t}, an IT-cell page reposted it at {at} with a caption your mummy shouldn\'t read.',
+  'mummy-kabir': 'Because of what you did on Kabir\'s mummy call at {t}, he stayed for the afternoon.',
+  'megaphone-mira': 'Because you gave Mira the megaphone at {t}, the stage was singing at {at} and nobody threw anything.',
+  'megaphone-kabir': 'Because you gave Kabir the megaphone at {t}, Inspector Rao got roasted live at {at}.',
+  'speaker-flop': 'Because you took Ravi\'s speaker at {t}, Mira\'s noon speech didn\'t carry.',
+  'speaker-speech': 'Because you got Ravi his speaker back at {t}, Mira\'s speech packed the stage at {at}.',
+  distraction: 'Because you\'d helped people all day, {who} made a scene at {at} and you walked off the bus.',
+  'detain-me': 'Because you asked to be detained at {t}, your friends got out the back at {at}.',
+  'missed-showdown': 'Because you stayed on the bus at {t}, you heard the charge at {at} through a window.',
+  'sana-short': 'Because Sana\'s crate went short, one more person went down at {at}.',
+  'world-stone': 'Nobody dealt with the man with {tell}. At {at} he threw the first stone.',
+  'world-speech': 'Ravi got his speaker to the stage, and Mira\'s noon speech packed it.',
+  'world-viral-line': 'Zoya\'s stream went viral, so Rao put his line where her camera was.',
+  'world-sitin': 'The day never boiled over, and at {at} the lathis stayed in their holders.',
 };

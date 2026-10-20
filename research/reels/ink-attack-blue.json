@@ -1,0 +1,67 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "ink-attack-blue",
+  "title": "\"Blue is my colour. Jai Bhim.\"",
+  "status": "sourced-secondary",
+  "situation": "As the founder announces a hunger strike, a woman throws blue ink at him; volunteers hold her until police take her away, during which she alleges assault and raises religious slogans. He tells supporters to stay seated.",
+  "where": "Jantar Mantar stage, New Delhi",
+  "when": {
+    "event": "2026-07-18",
+    "published": "2026-07-18"
+  },
+  "who": {
+    "protester": "movement founder on stage",
+    "officer": "Delhi Police who remove her",
+    "others": [
+      "attacker (self-described men's rights activist)",
+      "volunteers"
+    ]
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "Blue is my colour. Jai Bhim.",
+      "speaker": "Abhijeet Dipke",
+      "kind": "quoted-in-source",
+      "via": "The Tribune"
+    }
+  ],
+  "reactionBeats": "Supporters rush the stage; he repeatedly asks them to stay put.",
+  "music": null,
+  "commentMood": null,
+  "phase": "tense",
+  "emotion": [
+    "shock",
+    "composure"
+  ],
+  "actorTypes": [
+    "organiser",
+    "disruptor",
+    "volunteer"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Someone throws paint at Mira on the stage; whether the crowd charges or sits depends on whether she (or the player at the mic) says something calm and funny in the next three seconds.",
+    "cast": [
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.tribuneindia.com/news/india/woman-hurls-ink-at-cjp-founder-dipke-he-remains-unfazed-says-blue-is-my-colour/",
+      "publisher": "The Tribune",
+      "published": "2026-07-18",
+      "access": "fetched"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/2026_Delhi_Jantar_Mantar_protests",
+      "publisher": "Wikipedia",
+      "published": "2026",
+      "access": "fetched",
+      "note": "Tertiary; used for timeline only."
+    }
+  ]
+}

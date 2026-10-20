@@ -1,0 +1,65 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "b-team-of-terrorists",
+  "title": "\"B-team of terrorists\"",
+  "status": "sourced-secondary",
+  "situation": "The education minister calls the protesters \"the B-team of terrorists\" in a TV interview; the opposition demands an apology.",
+  "where": "TV interview",
+  "when": {
+    "event": "about 2026-06-23",
+    "published": "2026-06-26"
+  },
+  "who": {
+    "protester": null,
+    "officer": null,
+    "others": [
+      "minister",
+      "opposition leaders"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "They are the B-team of terrorists. The people who were rejected by the public have come back in another disguise.",
+      "speaker": "Dharmendra Pradhan",
+      "kind": "quoted-in-source",
+      "via": "Kashmir Reader"
+    },
+    {
+      "text": "We don't need a certificate of patriotism from people like you.",
+      "speaker": "Abhijeet Dipke",
+      "kind": "quoted-in-source",
+      "via": "Kashmir Reader"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "midday",
+  "emotion": [
+    "outrage"
+  ],
+  "actorTypes": [
+    "minister"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Ticker/TV line for the RUP minister; protesters immediately turn it into placards.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://kashmirreader.com/2026/06/26/rahul-demands-apology-from-pradhan-over-terrorists-remark-on-student-protesters/",
+      "publisher": "Kashmir Reader",
+      "published": "2026-06-26",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.aljazeera.com/news/2026/7/20/police-attack-cockroach-activists-as-thousands-march-on-indian-parliament",
+      "publisher": "Al Jazeera",
+      "published": "2026-07-20",
+      "access": "fetched"
+    }
+  ]
+}

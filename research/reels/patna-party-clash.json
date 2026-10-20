@@ -1,0 +1,69 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "patna-party-clash",
+  "title": "Two parties fight with lathis outside a party office",
+  "status": "sourced-secondary",
+  "situation": "While students protest at Dak Bungalow crossing, ruling-party workers march to gherao the opposition party office; both sides allegedly use lathis and stones; each calls it a pre-planned conspiracy by the other.",
+  "where": "Ashok Rajpath, Patna",
+  "when": {
+    "event": "2026-07-22",
+    "published": "2026-07-22"
+  },
+  "who": {
+    "protester": "students (elsewhere)",
+    "officer": "Patna Police, SDPO",
+    "others": [
+      "ruling-party workers",
+      "opposition workers"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "the law-and-order situation deteriorated after some protesters attempted to move forward.",
+      "speaker": "SDPO Komal Meena",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal (IANS)"
+    },
+    {
+      "text": "democratic voices could not be silenced through the arrogance of power",
+      "speaker": "Bihar Congress president",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal (IANS)"
+    },
+    {
+      "text": "A \"pre-planned attempt to create unrest\", a \"deliberate conspiracy\".",
+      "speaker": "BJP leaders",
+      "kind": "paraphrased",
+      "via": "Free Press Journal (IANS)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "tense",
+  "emotion": [
+    "chaos"
+  ],
+  "actorTypes": [
+    "party-worker",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "At 14:30 RUP and LJM workers start fighting over who owns the stage; students in between get blamed, and the ticker headline depends on who filmed first.",
+    "cast": [
+      "dev",
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.freepressjournal.in/bihar/bjp-congress-workers-clash-in-patna-amid-student-protests-several-injured-video",
+      "publisher": "Free Press Journal (IANS)",
+      "published": "2026-07-22",
+      "access": "fetched"
+    }
+  ]
+}

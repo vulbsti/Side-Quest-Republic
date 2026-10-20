@@ -1,0 +1,68 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "gandhi-lookalike-chase",
+  "title": "\"Gandhiji, kahan bhaag rahe ho?\"",
+  "status": "sourced-secondary",
+  "situation": "A man dressed as Gandhi (white dhoti, round glasses, walking stick) runs down a street with police running behind him; his stick falls and he keeps running.",
+  "where": "Near Palika Bazaar, Connaught Place, New Delhi",
+  "when": {
+    "event": "2026-10-10",
+    "published": "2026-10-11"
+  },
+  "who": {
+    "protester": "costumed protester (Gandhi)",
+    "officer": "Delhi Police detaining protesters",
+    "others": [
+      "off-camera voice"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "Gandhiji, where are you running?",
+      "speaker": "off-camera voice (reported in English translation)",
+      "kind": "quoted-in-source",
+      "via": "Gulf News"
+    }
+  ],
+  "reactionBeats": "The stick drops; he does not stop for it.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Article says it drew attention; no comments quoted."
+    ]
+  },
+  "phase": "tense",
+  "emotion": [
+    "absurd",
+    "panic"
+  ],
+  "actorTypes": [
+    "costumed-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Lend Kabir the Gandhi costume; when the chase starts, his stick drops in the road and the player can grab it, return it, or keep it as a prop.",
+    "cast": [
+      "kabir",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://gulfnews.com/world/asia/india/from-non-violence-to-a-police-chase-gandhi-lookalike-goes-viral-in-delhi-1.500706095",
+      "publisher": "Gulf News",
+      "published": "2026-10-11",
+      "access": "fetched"
+    }
+  ]
+}

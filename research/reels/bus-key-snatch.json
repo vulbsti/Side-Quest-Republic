@@ -1,0 +1,151 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "bus-key-snatch",
+  "title": "The detention bus that could not leave",
+  "status": "sourced-secondary",
+  "situation": "Police are loading detained protesters onto a bus. A woman protester takes the bus key and runs into the crowd; without the key the bus cannot move.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "2026-10-04 (Aaj Tak; Sunday)",
+    "published": "2026-10-05",
+    "note": "IndieBuzz caption says \"shared October 3\"; filming date and first uploader unestablished."
+  },
+  "who": {
+    "protester": "young woman protester (SIR / anti-CEC protest)",
+    "officer": "Delhi Police constables and the bus driver",
+    "others": [
+      "detainees inside the bus",
+      "filming bystanders"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "social_permission"
+  ],
+  "lines": [
+    {
+      "text": "So, this is the girl who took the bus key and ran. 😹😹😹",
+      "speaker": "X caption, @Delhiite_",
+      "kind": "caption",
+      "via": "Aaj Tak"
+    },
+    {
+      "text": "Gen-Z ने पुलिस के साथ खेला Subway Surfers! जंतर मंतर 2.0 पर बस की चाबी लेकर भागी दीदी!",
+      "speaker": "Boldsky video headline",
+      "kind": "caption",
+      "via": "Boldsky"
+    },
+    {
+      "text": "IndieBuzz caption claims the driver laughed.",
+      "speaker": "reposter caption",
+      "kind": "paraphrased",
+      "via": "indiebuzzofficial (Instagram)"
+    }
+  ],
+  "reactionBeats": "Not described by any source. Caption claims the driver laughed; unverified.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "admiring",
+      "disapproving",
+      "legalistic"
+    ],
+    "quoted": [
+      {
+        "text": "Absolute cinema",
+        "speaker": "Instagram commenter",
+        "kind": "comment",
+        "via": "indiebuzzofficial (Instagram)"
+      },
+      {
+        "text": "Wo stree hai, kuch bhi kar sakti hai 😂",
+        "speaker": "Instagram commenter",
+        "kind": "comment",
+        "via": "indiebuzzofficial (Instagram)"
+      },
+      {
+        "text": "This is jantar mantar entertainment 2.0😂😂",
+        "speaker": "Instagram commenter",
+        "kind": "comment",
+        "via": "indiebuzzofficial (Instagram)"
+      },
+      {
+        "text": "Funny huh? In what logic?",
+        "speaker": "Instagram commenter",
+        "kind": "comment",
+        "via": "indiebuzzofficial (Instagram)"
+      }
+    ],
+    "paraphrased": [
+      "Some praised her boldness; others asked whether it was legal (Aaj Tak, NewsBytes).",
+      "One Instagram commenter said it obstructed official duty."
+    ]
+  },
+  "phase": "showdown",
+  "phaseNote": "Detentions were under way; in game this is the 14:00+ detention-bus window.",
+  "emotion": [
+    "mischief",
+    "triumph",
+    "unease"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable",
+    "bus-driver",
+    "detainee",
+    "filmer"
+  ],
+  "context": "Same day police reported about 15 personnel injured and about 110 detained (Aaj Tak, NewsBytes).",
+  "buildThis": {
+    "flag": true,
+    "situation": "Lift the key off Iqbal's dashboard hook while he argues with a constable; the detention bus dies mid-route and detainees start eyeing the rear door.",
+    "cast": [
+      "player",
+      "iqbal",
+      "sharma",
+      "meera"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "driver consent",
+    "that the driver laughed (caption claim only)",
+    "that there were no legal consequences"
+  ],
+  "sources": [
+    {
+      "url": "https://www.aajtak.in/trending/story/jantar-mantar-woman-snatches-police-bus-key-viral-video-tstf-dskc-2661642-2026-10-05",
+      "publisher": "Aaj Tak",
+      "published": "2026-10-05",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.newsbytesapp.com/news/india/woman-halts-detainee-bus-by-seizing-keys-at-jantar-mantar/tldr",
+      "publisher": "NewsBytes",
+      "published": "2026-10-05",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.boldsky.com/videos/jantar-mantar-2-0-viral-videos-genz-steals-bus-key-outsmarts-police-like-subway-surfers-126284.html",
+      "publisher": "Boldsky",
+      "published": "2026-10-05",
+      "access": "fetched",
+      "note": "Video listing page; headline and summary only."
+    },
+    {
+      "url": "https://www.ndtv.com/india-news/jantar-mantar-protest-bus-key-dash-to-detain-me-please-how-protesters-outfoxed-delhi-cops-12144526",
+      "publisher": "NDTV",
+      "published": "2026-10-06",
+      "access": "blocked",
+      "note": "Recorded in protest-incidents.json on 2026-10-15; fetch blocked today."
+    },
+    {
+      "url": "https://www.instagram.com/reels/DeGYClxTsXK/",
+      "publisher": "indiebuzzofficial (Instagram)",
+      "published": "2026-10-03",
+      "access": "prior",
+      "note": "Root agent read caption and visible comments on 2026-10-15 (instagram-observations.json). Audio never verified."
+    }
+  ]
+}

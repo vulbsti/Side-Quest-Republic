@@ -1,0 +1,69 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "night-fans-sadda-haq",
+  "title": "Fans, food and \"Sadda Haq\" at 2:30 am",
+  "status": "sourced-secondary",
+  "situation": "Overnight at the site: bamboo hand fans handed out on entry and deposited on exit, volunteers fanning sleepers, food packets via human chain at 3 am, someone sings \"Sadda Haq\" at 2:30 am, dawn at 4.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "night of 2026-07-22",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "overnight campers and volunteers",
+    "officer": "heavy deployment around the site",
+    "others": [
+      "donors"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "When you enter the site, a pankha is given, and when you leave the protest site, one deposits it back.",
+      "speaker": "volunteer",
+      "kind": "quoted-in-source",
+      "via": "ThePrint (PTI)"
+    },
+    {
+      "text": "The night ends, but the protest doesn't.",
+      "speaker": "Nikhil (protester)",
+      "kind": "quoted-in-source",
+      "via": "ThePrint (PTI)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": "\"Sadda Haq\" (Rockstar, 2011), sung live. Wikipedia also lists \"Azadi\" (Divine, Dub Sharma) and \"Boom Shaka\" (KR$NA, Dhanda Nyoliwala) as protest songs.",
+  "commentMood": null,
+  "phase": "aftermath",
+  "emotion": [
+    "solidarity",
+    "tired"
+  ],
+  "actorTypes": [
+    "volunteer",
+    "camper"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Ravi runs the pankha deposit desk; hand fans are a real inventory, and when they run out at noon people start fainting.",
+    "cast": [
+      "ravi"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/hand-fans-food-and-songs-inside-a-night-at-jantar-mantar-protest/2994738/",
+      "publisher": "ThePrint (PTI)",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/2026_Delhi_Jantar_Mantar_protests",
+      "publisher": "Wikipedia",
+      "published": "2026",
+      "access": "fetched",
+      "note": "Tertiary; used for timeline only."
+    }
+  ]
+}
