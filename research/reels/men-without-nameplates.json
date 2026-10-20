@@ -1,0 +1,79 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "men-without-nameplates",
+  "title": "Men without names or uniforms",
+  "status": "sourced-secondary",
+  "situation": "Videos show men in jeans and white shirts carrying police lathis and hitting protesters, and uniformed personnel without name tags. Police HQ then orders Jantar Mantar duty in uniform only.",
+  "where": "Parliament Street to Transport Bhawan, New Delhi",
+  "when": {
+    "event": "2026-07-20",
+    "published": "2026-07-21 to 2026-07-23"
+  },
+  "who": {
+    "protester": "marchers incl. women and students",
+    "officer": "unidentified men in plain clothes, uniformed police without tags",
+    "others": []
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "\"Mild force\" was used after protesters breached multiple barricades (internal police report).",
+      "speaker": "New Delhi district police",
+      "kind": "paraphrased",
+      "via": "WION"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "angry",
+      "suspicious"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "A sung reel verse mentioned plainclothes men and missing nameplates (DT Next)."
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "fear",
+    "confusion"
+  ],
+  "actorTypes": [
+    "plainclothes-man",
+    "riot-police"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "At the charge, some lathi-swingers wear white shirts and jeans, not khaki; the player who looks for a nameplate before reacting learns who is who.",
+    "cast": [
+      "rao",
+      "zoya"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "who the men were (unverified)"
+  ],
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/national/delhi-jantar-mantar-protest-cockroach-janata-party-protesters-question-role-of-unidentified-personnel",
+      "publisher": "National Herald",
+      "published": "2026-07-21",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.wionews.com/india-news/plainclothes-police-missing-nametags-delhi-police-orders-officers-to-be-in-uniform-after-viral-lathi-charge-videos-spark-outrage-1784770601254",
+      "publisher": "WION",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    }
+  ]
+}

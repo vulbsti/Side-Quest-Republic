@@ -1,0 +1,69 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "dosti-over-detention",
+  "title": "\"Dosti > detention\"",
+  "status": "prior-direct-observation",
+  "situation": "Reel shows a police bus and barricades; editorial overlay contrasts fear of detention with loneliness without your friends.",
+  "where": "Jantar Mantar (inferred from frame and context)",
+  "when": {
+    "event": null,
+    "published": null
+  },
+  "who": {
+    "protester": "friend group",
+    "officer": "police with bus",
+    "others": []
+  },
+  "comicMechanism": [
+    "goal_reversal",
+    "social_permission"
+  ],
+  "lines": [
+    {
+      "text": "Dosti > detention",
+      "speaker": "peeinghuman caption",
+      "kind": "caption",
+      "via": "peeinghuman (Instagram)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "critical"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Officer reframed as bus conductor",
+      "Backbencher behaviour",
+      "A commenter claims a 15-minute friend joined their detention",
+      "Others criticise police brutality"
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "loyalty"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Ambient: a stranger the player met 15 minutes ago follows them onto the detention bus \"because we're friends now\".",
+    "cast": [
+      "nikhil"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.instagram.com/peeinghuman/reel/DeU2JR_zqYq/",
+      "publisher": "peeinghuman (Instagram)",
+      "published": null,
+      "access": "prior",
+      "note": "Observed read-only on 2026-10-16 (live-research-2026-10-16.json)."
+    }
+  ]
+}

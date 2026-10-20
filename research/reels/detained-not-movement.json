@@ -1,0 +1,69 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "detained-not-movement",
+  "title": "\"I am in detention. The movement is not.\"",
+  "status": "sourced-secondary",
+  "situation": "Student leader detained with 200+ marchers; earlier she renamed the march point: Dilli Haat is \"Jantar Mantar today\". Another leader tells supporters to make wherever police stop them their Jantar Mantar.",
+  "where": "Dilli Haat / INA, New Delhi",
+  "when": {
+    "event": "2026-10-10 afternoon",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": "student organiser (AISA) and marchers",
+    "officer": "Delhi Police",
+    "others": [
+      "senior activists"
+    ]
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "I am in detention. The movement is not.",
+      "speaker": "Neha Bora",
+      "kind": "quoted-in-source",
+      "via": "The South First"
+    },
+    {
+      "text": "Wherever the Delhi Police try to stop you, make it your Jantar Mantar.",
+      "speaker": "Ajinkya Shinde (CJP)",
+      "kind": "quoted-in-source",
+      "via": "The South First"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "tense",
+  "emotion": [
+    "defiance"
+  ],
+  "actorTypes": [
+    "organiser",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "When barricades seal the main site, Mira can declare \"yahi Jantar Mantar hai\" wherever the crew is sitting, and the hotspot moves there.",
+    "cast": [
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://thesouthfirst.com/beyond-south/the-road-to-jantar-mantar-a-day-inside-indias-sealed-capital/",
+      "publisher": "The South First",
+      "published": "2026-10-10",
+      "access": "fetched"
+    },
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

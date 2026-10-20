@@ -1,0 +1,74 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "imran-van-selfie",
+  "title": "\"Apparently I'm going for a drive\"",
+  "status": "sourced-secondary",
+  "situation": "A Bollywood actor detained at a Mumbai protest posts a relaxed selfie from inside the police van.",
+  "where": "August Kranti Maidan, Mumbai",
+  "when": {
+    "event": "2026-10-10",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": "celebrity protester",
+    "officer": "Mumbai Police",
+    "others": [
+      "400+ other detainees"
+    ]
+  },
+  "comicMechanism": [
+    "borrowed_confidence",
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Apparently I'm going for a drive.",
+      "speaker": "detainee (Instagram caption)",
+      "kind": "caption",
+      "via": "The Pioneer"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "supportive"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Fans supported him; others commented on how relaxed he looked (Pioneer)."
+    ]
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "nonchalance"
+  ],
+  "actorTypes": [
+    "celebrity",
+    "detainee",
+    "police-van"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "On the detention bus, Meera insists on a \"detention selfie\" with the barred window; the caption she picks decides whether the clip reads brave or smug.",
+    "cast": [
+      "meera"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://dailypioneer.com/news/imran-khan-selfie-police-van-mumbai-protest-detention",
+      "publisher": "The Pioneer",
+      "published": "2026-10-10",
+      "access": "fetched"
+    },
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

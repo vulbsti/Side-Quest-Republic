@@ -1,0 +1,72 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "dalli-police-sawaal",
+  "title": "\"Dalli police se ek zaroori sawaal\"",
+  "status": "prior-direct-observation",
+  "situation": "Night footage with officers; commenters praise a role reversal involving recording glasses and the officers' apparent innocence.",
+  "where": "Delhi (night)",
+  "when": {
+    "event": null,
+    "published": null
+  },
+  "who": {
+    "protester": "creator with recording glasses",
+    "officer": "constables at night",
+    "others": []
+  },
+  "comicMechanism": [
+    "literal_service_request",
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "Dalli police se ek zaroori sawaal",
+      "speaker": "peeinghuman caption",
+      "kind": "caption",
+      "via": "peeinghuman (Instagram)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "political-anger"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Surveillance turned back on its users",
+      "Uno reverse",
+      "Officers look innocent"
+    ]
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "cheek"
+  ],
+  "actorTypes": [
+    "creator",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Pester \"one important question\": Kabir with camera glasses asks Sharma something so polite and specific that Sharma ends up explaining himself to the crowd.",
+    "cast": [
+      "kabir",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "the actual question (not audio-verified)"
+  ],
+  "sources": [
+    {
+      "url": "https://www.instagram.com/peeinghuman/reel/DbNVvp1pU9l/",
+      "publisher": "peeinghuman (Instagram)",
+      "published": null,
+      "access": "prior",
+      "note": "Observed read-only on 2026-10-16."
+    }
+  ]
+}

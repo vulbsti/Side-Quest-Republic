@@ -1,0 +1,70 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "dcp-slap",
+  "title": "The slap and \"lost his cool\"",
+  "status": "sourced-secondary",
+  "situation": "A 36-second video shows an Additional DCP slapping a woman protester near Parliament as police chase marchers; he is removed from protest duty. A police source says he \"lost cool\" and claims she had a nail-like object.",
+  "where": "Near Parliament, New Delhi",
+  "when": {
+    "event": "2026-07-20",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "woman protester",
+    "officer": "Additional DCP",
+    "others": []
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "The officer lost cool and committed the act.",
+      "speaker": "unnamed DCP-rank officer via ThePrint",
+      "kind": "quoted-in-source",
+      "via": "WION"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "angry"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Online calls for his removal; a former MP filed a complaint."
+    ]
+  },
+  "phase": "showdown",
+  "emotion": [
+    "anger",
+    "humiliation"
+  ],
+  "actorTypes": [
+    "senior-officer",
+    "woman-protester"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Serious beat: if a senior officer hits a friend and the player filmed it, the clip becomes the evening's main feed story and that officer is pulled off the line.",
+    "cast": [
+      "zoya",
+      "meera"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.wionews.com/india-news/lost-his-cool-delhi-cop-who-slapped-woman-during-parliament-march-removed-from-protest-site-1784783693383",
+      "publisher": "WION",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/2026_Delhi_Jantar_Mantar_protests",
+      "publisher": "Wikipedia",
+      "published": "2026",
+      "access": "fetched",
+      "note": "Tertiary; used for timeline only."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "heat-medical-camp",
+  "title": "Paracetamol under a streetlight",
+  "status": "sourced-secondary",
+  "situation": "Heat, humidity and overcrowding; volunteer doctors (4-5 at any time) hand out ORS and paracetamol to 200+ people; protesters not eating get nausea and dehydration.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-24"
+  },
+  "who": {
+    "protester": "campers",
+    "officer": null,
+    "others": [
+      "volunteer doctors",
+      "donating students"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "food and ORS are being provided to such individuals at the protest site",
+      "speaker": "doctors",
+      "kind": "quoted-in-source",
+      "via": "Deccan Chronicle (PTI)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "midday",
+  "emotion": [
+    "care",
+    "exhaustion"
+  ],
+  "actorTypes": [
+    "medic",
+    "camper"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Sana's table: deliver ORS to the person swaying in the sun before 13:00 and the faint-and-ambulance beat does not happen near your crew.",
+    "cast": [
+      "sana"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.deccanchronicle.com/nation/current-affairs/jantar-mantar-protesters-face-heat-viral-infections-and-dehydration-1973617",
+      "publisher": "Deccan Chronicle (PTI)",
+      "published": "2026-07-24",
+      "access": "fetched"
+    }
+  ]
+}

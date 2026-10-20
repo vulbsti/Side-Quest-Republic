@@ -1,0 +1,65 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "patna-rope-tug-of-war",
+  "title": "Tug of war with the police rope",
+  "status": "sourced-secondary",
+  "situation": "Police bring a thick rope to hold the crowd back from traffic; protesters grab the other end and play tug of war with the officers.",
+  "where": "Patna, Bihar",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-24"
+  },
+  "who": {
+    "protester": "students",
+    "officer": "Bihar Police line with rope",
+    "others": []
+  },
+  "comicMechanism": [
+    "goal_reversal",
+    "social_permission"
+  ],
+  "lines": [],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "delighted"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "\"Peak Gen Z behavior\" (Republic)."
+    ]
+  },
+  "phase": "midday",
+  "emotion": [
+    "playful"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "The police rope line at 14:00: grab the slack end and the crew joins a tug of war; win and the line moves back two metres, lose and the crew stumbles into the barricade.",
+    "cast": [
+      "player",
+      "kabir"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.republicworld.com/viral/biharis-are-next-level-neet-protesters-ask-cops-to-use-water-cannons-amid-heat-break-into-impromptu-rain-dance-viral-videos-2026-07-24-133319",
+      "publisher": "Republic World",
+      "published": "2026-07-24",
+      "access": "fetched"
+    },
+    {
+      "url": "https://timesofindia.indiatimes.com/india/water-cannon-tug-of-war-and-a-stolen-gate-patna-neet-protest-goes-viral/articleshow/132577095.cms",
+      "publisher": "Times of India",
+      "published": "2026-07-23",
+      "access": "blocked",
+      "note": "Headline only; recorded in protest-incidents.json."
+    }
+  ]
+}

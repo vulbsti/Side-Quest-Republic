@@ -1,0 +1,60 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "insaaniyat-pr",
+  "title": "\"Farq sirf uniform ka hai\"",
+  "status": "sourced-secondary",
+  "situation": "Before the October protest, Delhi Police's social media runs a humanising campaign: open letter, trending music, injured women officers, an officer fixing a detained leader's clothes.",
+  "where": "X",
+  "when": {
+    "event": "2026-10-07 to 2026-10-09",
+    "published": "2026-10-09"
+  },
+  "who": {
+    "protester": null,
+    "officer": "Delhi Police social media wing",
+    "others": []
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "Farq sirf uniform ka hai, insaaniyat ka nahi.",
+      "speaker": "Delhi Police open letter",
+      "kind": "caption",
+      "via": "ThePrint"
+    },
+    {
+      "text": "Different sides of line yet same womanhood",
+      "speaker": "Delhi Police post",
+      "kind": "caption",
+      "via": "ThePrint"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "pr"
+  ],
+  "actorTypes": [
+    "police-pr"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "The police have their own reel account in the phone feed; it posts a clip of Sharma helping someone you helped first, with no credit.",
+    "cast": [
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/humans-of-delhi-police-on-eve-of-jantar-mantar-2-0-more-fact-checkers-open-letter-for-insaaniyat/3066858/",
+      "publisher": "ThePrint",
+      "published": "2026-10-09",
+      "access": "fetched"
+    }
+  ]
+}

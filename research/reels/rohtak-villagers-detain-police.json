@@ -1,0 +1,88 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "rohtak-villagers-detain-police",
+  "title": "Villagers detain the police who came to detain",
+  "status": "sourced-secondary",
+  "situation": "At 6 am police come to a village to stop a local representative going to the Delhi protest. He makes calls; ~500 villagers gather and declare the police \"under detention\" until a senior officer explains. They release the police at 1 pm after getting a written note.",
+  "where": "Kabulpur village, Rohtak, Haryana",
+  "when": {
+    "event": "2026-10-10",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": "Zila Parishad member and his village",
+    "officer": "SHO and police team",
+    "others": [
+      "independent journalist filming"
+    ]
+  },
+  "comicMechanism": [
+    "goal_reversal",
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "It was our duty to stop people from gathering in Delhi because the protest is illegal.",
+      "speaker": "SHO Rakesh Kumar",
+      "kind": "quoted-in-source",
+      "via": "ThePrint"
+    },
+    {
+      "text": "the villagers are free to shoot videos and post them on social media.",
+      "speaker": "SHO Rakesh Kumar",
+      "kind": "quoted-in-source",
+      "via": "ThePrint"
+    },
+    {
+      "text": "The written note mattered because the police \"would have later denied having ever detained him.\"",
+      "speaker": "Jai Dev Dagar",
+      "kind": "paraphrased",
+      "via": "ThePrint"
+    }
+  ],
+  "reactionBeats": "Seven-hour standoff; SHO says villagers treated police well throughout.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "delighted",
+      "role-reversal"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "ThePrint live blog calls it a reversal moment."
+    ]
+  },
+  "phase": "morning",
+  "emotion": [
+    "defiance",
+    "politeness"
+  ],
+  "actorTypes": [
+    "villagers",
+    "sho",
+    "journalist"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Two constables come to pick up Mira early; Asha and the stall-holders surround them with chai and refuse to let them go without \"likhit mein\" (a written reason).",
+    "cast": [
+      "asha",
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/when-tables-turn-policemen-went-to-rohtak-village-to-detain-protester-villagers-detained-them-instead/3067729/",
+      "publisher": "ThePrint",
+      "published": "2026-10-10",
+      "access": "fetched"
+    },
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

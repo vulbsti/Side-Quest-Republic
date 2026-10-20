@@ -1,0 +1,63 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "chembur-van-latch",
+  "title": "Someone just opens the latch",
+  "status": "sourced-secondary",
+  "situation": "A man walks up to a police van holding detained protesters and opens its latch; several youths jump out and run. A young woman following the van claps.",
+  "where": "Ambedkar Udyan Chowk, Chembur, Mumbai",
+  "when": {
+    "event": "2026-07-22",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "passer-by or supporter",
+    "officer": "Mumbai Police",
+    "others": [
+      "detainees",
+      "woman clapping"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "social_permission"
+  ],
+  "lines": [
+    {
+      "text": "What they did with students in Delhi was wrong.",
+      "speaker": "young woman in the video",
+      "kind": "quoted-in-source",
+      "via": "Siasat (PTI)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "aftermath",
+  "emotion": [
+    "mischief",
+    "liberation"
+  ],
+  "actorTypes": [
+    "bystander",
+    "detainee",
+    "police-van"
+  ],
+  "context": "Police said 700 to 800 gathered, about 200 detained, officers showed restraint.",
+  "buildThis": {
+    "flag": true,
+    "situation": "The detention bus rear latch is a usable object: open it while the guard chats with Sharma and detainees trickle out one by one.",
+    "cast": [
+      "player",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.siasat.com/watch-man-opens-police-van-helps-detained-students-escape-3511617/",
+      "publisher": "Siasat (PTI)",
+      "published": "2026-07-23",
+      "access": "fetched"
+    }
+  ]
+}

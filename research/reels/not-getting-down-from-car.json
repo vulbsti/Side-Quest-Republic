@@ -1,0 +1,53 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "not-getting-down-from-car",
+  "title": "\"I am not getting down from the car\"",
+  "status": "sourced-secondary",
+  "situation": "A protest leader detained in the morning refuses to leave her car.",
+  "where": "Outside her home, Jangpura, New Delhi",
+  "when": {
+    "event": "2026-10-10 morning (09:15 entry)",
+    "published": "2026-10-10"
+  },
+  "who": {
+    "protester": "CJP leader",
+    "officer": "Delhi Police",
+    "others": []
+  },
+  "comicMechanism": [
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "I am not getting down from the car.",
+      "speaker": "Ratna Singh",
+      "kind": "quoted-in-source",
+      "via": "ThePrint (live blog)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "stubborn"
+  ],
+  "actorTypes": [
+    "organiser",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Ambient: someone refuses to get out of an auto at the barricade, and the queue behind honks.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://theprint.in/india/jantar-mantar-delhi-cjp-protest-live-updates/3066985/",
+      "publisher": "ThePrint (live blog)",
+      "published": "2026-10-10",
+      "access": "fetched"
+    }
+  ]
+}

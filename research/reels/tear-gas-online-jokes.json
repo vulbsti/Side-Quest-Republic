@@ -1,0 +1,86 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "tear-gas-online-jokes",
+  "title": "\"I cried remembering them in the fog of the tear gas\"",
+  "status": "sourced-secondary",
+  "situation": "After the 20 July tear gas, posts joke about pollution, fuel adulteration and exes.",
+  "where": "X and Instagram",
+  "when": {
+    "event": "2026-07-20 onward",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "online posters",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "scale_collision",
+    "literal_service_request"
+  ],
+  "lines": [
+    {
+      "text": "Delhi Police, please don't use tear gas. It pollutes the city.",
+      "speaker": "X post",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    },
+    {
+      "text": "Unlike petrol blended with E20, the tear gas used during the protest was 100 per cent authentic and without adulteration.",
+      "speaker": "X post",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    },
+    {
+      "text": "I cried remembering them in the fog of the tear gas.",
+      "speaker": "Instagram post",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    },
+    {
+      "text": "I am totally safe here. There are a lot of police around me. Nobody can hit me.",
+      "speaker": "Instagram post",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    },
+    {
+      "text": "Even they didn't ignore me so much!",
+      "speaker": "post with photo lying on the ground",
+      "kind": "caption",
+      "via": "DT Next (agency copy, also in Outlook)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "aftermath",
+  "emotion": [
+    "gallows-humour"
+  ],
+  "actorTypes": [
+    "poster"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Feed and ticker barks after the gas: the in-game feed fills with these kinds of jokes while friends nearby are actually coughing.",
+    "cast": [
+      "meera",
+      "sana"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "publisher": "National Herald",
+      "published": "2026-07-23",
+      "access": "fetched"
+    }
+  ]
+}

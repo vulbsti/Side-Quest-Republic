@@ -1,0 +1,76 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "fakes-and-deepfakes",
+  "title": "Deepfake DCP resigns; Rath Yatra passed off as protest",
+  "status": "sourced-secondary",
+  "situation": "A deepfake shows a DCP \"resigning\" because he was told to frame students; a Rath Yatra crowd video is passed off as Jantar Mantar; Delhi Police rebut 15 posts (girl died in stampede, nail batons, etc.) and allege \"Pakistan-based handlers\".",
+  "where": "Social media",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-22 to 2026-07-27"
+  },
+  "who": {
+    "protester": null,
+    "officer": "Delhi Police fact-check desk",
+    "others": [
+      "fact-checkers",
+      "anonymous handles"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "The viral clip is completely fake and has already been rebutted.",
+      "speaker": "police source",
+      "kind": "quoted-in-source",
+      "via": "Deccan Chronicle"
+    },
+    {
+      "text": "Pakistan-based handlers allegedly modulated the voice and inserted fabricated audio.",
+      "speaker": "police source",
+      "kind": "quoted-in-source",
+      "via": "Deccan Chronicle"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "tense",
+  "emotion": [
+    "confusion"
+  ],
+  "actorTypes": [
+    "rumour",
+    "fact-checker"
+  ],
+  "context": "ThePrint (Oct 9) notes a July police fact-check denying pellet use was later contradicted by reports the RAF fired pellets.",
+  "buildThis": {
+    "flag": true,
+    "situation": "Rumour system: a fake \"Rao resigns\" clip spreads at 15:00; Zoya can debunk it on air, or the player can push it and watch the line waver.",
+    "cast": [
+      "zoya",
+      "rao"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.boomlive.in/fact-check/video-of-delhi-dcp-quitting-over-framing-cjp-protesters-is-a-deepfake-31946",
+      "publisher": "BOOM",
+      "published": "2026-07-27",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.deccanchronicle.com/nation/15-fake-social-media-posts-rebutted-by-delhi-police-since-cjp-protest-1973058",
+      "publisher": "Deccan Chronicle",
+      "published": "2026-07-22",
+      "access": "fetched"
+    },
+    {
+      "url": "https://newsonair.gov.in/government-debunks-fake-video-claiming-to-show-protest-at-jantar-mantar/",
+      "publisher": "News On AIR (PIB Fact Check)",
+      "published": "2026-07-24",
+      "access": "fetched"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "mumbai-drug-threat",
+  "title": "\"50 grams of powder\"",
+  "status": "sourced-secondary",
+  "situation": "A clip purports to show a Mumbai officer warning detained students that if they protest again he will plant drugs on them so they never get bail. An inquiry is ordered.",
+  "where": "Mumbai",
+  "when": {
+    "event": "about 2026-07-22",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "detained students",
+    "officer": "unidentified Mumbai Police officer",
+    "others": []
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "There is no one worse than me. You people are causing trouble for us.",
+      "speaker": "officer (alleged)",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "angry",
+      "afraid"
+    ],
+    "quoted": [
+      {
+        "text": "Raising one's voice is not a crime.",
+        "speaker": "Congress",
+        "kind": "comment",
+        "via": "Free Press Journal"
+      }
+    ],
+    "paraphrased": []
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "fear"
+  ],
+  "actorTypes": [
+    "station-officer",
+    "detainee"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Tone reference for a bullying constable in the detention bus; not a comic beat.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "doNotInfer": [
+    "authenticity of the clip (inquiry pending at publication)"
+  ],
+  "sources": [
+    {
+      "url": "https://www.freepressjournal.in/amp/mumbai/will-destroy-your-life-viral-video-shows-mumbai-cop-allegedly-threatening-detained-students-with-false-drug-case-police-orders-inquiry",
+      "publisher": "Free Press Journal",
+      "published": "2026-07-23",
+      "access": "fetched"
+    }
+  ]
+}
