@@ -1,0 +1,43 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "cute-uncle",
+  "title": "\"Uncle, aap cute ho\"",
+  "status": "unverified-owner-lead",
+  "situation": "A protester tells a police officer he is cute.",
+  "where": null,
+  "when": {
+    "event": null,
+    "published": null
+  },
+  "who": {
+    "protester": "young protester",
+    "officer": "older police officer",
+    "others": []
+  },
+  "comicMechanism": [
+    "social_permission"
+  ],
+  "lines": [],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "wholesome"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Merge with pookie-cop: the compliment softens Sharma, but only if he heard it without a camera in his face.",
+    "cast": [
+      "meera",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "searchLog": "Exact phrase not found 2026-10-20. Closest sourced analogue: pookie-cop (Mumbai, July 2026).",
+  "sources": []
+}

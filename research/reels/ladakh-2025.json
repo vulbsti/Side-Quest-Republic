@@ -1,0 +1,61 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "ladakh-2025",
+  "title": "Leh, September 2025",
+  "status": "sourced-secondary",
+  "situation": "Statehood protests in Leh turn violent; a ruling-party office, a council office and a police vehicle burn; police fire, four die. The Home Ministry blames the activist leader for \"provocative mention of Arab Spring-style protest and references to Gen Z protests in Nepal\"; his NGO's foreign-funding licence is cancelled the next day.",
+  "where": "Leh, Ladakh",
+  "when": {
+    "event": "2025-09-24",
+    "published": "2025-09-25"
+  },
+  "who": {
+    "protester": "young Ladakhis",
+    "officer": "police who fired",
+    "others": [
+      "activist leader",
+      "Home Ministry"
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "misled",
+      "speaker": "Home Ministry on Wangchuk",
+      "kind": "quoted-in-source",
+      "via": "Human Rights Watch"
+    },
+    {
+      "text": "in self-defence",
+      "speaker": "Home Ministry on the firing",
+      "kind": "quoted-in-source",
+      "via": "Human Rights Watch"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "showdown",
+  "emotion": [
+    "grief",
+    "anger"
+  ],
+  "actorTypes": [
+    "crowd",
+    "armed-police"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Reference for the worst-case ending only; not to be played for laughs.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.hrw.org/news/2025/09/25/india-4-dead-in-protests-over-ladakh-statehood",
+      "publisher": "Human Rights Watch",
+      "published": "2025-09-25",
+      "access": "fetched"
+    }
+  ]
+}

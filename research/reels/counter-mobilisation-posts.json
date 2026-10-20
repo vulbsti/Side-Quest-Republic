@@ -1,0 +1,86 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "counter-mobilisation-posts",
+  "title": "\"NOW THE REAL FUN BEGINS!\"",
+  "status": "sourced-secondary",
+  "situation": "Before the October 10 protest, templated posts claim 5 lakh to 10 lakh Hindutva workers will come to Jantar Mantar; one post shows a man with a wooden stick and a convoy leaving a mall at 10 am. Old saffron-scarf footage recirculates as new. The named groups deny it.",
+  "where": "X, Facebook, Instagram (aimed at Jantar Mantar)",
+  "when": {
+    "event": "2026-10-07 to 2026-10-08",
+    "published": "2026-10-08"
+  },
+  "who": {
+    "protester": null,
+    "officer": null,
+    "others": [
+      "Hindutva influencers",
+      "self-described \"IT Cell wala\" account",
+      "a youth group promising \"a befitting reply\""
+    ]
+  },
+  "comicMechanism": [],
+  "lines": [
+    {
+      "text": "Bajrang Dal is moving!",
+      "speaker": "social media post",
+      "kind": "caption",
+      "via": "Newslaundry"
+    },
+    {
+      "text": "NOW THE REAL FUN BEGINS!",
+      "speaker": "social media post",
+      "kind": "caption",
+      "via": "Newslaundry"
+    },
+    {
+      "text": "#FreeStreetsOfNewDelhi",
+      "speaker": "hashtag",
+      "kind": "caption",
+      "via": "Newslaundry"
+    },
+    {
+      "text": "Protesters called \"cockroaches\" who should be taught a lesson.",
+      "speaker": "social media post",
+      "kind": "paraphrased",
+      "via": "Newslaundry"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "threatening",
+      "hype"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "Bajrang Dal called the reports \"misleading, malicious propaganda\"."
+    ]
+  },
+  "phase": "midday",
+  "emotion": [
+    "dread"
+  ],
+  "actorTypes": [
+    "counter-group",
+    "influencer"
+  ],
+  "context": "ThePrint live blog for Oct 10 records no actual pro-government counter-protest on the day.",
+  "buildThis": {
+    "flag": true,
+    "situation": "Midday rumour on the phone: \"DRS ke 5 lakh aa rahe hain\"; the truth is six bikes and a megaphone, but the rumour alone shrinks the crowd unless someone films the real size.",
+    "cast": [
+      "zoya",
+      "nikhil"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.newslaundry.com/2026/10/08/from-5-lakh-to-10-lakh-social-media-claims-fuel-counter-mobilisation-ahead-of-cjp-protest",
+      "publisher": "Newslaundry",
+      "published": "2026-10-08",
+      "access": "fetched"
+    }
+  ]
+}

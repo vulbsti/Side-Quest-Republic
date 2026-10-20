@@ -1,0 +1,72 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "reclaimed-gyanu-bro",
+  "title": "\"Gyanu, you're done bro!\"",
+  "status": "sourced-secondary",
+  "situation": "After Jantar Mantar is denotified as a protest site, activists sneak in at dawn, post that they have reclaimed it, and are detained.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "2026-10-12/13 early morning",
+    "published": "2026-10-13"
+  },
+  "who": {
+    "protester": "CJP leaders",
+    "officer": "Delhi Police",
+    "others": []
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [
+    {
+      "text": "Gyanu, you're done bro!",
+      "speaker": "Saurav Das (X)",
+      "kind": "caption",
+      "via": "Khaleej Times (ANI)"
+    },
+    {
+      "text": "Jantar Mantar has been reclaimed.",
+      "speaker": "Saurav Das (X)",
+      "kind": "caption",
+      "via": "Khaleej Times (ANI)"
+    },
+    {
+      "text": "Fortress Jantar Mantar has been breached.",
+      "speaker": "Ashutosh Ranka",
+      "kind": "quoted-in-source",
+      "via": "Khaleej Times (ANI)"
+    },
+    {
+      "text": "You cannot denotify the resistance.",
+      "speaker": "Abhijeet Dipke",
+      "kind": "quoted-in-source",
+      "via": "Khaleej Times (ANI)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "cheek",
+    "defiance"
+  ],
+  "actorTypes": [
+    "organiser",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Chat line for Kabir: \"bro is done\" energy before anything has actually happened.",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.khaleejtimes.com/world/asia/detained-cjp-leaders-say-reclaimed-indias-jantar-mantar",
+      "publisher": "Khaleej Times (ANI)",
+      "published": "2026-10-13",
+      "access": "fetched"
+    }
+  ]
+}

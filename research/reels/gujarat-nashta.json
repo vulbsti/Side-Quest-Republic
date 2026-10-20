@@ -1,0 +1,116 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "gujarat-nashta",
+  "title": "\"Sir ji, nashta hoga?\"",
+  "status": "sourced-secondary",
+  "situation": "Detained students outside a Gujarat police station ask if there will be breakfast; the officer says yes. They get tea, coffee, snacks and lunch, play Ludo, take selfies and thank the police as they leave.",
+  "where": "Sector 7 Police Station, Gujarat",
+  "when": {
+    "event": "2026-07-25",
+    "published": "2026-07-26"
+  },
+  "who": {
+    "protester": "detained students",
+    "officer": "Gujarat Police station staff",
+    "others": []
+  },
+  "comicMechanism": [
+    "literal_service_request",
+    "goal_reversal"
+  ],
+  "lines": [
+    {
+      "text": "Sir ji, nashta hoga?",
+      "speaker": "student",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Hoga.",
+      "speaker": "officer",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Chai nashta sab hoga!",
+      "speaker": "officer",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Thank you! We love you, Gujarat Police!",
+      "speaker": "students chanting",
+      "kind": "quoted-in-source",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "10/10 Service",
+      "speaker": "video caption",
+      "kind": "caption",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Chai Coffee N Chips",
+      "speaker": "video caption",
+      "kind": "caption",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Ludo Timeee",
+      "speaker": "video caption",
+      "kind": "caption",
+      "via": "Free Press Journal"
+    },
+    {
+      "text": "Pradhan, It's Done Bro",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "Free Press Journal"
+    }
+  ],
+  "reactionBeats": "Chant \"Resign, resign!\" on the bus, then applause for the police on leaving.",
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "amused",
+      "skeptical"
+    ],
+    "quoted": [
+      {
+        "text": "Yeh picnic lag raha hai",
+        "speaker": "commenter",
+        "kind": "comment",
+        "via": "Free Press Journal"
+      }
+    ],
+    "paraphrased": [
+      "Another said detention can never be fun."
+    ]
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "relief",
+    "cheek"
+  ],
+  "actorTypes": [
+    "detainee",
+    "station-officer"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "On the detention bus, ask the guard \"nashta hoga?\"; a soft Sharma brings samosas and the bus turns into a Ludo party; an annoyed one adds your name to the list.",
+    "cast": [
+      "sharma",
+      "kabir"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.freepressjournal.in/education/sir-ji-nashta-hoga-detained-students-call-gujarat-polices-hospitality-1010-service-after-tea-snacks-and-lunch-served-video-goes-viral",
+      "publisher": "Free Press Journal",
+      "published": "2026-07-26",
+      "access": "fetched"
+    }
+  ]
+}

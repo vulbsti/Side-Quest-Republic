@@ -1,5 +1,9 @@
 # Protest research for Side Quest Republic
 
+## 2026-10-20 pass (research workstream, cloud container)
+
+New files: `reels/` (55 catalogue entries, one JSON each, plus `reels/index.json`), `situations.md` (20 ranked build-this situations and the mantarjantar.com analysis), `politics-standins.md` (how parties, street groups and police behaved, for RUP / DRS / LJM), `reel-pipeline-runbook.md` (owner-machine Instagram, indown.io, Demucs and Whisper steps). Sources were news, fact-check and agency pages read with a web search and fetch tool; no reel video or audio was watched or heard. Blocked or rate-limited this pass: Instagram, YouTube, mantarjantar.com via curl, NDTV, Times of India, The Guardian, India Today, DW, and the body text of The Wire and the IBTimes burger piece.
+
 Research date: 15 October 2026. Public reporting is distinguished from direct observation. The child agent's browser access was rejected; the root agent subsequently read visible caption and comments through the authorized signed-in Instagram session. No likes, follows, messages or posting. Video audio was not verified. See `instagram-observations.json` for the root's observation record.
 
 ## Direct Instagram observations from root

@@ -1,0 +1,58 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "patna-anthem-halt",
+  "title": "The anthem stops the advance",
+  "status": "sourced-secondary",
+  "situation": "A column of police with shields and lathis advances on students; the crowd begins the national anthem and the officers halt, stand to attention and sing along.",
+  "where": "Patna, Bihar",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-08-01"
+  },
+  "who": {
+    "protester": "student crowd",
+    "officer": "Bihar Police column with shields and lathis",
+    "others": []
+  },
+  "comicMechanism": [
+    "social_permission",
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "Officers halted, stood erect and sang along.",
+      "speaker": "narration",
+      "kind": "paraphrased",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "showdown",
+  "emotion": [
+    "awe",
+    "relief"
+  ],
+  "actorTypes": [
+    "crowd",
+    "riot-police"
+  ],
+  "context": "Jantar Mantar protesters also sang the anthem and banged plates with spoons on 20 June (Wikipedia timeline).",
+  "buildThis": {
+    "flag": true,
+    "situation": "At the charge, Mira can start the anthem; if enough people join within a few seconds the RAF line freezes at attention and the charge is delayed.",
+    "cast": [
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    }
+  ]
+}

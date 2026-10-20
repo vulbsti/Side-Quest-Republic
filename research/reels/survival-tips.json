@@ -1,0 +1,64 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "survival-tips",
+  "title": "Thermocol in the jeans",
+  "status": "sourced-secondary",
+  "situation": "Survival guides spread: thermocol sheets inside clothing against lathis, antacid-water for tear gas, swimming goggles, two helmets so you can lend one, a spare kurta, offline maps and Bluetooth messaging for internet shutdowns.",
+  "where": "Social media, Delhi",
+  "when": {
+    "event": "July 2026",
+    "published": "2026-07-23"
+  },
+  "who": {
+    "protester": "experienced and first-time protesters",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "literal_service_request"
+  ],
+  "lines": [
+    {
+      "text": "Even a small gap lets the gas in.",
+      "speaker": "Hardik, 22",
+      "kind": "quoted-in-source",
+      "via": "The Federal"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "preparation",
+    "nervous"
+  ],
+  "actorTypes": [
+    "gen-z-protester",
+    "first-timer"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "Nikhil turns up with thermocol under his shirt that squeaks when he walks; the player can strip it for a placard or let it save him at the charge.",
+    "cast": [
+      "nikhil",
+      "sana"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://thefederal.com/category/news/internet-off-goggles-on-gen-zs-protest-survival-guide-goes-viral-251139",
+      "publisher": "The Federal",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=xiJphe4H8IQ",
+      "publisher": "YouTube",
+      "published": null,
+      "access": "search-only",
+      "note": "Title: \"Jantar Mantar Protest: जींस में थर्मोकोल शीट का कमाल! Gen Z के viral Survival Tips!\""
+    }
+  ]
+}

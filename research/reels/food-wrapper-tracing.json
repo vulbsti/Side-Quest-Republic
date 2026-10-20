@@ -1,0 +1,73 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "food-wrapper-tracing",
+  "title": "Cops trace the biryani",
+  "status": "sourced-secondary",
+  "situation": "Police reportedly trace discarded food wrappers back to eateries sending bulk food and summon staff; a Muslim volunteer who served water and food says UP Police detained his relatives to make him surrender (police deny).",
+  "where": "Jantar Mantar; Ghaziabad and Meerut",
+  "when": {
+    "event": "about 2026-07-23 to 2026-07-25",
+    "published": "2026-07-24/25"
+  },
+  "who": {
+    "protester": "food volunteer",
+    "officer": "Delhi Police; UP Police (alleged)",
+    "others": [
+      "eatery owners"
+    ]
+  },
+  "comicMechanism": [
+    "bureaucratic_literalism"
+  ],
+  "lines": [
+    {
+      "text": "no authority has the constitutional right to starve, isolate or lay siege to peaceful citizens.",
+      "speaker": "Ashutosh Ranka (CJP)",
+      "kind": "quoted-in-source",
+      "via": "Ground News aggregation (Indian Express, The Statesman)"
+    },
+    {
+      "text": "no such matter has come to my notice.",
+      "speaker": "Meerut SSP",
+      "kind": "quoted-in-source",
+      "via": "Scroll"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "midday",
+  "emotion": [
+    "menace",
+    "absurd"
+  ],
+  "actorTypes": [
+    "vendor",
+    "volunteer",
+    "constable"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "A constable collects Asha's paper cups as \"evidence\"; if he gets three, she is told to close the stall at 14:00 unless someone talks him down.",
+    "cast": [
+      "asha",
+      "sharma"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://ground.news/article/using-discarded-wrappers-cops-trace-outlets-sending-food-to-jantar-mantar-protest-site",
+      "publisher": "Ground News aggregation (Indian Express, The Statesman)",
+      "published": "2026-07-24",
+      "access": "fetched",
+      "note": "Aggregator summary; original Indian Express piece not read."
+    },
+    {
+      "url": "https://scroll.in/latest/1094533/scroll_in",
+      "publisher": "Scroll",
+      "published": "2026-07-25",
+      "access": "fetched"
+    }
+  ]
+}

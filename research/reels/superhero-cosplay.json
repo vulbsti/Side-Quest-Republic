@@ -1,0 +1,81 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "superhero-cosplay",
+  "title": "Batman leaves Gotham",
+  "status": "sourced-secondary",
+  "situation": "Protesters come as Batman, Spider-Man, Superman, Iron Man, Gandhi, Ambedkar, \"Dora the Protester\" and a \"low-budget Pokémon\". Memes frame the icons as returning \"Season 1 players\".",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "June to July 2026",
+    "published": "2026-07-23 to 2026-08-01"
+  },
+  "who": {
+    "protester": "costumed students",
+    "officer": null,
+    "others": [
+      "photographers"
+    ]
+  },
+  "comicMechanism": [
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "The country is so cooked even the Season 1 players have to come back.",
+      "speaker": "Gandhi meme",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "You know it's serious when Batman leaves Gotham behind.",
+      "speaker": "Batman meme",
+      "kind": "caption",
+      "via": "Onmanorama"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "playful"
+  ],
+  "actorTypes": [
+    "costumed-protester"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "A costume crate at the volunteer tent: whoever wears the Spider-Man suit gets photographed by everyone and recognised by every constable later.",
+    "cast": [
+      "kabir",
+      "nikhil"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.onmanorama.com/news/india/2026/07/24/cjp-gen-z-protest-neet-leak-memes-subway-surfers-gta-rhiya-ahir.html",
+      "publisher": "Onmanorama",
+      "published": "2026-07-24",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.dtnext.in/news/national/with-a-drizzle-of-satire-and-a-dash-of-fun-memes-and-reels-fuel-gen-zs-response-to-cjp-protest",
+      "publisher": "DT Next (agency copy, also in Outlook)",
+      "published": "2026-07",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/national/memes-reels-and-resistance-gen-z-gives-the-cjp-protest-a-viral-edge",
+      "publisher": "National Herald",
+      "published": "2026-07-23",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    }
+  ]
+}

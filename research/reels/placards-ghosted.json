@@ -1,0 +1,97 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "placards-ghosted",
+  "title": "\"Even my ex didn't ghost me this badly!\"",
+  "status": "sourced-secondary",
+  "situation": "Placards built to be screenshotted: dating, jobs, Dora, funding.",
+  "where": "Jantar Mantar, New Delhi",
+  "when": {
+    "event": "June to July 2026",
+    "published": "2026-07-24 to 2026-08-01"
+  },
+  "who": {
+    "protester": "students",
+    "officer": null,
+    "others": []
+  },
+  "comicMechanism": [
+    "scale_collision"
+  ],
+  "lines": [
+    {
+      "text": "Even my ex didn't ghost me this badly!",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    },
+    {
+      "text": "My Hinge (it's a dating app, ICYDK) matches reply faster than the government.",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    },
+    {
+      "text": "You f***ed with the wrong gen.",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "National Herald (opinion, Jaideep Hardikar)"
+    },
+    {
+      "text": "Kya aapko kahi accountability dikh rahi hai?",
+      "speaker": "Dora placard",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "Nobody funds me, I hate this government for free.",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "It's so bad even the privileged are here.",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "Onmanorama"
+    },
+    {
+      "text": "Economy is so bad that even Dharmendra Pradhan isn't resigning without another job in hand.",
+      "speaker": "placard",
+      "kind": "caption",
+      "via": "Onmanorama"
+    }
+  ],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": null,
+  "phase": "morning",
+  "emotion": [
+    "wit"
+  ],
+  "actorTypes": [
+    "gen-z-protester"
+  ],
+  "buildThis": {
+    "flag": true,
+    "situation": "A placard-making table: the player writes one from fragments; the funniest one becomes the photo every reporter takes and follows you through the day.",
+    "cast": [
+      "kabir",
+      "mira"
+    ]
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.nationalheraldindia.com/amp/story/opinion/it-was-both-a-protest-and-a-carnival-jantar-mantar-cup-gen-z",
+      "publisher": "National Herald (opinion, Jaideep Hardikar)",
+      "published": "2026-08-01",
+      "access": "fetched"
+    },
+    {
+      "url": "https://www.onmanorama.com/news/india/2026/07/24/cjp-gen-z-protest-neet-leak-memes-subway-surfers-gta-rhiya-ahir.html",
+      "publisher": "Onmanorama",
+      "published": "2026-07-24",
+      "access": "fetched"
+    }
+  ]
+}

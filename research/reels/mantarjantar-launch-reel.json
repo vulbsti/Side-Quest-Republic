@@ -1,0 +1,59 @@
+{
+  "schema": "sqr-reel/1",
+  "id": "mantarjantar-launch-reel",
+  "title": "Players retell their detentions",
+  "status": "prior-direct-observation",
+  "situation": "The mantarjantar.com creator's launch reel; comments retell accidents (\"detained while dancing\"), ask for Steam and downloads, and for real politicians in the game.",
+  "where": "Instagram (bugswriter)",
+  "when": {
+    "event": "October 2026",
+    "published": null
+  },
+  "who": {
+    "protester": "players",
+    "officer": null,
+    "others": [
+      "game creator"
+    ]
+  },
+  "comicMechanism": [
+    "borrowed_confidence"
+  ],
+  "lines": [],
+  "reactionBeats": null,
+  "music": null,
+  "commentMood": {
+    "mood": [
+      "enthusiastic"
+    ],
+    "quoted": [],
+    "paraphrased": [
+      "A player says they were detained while dancing",
+      "Requests for Steam and downloads",
+      "Requests for recognisable political figures",
+      "A player tried it during office hours"
+    ]
+  },
+  "phase": "aftermath",
+  "emotion": [
+    "delight"
+  ],
+  "actorTypes": [
+    "player"
+  ],
+  "buildThis": {
+    "flag": false,
+    "situation": "Design test: can the player retell their day in one sentence about their own actions?",
+    "cast": null
+  },
+  "clipRanges": null,
+  "sources": [
+    {
+      "url": "https://www.instagram.com/bugswriter/reel/DehgRPtSt6M/",
+      "publisher": "bugswriter (Instagram)",
+      "published": null,
+      "access": "prior",
+      "note": "Observed read-only on 2026-10-16."
+    }
+  ]
+}
