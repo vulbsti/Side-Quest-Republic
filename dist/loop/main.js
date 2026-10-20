@@ -5,17 +5,17 @@
 import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
 import { expandWorld } from '../world-expansion.js?v=27';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
-import { loadCharacters, makeCharacter, animateCharacter, CARRY_POSES } from '../characters.js?v=27';
+import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=5';
-import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=5';
+import * as R from './rules.js?v=6';
+import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=6';
 import { createLighting } from './lighting.js?v=1';
 import {
-  createProps, GROUP_LOOK, makeHeldFlag, makeHeldPlacard, waveFlag, makeTintable, equipRAF, setShield,
-  equipScarf, equipCap, equipProvocateur, BARRICADE_LINES,
-} from './props.js?v=1';
-import { createCinematic } from './cinematic.js?v=1';
+  createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
+  equipCap, equipProvocateur, BARRICADE_LINES,
+} from './props.js?v=2';
+import { createCinematic } from './cinematic.js?v=2';
 import { createPhone } from './phone-ui.js?v=1';
 
 const { createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
@@ -23,7 +23,9 @@ const $ = (s) => document.querySelector(s);
 const QS = new URLSearchParams(location.search);
 const LONG = QS.has('long'), DEV = QS.has('dev') || QS.has('demo'), DEMO = QS.has('demo');
 const STEP = 0.1;
-const CROWD_POOL = 52, CONSTABLES = 8, RAF_POOL = 10, CREW_POOL = 8, PROV_POOL = 3, KIDS = 4;
+const CROWD_POOL = 52, CONSTABLES = 8, RAF_POOL = 10, CREW_POOL = 8, PROV_POOL = 3, KIDS = 6, DETAINEES = 10;
+// Crowd bodies per group: each group wears its own outfits (characters.js variants), so pools are per kind.
+const CROWD_KINDS = { students: 36, party: 12, sena: 10, opp: 8 };
 const SAVE_KEY = 'sqr-loop-v1';
 const OBJECTS = ['speaker', 'key', 'megaphone', 'phone', 'water'];
 const HEAVY = ['speaker', 'water'];
@@ -43,9 +45,9 @@ const phaseFromClock = (m) => (m < 720 ? 'morning' : m < 840 ? 'midday' : m < 96
 if (LONG) { if (R.setTempo) R.setTempo(R.TEMPO?.long ? 'long' : 4.0); else R.setSecondsPerMinute?.(4.0); }
 
 // --- optional content and integrations (the writing, audio and asset workstreams) ---------
-// Model swap point: flip MODELS_READY when loop/models.js exists (until then ?models tries it), so the
-// default page makes no 404 request.
-const MODELS_READY = false;
+// Model swap point: loop/models.js (vehicles, flags, placards, the detention bus).
+const MODELS_READY = true;
+let MODELS = null, MOD = null;
 const optional = async (path) => { try { return await import(path); } catch { return null; } };
 let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null }, demo = null;
 /** Audio swap point: audio.js createAudio() (or anything with the same methods, via __loop.setAudio). */
@@ -53,7 +55,7 @@ const NOOP = () => {};
 let audio = { cue: NOOP, phase: NOOP, music: NOOP, chase: NOOP, intensity: NOOP, crowd: NOOP, update: NOOP, unlock: NOOP, silence: NOOP, duck: NOOP };
 async function loadOptional() {
   const [sc, bk, ph, au, mo, dm] = await Promise.all([
-    optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js') : null,
+    optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js?v=1') : null,
     DEMO ? optional('./dev-demo.js') : null,
   ]);
   demo = dm;
@@ -68,11 +70,60 @@ async function loadOptional() {
   };
   const a = au?.createAudio?.() ?? au?.default ?? au?.audio ?? null;
   if (a) setAudio(a);
-  // Model swap point: models.js may export loadModels() -> { name: Object3D } (names as props.setModel).
+  // Model swap point: models.js loadModels() -> { vajra, suv, bike, canister, flags, bus, ... }.
   try {
-    const models = (await mo?.loadModels?.()) ?? mo?.MODELS ?? null;
-    if (models) for (const [name, obj] of Object.entries(models)) if (obj) props.setModel(name, obj);
+    const models = (await mo?.loadModels?.()) ?? null;
+    if (models) applyModels(models, mo);
   } catch (e) { console.warn('models.js could not be applied', e); }
+}
+/** A vehicle with a group flag on its 'flagMount', streaming backwards (props waves the node named 'flag'). */
+function withFlag(base, flag, scale) {
+  const g = new THREE.Group(), mount = base.getObjectByName('flagMount');
+  g.add(base.clone(true));
+  if (flag && mount) {
+    base.updateMatrixWorld(true);
+    const f = new THREE.Group(); f.name = 'flag';
+    const inner = flag.clone(true); inner.scale.setScalar(scale); inner.rotation.y = Math.PI / 2; f.add(inner);
+    mount.getWorldPosition(f.position); g.add(f);
+  }
+  return g;
+}
+function applyModels(m, mo) {
+  MODELS = m; MOD = mo;
+  if (m.vajra) {
+    // The DELHI POLICE decals sat exactly on the armour ribs' outer face, so a rib showed through as an
+    // extra stroke ("DELHII"). Push the decal planes a couple of centimetres out from the body.
+    m.vajra.traverse((o) => { if (o.isMesh && /^Decal (DELHI POLICE|Delhi Police Hindi)/.test(o.material?.name || '')) o.scale.x *= 1.025; });
+    props.setModel('vajra', m.vajra);
+  }
+  if (m.suv) props.setModel('suv', withFlag(m.suv, m.flags?.party, 0.5));
+  if (m.bike) props.setModel('bike', withFlag(m.bike, m.flags?.sena, 0.45));
+  if (m.canister) props.setModel('canister', m.canister);
+  if (m.bus?.userData?.seats) {
+    // The detention bus: the same DTC bus, with see-through glass and seats inside.
+    m.bus.position.copy(shuttle.position); m.bus.rotation.copy(shuttle.rotation);
+    world.scene.add(m.bus); shuttle.visible = false; shuttle = m.bus;
+    busSeats = m.bus.userData.seats.slice().sort((a, b) => Math.hypot(a.position.x + 1.1, a.position.z - 1) - Math.hypot(b.position.x + 1.1, b.position.z - 1));
+  }
+}
+let busSeats = null;
+/** A group flag held at the one-hand carry point (carry:'key'); the cloth trails back over the shoulder. */
+function heldFlag(kind) {
+  const src = MODELS?.flags?.[kind];
+  if (!src) return makeHeldFlag(kind);
+  const g = new THREE.Group(), wave = new THREE.Group(), f = src.clone(true);
+  f.rotation.y = 2.1; wave.add(f); g.add(wave);
+  g.userData.flag = wave;
+  const grip = src.getObjectByName('grip');
+  g.position.set(-0.18, 1.14 - (grip ? grip.position.y : 1), 0.4);
+  return g;
+}
+function heldPlacard(i) {
+  const s = MODELS?.flags?.students;
+  if (!s || !MOD?.placard) return makeHeldPlacard(i);
+  const g = new THREE.Group(); g.add(MOD.placard(s, i));
+  g.position.set(-0.18, 1.14 - 0.78, 0.4);
+  return g;
 }
 function setAudio(a) {
   const f = (...names) => { for (const n of names) if (typeof a[n] === 'function') return a[n].bind(a); return NOOP; };
@@ -257,64 +308,76 @@ function makePeople() {
     const s = day.people[id];
     bodies[id] = { id, model, x: s.x, z: s.z, y: 0, speed: 0, yaw: 0, radius: 0.4 };
   }
-  const shirts = GROUP_LOOK.students.shirt;
-  for (let i = 0; i < CROWD_POOL; i++) {
-    const model = makeCharacter({ color: shirts[i % shirts.length] });
-    const tint = makeTintable(model, shirts[i % shirts.length]);
+  let i = 0;
+  for (const [kind, n] of Object.entries(CROWD_KINDS)) for (let k = 0; k < n; k++, i++) {
+    // Party workers and sena men have their own outfits; students and LJM supporters are the civilian mix.
+    const model = makeCharacter(kind === 'party' || kind === 'sena' ? { kind, index: k } : { index: k + (kind === 'opp' ? 3 : 0), backpack: kind === 'students' && k % 5 === 1 });
     model.visible = false;
     world.scene.add(model);
-    crowd.push(body(model, { idx: i, tint, kind: 'students', cluster: null, target: null, side: i % 2 ? 1 : -1, phase: i * 1.7, kit: {}, carry: false, fainted: 0 }));
+    crowd.push(body(model, { idx: i, pool: kind, kind, cluster: null, target: null, side: i % 2 ? 1 : -1, phase: i * 1.7, kit: {}, carry: false, fainted: 0 }));
   }
   for (let i = 0; i < CONSTABLES + RAF_POOL; i++) {
     const raf = i >= CONSTABLES;
-    const model = makeCharacter({ police: true });
-    if (raf) equipRAF(model);
+    // RAF jawans come with blue camo, helmet, shield and lathi from characters.js.
+    const model = makeCharacter({ kind: raf ? 'raf' : 'constable', index: i });
     model.visible = false;
     world.scene.add(model);
     police.push(body(model, { idx: i, kind: raf ? 'raf' : 'constable', radius: 0.4, side: i % 2 ? 1 : -1, oid: null, posture: 'stand', label: OFFICER_NAME[raf ? 'raf' : 'constable'] }));
   }
   for (let i = 0; i < CREW_POOL; i++) {
     const c = ['#e5ff86', '#ff9cc4', '#8fd3ff', '#ffd34d', '#b8e0a0', '#f2a65a', '#c9b6ff', '#7fe0d0'][i];
-    const model = makeCharacter({ color: c, backpack: i % 2 === 0 });
+    const model = makeCharacter({ index: i + 1, backpack: i % 2 === 0 });
+    void c;
     model.visible = false; world.scene.add(model);
     const b = body(model, { idx: i, kind: 'crew', label: 'YOUR CREW' });
-    if (i % 3 === 0) { b.kit = makeHeldPlacard(i + 3); model.add(b.kit); b.carry = 'key'; }
+    if (i % 3 === 0) { b.kit = heldPlacard(i + 3); model.add(b.kit); b.carry = 'key'; }
     crew.push(b);
   }
   for (let i = 0; i < PROV_POOL; i++) {
-    const model = makeCharacter({ color: ['#3a3f45', '#4a4038', '#2f3a33'][i], gender: 'male' });
+    const model = makeCharacter({ variant: ['student-hoodie', 'student-tee', 'student-kurta'][i] });
     equipProvocateur(model);
     model.visible = false; world.scene.add(model);
     provs.push(body(model, { idx: i, kind: 'prov', pid: null, label: 'MAN IN NEW SHOES' }));
   }
+  // The youngest students at the front, who dance in the cannon's spray.
   for (let i = 0; i < KIDS; i++) {
-    const model = makeCharacter({ color: ['#ffd34d', '#ff7aa8', '#7ad3ff', '#9be59b'][i] });
-    model.scale.setScalar(0.64);
+    const model = makeCharacter({ index: i * 2 + 1 });
+    model.scale.setScalar(0.94);
     model.visible = false; world.scene.add(model);
-    kids.push(body(model, { idx: i, kind: 'kid', label: 'KID' }));
+    kids.push(body(model, { idx: i, kind: 'kid', label: 'STUDENT' }));
+  }
+  // People on the detention bus, seated (named people are moved onto seats when they are inside).
+  for (let i = 0; i < DETAINEES; i++) {
+    const model = makeCharacter({ index: i + 4 });
+    model.visible = false; world.scene.add(model);
+    detainees.push(model);
+  }
+  // Sena riders, on their bikes while the column rides in.
+  for (let i = 0; i < 4; i++) {
+    const model = makeCharacter({ kind: 'sena', index: i + 2 });
+    model.visible = false; world.scene.add(model);
+    riders.push(model);
   }
 }
+const detainees = [], riders = [];
 
 /** Dress a pooled crowd body for a group: shirt colour, flag or placard, scarf, cap. */
 function dress(b, kind) {
   if (b.kind === kind && b.dressed) return;
   b.kind = kind; b.dressed = true;
-  const look = GROUP_LOOK[kind] || GROUP_LOOK.students;
-  b.tint.set(look.shirt[b.idx % look.shirt.length]);
   for (const k of Object.values(b.kit)) k.visible = false;
   b.carry = false;
   const i = b.idx;
   const kit = (name, make) => { const o = (b.kit[name] ??= make()); o.visible = true; return o; };
   if (kind === 'students') {
-    if (i % 4 === 0) { kit('placard', () => { const p = makeHeldPlacard(i); b.model.add(p); return p; }); b.carry = 'key'; }
+    if (i % 4 === 0) { kit('placard', () => { const p = heldPlacard(i); b.model.add(p); return p; }); b.carry = 'key'; }
   } else if (kind === 'party') {
-    if (i % 2 === 0) { kit('flag-party', () => { const f = makeHeldFlag('party'); b.model.add(f); return f; }); b.carry = 'key'; }
+    if (i % 2 === 0) { kit('flag-party', () => { const f = heldFlag('party'); b.model.add(f); return f; }); b.carry = 'key'; }
     if (i % 3 === 0) kit('cap-party', () => equipCap(b.model, '#f7f4ea'));
   } else if (kind === 'sena') {
-    kit('scarf', () => equipScarf(b.model));
-    if (i % 2 === 1) { kit('flag-sena', () => { const f = makeHeldFlag('sena'); b.model.add(f); return f; }); b.carry = 'key'; }
+    if (i % 2 === 1) { kit('flag-sena', () => { const f = heldFlag('sena'); b.model.add(f); return f; }); b.carry = 'key'; }
   } else if (kind === 'opp') {
-    if (i % 2 === 0) { kit('flag-opp', () => { const f = makeHeldFlag('opp'); b.model.add(f); return f; }); b.carry = 'key'; }
+    if (i % 2 === 0) { kit('flag-opp', () => { const f = heldFlag('opp'); b.model.add(f); return f; }); b.carry = 'key'; }
     if (i % 4 === 1) kit('cap-opp', () => equipCap(b.model, '#2f6fbe'));
   }
   b.flag = b.kit['flag-' + kind] || b.kit.placard || null;
@@ -387,7 +450,8 @@ function updateCrowd(dt) {
         for (let i = 0; i < freeList.length; i++) { const f = freeList[i]; if (f.kind !== cl.kind) continue; const d = dist(f, cl.center); if (d < bd) { bd = d; best = i; } }
         let b = best >= 0 ? freeList.splice(best, 1)[0] : null;
         if (!b) {
-          b = crowd.find((x) => !x.cluster && !x.model.visible);
+          const pool = CROWD_KINDS[cl.kind] ? cl.kind : 'students';
+          b = crowd.find((x) => !x.cluster && !x.model.visible && x.pool === pool);
           if (!b) break;
           Object.assign(b, cl.spawn);
           if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -14, z: 12 });
@@ -415,11 +479,25 @@ function updateCrowd(dt) {
     if (!b.model.visible) continue;
     const ox = b.x, oz = b.z;
     let tx = b.target ? b.target.x + b.ox : b.x, tz = b.target ? b.target.z + b.oz : b.z;
+    // Hit by the charge: the Shoved (or Duck) clip, the body driven back ~1.5 m over 1.6 s.
+    if (b.shoveT > 0) {
+      b.shoveT -= dt; b.speed = 0;
+      const k = (b.ducked ? 0.6 : 1.5) / 1.6 * dt; b.x += b.shx * k; b.z += b.shz * k;
+      if (b.shoveT <= 0) { b.flee = 2.4; b.fx = b.shx; b.fz = b.shz; }
+      continue;
+    }
+    if (!ch.active) b.hit = false;
     // Danger makes people run: the lathi line sweeping through, gas, the water jet.
     if (b.flee <= 0) {
       let fx2 = 0, fz2 = 0;
       if (ch.active && ch.along < 16) {
         const s = (b.x - ch.x) * ch.nx + (b.z - ch.z) * ch.nz, lat = Math.abs((b.x - ch.x) * -ch.nz + (b.z - ch.z) * ch.nx);
+        if (s > -1.5 && s < 1.4 && lat < ch.length / 2 + 1 && !b.hit && b.fainted <= 0) {
+          b.hit = true; b.ducked = b.idx % 3 === 0; b.shoveT = 1.6; b.shx = ch.nx; b.shz = ch.nz;
+          b.yaw = Math.atan2(-ch.nx, -ch.nz);
+          playOnce(b.model, b.ducked ? 'Duck' : 'Shoved');
+          continue;
+        }
         if (s > -1.5 && s < 7 && lat < ch.length / 2 + 4) { fx2 = ch.nx; fz2 = ch.nz; }
       }
       const g = gasOn(b.x, b.z);
@@ -568,7 +646,8 @@ function updatePolice(dt) {
     if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
     else if (o.yaw !== undefined) b.yaw = o.yaw;
     else if (fx.hotspotPos) b.yaw = Math.atan2(fx.hotspotPos.x - b.x, fx.hotspotPos.z - b.z);
-    setShield(b.model, posture === 'line' || posture === 'charge' ? 'up' : 'carry');
+    // Skinned RAF jawans hold their own shield (left hand on its grip); only the old procedural kit needs posing.
+    if (!b.model.userData.isSkinnedHuman) setShield(b.model, posture === 'line' || posture === 'charge' ? 'up' : 'carry');
     if (b.model.userData.baton) b.model.userData.baton.visible = b.kind === 'raf' || posture === 'charge' || posture === 'line' || posture === 'chase';
   }
 }
@@ -655,6 +734,36 @@ function updateBodies(dt) {
   }
 }
 
+// The detention bus fills up: you, named friends and other detainees sit inside, visible through the glass.
+let playerSeated = false;
+const seatedIds = new Set(), _seat = new THREE.Vector3();
+function updateDetainees() {
+  const b = day.bus, holds = !!busSeats && b.detention && (b.phase === 'detention' || b.phase === 'parked');
+  let k = 0;
+  const seatAt = (m) => {
+    const st = busSeats[k++];
+    if (!st) { m.visible = false; return; }
+    shuttle.updateMatrixWorld(); _seat.copy(st.position); shuttle.localToWorld(_seat);
+    m.position.copy(_seat); m.rotation.y = shuttle.rotation.y + st.yaw; m.visible = true;
+  };
+  playerSeated = holds && S.detained(day);
+  if (playerSeated) { seatAt(playerModel); playerModel.visible = true; }
+  seatedIds.clear();
+  for (const id of day.detention?.people || []) if (holds && bodies[id]) { seatAt(bodies[id].model); seatedIds.add(id); }
+  const n = holds ? Math.min(DETAINEES, day.detention?.count || 0) : 0;
+  detainees.forEach((m, i) => { if (i < n) seatAt(m); else m.visible = false; });
+}
+// Sena riders sit on their bikes while the column rides in; once parked they join the group on foot.
+function updateRiders() {
+  props.vehicles.bikes.forEach((bike, i) => {
+    const r = riders[i]; if (!r) return;
+    const seat = bike.userData.seat ??= bike.getObjectByName('seat');
+    r.visible = !!(seat && bike.visible && bike.userData.moving);
+    if (!r.visible) return;
+    bike.updateMatrixWorld(); seat.getWorldPosition(_seat);
+    r.position.set(_seat.x, _seat.y - 0.47, _seat.z); r.rotation.y = bike.rotation.y;
+  });
+}
 function attach(item, holderModel, pose) {
   if (item.parent !== holderModel) holderModel.add(item);
   item.position.fromArray(CARRY_POSES[pose].position);
@@ -1028,7 +1137,7 @@ function findPrompt() {
   const p = sim.player, carrying = day.player.carrying;
   const options = [];
   if (S.detained(day)) {
-    const o = nearestOpportunity(true);
+    const o = nearestOpportunity(true, true);
     return o?.cmd || o?.choices ? { d: 0, text: o.label, run: () => runOpportunity(o) } : null;
   }
   if (!carrying) {
@@ -1056,8 +1165,9 @@ function findPrompt() {
   }
   // Anything else the engine says you can do right here (scenes, detention, rally spots).
   // (Talk, take, give, pester and provocateur have their own richer prompts above.)
-  const o = nearestOpportunity(true);
-  if ((o?.cmd || o?.choices) && o.d < 2.6 && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  const o = nearestOpportunity(true, true);
+  // Scenes trigger from a few metres away (you walk up to a conversation, not into a person).
+  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'scene' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
 }
@@ -1183,24 +1293,30 @@ function film() {
 // --- opportunities: one objective card -------------------------------------------------
 
 const _oppPos = { x: 0, z: 0 };
-let oppCache = null, oppT = 0;
-/** The nearest thing to do: from the engine's opportunities(s, pos), else a small local fallback. */
-function nearestOpportunity(fresh = false) {
-  if (!fresh && oppT > 0) return oppCache;
+let oppCache = null, oppNear = null, oppT = 0;
+/**
+ * The thing to do next: the engine's opportunities(s, pos) come ranked (scenes, chases and provocateurs beat
+ * the ever-present constable), so the objective card shows the first one. With nearest=true it returns the
+ * closest actionable one instead, for the E prompt. Without the engine, a small local fallback.
+ */
+function nearestOpportunity(fresh = false, nearest = false) {
+  if (!fresh && oppT > 0) return nearest ? oppNear : oppCache;
   oppT = 0.3;
   _oppPos.x = sim.player.x; _oppPos.z = sim.player.z;
   const list = S.opportunities(day, _oppPos);
-  let best = null, bd = 1e9;
+  let best = null, near = null, bd = 1e9;
   if (Array.isArray(list)) {
     for (const o of list) {
       if (!o) continue;
       const x = o.x ?? o.pos?.x, z = o.z ?? o.pos?.z;
       const d = x === undefined ? (o.d ?? o.dist ?? 0) : Math.hypot(x - _oppPos.x, z - _oppPos.z);
-      if (d < bd) { bd = d; best = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null }; }
+      const item = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null };
+      best ??= item;
+      if ((item.cmd || item.choices) && !LOCAL_KINDS.has(item.kind) && d < bd) { bd = d; near = item; }
     }
-  } else best = localOpportunity();
-  oppCache = best;
-  return best;
+  } else best = near = localOpportunity();
+  oppCache = best; oppNear = near ?? best;
+  return nearest ? oppNear : best;
 }
 function localOpportunity() {
   const p = sim.player, out = [];
@@ -1316,6 +1432,7 @@ function showEnding() {
     const stance = STANCE[e.stance] || e.stance || 'did what they could';
     const when = e.chargeClock ?? timeText(e.chargeAt ?? e.when ?? e.timing);
     const bandWord = { calm: 'Calm', rising: 'Rising', high: 'Ugly', riot: 'A riot' }[e.band];
+    const r = S.rep(day) || {}, idleDay = !((r.aura || 0) + (r.help || 0) + (r.nuisance || 0) + (r.heat || 0));
     if (bandWord) sv.word = bandWord;
     body = `<span class="tiny">${clockText(day.t)} · LOOP ${memory.loops - 1} ENDS</span>
       <h2>${esc(e.title ?? flavour?.title ?? `${sv.word} at ${where}`)}</h2>
@@ -1330,7 +1447,7 @@ function showEnding() {
           <dt>When</dt><dd>${when ? esc(when) + (e.timingText ? ' · ' + esc(e.timingText) : '') : 'No charge came'}</dd>
         </dl>
       </div>
-      ${callbacks ? `<h3 class="because">Because of you</h3><ul class="callbacks">${callbacks}</ul>` : ''}
+      ${callbacks ? `<h3 class="because">${idleDay ? 'What happened while you watched' : 'Because of you'}</h3><ul class="callbacks">${callbacks}</ul>` : ''}
       ${e.text ?? flavour?.text ? `<p>${esc(e.text ?? flavour.text)}</p>` : ''}`;
   } else {
     const lv = levers(day);
@@ -1386,7 +1503,7 @@ function nearestOf(list, pos, pred = () => true) {
   return best;
 }
 const actorOf = (id) => {
-  if (id === 'player') return sim.player;
+  if (id === 'player') return playerAnchor;
   const here = PLACES[cine?.scene?.place] || sim.player;
   if (id === 'mummy') return bodies.kabir?.model.visible ? bodies.kabir : null; // her voice comes out of Kabir's phone
   if (id === 'wireless') return nearestOf(police, here) || (bodies.sharma.model.visible ? bodies.sharma : null);
@@ -1542,12 +1659,15 @@ function step(dt) {
     sim.player.x = dp.x; sim.player.z = dp.z; sim.player.vx = sim.player.vz = 0;
     if (!detainedShown) { detainedShown = true; closeChoices(); }
   } else if (detainedShown) { detainedShown = false; sim.player.x = day.bus.x - 2.4; sim.player.z = day.bus.z + 3; toast('You\'re off the bus. Walk, don\'t run.', 3); }
-  playerModel.visible = !detained;
+  playerModel.visible = !detained || playerSeated;
   updateShuttle();
   updateBodies(dt);
   fx.player = sim.player; fx.phase = phaseNow;
   const hs = S.director(day)?.hotspot;
   fx.hotspotPos = (hs && (PLACES[hs] || hs.x !== undefined && hs)) || (phaseNow === 'tense' || phaseNow === 'showdown' ? PLACES[levers(day).location] : null);
+  // The cannon aims at the crowd it was sent for (over the barricade line), not at the line itself.
+  const cp = day.police?.cannon?.place;
+  fx.cannonAim = (cp && R.CROWD_CENTERS?.[cp]) || null;
   props.update(day, dt, performance.now() / 1000, fx);
   const g = day.police?.gas; if (g) { fxGas.x = g.x; fxGas.z = g.z; }
   updateCrowd(dt);
@@ -1563,8 +1683,12 @@ function step(dt) {
   for (const b of Object.values(bodies)) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   for (const arr of [crowd, police, crew, provs, kids]) for (const b of arr) if (b.model.visible) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   playerModel.position.set(sim.player.x, sim.player.y, sim.player.z);
+  // In a scene you turn to whoever you are talking to, so reaction shots catch your face.
+  if (cine.mode === 'scene' && cine.lookTargets.has('player')) { const l = cine.lookTargets.get('player'); sim.player.yaw = Math.atan2(l.x - sim.player.x, l.z - sim.player.z); }
   const turn = Math.atan2(Math.sin(sim.player.yaw - playerModel.rotation.y), Math.cos(sim.player.yaw - playerModel.rotation.y));
   playerModel.rotation.y += turn * Math.min(1, dt * 14);
+  updateDetainees();
+  updateRiders();
   ambient(dt);
   barks(dt);
   updateFlags();
@@ -1589,27 +1713,35 @@ function step(dt) {
 function animate(t) {
   const p = sim.player;
   const carryPose = (c) => (c ? POSE[c] : false);
-  animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: carryPose(day.player.carrying), airborne: !p.grounded, vy: p.vy, important: true, gesture: recT > 0 ? 'phone' : '' });
+  if (playerSeated) animateCharacter(playerModel, 0, t, { seated: true, important: true });
+  else animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: carryPose(day.player.carrying), airborne: !p.grounded, vy: p.vy, important: true, gesture: recT > 0 ? 'phone' : '' });
   for (const [id, b] of Object.entries(bodies)) {
     if (!b.model.visible) continue;
     const s = day.people[id];
     const carrying = s.carrying === 'phone' ? false : s.carrying;
+    const talking = speakingNow(b) || cine.speaking === id || (id === 'mira' && s.mode === 'speech');
+    // Meera is always making a reel; Zoya films while she is live. Both lower the phone to talk.
+    if (seatedIds.has(id)) { animateCharacter(b.model, 0, t, { seated: true, talking, distance: dist(b, p), important: true }); continue; }
+    const films = b.speed < 0.2 && !carrying && cine.speaking !== id && ((id === 'meera' && !s.detained) || (id === 'zoya' && s.carrying === 'phone' && day.stream?.live));
     animateCharacter(b.model, b.speed, t, {
-      carry: carryPose(carrying),
-      talking: speakingNow(b) || cine.speaking === id || (id === 'mira' && s.mode === 'speech'),
+      action: films ? 'Film' : '',
+      carry: carryPose(carrying), talking,
       distance: dist(b, p), important: true,
     });
     if (b.model.userData.phone) b.model.userData.phone.visible = id === 'zoya' && s.carrying === 'phone';
   }
   const surge = clashSurge();
   const tense = phaseNow === 'tense' || phaseNow === 'showdown';
+  const sitInNow = clockMinutes(day.t) >= 16 * 60 + 40 && !day.police?.charge && !S.director(day)?.chargeAt;
   for (const b of crowd) {
     if (!b.model.visible) continue;
     const still = b.speed < 0.3 || (b.target && dist(b, b.target) < 1.2);
     const cl = b.clusterRef;
-    const dancing = still && b.cluster === 'cpParty' && day.objects.speaker.on;
-    const sitting = still && b.cluster === 'stage' && day.moment === 'singalong';
-    const fainted = b.fainted > 0 || (still && b.cluster === 'stage' && day.heat && !sitting && b.idx % 4 === 0);
+    const dancing = still && ((b.cluster === 'cpParty' && day.objects.speaker.on) || (props.dancing && fx.sprayLand && b.kind === 'students' && dist(b, fx.sprayLand) < 10));
+    // The sing-along sits the stage down; a day that never boiled over ends as a sit-in.
+    const sitIn = sitInNow && b.kind === 'students' && b.cluster && b.idx % 4 !== 3;
+    const sitting = still && ((b.cluster === 'stage' && day.moment === 'singalong') || sitIn);
+    const fainted = b.fainted > 0 || (still && b.cluster === 'stage' && day.heat && !sitting && b.idx % 11 === 0);
     const shoving = surge && b.cluster === surge.group && b.flee <= 0;
     const cheering = b.cluster === 'stage' && ((day.people.mira.mode === 'speech' && day.speech === 'big') || day.moment === 'roast');
     const angry = (b.cluster === 'barricade' && day.minister === 'noshow') || (cl && cl.kind !== 'students' && (tense || /angry|chant|hot/.test(cl.mood || '')));
@@ -1617,15 +1749,23 @@ function animate(t) {
     let gesture = '';
     if (b.reactT > 0) { b.reactT -= 1 / 60; gesture = b.react === 'laugh' ? 'laugh' : b.react === 'point' ? 'point' : ''; if (b.reactAt && still) b.yaw = Math.atan2(b.reactAt.x - b.x, b.reactAt.z - b.z); }
     if (b.cough > 0 && b.flee <= 0) gesture = 'rest';
-    if (dancing) { b.model.position.y = Math.abs(Math.sin(t * 5.2 + b.phase)) * 0.4; b.model.rotation.y = b.yaw + Math.sin(t * 2.6 + b.phase) * 0.7; }
-    else if (fainted) b.model.position.y = -0.34;
-    else if (sitting) { b.model.position.y = -0.34; b.model.rotation.y = b.yaw + Math.sin(t * 1.4 + b.phase) * 0.12; }
+    // Real clips, not position hacks: Lie for the fainted, Dance at the speaker, Sit for the sing-along,
+    // Push or Chant in a scuffle, Film for the ones holding their phones up.
+    const filming = still && !b.carry && b.idx % 7 === 3 && (tense || cheering || dancing);
+    let action = '';
+    if (b.shoveT > 0) action = '';
+    else if (fainted) action = 'Lie';
+    else if (still && shoving && b.speed < 0.6) action = b.idx % 3 === 0 ? 'Chant' : 'Push';
+    else if (filming) action = 'Film';
+    else if (dancing) action = 'Dance';
+    else if (sitting) action = 'Sit';
+    else if (still && (cheering || chanting) && !gesture) action = b.carry ? (cheering ? 'Wave' : 'Chant') : b.idx % 4 === 1 ? 'Wave' : 'Chant';
     if (b.flag) waveFlag(b.flag, t * (chanting ? 2 : 1), b.phase);
-    animateCharacter(b.model, dancing || sitting || fainted ? 0 : b.speed, t, {
-      carry: b.carry && !fainted && !sitting && !gesture ? b.carry : false,
-      pose: dancing || ((cheering || chanting) && !b.carry),
-      seated: sitting || fainted,
-      gesture: fainted ? 'rest' : gesture || (shoving ? 'push' : (sitting && b.idx % 3 === 0) || (dancing && Math.sin(t * 2.6 + b.phase) > 0) ? 'wave' : ''),
+    const holding = b.carry && !fainted && !sitting && !dancing && !gesture && action !== 'Push';
+    if (b.flag) b.flag.visible = !!holding;
+    animateCharacter(b.model, fainted || sitting || (action && still) ? 0 : b.speed, t, {
+      action, carry: holding ? b.carry : false,
+      gesture: fainted || action ? '' : gesture,
       distance: dist(b, p),
     });
   }
@@ -1634,13 +1774,18 @@ function animate(t) {
     const ps = b.posture;
     animateCharacter(b.model, b.speed, t, {
       seated: ps === 'seat',
-      gesture: ps === 'charge' ? 'charge' : surge && day.police.line === day.clash?.place && ps === 'line' ? 'push' : ps === 'seat' && b.idx % 2 ? 'phone' : '',
+      // The charge: running with lathis up, then the Lathi clip where the front stops.
+      action: ps === 'charge' && b.speed < 0.6 ? 'Lathi' : surge && day.police.line === day.clash?.place && ps === 'line' && b.kind !== 'raf' ? 'Push' : '',
+      gesture: ps === 'charge' ? 'charge' : ps === 'seat' && b.idx % 2 ? 'phone' : '',
       distance: dist(b, p), talking: speakingNow(b),
     });
   }
-  for (const b of crew) if (b.model.visible) animateCharacter(b.model, b.speed, t, { carry: b.carry && !b.seated ? b.carry : false, seated: b.seated, gesture: b.seated && b.idx % 2 ? 'wave' : '', distance: dist(b, p) });
-  for (const b of provs) if (b.model.visible) animateCharacter(b.model, b.speed, t, { gesture: b.state === 'acting' ? (Math.sin(t * 2 + b.idx) > 0 ? 'point' : 'push') : b.state === 'joined' ? 'push' : '', distance: dist(b, p) });
-  for (const b of kids) if (b.model.visible) { b.model.position.y = Math.abs(Math.sin(t * 6 + b.idx)) * 0.25; animateCharacter(b.model, 0, t, { pose: true, distance: dist(b, p) }); }
+  // A crew blocking the road sits down on the tarmac (the Sit clip is a ground sit).
+  for (const b of crew) if (b.model.visible) animateCharacter(b.model, b.seated ? 0 : b.speed, t, { carry: b.carry && !b.seated ? b.carry : false, action: b.seated ? 'Sit' : '', distance: dist(b, p) });
+  for (const b of provs) if (b.model.visible) animateCharacter(b.model, b.speed, t, { action: b.speed < 0.3 && (b.state === 'acting' || b.state === 'joined') ? (Math.sin(t * 0.7 + b.idx) > 0 ? 'Chant' : 'Push') : '', distance: dist(b, p) });
+  for (const b of kids) if (b.model.visible) animateCharacter(b.model, b.speed > 0.6 ? b.speed : 0, t, { action: b.speed > 0.6 ? '' : 'Dance', distance: dist(b, p) });
+  for (const m of detainees) if (m.visible) animateCharacter(m, 0, t, { seated: true, distance: dist(m.position, p) });
+  for (const m of riders) if (m.visible) animateCharacter(m, 0, t, { seated: true, distance: dist(m.position, p) });
 }
 
 // Camera: a follow camera that never sits behind scenery. Preallocated vectors: no garbage per frame.
@@ -1655,9 +1800,16 @@ function camera(dt) {
   if (cine.update(dt)) return;
   const p = sim.player;
   if (S.detained(day)) {
-    // Looking in at the bus from the pavement.
-    camTarget.set(day.bus.x, 1.6, day.bus.z + 1);
-    camDesired.set(day.bus.x - 7.5, 3.4, day.bus.z + 5);
+    if (playerSeated) {
+      // Through the window, close: you on your seat, the others behind you, the street beyond the glass.
+      camTarget.set(playerModel.position.x + 0.2, playerModel.position.y + 0.95, playerModel.position.z + 0.3);
+      camDesired.set(shuttle.position.x - 3.6, playerModel.position.y + 1.7, playerModel.position.z + 2.6);
+    } else {
+      // Looking in at the van from the pavement.
+      const dp = R.detentionPos ? R.detentionPos(day) : day.bus;
+      camTarget.set(dp.x, 1.6, dp.z);
+      camDesired.set(dp.x - 6.5, 3.4, dp.z + 4.5);
+    }
     world.camera.position.lerp(camDesired, 1 - Math.exp(-dt * 4));
     world.camera.lookAt(camTarget);
     return;
@@ -1761,6 +1913,7 @@ function updateHUD(dt) {
   }
   // Detained card.
   $('#detained').classList.toggle('hidden', !S.detained(day));
+  $('#hud').classList.toggle('held', S.detained(day));
   // The one objective card: the nearest opportunity, with a compass arrow.
   oppT -= dt;
   const o = mode === 'play' && !cine.active ? nearestOpportunity() : null;
@@ -1911,7 +2064,7 @@ function setupInput() {
     sim.police = [];
     lighting = createLighting(world);
     props = createProps(world, { PLACES, playerObstacles });
-    playerModel = makeCharacter({ color: '#df754c', pants: '#31565a', backpack: true, gender: 'male' });
+    playerModel = makeCharacter({ variant: 'student-tee', backpack: true });
     world.scene.add(playerModel);
     phone = createPhone($('#phone'), $('#phonePill'), { clock: () => (day ? clockText(day.t) : ''), nameOf: (id) => PEOPLE[id]?.name ?? id });
     cine = createCinematic({
@@ -1925,8 +2078,8 @@ function setupInput() {
       },
     });
     day = createDay();
+    await loadOptional(); // before the people, so their flags and placards are the real models
     makePeople();
-    await loadOptional();
     resetDay();
     setupInput();
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
@@ -1938,7 +2091,8 @@ function setupInput() {
     window.__loop = {
       get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; },
       startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
-      snap: () => { crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; },
+      // After a time jump: people snap to where they now are, and lines said an hour ago stop hanging in the air.
+      snap: () => { crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; for (const b of bubbles) b.ttl = 0; },
       playScene: devPlayScene, setAudio, stings: (on) => { stingsOn = !!on; },
       view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },

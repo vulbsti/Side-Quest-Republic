@@ -4,6 +4,7 @@
 // swaps a real model in everywhere at once.
 // No per-frame allocation in the update paths: all vectors and particle buffers are preallocated.
 import * as THREE from 'three';
+import { aimVajra } from './models.js?v=1';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const v1 = new THREE.Vector3(), v2 = new THREE.Vector3(), v3 = new THREE.Vector3();
@@ -359,6 +360,21 @@ function buildAmbulance() {
   g.userData.light = light;
   return g;
 }
+/** The blue-and-white police van that holds detainees until the shuttle is commandeered at 14:00. Forward +z. */
+function buildVan() {
+  const g = new THREE.Group();
+  box(2.1, 2.0, 5.4, '#eef1f3', 0, 1.35, 0, g, 0.5);
+  box(2.12, 0.34, 5.42, '#2754a3', 0, 1.25, 0, g, 0.5);
+  box(1.9, 0.7, 0.05, '#25313a', 0, 1.95, 2.71, g, 0.15);
+  for (const side of [-1, 1]) {
+    box(0.04, 0.5, 2.8, '#25313a', side * 1.06, 1.95, -0.6, g, 0.15);
+    for (let z = -1.9; z <= 0.7; z += 0.2) box(0.03, 0.55, 0.025, '#9aa3a8', side * 1.09, 1.95, z, g);
+    const q = textPlate('DELHI POLICE', 2.6, 0.3, '#eef1f3', '#1d3d7a'); q.position.set(side * 1.07, 0.82, -0.3); q.rotation.y = side * Math.PI / 2; g.add(q);
+  }
+  box(1.0, 0.14, 0.3, '#c0392b', -0.3, 2.42, 1.9, g); box(0.6, 0.14, 0.3, '#2a6bff', 0.45, 2.42, 1.9, g);
+  for (const [x, z] of [[-1, -1.7], [1, -1.7], [-1, 1.8], [1, 1.8]]) wheel(g, x, 0.42, z, 0.42);
+  return g;
+}
 function buildChair(i) {
   const g = new THREE.Group(), c = ['#c0392b', '#2d6fa3', '#e8e2d0'][i % 3];
   box(0.46, 0.05, 0.44, c, 0, 0.45, 0, g, 0.5);
@@ -373,7 +389,7 @@ function buildCanister() {
 }
 function buildStone() { const m = new THREE.Mesh(new THREE.DodecahedronGeometry(0.09), mat('#7b746a')); m.castShadow = true; const g = new THREE.Group(); g.add(m); return g; }
 
-const BUILDERS = { vajra: buildVajra, suv: buildSUV, bike: buildBike, ambulance: buildAmbulance, chair: buildChair, canister: buildCanister, stone: buildStone, barricade: null };
+const BUILDERS = { van: buildVan, vajra: buildVajra, suv: buildSUV, bike: buildBike, ambulance: buildAmbulance, chair: buildChair, canister: buildCanister, stone: buildStone, barricade: null };
 
 // --- layouts ------------------------------------------------------------------------------------
 
@@ -421,6 +437,10 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
     for (const k of ['turret', 'nozzle', 'rider', 'flag', 'light']) {
       g.userData[k] = inner.userData?.[k] ?? inner.getObjectByName?.(k) ?? null;
     }
+    // The spray comes out of the nozzle tip: the glTF Vajra names it 'nozzleTip', the procedural one keeps it in userData.nozzle.
+    const tip = inner.getObjectByName?.('nozzleTip');
+    g.userData.tip = tip ?? inner.userData?.nozzle ?? null;
+    g.userData.aim = tip ? (yaw, pitch) => aimVajra(inner, yaw, pitch) : null;
   }
   /** Swap point for the assets workstream: replace a procedural prop with a real glTF scene. */
   function setModel(name, object3d) {
@@ -443,6 +463,7 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
   const suv = make('suv'); suv.visible = false;
   const bikes = [0, 1, 2, 3].map((i) => { const b = make('bike', i); b.visible = false; return b; });
   const ambulance = make('ambulance'); ambulance.visible = false;
+  const van = make('van'); van.visible = false;
   const chairs = Array.from({ length: 8 }, (_, i) => { const c = make('chair', i); c.visible = false; return c; });
   const canisters = [0, 1, 2].map((i) => { const c = make('canister', i); c.visible = false; return c; });
   const stone = make('stone'); stone.visible = false;
@@ -467,6 +488,7 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
       if (len <= step) { d.x = tx; d.z = tz; d.i++; step -= len; } else { d.x += (dx / len) * step; d.z += (dz / len) * step; step = 0; }
     }
     if (d.i >= d.path.length) d.moving = false;
+    d.g.userData.moving = d.moving;
     d.g.position.set(d.x, 0, d.z);
     const cur = d.g.rotation.y, diff = Math.atan2(Math.sin(d.yaw - cur), Math.cos(d.yaw - cur));
     d.g.rotation.y = cur + diff * Math.min(1, dt * 5);
@@ -528,6 +550,11 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
       });
     }
 
+    // The police van at its spot while it is the detention vehicle (before the shuttle is taken over).
+    const det = day.detention;
+    van.visible = !!det && det.vehicle === 'van' && det.x !== undefined;
+    if (van.visible) { van.position.set(det.x + 1.4, 0, det.z + 2.6); van.rotation.y = Math.PI / 2; }
+
     // The water cannon: rolls in, parks, sprays (or plays fountain for the dancing kids).
     const cn = police.cannon;
     if (cn && cn.x !== undefined) {
@@ -543,21 +570,22 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
       dance = cn.state === 'dance';
       spray = cn.state === 'spraying' || dance ? Math.min(1, spray + dt * 2) : Math.max(0, spray - dt * 2);
       // Aim at the hotspot crowd (or straight ahead), swinging slowly like a real turret.
-      const tgt = ctx.hotspotPos || ctx.player;
+      const tgt = ctx.cannonAim || ctx.hotspotPos || ctx.player;
       const turret = vajra.userData.turret;
       if (turret) {
         const want = Math.atan2(tgt.x - cannonD.x, tgt.z - cannonD.z) - vajra.rotation.y + (dance ? 0 : Math.sin(t * 0.7) * 0.25);
         sprayDir += Math.atan2(Math.sin(want - sprayDir), Math.cos(want - sprayDir)) * Math.min(1, dt * 2);
-        turret.rotation.y = sprayDir;
-        sprayPitch = dance ? 0.95 : 0.18;
+        sprayPitch += ((dance ? 0.95 : 0.18) - sprayPitch) * Math.min(1, dt * 2);
+        if (vajra.userData.aim) vajra.userData.aim(sprayDir, sprayPitch);
+        else turret.rotation.y = sprayDir;
       }
       sprayTarget.set(tgt.x, 0, tgt.z);
     } else {
       if (cannonD.shown && !cannonD.moving) { cannonD.shown = false; vajra.visible = false; cannonKey = null; }
       spray = Math.max(0, spray - dt * 2); dance = false;
     }
-    if (spray > 0.01 && vajra.userData.nozzle) {
-      const tip = vajra.userData.nozzle;
+    if (spray > 0.01 && vajra.userData.tip) {
+      const tip = vajra.userData.tip;
       tip.getWorldPosition(v1);
       // Direction: the turret's facing, pitched up.
       v2.set(0, 0, 1).applyQuaternion(tip.getWorldQuaternion(q1));
@@ -702,7 +730,7 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
     get dancing() { return spray > 0.3 && dance; },
     get cannonPos() { return cannonD.shown ? vajra.position : null; },
     get suvPos() { return suvD.shown ? suv.position : null; },
-    vehicles: { vajra, suv, bikes, ambulance },
+    vehicles: { vajra, suv, bikes, ambulance, van },
     particles: { water, smoke, dust },
   };
 }

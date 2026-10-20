@@ -2,17 +2,17 @@
 // Characters are fictional. Lines are original Hinglish.
 
 export const PEOPLE = {
-  ravi: { name: 'Ravi', role: 'sound volunteer', look: { color: '#d4b46b', pants: '#6f5e47', hat: true, gender: 'male' } },
-  iqbal: { name: 'Iqbal', role: 'shuttle driver', look: { color: '#5d7fa8', pants: '#2f3a44', gender: 'male' } },
+  ravi: { name: 'Ravi', role: 'sound volunteer', look: { variant: 'vendor', color: '#d4b46b', pants: '#6f5e47', hat: true, gender: 'male' } },
+  iqbal: { name: 'Iqbal', role: 'shuttle driver', look: { variant: 'uncle', color: '#5d7fa8', pants: '#2f3a44', gender: 'male' } },
   sharma: { name: 'Officer Sharma', role: 'constable', look: { police: true } },
-  mira: { name: 'Mira', role: 'organiser', look: { color: '#819777', pants: '#b6a080', gender: 'female' } },
-  asha: { name: 'Asha', role: 'chai seller, knows everything', look: { color: '#c9573f', pants: '#5a3c34', gender: 'female' } },
-  zoya: { name: 'Zoya', role: 'independent reporter', look: { color: '#2f4f6f', pants: '#1f2a33', gender: 'female', backpack: true } },
-  meera: { name: 'Meera', role: 'reel creator', look: { color: '#e08fb0', pants: '#3b3046', gender: 'female' } },
-  kabir: { name: 'Kabir', role: 'student, aspiring comic', look: { color: '#e3c449', pants: '#2b3a52', gender: 'male', backpack: true } },
-  nikhil: { name: 'Nikhil', role: 'first-timer, phone at 3%', look: { color: '#8fb6c9', pants: '#47505a', gender: 'male' } },
-  dev: { name: 'Dev', role: 'coalition negotiator', look: { color: '#f2efe6', pants: '#3e3a33', gender: 'male' } },
-  sana: { name: 'Sana', role: 'medical volunteer', look: { color: '#e8ecef', pants: '#4f6f6a', gender: 'female' } },
+  mira: { name: 'Mira', role: 'organiser', look: { variant: 'student-kurti', color: '#819777', pants: '#b6a080', gender: 'female' } },
+  asha: { name: 'Asha', role: 'chai seller, knows everything', look: { variant: 'aunty', color: '#c9573f', pants: '#5a3c34', gender: 'female' } },
+  zoya: { name: 'Zoya', role: 'independent reporter', look: { variant: 'student-shirt-f', color: '#2f4f6f', pants: '#1f2a33', gender: 'female', backpack: true } },
+  meera: { name: 'Meera', role: 'reel creator', look: { variant: 'student-tee-f', color: '#e08fb0', pants: '#3b3046', gender: 'female' } },
+  kabir: { name: 'Kabir', role: 'student, aspiring comic', look: { variant: 'student-kurta', color: '#e3c449', pants: '#2b3a52', gender: 'male', backpack: true } },
+  nikhil: { name: 'Nikhil', role: 'first-timer, phone at 3%', look: { variant: 'student-hoodie', color: '#8fb6c9', pants: '#47505a', gender: 'male' } },
+  dev: { name: 'Dev', role: 'coalition negotiator', look: { variant: 'student-kurta', color: '#f2efe6', pants: '#3e3a33', gender: 'male', hat: true } },
+  sana: { name: 'Sana', role: 'medical volunteer', look: { variant: 'student-tee-f', color: '#e8ecef', pants: '#4f6f6a', gender: 'female', backpack: true } },
   rao: { name: 'Inspector Rao', role: 'heard on the wireless', voice: true },
 };
 
@@ -619,7 +619,7 @@ export const INTENTS = {
   'give-water': 'Give {name} the water crate',
   drop: 'Put it down here',
   talk: 'Talk to {name}',
-  'talk-nikhil-lost': 'Help the lost kid find his friend',
+  'talk-nikhil-lost': 'Nikhil is lost, phone at 3%. Help him find Kabir',
   film: 'Film it: {what}',
   'film-bus-key': 'the bus key heist',
   'film-bus-stalled': 'the bus going nowhere',
