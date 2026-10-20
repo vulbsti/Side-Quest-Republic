@@ -686,6 +686,9 @@ function cannonFires(s) {
   if (!c) return;
   if (s.flags['cannon-requested']) {
     c.state = 'dance';
+    // The spray is a party: students run over from the biggest crowd to dance in it (and stay for the sit-in).
+    const from = biggestCrowd(s);
+    if (from !== c.place) crowdAdd(s, c.place, crowdTake(s, from, Math.min(18, Math.floor(crowdAt(s, from) * 0.35))));
     cue(s, 'cannon-dance', { place: c.place, pos: c });
     cue(s, 'crowd-laugh', { place: c.place });
     emit(s, 'cannon-dance', { link: 'cannon-dance', place: c.place, pos: c });
@@ -2309,7 +2312,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   if (pl.crew.length) {
     const front = s.police.line ? LINE_FRONT[s.police.line] : LINE_FRONT.barricade;
     if (!pl.blocking) push('block', 'block', I('crew-block'), front, null);
-    if (s.t >= at(15, 0)) push('stance', 'stance', I('stance'), pl, null, { choices: ['hold', 'scatter', 'block', 'protect'].map((st) => ({ text: I(`stance-${st}`), cmd: { type: 'stance', stance: st } })) });
+    if (s.t >= at(15, 0) && !pl.stance) push('stance', 'stance', I('stance'), pl, null, { choices: ['hold', 'scatter', 'block', 'protect'].map((st) => ({ text: I(`stance-${st}`), cmd: { type: 'stance', stance: st } })) });
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
@@ -2321,12 +2324,18 @@ export function opportunities(s, pos = s.player, radius = 10) {
   };
   for (const o of out) o.rank = score(o);
   out.sort((a, b) => a.rank - b.rank);
-  const near = out.filter((o) => o.d <= radius);
+  // "Put it down here" is always at distance 0; the HUD already says Q drops it, so it never wins the card
+  // over something real (a person to give it to, a scene, the hotspot).
+  const near = out.filter((o) => o.d <= radius && o.kind !== 'drop');
   if (near.length) return near;
+  const real = out.filter((o) => o.kind !== 'drop');
   // Nothing in reach: point at the nearest thing that is alive, so the HUD always has a card.
   const hot = s.director.hotspot;
   const go = { id: `go:${hot}`, kind: 'go', text: I('go', { place: PLACES[hot].name }), x: PLACES[hot].x, z: PLACES[hot].z, d: dist(pos, PLACES[hot]), cmd: null };
-  return [out[0] && out[0].d < go.d ? out[0] : go];
+  // From 14:00 a far-off chat with a constable is not the point any more: send the player to the hotspot
+  // unless the best thing is something rare or urgent.
+  const worth = real[0] && (s.t < at(14, 0) || (URGENT[real[0].kind] ?? 0) < 0);
+  return [worth && real[0].d < go.d ? real[0] : go];
 }
 
 /** Which talk line applies right now. */
