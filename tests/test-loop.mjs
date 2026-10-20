@@ -69,10 +69,26 @@ r = play([
 assert(r.links.has('key-returned') && r.links.has('rao-recalls'));
 assert.notEqual(r.s.ending, 'march', 'a returned key stops the chain before the march');
 
-// Taken in front of Sharma: detained, loop over early.
-r = play([[at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['sharma'] }); }]]);
-assert.equal(r.s.ending, 'detained');
-assert(r.s.t < at(12, 0));
+// Taken in front of the CP constable: he chases you. Stand there and he catches you, the key goes back,
+// and you sit out the showdown in the police van until 17:30. The day itself carries on.
+{
+  const s = createDay();
+  runUntil(s, at(11, 10));
+  moveTo(s, SPOTS.keyHook);
+  act(s, { type: 'take', object: 'key', witnesses: ['c2'] });
+  assert.equal(s.player.chasedBy, 'c2', 'a constable who sees you take the key runs at you');
+  advance(s, 30);
+  assert(s.player.detained, 'standing still gets you caught');
+  assert.equal(s.player.carrying, null);
+  assert.equal(s.objects.key.holder, 'hook', 'the police hang the key back');
+  const seen = links(drainEvents(s));
+  for (const l of ['chase', 'detained']) { assert(seen.has(l), `caught chain fires ${l}`); everSeen.add(l); }
+  runUntil(s, at(17, 31));
+  assert(!s.player.detained, 'everyone is released at 17:30');
+  advance(s, 1000);
+  assert(s.over && s.t >= at(18, 0) - 1, 'the day runs to 18:00 even after you are detained');
+  assert.equal(s.outcome.role, 'detained');
+}
 
 // Speaker party at CP: Sharma comes, switches it off, then goes back.
 r = play([
@@ -228,6 +244,68 @@ assert.equal(r.s.ending, 'roast');
 // Rao sends the line to a scuffle.
 r = play([[at(10, 10), (s) => whisper(s, 'dev', 'minister')]]);
 assert.equal(r.s.police.line, 'barricade');
+
+// --- the protest-day slice: pester, chase, crew, provocateurs -------------------------
+
+const nikhilToKabir = (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath); walkPlayer(s, { x: -3, z: -1 }); };
+const pester = (s, to, how) => { moveTo(s, s.officers[to] || s.people[to]); const r = act(s, { type: 'pester', to, how }); assert(r.ok, `pester ${to}`); return r; };
+
+// The cannon rumour told to Asha at 11:35 reaches CP during Iqbal's break; nobody boards for Jantar.
+r = play([[at(11, 35), (s) => whisper(s, 'asha', 'cannon')]]);
+assert(r.links.has('cp-refuses'));
+
+// Charm Sharma twice: he goes soft. Ask a constable for the water cannon in the morning: it becomes a dance.
+// Point a provocateur out to soft Sharma: he walks him off. At the charge Sharma lets Kabir through.
+r = play([
+  [at(10, 5), nikhilToKabir],
+  [at(10, 20), (s) => { pester(s, 'sharma', 'career'); pester(s, 'sharma', 'cute'); assert.equal(s.people.sharma.mood, 'soft'); pester(s, 'c1', 'cannon'); }],
+  [at(14, 34), (s) => {
+    const p = s.provocateurs[0], sh = s.people.sharma;
+    moveTo(s, p); Object.assign(sh, { x: p.x + 2, z: p.z }); // Sharma happens to be doing the rounds
+    assert(act(s, { type: 'provocateur', id: p.id, how: 'report', to: 'sharma' }).ok);
+    assert.equal(p.state, 'reported');
+    moveTo(s, SPOTS.metro);
+  }],
+]);
+for (const l of ['pester-soft', 'cannon-dance', 'provocateur-reported', 'sharma-lets-through']) assert(r.links.has(l), `soft Sharma chain fires ${l}`);
+assert.equal(r.s.police.charge.letThrough, 'kabir');
+assert(r.s.people.kabir.mode !== 'detained');
+
+// Pester the same constable three times: annoyed. Film it; the 17:00 repost calls it back.
+// Steal the key in front of the CP constable and lose him in the stage crowd. Spread the DRS rumour. Join a provocateur.
+r = play([
+  [at(10, 15), (s) => { pester(s, 'c1', 'career'); assert(act(s, { type: 'film' }).ok); pester(s, 'c1', 'cute'); pester(s, 'c1', 'cute'); assert.equal(s.officers.c1.mood, 'annoyed'); }],
+  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['c2'] }); for (let i = 0; i < 60; i++) { const d = dist(s.player, { x: 0, z: -5.5 }); if (d < 0.5) break; s.player.x += (0 - s.player.x) / d * 0.8; s.player.z += (-5.5 - s.player.z) / d * 0.8; advance(s, 0.1); } advance(s, 4); assert.equal(s.player.chasedBy, null); }],
+  [at(12, 5), (s) => whisper(s, 'mira', 'sena')],
+  [at(14, 34), (s) => { const p = s.provocateurs[0]; moveTo(s, p); assert(act(s, { type: 'provocateur', id: p.id, how: 'join' }).ok); }],
+]);
+for (const l of ['officer-annoyed', 'chase', 'chase-lost', 'sena-called', 'provocateur-joined', 'joined-stone', 'repost']) assert(r.links.has(l), `chaos chain fires ${l}`);
+
+// Enough aura to rally: expose the provocateur, take three students to the barricade and sit down.
+r = play([
+  [at(10, 20), (s) => { pester(s, 'sharma', 'career'); pester(s, 'sharma', 'cute'); pester(s, 'c1', 'cannon'); }],
+  [at(14, 34), (s) => {
+    const p = s.provocateurs[0]; moveTo(s, p);
+    assert(act(s, { type: 'provocateur', id: p.id, how: 'expose' }).ok);
+    moveTo(s, { x: 0, z: -5.5 }, 0);
+    assert(act(s, { type: 'rally' }).ok);
+    walkPlayer(s, { x: 36.5, z: -4.5 }); advance(s, 4);
+  }],
+]);
+for (const l of ['provocateur-exposed', 'crew-join', 'crew-block', 'sitin']) assert(r.links.has(l), `crew chain fires ${l}`);
+
+// Help people all day, then report a provocateur to the wrong cop: you're detained, and a friend gets you out.
+r = play([
+  [at(10, 5), nikhilToKabir],
+  [at(12, 15), (s) => { take(s, 'water'); give(s, 'sana'); }],
+  [at(14, 34), (s) => {
+    const p = s.provocateurs[0], c = s.officers.c4;
+    moveTo(s, p); Object.assign(c, { x: p.x + 2, z: p.z });
+    act(s, { type: 'provocateur', id: p.id, how: 'report', to: 'c4' });
+    assert(s.player.detained);
+  }],
+]);
+for (const l of ['report-wrong', 'detained', 'friend-distracts']) assert(r.links.has(l), `wrong report chain fires ${l}`);
 
 // Reader check: every rule and every link has content, and every link is reachable by some script above or by an owner.
 for (const rule of RULES) assert(LINES[rule.says], `rule ${rule.id} says something visible`);
