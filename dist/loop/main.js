@@ -1620,7 +1620,7 @@ const shotRay = new THREE.Raycaster(), _sd = new THREE.Vector3();
 function isShown(o) { for (let x = o; x; x = x.parent) if (!x.visible) return false; return true; }
 function shotClear(look, cam) {
   _sd.subVectors(cam, look); const len = _sd.length(); if (len < 1e-3) return 0;
-  shotRay.set(look, _sd.normalize()); shotRay.near = 0.28; shotRay.far = len;
+  shotRay.set(look, _sd.normalize()); shotRay.near = 0.28; shotRay.far = len; shotRay.camera = world.camera; // sprites (labels, bubbles) need it
   for (const h of shotRay.intersectObjects(world.scene.children, true)) {
     const o = h.object, m = o.material;
     if (!o.isMesh || o.isInstancedMesh && o.count === 0 || (m && (m.transparent && m.opacity < 0.6 || m.visible === false))) continue;
@@ -1695,6 +1695,9 @@ function step(dt) {
   for (const b of Object.values(bodies)) if (b.model.visible && b.id !== 'mira') sepList.push(b);
   for (const arr of [crowd, police, crew, provs]) for (const b of arr) if (b.model.visible && !b.fainted && b.posture !== 'seat') sepList.push(b);
   separateBodies(sepList, world.obstacles);
+  // Nobody stands inside the bus: when it parks on a crowd, they step out to the nearer side.
+  { const o = shuttleObstacle, hw = o.w / 2 + 0.4, hd = o.d / 2 + 0.4;
+    for (const b of sepList) if (b !== sim.player && Math.abs(b.x - o.x) < hw && Math.abs(b.z - o.z) < hd) b.x = o.x + Math.sign(b.x - o.x || 1) * (hw + 0.05); }
   for (const b of Object.values(bodies)) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   for (const arr of [crowd, police, crew, provs, kids]) for (const b of arr) if (b.model.visible) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   playerModel.position.set(sim.player.x, sim.player.y, sim.player.z);
@@ -1816,9 +1819,10 @@ function camera(dt) {
   const p = sim.player;
   if (S.detained(day)) {
     if (playerSeated) {
-      // Through the window, close: you on your seat, the others behind you, the street beyond the glass.
-      camTarget.set(playerModel.position.x + 0.3, playerModel.position.y + 0.9, playerModel.position.z + 0.6);
-      camDesired.set(shuttle.position.x - 3.2, playerModel.position.y + 1.15, playerModel.position.z + 2.4);
+      // Inside, from the aisle a couple of rows ahead: your face on the seat, the other detainees behind you.
+      const fz = Math.cos(playerModel.rotation.y);
+      camTarget.set(playerModel.position.x, playerModel.position.y + 0.82, playerModel.position.z);
+      camDesired.set(shuttle.position.x + Math.sign(shuttle.position.x - playerModel.position.x) * 0.6, playerModel.position.y + 0.95, playerModel.position.z + fz * 2.0);
     } else {
       // Looking in at the van from the pavement.
       const dp = R.detentionPos ? R.detentionPos(day) : day.bus;
