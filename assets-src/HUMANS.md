@@ -1,35 +1,62 @@
-# Anatomical human characters
+# People: Delhi protest crowd
 
-## Delivered runtime assets
+Runtime: `dist/characters.js` + `dist/assets/people/people-m.glb` (male skeleton) and `people-f.glb` (female skeleton).
+Each GLB holds one MPFB skeleton, several complete outfit variants (one skinned mesh with three materials: skin,
+cloth atlas, hair) plus a collapse-decimated `.lod1` copy of each, and 15 retargeted CMU mocap clips. Sources and
+licences: `PROVENANCE.md`. Contact sheets: `docs/screens/assets/`.
 
-`dist/characters.js` provides `await loadCharacters()`, synchronous `makeCharacter(options)` and `animateCharacter(root, speed, simulationTime, options)`. It uses the existing local Three.js and GLTFLoader. GLB meshes and texture objects are shared; each character gets an independent cloned skeleton, materials and animation mixer. No runtime network dependency.
+## Variants
 
-- `dist/assets/humans/male.glb`: anatomically modeled adult, shirt/jeans, hair, eyes, eyebrows, shoes.
-- `female.glb`: female body proportions, ponytail, short-sleeve shirt, jeans, shoes.
-- `officer.glb`: male body, khaki collared shirt and trousers. Runtime adds cap and darkens shoes. Unarmed.
-- `humans-review.jpg`: Blender render of all three, inspected after fixing arm rest-pose corrections.
+| Variant | Body | kind | Look |
+|---|---|---|---|
+| student-tee | m | civilian | oversized yellow "DELHI 6" tee, jeans, white sneakers |
+| student-hoodie | m | civilian | grey hoodie (hood roll), black joggers |
+| student-kurta | m | civilian | short block-print kurta over jeans, jhola bag |
+| uncle | m | civilian | tucked check shirt, grey trousers, belt, glasses, grey hair, moustache |
+| vendor | m | civilian | kurta-pyjama, red-white gamchha on the shoulder, moustache |
+| party-worker | m | party | white kurta-pyjama, saffron-green RUP stole |
+| sena | m | sena | black tee, saffron scarf, headband, tilak |
+| constable | m | constable | Delhi Police khaki shirt/trousers, belt, peaked cap, moustache |
+| raf | m | raf | RAF blue camouflage, belt, boots, helmet with raised visor (+ shield and lathi props at runtime) |
+| student-tee-f | f | civilian | white "NO CHILL" tee, jeans |
+| student-kurti | f | civilian | yellow block-print kurti over jeans, pink stole |
+| aunty | f | civilian | maroon salwar kameez, orange dupatta over both shoulders |
+| student-shirt-f | f | civilian | oversized green check shirt, dark jeans |
 
-Models contain roughly 27–30k triangles each, six material draws. Embedded textures have been reduced to 1024px, with JPEG opaque maps and PNG hair alpha. Assets together approximately 11MB. Thirty-one instances use approximately 850k triangles before shadows; real browser FPS remains the integrator's verification responsibility.
+LOD0 31–37k triangles, LOD1 8.6–10.3k (switch at 16 m unless `important`).
 
-`makeCharacter` accepts `gender: 'male'|'female'`, `police`, `color`, `skin`, `backpack`, `hat`. With no gender it alternates some civilians for variety. `pants` retained in signature but clothing uses a shared shirt/jeans texture and is not independently recolored. Root transform semantics stay unchanged. Module `userData` contains the mixer/bones/actions; no changes are required from the game.
+## Clips (both skeletons; natural speed m/s male / female)
 
-## Provenance and licensing
+Idle 3.2 s, Walk 1.10 s (1.27 / 1.12), Run 0.73 s (3.10 / 2.73), Talk 4.0 s, Chant 2.0 s, Film 3.2 s, Lathi 2.2 s,
+Shoved 1.6 s one-shot (travel 0.99 / 0.87 m/s backwards, removed from the clip), Duck 1.2 s one-shot, Sit 4.2 s (on the
+ground), Dance 2.2 s, Push 1.4 s, Wave 0.6 s, Jump 1.7 s one-shot, Lie 1.0 s. Walk and Run start on the same gait
+event, so one normalised phase drives both and the runtime blends them by speed.
 
-Bodies, topology, rig weights, skins, hair, eyes and clothes were created from **MakeHuman/MPFB 2.0.18** and the official **makehuman_system_assets CC0 pack**. The MPFB program is GPL, but the assets and exported models are explicitly CC0; program code is not bundled into the game. The runtime cloning and animation module is original project code.
+## Build (all steps scripted; inputs in PROVENANCE.md)
 
-Primary sources checked on 2026-10-15:
+1. `python build_people.py <out> all` (bpy 5.2 as a module, numpy/scipy/pillow): rebuilds each full body from
+   MakeHuman base.obj + targets under the shipped skin, cuts garment shells from it (exact iso-line clips of limb
+   and height fields, smoothed offsets that keep the body's weights/UVs), adds parametric parts (kurta skirts with
+   slits, dupatta/scarf/strap strips weighted to the torso only, belts, caps, helmet, moustache, glasses), paints
+   fabrics per texel from 3D position maps (denim, knit, cotton slub, checks, block print, camo), and exports
+   `people-{m,f}.raw.glb` + LOD1.
+2. `python3 clips.py <raw.glb> clips.json [preview_dir]`: numpy BVH FK, world-space delta retarget with aligned rest,
+   loop-window search (pose + hip-drift cost), gait-phase alignment, seam distribution, ground offset, IK overlays
+   (`overlays.py`), constant head-level fix.
+3. `node add_animations.mjs <raw.glb> clips.json <out.glb> 1024` (gltf-transform, meshoptimizer, sharp; run from a
+   folder with those packages installed): adds channels and clip metadata (scene extras), resamples, WebP 1024,
+   meshopt. `PREVIEW=1` keeps PNG and plain geometry so Blender can import it for pose renders.
+4. Checks: `node tests/test-assets.mjs`, `node tests/test-character-pose.mjs`, renders with `../render_sheet.py`, and
+   `node ../pose_export.mjs out.obj [--bus]` to bake what `characters.js` actually shows into OBJ for Blender.
 
-- MPFB asset/output license: https://github.com/makehumancommunity/mpfb2/blob/master/LICENSE.md
-- Source release: https://github.com/makehumancommunity/mpfb2/tree/v2.0.18
-- Official asset pack lists each system asset as CC0: https://static.makehumancommunity.org/assets/assetpacks/makehuman_system_assets.html
-- Download used: https://files.makehumancommunity.org/asset_packs/makehuman_system_assets/makehuman_system_assets_cc0.zip
+## Honest limits
 
-Used named system assets: `young_asian_male`, `young_asian_female`, `low-poly` eyes, `eyebrow001`, `short02`, `ponytail01`, `male_casualsuit02`, `female_casualsuit01`, `male_casualsuit03`, `shoes01`. Skin tint and clothing color variants are runtime art direction, not claims that models represent any particular real person or demographic.
-
-The three.js Soldier, Michelle and Samba samples were downloaded and rendered for evaluation, then **rejected**: they were sci-fi armor, a cartoon, and a robot. They are not shipped, and their geometry or animation data is not used. This avoids claiming the three.js repository MIT license covers Mixamo source assets.
-
-## Motion and limitations
-
-Six original authored skeletal animation clips are embedded: Idle, Walk, Run, Wave, Carry and Jump. They rotate an anatomically fitted Mixamo-compatible skeleton, not rigid primitive limbs. Runtime crossfades clips and adjusts gait playback speed; talking and turns add small head/spine adjustments. These are hand-authored cycles, **not motion capture**. Full hand-object IK, foot-placement IK, facial lip sync, collision-aware cloth and photoreal facial acting are not implemented. These are textured game characters with natural proportions, not photoreal digital doubles.
-
-Source build: `assets-src/create_humans.py`. Review scripts: `inspect_humans.py` (rejected candidates) and `review_humans.py` (final output). Build ran in unique remote `/tmp/sqr3d-humans` using authorized Blender on uxserver; exported model source .blend files remain there. Original photographs or third-party likenesses were not used.
+- All men share one MPFB face and all women another; variety is skin tone, hair, accessories and clothes. From
+  gameplay distance this reads as a varied crowd; in close-up dialogue it reads as siblings.
+- Clothes are offset shells, not simulated cloth: no wrinkles beyond painted shading, kurta/dupatta panels are stiff,
+  the kurti stole looks like a flat strip. The aunty's dupatta is plausible from the front, cape-like from behind.
+- Fabrics are procedural; prints and checks read well, but nothing is photo-scanned.
+- Mocap is real (CMU) but retargeted without foot IK: planted toes slip about 3–4 cm/s walking and 10–14 cm/s
+  running (measured by the pose test). The Wave and Dance loop seams are visible if you watch for them.
+- Hands are not posed per clip (except fists in Chant, phone grip in Film, palms in Push, curled grips for the
+  lathi/shield).

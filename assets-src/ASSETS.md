@@ -24,3 +24,27 @@ These are reference-informed stylizations, not surveyed reconstructions or photo
 ## Render verification
 
 `dist/assets/delhi-title.jpg` is a 1600x900 Cycles render of these exact meshes and was visually inspected: modeled columns, windows, bus features, chai kettle/cups, nested monument edges and stairs are visible. The asset showcase does not demonstrate runtime playability, animation or collision behavior. `render_establishing.py` produces a 3-second, 24fps, 960x540 camera orbit, encoded as `delhi-establishing.mp4` when complete. Saved editable scene: `delhi-assets.blend`.
+
+# Protest vehicles and props (`dist/assets/props/`)
+
+Built by `props/textures.py` (flag, placard, decal, camo textures) and `props/build_props.py <out> <tex> [names]`
+(bpy), compressed by `props/compress.mjs` (WebP + meshopt, named empty nodes kept). Loaded by `dist/loop/models.js`.
+Y-up, front +Z, origin on the ground. Sizes are from `tests/test-assets.mjs`.
+
+| File | Size W x H x L m | Hookup nodes |
+|---|---|---|
+| vajra.glb (Delhi Police water cannon, white/blue) | 2.8 x 3.7 x 8.2 | `turret` (yaw) > `nozzle` (pitch) > `nozzleTip` |
+| suv.glb (white party SUV, VIP sticker) | 2.0 x 1.9 x 4.9 | `flagMount` |
+| bike.glb (red commuter motorbike) | 0.7 x 1.3 x 1.9 | `flagMount`, `seat` |
+| shield.glb (polycarbonate riot shield) | 0.6 x 1.0 | `grip` |
+| lathi.glb (bamboo, leather grip, brass band) | 1.1 long, along +Y | `grip` |
+| helmet.glb, canister.glb (tear gas, olive) | | canister `smoke` |
+| flag-party.glb (RUP saffron-white-green, marigold), flag-sena.glb (DRS saffron swallowtail, "धर्म रक्षा सेना"), flag-opp.glb (LJM white-blue-green, ceiling fan) | pole ~2.3 m | `grip` |
+| placards.glb (8 hand-lettered chart-paper placards, Hindi and English) | | `placard0`..`placard7` |
+
+`models.js` also returns `bus`: the existing `delhi-bus.glb` as the detention bus with see-through glass, a floor,
+32 seats (benches with backs), grab rails and window grilles; `bus.userData.seats` lists seat points for seated
+characters. Honest limit: these props are clean low-poly CAD shapes with procedural decals; they read correctly
+(you can tell a Vajra from a bus at a glance) but look like good toys, not photographs; no dirt, dents or wear.
+Bike fix (2026-10-20): spokes and forks were rotated about the world origin (under the ground); `spin()` now
+rotates parts about their own centre.
