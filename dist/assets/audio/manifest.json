@@ -1,0 +1,5335 @@
+{
+ "version": 2,
+ "builtBy": "tools/audio/build.py",
+ "format": "MP3 (libmp3lame VBR): decodes with decodeAudioData in every browser including Safari/iOS; Opus would be ~25% smaller but Safari only decodes it from iOS/macOS 17 on.",
+ "loudnessTargets": {
+  "music": "-16 LUFS integrated",
+  "bed": "-20 LUFS integrated",
+  "sfx": "-20 LUFS (integrated when >= 3 s, else max momentary)"
+ },
+ "truePeakCeiling": "-1 dBFS (alimiter)",
+ "fades": "50 ms in and out for music and beds; one-shots 3 ms in (to keep the attack), 50 ms out.",
+ "listening": "No clip here has been listened to by a person or agent. Every check is ffmpeg analysis (loudness, true peak, duration, silence, spectral centroid). Listen before shipping.",
+ "synth": [
+  {
+   "id": "synth-megaphone-squeal",
+   "cue": [
+    "sena-bikes",
+    "arrival-wave",
+    "barricades-up"
+   ],
+   "placeholder": true,
+   "note": "Web Audio feedback squeal + key click for a handheld PA, made at runtime in dist/loop/audio.js. No megaphone recording was reachable."
+  },
+  {
+   "id": "synth-footsteps-run",
+   "cue": [
+    "chase-start"
+   ],
+   "placeholder": false,
+   "note": "Running footsteps sequenced at runtime from the recorded step-a/b/c samples (random pick, pitch and timing)."
+  },
+  {
+   "id": "synth-bikes-passby",
+   "cue": [
+    "sena-bikes"
+   ],
+   "placeholder": false,
+   "note": "Bike pass-by built at runtime from the recorded amb-bike-idle and bike-rev with a playback-rate (doppler) ramp."
+  }
+ ],
+ "clips": [
+  {
+   "id": "music-morning",
+   "kind": "music",
+   "file": "music/music-morning.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Monkeys Spinning Monkeys",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Monkeys Spinning Monkeys",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/monkeys-spinning-monkeys-kevin-macleod.mp3",
+     "via": "this repo (downloaded from incompetech 2026-10-16, sha256 a5bb345c...)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     100
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -18.1,
+    "gainDb": 2.1
+   },
+   "analysis": {
+    "durationSeconds": 100.049,
+    "kbps": 103,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -9.4,
+    "truePeakDbfs": -0.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 753,
+    "spectralRolloffHz": 1249,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "phase": [
+     "morning"
+    ],
+    "mood": [
+     "playful",
+     "comic"
+    ]
+   },
+   "note": "Flutes and pizzicato; the calm, silly 10:00 street.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1286453,
+   "sha256": "f1ed666a144b650929c4af2653d85bdb6e527aecb394c213ce3ff51b1c49b3ad"
+  },
+  {
+   "id": "music-midday",
+   "kind": "music",
+   "file": "music/music-midday.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Sneaky Snitch",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Sneaky Snitch",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/Vu-Van-Dai/translate_comic/e52b198e7d58186586105a0af4a61659c5fc993f/assets/music/sneaky_snitch.mp3",
+     "via": "github Vu-Van-Dai/translate_comic (320 kbps copy of the incompetech MP3)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     100
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -17.6,
+    "gainDb": 1.6
+   },
+   "analysis": {
+    "durationSeconds": 100.049,
+    "kbps": 97,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -10.5,
+    "truePeakDbfs": -0.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 555,
+    "spectralRolloffHz": 840,
+    "spectralFlatness": 0.009
+   },
+   "tags": {
+    "phase": [
+     "midday"
+    ],
+    "mood": [
+     "mischief",
+     "rising"
+    ]
+   },
+   "note": "Sneaky pizzicato and clarinet; the street filling up, schemes starting.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1213059,
+   "sha256": "e4f07e200ee3557f3d11365f2be1c793bcaf4938e3181714d0e10318eaa05fd6"
+  },
+  {
+   "id": "music-tense",
+   "kind": "music",
+   "file": "music/music-tense.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Hitman",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Hitman",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/Vu-Van-Dai/translate_comic/e52b198e7d58186586105a0af4a61659c5fc993f/assets/music/hitman.mp3",
+     "via": "github Vu-Van-Dai/translate_comic (320 kbps)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     52
+    ],
+    "seconds": [
+     84
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -12.3,
+    "gainDb": -3.7
+   },
+   "analysis": {
+    "durationSeconds": 84.036,
+    "kbps": 123,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -12.6,
+    "truePeakDbfs": -2.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1451,
+    "spectralRolloffHz": 2864,
+    "spectralFlatness": 0.034
+   },
+   "tags": {
+    "phase": [
+     "tense"
+    ],
+    "mood": [
+     "tense",
+     "dark"
+    ]
+   },
+   "note": "From the full-band entry at 0:52; skips the sparse intro so it starts tense.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1290057,
+   "sha256": "a4962412561af077737c35ef976cfe9d245af2c93c1fe26e2a313c70c2e7a4fd"
+  },
+  {
+   "id": "music-showdown",
+   "kind": "music",
+   "file": "music/music-showdown.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Five Armies",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Five%20Armies.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Five Armies",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Five%20Armies.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/MrOnlineCoder/NPAdv/ae9a4aa945441cca99b943e79dd055a549fe0e50/assets/music/five_armies.mp3",
+     "via": "github MrOnlineCoder/NPAdv (320 kbps)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     76
+    ],
+    "seconds": [
+     76
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -9.5,
+    "gainDb": -6.5
+   },
+   "analysis": {
+    "durationSeconds": 76.042,
+    "kbps": 109,
+    "integratedLufs": -15.9,
+    "maxMomentaryLufs": -12.8,
+    "truePeakDbfs": -5.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1215,
+    "spectralRolloffHz": 2261,
+    "spectralFlatness": 0.015
+   },
+   "tags": {
+    "phase": [
+     "showdown"
+    ],
+    "mood": [
+     "anthem",
+     "epic"
+    ]
+   },
+   "note": "From the 1:16 build to the climax; the showdown anthem.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1032267,
+   "sha256": "985665d11d276dbf0fb9c43cd2448d3de6bc1bdb267320426c17e99f6be97b46"
+  },
+  {
+   "id": "music-hot",
+   "kind": "music",
+   "file": "music/music-hot.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Volatile Reaction",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Volatile%20Reaction.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Volatile Reaction",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Volatile%20Reaction.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/hoveychen/skin-run/b028803ce8f9adac20b45b85fd9fbb091bcc0808/assets/audio/bgm/bgm_game.mp3",
+     "via": "github hoveychen/skin-run (256 kbps, credited there as Volatile Reaction)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     28
+    ],
+    "seconds": [
+     72
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -7.3,
+    "gainDb": -8.7
+   },
+   "analysis": {
+    "durationSeconds": 72.046,
+    "kbps": 108,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -11.8,
+    "truePeakDbfs": -6.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1217,
+    "spectralRolloffHz": 2326,
+    "spectralFlatness": 0.017
+   },
+   "tags": {
+    "phase": [
+     "tense",
+     "showdown"
+    ],
+    "mood": [
+     "aggressive",
+     "high-intensity"
+    ]
+   },
+   "note": "Aggressive brass and drums; the intensity layer the director pushes into above ~65.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 972977,
+   "sha256": "721747a5f6bbf75520a5153b1f8a6caf0485533ee30a5ecde28d182a4eddf029"
+  },
+  {
+   "id": "music-aftermath",
+   "kind": "music",
+   "file": "music/music-aftermath.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Lasting Hope",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lasting%20Hope.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Lasting Hope",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lasting%20Hope.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/Vu-Van-Dai/translate_comic/e52b198e7d58186586105a0af4a61659c5fc993f/assets/music/lasting_hope.mp3",
+     "via": "github Vu-Van-Dai/translate_comic (320 kbps)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     100
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -16.9,
+    "gainDb": 0.9
+   },
+   "analysis": {
+    "durationSeconds": 100.049,
+    "kbps": 97,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -10.9,
+    "truePeakDbfs": -1.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 411,
+    "spectralRolloffHz": 603,
+    "spectralFlatness": 0.004
+   },
+   "tags": {
+    "phase": [
+     "aftermath"
+    ],
+    "mood": [
+     "dusk",
+     "bittersweet",
+     "hope"
+    ]
+   },
+   "note": "Slow piano and strings for dusk, the detention bus and friends found or missing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1217773,
+   "sha256": "e9306565aceb50f4e93865337e58f4b9f24a75b574c8847744ffda8312a588e8"
+  },
+  {
+   "id": "music-chase",
+   "kind": "music",
+   "file": "music/music-chase.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Mistake the Getaway",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Mistake%20the%20Getaway.mp3",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Mistake the Getaway",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Mistake%20the%20Getaway.mp3",
+     "fetchedFrom": "https://raw.githubusercontent.com/MrOnlineCoder/NPAdv/ae9a4aa945441cca99b943e79dd055a549fe0e50/assets/music/getaway.mp3",
+     "via": "github MrOnlineCoder/NPAdv (320 kbps)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     66
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -13.5,
+    "gainDb": -2.5
+   },
+   "analysis": {
+    "durationSeconds": 66.038,
+    "kbps": 121,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -11.0,
+    "truePeakDbfs": -1.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2032,
+    "spectralRolloffHz": 4156,
+    "spectralFlatness": 0.039
+   },
+   "tags": {
+    "cue": [
+     "chase-start"
+    ],
+    "phase": [
+     "tense",
+     "showdown",
+     "aftermath"
+    ],
+    "mood": [
+     "chase",
+     "game-music-edit"
+    ]
+   },
+   "note": "Horn-blast getaway; cut before the 1:08 breakdown so the loop stays at full energy.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 998643,
+   "sha256": "719190dc06edcade687e8fc1cc9b66f2e5a5d077572314fc90a069cc5fbeaddf"
+  },
+  {
+   "id": "music-chase-comic",
+   "kind": "music",
+   "file": "music/music-chase-comic.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Run Amok",
+   "author": "Kevin MacLeod (incompetech.com)",
+   "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400024",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Run Amok",
+     "author": "Kevin MacLeod (incompetech.com)",
+     "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400024",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/run-amok-kevin-macleod.mp3",
+     "via": "this repo (downloaded from incompetech 2026-10-16, sha256 12ee7366...)",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     64
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -16.0,
+    "method": "integrated",
+    "measuredBefore": -16.3,
+    "gainDb": 0.3
+   },
+   "analysis": {
+    "durationSeconds": 64.026,
+    "kbps": 122,
+    "integratedLufs": -16.0,
+    "maxMomentaryLufs": -11.5,
+    "truePeakDbfs": -1.3,
+    "silenceSeconds": 0.82,
+    "spectralCentroidHz": 1597,
+    "spectralRolloffHz": 3295,
+    "spectralFlatness": 0.038
+   },
+   "tags": {
+    "cue": [
+     "chase-start",
+     "cannon-dance"
+    ],
+    "phase": [
+     "morning",
+     "midday"
+    ],
+    "mood": [
+     "chase",
+     "slapstick"
+    ]
+   },
+   "note": "Comic orchestral chase for the funny part of the day; also the cannon-dance tune.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 976702,
+   "sha256": "e6a4d245540a317c5c3fe26b887d621825c95ee18d7a95bb5337d18e9880074d"
+  },
+  {
+   "id": "amb-traffic",
+   "kind": "bed",
+   "file": "amb/amb-traffic.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Indian Street - Delhi.wav",
+   "author": "grololo",
+   "sourceUrl": "https://freesound.org/people/grololo/sounds/34864/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Indian Street - Delhi.wav",
+     "author": "grololo",
+     "sourceUrl": "https://freesound.org/people/grololo/sounds/34864/",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/delhi-street-cc0.mp3",
+     "via": "this repo (Freesound HQ preview)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     50
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -14.7,
+    "gainDb": -5.3
+   },
+   "analysis": {
+    "durationSeconds": 50.051,
+    "kbps": 58,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.7,
+    "truePeakDbfs": -10.1,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2305,
+    "spectralRolloffHz": 4479,
+    "spectralFlatness": 0.025
+   },
+   "tags": {
+    "phase": [
+     "all"
+    ],
+    "mood": [
+     "street"
+    ]
+   },
+   "note": "Downtown Delhi traffic and horns, the base layer all day.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 364031,
+   "sha256": "6049a85ce1574200885bc5224fd3fc1a80f6d3ca5cbf9da6ecb4a2f5bea0567a"
+  },
+  {
+   "id": "amb-crowd-sparse",
+   "kind": "bed",
+   "file": "amb/amb-crowd-sparse.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Delhi World Book Fair crowd (45 s excerpt)",
+   "author": "Piotrek Zyla / SoundEnsemble",
+   "sourceUrl": "https://freesound.org/people/SoundEnsemble/sounds/516660/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Delhi World Book Fair crowd (45 s excerpt)",
+     "author": "Piotrek Zyla / SoundEnsemble",
+     "sourceUrl": "https://freesound.org/people/SoundEnsemble/sounds/516660/",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/delhi-bookfair-crowd-cc0.mp3",
+     "via": "this repo (Freesound HQ preview)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     45
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -25.7,
+    "gainDb": 5.7
+   },
+   "analysis": {
+    "durationSeconds": 45.035,
+    "kbps": 106,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.9,
+    "truePeakDbfs": -3.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2091,
+    "spectralRolloffHz": 3919,
+    "spectralFlatness": 0.031
+   },
+   "tags": {
+    "crowd": [
+     "sparse"
+    ],
+    "phase": [
+     "morning"
+    ]
+   },
+   "note": "Delhi crowd with Hindi background speech; few people.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 599258,
+   "sha256": "eda405fdd5a9a660a07a6178362e270579265241cea894b6a9e99c20c5385c13"
+  },
+  {
+   "id": "amb-crowd-medium",
+   "kind": "bed",
+   "file": "amb/amb-crowd-medium.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Free Crowd Cheering Sounds: 10 Ambience",
+   "author": "Gregor Quendel",
+   "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Free Crowd Cheering Sounds: 10 Ambience",
+     "author": "Gregor Quendel",
+     "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-quendel-crowd-cheering/quendel_10_ambience.mp3",
+     "via": "github SherlockFP/JackID",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     10
+    ],
+    "seconds": [
+     23
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -16.5,
+    "gainDb": -3.5
+   },
+   "analysis": {
+    "durationSeconds": 23.04,
+    "kbps": 94,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -17.5,
+    "truePeakDbfs": -6.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2022,
+    "spectralRolloffHz": 3445,
+    "spectralFlatness": 0.023
+   },
+   "tags": {
+    "crowd": [
+     "medium"
+    ],
+    "phase": [
+     "midday",
+     "tense"
+    ]
+   },
+   "note": "Large crowd room tone, no cheering.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 270755,
+   "sha256": "0b8cdb4d38cd743f732030b1a9374864b814d42e9bc831acc762b68ba74127f8"
+  },
+  {
+   "id": "amb-crowd-dense",
+   "kind": "bed",
+   "file": "amb/amb-crowd-dense.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Crowd Shouting/Speaking Ambience",
+   "author": "StarNinjas",
+   "sourceUrl": "https://opengameart.org/content/crowd-shoutingspeaking-ambience",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crowd Shouting/Speaking Ambience",
+     "author": "StarNinjas",
+     "sourceUrl": "https://opengameart.org/content/crowd-shoutingspeaking-ambience",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-starninjas-crowd/crowd_shouting.ogg",
+     "via": "github SherlockFP/JackID (original OGG, sha256 a2c23a64...)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0.2
+    ],
+    "seconds": [
+     27
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -14.1,
+    "gainDb": -5.9
+   },
+   "analysis": {
+    "durationSeconds": 27.037,
+    "kbps": 83,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.0,
+    "truePeakDbfs": -11.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2476,
+    "spectralRolloffHz": 5297,
+    "spectralFlatness": 0.028
+   },
+   "tags": {
+    "crowd": [
+     "dense"
+    ],
+    "phase": [
+     "tense",
+     "showdown"
+    ]
+   },
+   "note": "Crowd shouting and talking over each other; reads as a protest crowd.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 280450,
+   "sha256": "340cfcb41ce4137da8b8d1b80846bee675e688c2fd52a23fd8d6cf2684c27477"
+  },
+  {
+   "id": "amb-chant",
+   "kind": "bed",
+   "file": "amb/amb-chant.mp3",
+   "loop": true,
+   "channels": 2,
+   "title": "Free Crowd Cheering Sounds: 08 Rhythmic Cheering",
+   "author": "Gregor Quendel",
+   "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Free Crowd Cheering Sounds: 08 Rhythmic Cheering",
+     "author": "Gregor Quendel",
+     "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-quendel-crowd-cheering/quendel_08_rhythmic_cheering.mp3",
+     "via": "github SherlockFP/JackID",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     4
+    ],
+    "seconds": [
+     12.5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -13.5,
+    "gainDb": -6.5
+   },
+   "analysis": {
+    "durationSeconds": 12.539,
+    "kbps": 88,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.2,
+    "truePeakDbfs": -8.5,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1837,
+    "spectralRolloffHz": 3079,
+    "spectralFlatness": 0.021
+   },
+   "tags": {
+    "cue": [
+     "arrival-wave",
+     "crew-block"
+    ],
+    "crowd": [
+     "chant"
+    ],
+    "mood": [
+     "chant"
+    ]
+   },
+   "note": "Rhythmic crowd chanting (stadium style, no words). Stand-in until Hindi protest chants come from the reels.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "Real crowd chanting, but a stadium chant, not 'Inquilab Zindabad'; replace with reel stems.",
+   "bytes": 137862,
+   "sha256": "1415e7e23dbee8d68fd3873f63978006e23d835f5dacfea3448241c3f221c905"
+  },
+  {
+   "id": "amb-night",
+   "kind": "bed",
+   "file": "amb/amb-night.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "Crickets At Night - Raw sound",
+   "author": "Defelozedd94",
+   "sourceUrl": "https://freesound.org/people/Defelozedd94/sounds/522299/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crickets At Night - Raw sound",
+     "author": "Defelozedd94",
+     "sourceUrl": "https://freesound.org/people/Defelozedd94/sounds/522299/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/amb_night.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame (10 s loop, 24 kHz)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     10
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -21.1,
+    "gainDb": 1.1
+   },
+   "analysis": {
+    "durationSeconds": 10.031,
+    "kbps": 51,
+    "integratedLufs": -19.9,
+    "maxMomentaryLufs": -16.8,
+    "truePeakDbfs": -2.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1785,
+    "spectralRolloffHz": 4393,
+    "spectralFlatness": 0.013
+   },
+   "tags": {
+    "phase": [
+     "aftermath"
+    ],
+    "mood": [
+     "dusk"
+    ]
+   },
+   "note": "Crickets at night, faint under the dusk mix.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 64424,
+   "sha256": "686b702868a280fa94ccff519f326e4b1760c634e123c8ffdc4eb20ac35389b0"
+  },
+  {
+   "id": "amb-crickets",
+   "kind": "bed",
+   "file": "amb/amb-crickets.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "barrage_of_crickets_chirping.wav",
+   "author": "ianjuby",
+   "sourceUrl": "http://www.freesound.org/people/ianjuby/sounds/134802/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "barrage_of_crickets_chirping.wav",
+     "author": "ianjuby",
+     "sourceUrl": "http://www.freesound.org/people/ianjuby/sounds/134802/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/3-134802-A-13.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -27.0,
+    "gainDb": 7.0
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 72,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.7,
+    "truePeakDbfs": -4.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 5313,
+    "spectralRolloffHz": 7106,
+    "spectralFlatness": 0.073
+   },
+   "tags": {
+    "cue": [
+     "awkward-silence"
+    ],
+    "mood": [
+     "awkward"
+    ]
+   },
+   "note": "Barrage of crickets for the awkward-silence beat.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 45522,
+   "sha256": "d1b7d4fbb025a1694e45eec45d3bef1e5d13f07d7c7dfd202c109aaef4dc2460"
+  },
+  {
+   "id": "amb-spray",
+   "kind": "bed",
+   "file": "amb/amb-spray.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "Heavy rain.wav + Water Fountain Sound",
+   "author": "reelworldstudio + Legnalegna55",
+   "sourceUrl": "http://www.freesound.org/people/reelworldstudio/sounds/161127/ + https://freesound.org/people/Legnalegna55/sounds/554789/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Heavy rain.wav",
+     "author": "reelworldstudio",
+     "sourceUrl": "http://www.freesound.org/people/reelworldstudio/sounds/161127/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/4-161127-A-10.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+     "title": "Water Fountain Sound",
+     "author": "Legnalegna55",
+     "sourceUrl": "https://freesound.org/people/Legnalegna55/sounds/554789/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/fountain_loop.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame (8 s loop, 24 kHz)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0,
+     0
+    ],
+    "seconds": [
+     5,
+     5
+    ],
+    "filters": "highpass=f=180"
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -17.5,
+    "gainDb": -2.5
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 64,
+    "integratedLufs": -19.8,
+    "maxMomentaryLufs": -17.4,
+    "truePeakDbfs": -5.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 4262,
+    "spectralRolloffHz": 8118,
+    "spectralFlatness": 0.071
+   },
+   "tags": {
+    "cue": [
+     "cannon-spray",
+     "cannon-dance"
+    ],
+    "mood": [
+     "water"
+    ]
+   },
+   "note": "Heavy rain plus a fountain jet: the water-cannon spray, positional.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "Composite of rain and fountain recordings, not a recorded water cannon.",
+   "bytes": 40375,
+   "sha256": "3a1fe581c514cc41d55fc64907fbf51b0c10525f282025e39806d9706821e32b"
+  },
+  {
+   "id": "amb-hiss",
+   "kind": "bed",
+   "file": "amb/amb-hiss.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "S10-07 Acetylene torch; light; then steady hiss.wav",
+   "author": "craigsmith",
+   "sourceUrl": "https://freesound.org/people/craigsmith/sounds/676007/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "S10-07 Acetylene torch; light; then steady hiss.wav",
+     "author": "craigsmith",
+     "sourceUrl": "https://freesound.org/people/craigsmith/sounds/676007/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/torch_loop.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame (2.4 s loop)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     2.4
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -19.4,
+    "gainDb": -0.6
+   },
+   "analysis": {
+    "durationSeconds": 2.429,
+    "kbps": 51,
+    "integratedLufs": -21.9,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -8.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1301,
+    "spectralRolloffHz": 2283,
+    "spectralFlatness": 0.007
+   },
+   "tags": {
+    "cue": [
+     "gas-fired"
+    ],
+    "mood": [
+     "gas"
+    ]
+   },
+   "note": "Steady gas hiss (an acetylene torch) for the tear-gas canister on the ground.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "A recorded gas hiss, but a torch, not a tear-gas canister.",
+   "bytes": 15439,
+   "sha256": "e7821d2853ae5e1b137eb0e07097fd374b0abff7bb3957ef0fd431f915808af5"
+  },
+  {
+   "id": "amb-bus-idle",
+   "kind": "bed",
+   "file": "amb/amb-bus-idle.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "Diesel Truck Idling Front.wav",
+   "author": "ibirdfilm",
+   "sourceUrl": "http://www.freesound.org/people/ibirdfilm/sounds/128160/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Diesel Truck Idling Front.wav",
+     "author": "ibirdfilm",
+     "sourceUrl": "http://www.freesound.org/people/ibirdfilm/sounds/128160/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/3-128160-A-44.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -33.7,
+    "gainDb": 13.7
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 65,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -19.6,
+    "truePeakDbfs": -4.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2920,
+    "spectralRolloffHz": 5857,
+    "spectralFlatness": 0.039
+   },
+   "tags": {
+    "cue": [
+     "bus"
+    ],
+    "mood": [
+     "engine"
+    ]
+   },
+   "note": "Diesel truck idling: the bus and the Vajra truck engine, positional.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 40781,
+   "sha256": "e4ce24cc957c917adbec14237bf0b55529c908f3e80d4a53fa0de5e536d8b778"
+  },
+  {
+   "id": "amb-bike-idle",
+   "kind": "bed",
+   "file": "amb/amb-bike-idle.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "Motorbike Idling.wav",
+   "author": "lmbubec",
+   "sourceUrl": "http://www.freesound.org/people/lmbubec/sounds/119455/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Motorbike Idling.wav",
+     "author": "lmbubec",
+     "sourceUrl": "http://www.freesound.org/people/lmbubec/sounds/119455/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/3-119455-A-44.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -21.8,
+    "gainDb": 1.8
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 72,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -19.7,
+    "truePeakDbfs": -6.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3673,
+    "spectralRolloffHz": 7978,
+    "spectralFlatness": 0.075
+   },
+   "tags": {
+    "cue": [
+     "sena-bikes"
+    ],
+    "mood": [
+     "engine"
+    ]
+   },
+   "note": "Motorbike idling, positional; several at different rates make the sena bikes.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 45108,
+   "sha256": "d18fa7e9d1a85b3de7cfd8d8d67c2cf83f76f0a74b2578df68aac0b5e389a7e0"
+  },
+  {
+   "id": "amb-siren",
+   "kind": "bed",
+   "file": "amb/amb-siren.mp3",
+   "loop": true,
+   "channels": 1,
+   "title": "Wail and Yelp.mp3",
+   "author": "WBJB1",
+   "sourceUrl": "https://freesound.org/people/WBJB1/sounds/223824/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Wail and Yelp.mp3",
+     "author": "WBJB1",
+     "sourceUrl": "https://freesound.org/people/WBJB1/sounds/223824/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/siren_loop.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame (6 s loop, 24 kHz)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     6
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -21.9,
+    "gainDb": 1.9
+   },
+   "analysis": {
+    "durationSeconds": 6.034,
+    "kbps": 34,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.9,
+    "truePeakDbfs": -14.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1466,
+    "spectralRolloffHz": 1421,
+    "spectralFlatness": 0.004
+   },
+   "tags": {
+    "cue": [
+     "cannon-roll",
+     "raf-arrive"
+    ],
+    "phase": [
+     "tense",
+     "showdown"
+    ]
+   },
+   "note": "Police wail-and-yelp loop, distant layer in the tense phases.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 25475,
+   "sha256": "0edf3e277f0c520ba12f2299fdd6a82bbc161da6190359d7002ae7f801e2cfd4"
+  },
+  {
+   "id": "laugh-group-a",
+   "kind": "sfx",
+   "file": "sfx/laugh-group-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "small group laugh 2.flac",
+   "author": "Corsica_S",
+   "sourceUrl": "http://www.freesound.org/people/Corsica_S/sounds/30039/",
+   "license": "CC BY 3.0",
+   "sources": [
+    {
+     "title": "small group laugh 2.flac",
+     "author": "Corsica_S",
+     "sourceUrl": "http://www.freesound.org/people/Corsica_S/sounds/30039/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/1-30039-A-26.wav",
+     "via": "ESC-50 dataset (K. Piczak), 5 s clip",
+     "license": "CC BY 3.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -16.7,
+    "gainDb": -3.3
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 70,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -14.3,
+    "truePeakDbfs": -3.1,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1798,
+    "spectralRolloffHz": 3618,
+    "spectralFlatness": 0.044
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ]
+   },
+   "note": "Small group laughing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 43865,
+   "sha256": "c3f199750b5bb8baa2f52f286bad70c473340dde02c347d7739f3ebf875b292a"
+  },
+  {
+   "id": "laugh-group-b",
+   "kind": "sfx",
+   "file": "sfx/laugh-group-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "small group laugh 6.flac",
+   "author": "Corsica_S",
+   "sourceUrl": "http://www.freesound.org/people/Corsica_S/sounds/30043/",
+   "license": "CC BY 3.0",
+   "sources": [
+    {
+     "title": "small group laugh 6.flac",
+     "author": "Corsica_S",
+     "sourceUrl": "http://www.freesound.org/people/Corsica_S/sounds/30043/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/1-30043-A-26.wav",
+     "via": "ESC-50 dataset (K. Piczak), 5 s clip",
+     "license": "CC BY 3.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -16.8,
+    "gainDb": -3.2
+   },
+   "analysis": {
+    "durationSeconds": 3.318,
+    "kbps": 67,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.6,
+    "truePeakDbfs": -3.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1652,
+    "spectralRolloffHz": 3068,
+    "spectralFlatness": 0.032
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ]
+   },
+   "note": "Small group laughing, second take.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 27835,
+   "sha256": "e50fbd26f84906a020ca6bf72f1745ef616f1875c42dd64990cc8700a6981ae6"
+  },
+  {
+   "id": "laugh-audience",
+   "kind": "sfx",
+   "file": "sfx/laugh-audience.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "small audience laughter.wav",
+   "author": "cognito perceptu",
+   "sourceUrl": "https://freesound.org/people/cognito%20perceptu/sounds/17121/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "small audience laughter.wav",
+     "author": "cognito perceptu",
+     "sourceUrl": "https://freesound.org/people/cognito%20perceptu/sounds/17121/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/17121.ogg",
+     "via": "github daetrox/void-of-voices (trimmed, levelled HQ preview)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -18.5,
+    "gainDb": -1.5
+   },
+   "analysis": {
+    "durationSeconds": 3.5,
+    "kbps": 53,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -17.4,
+    "truePeakDbfs": -5.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2115,
+    "spectralRolloffHz": 3488,
+    "spectralFlatness": 0.008
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ]
+   },
+   "note": "Small audience laughter.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 23267,
+   "sha256": "342e0eaebdb18b13e76a303a6d2872a9a0e29474c68dc53cee33ff5e1f5a1834"
+  },
+  {
+   "id": "laugh-man",
+   "kind": "sfx",
+   "file": "sfx/laugh-man.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Laughing Man",
+   "author": "scottemoil",
+   "sourceUrl": "http://www.freesound.org/people/scottemoil/sounds/263775/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Laughing Man",
+     "author": "scottemoil",
+     "sourceUrl": "http://www.freesound.org/people/scottemoil/sounds/263775/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/5-263775-A-26.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     3.5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -30.0,
+    "gainDb": 10.0
+   },
+   "analysis": {
+    "durationSeconds": 3.527,
+    "kbps": 67,
+    "integratedLufs": -20.8,
+    "maxMomentaryLufs": -12.9,
+    "truePeakDbfs": -0.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3333,
+    "spectralRolloffHz": 6288,
+    "spectralFlatness": 0.074
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ]
+   },
+   "note": "One man laughing; layered over a group laugh.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 29582,
+   "sha256": "d3c2c90dd58c589601fcdb1a22dcc09c970a4739e0c5497ef4189c7eb7946e1d"
+  },
+  {
+   "id": "chuckle",
+   "kind": "sfx",
+   "file": "sfx/chuckle.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Voices - male laughter - mild chuckles.wav",
+   "author": "jodybruchon",
+   "sourceUrl": "https://freesound.org/people/jodybruchon/sounds/459455/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Voices - male laughter - mild chuckles.wav",
+     "author": "jodybruchon",
+     "sourceUrl": "https://freesound.org/people/jodybruchon/sounds/459455/",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/mild-chuckle-cc0.mp3",
+     "via": "this repo (Freesound HQ preview)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -19.2,
+    "gainDb": -0.8
+   },
+   "analysis": {
+    "durationSeconds": 1.515,
+    "kbps": 72,
+    "integratedLufs": -22.0,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -2.1,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1902,
+    "spectralRolloffHz": 2885,
+    "spectralFlatness": 0.061
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ]
+   },
+   "note": "Mild male chuckle for small laughs.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 13638,
+   "sha256": "6872e3ffc761ed79feeee19ca3b9f7a58209bf3f9e9b0253a35168d310f25cc7"
+  },
+  {
+   "id": "gasp-a",
+   "kind": "sfx",
+   "file": "sfx/gasp-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "small crowd gasp shock surprise",
+   "author": "HowardV",
+   "sourceUrl": "https://freesound.org/people/HowardV/sounds/264376/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "small crowd gasp shock surprise",
+     "author": "HowardV",
+     "sourceUrl": "https://freesound.org/people/HowardV/sounds/264376/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/264376.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     2.6
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.6,
+    "gainDb": -1.4
+   },
+   "analysis": {
+    "durationSeconds": 2.638,
+    "kbps": 68,
+    "integratedLufs": -20.8,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -9.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1944,
+    "spectralRolloffHz": 3381,
+    "spectralFlatness": 0.022
+   },
+   "tags": {
+    "cue": [
+     "crowd-gasp",
+     "stone-thrown",
+     "faint"
+    ]
+   },
+   "note": "Small crowd gasp of surprise.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 22505,
+   "sha256": "dbda5f97887bf6039cd139d8b8d38971457f07db58ea8d555883823526756247"
+  },
+  {
+   "id": "gasp-b",
+   "kind": "sfx",
+   "file": "sfx/gasp-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Crowd gasp.wav (14 layered vocal gasps)",
+   "author": "RadioCounseling",
+   "sourceUrl": "https://freesound.org/people/RadioCounseling/sounds/635110/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crowd gasp.wav (14 layered vocal gasps)",
+     "author": "RadioCounseling",
+     "sourceUrl": "https://freesound.org/people/RadioCounseling/sounds/635110/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Psalmuel01/street-football/2ac62912e143b927604e88011f9dd1841c950d28/public/assets/audio/crowd/gasp.mp3",
+     "via": "github Psalmuel01/street-football",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -10.0,
+    "gainDb": -10.0
+   },
+   "analysis": {
+    "durationSeconds": 1.646,
+    "kbps": 57,
+    "integratedLufs": -21.6,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -9.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1796,
+    "spectralRolloffHz": 4005,
+    "spectralFlatness": 0.036
+   },
+   "tags": {
+    "cue": [
+     "crowd-gasp",
+     "gas-fired"
+    ]
+   },
+   "note": "14 layered vocal gasps.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 11804,
+   "sha256": "3e6453187ac4fa3216f18a03acd39d020b9ee3b766513b1bef50c9ab2d2a85d4"
+  },
+  {
+   "id": "ooh",
+   "kind": "sfx",
+   "file": "sfx/ooh.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Crowd Oooh.wav",
+   "author": "deleted_user_2104797",
+   "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/324890/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crowd Oooh.wav",
+     "author": "deleted_user_2104797",
+     "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/324890/",
+     "fetchedFrom": "https://raw.githubusercontent.com/danielkuperhand-cell/legacy-league/4caca9d7060b5cee647372e1a0eecc210bedfd25/rush/media/crowd/oooh-2.mp3",
+     "via": "github danielkuperhand-cell/legacy-league",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -17.7,
+    "gainDb": -2.3
+   },
+   "analysis": {
+    "durationSeconds": 2.612,
+    "kbps": 63,
+    "integratedLufs": -22.4,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -8.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1170,
+    "spectralRolloffHz": 1486,
+    "spectralFlatness": 0.017
+   },
+   "tags": {
+    "cue": [
+     "crowd-gasp",
+     "caught"
+    ]
+   },
+   "note": "Crowd 'oooh'.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 20644,
+   "sha256": "49190ebe0230ad165f4cb9608f1e2629fb470ea52eb92dc526fbd443432db1c5"
+  },
+  {
+   "id": "aww",
+   "kind": "sfx",
+   "file": "sfx/aww.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "aww.wav",
+   "author": "phmiller42",
+   "sourceUrl": "https://freesound.org/people/phmiller42/sounds/124996/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "aww.wav",
+     "author": "phmiller42",
+     "sourceUrl": "https://freesound.org/people/phmiller42/sounds/124996/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/124996.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -16.8,
+    "gainDb": -3.2
+   },
+   "analysis": {
+    "durationSeconds": 2.038,
+    "kbps": 52,
+    "integratedLufs": -23.3,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -8.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 926,
+    "spectralRolloffHz": 1270,
+    "spectralFlatness": 0.006
+   },
+   "tags": {
+    "cue": [
+     "chase-lost",
+     "awkward-silence"
+    ]
+   },
+   "note": "Crowd 'aww'.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 13229,
+   "sha256": "32fa62f30d23abd22ba7e41cc8683849049cf947226f00f3de17ac4acc071021"
+  },
+  {
+   "id": "boo",
+   "kind": "sfx",
+   "file": "sfx/boo.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Crowd Boo.wav",
+   "author": "deleted_user_2104797",
+   "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/324893/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crowd Boo.wav",
+     "author": "deleted_user_2104797",
+     "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/324893/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/324893.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     4
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -19.2,
+    "gainDb": -0.8
+   },
+   "analysis": {
+    "durationSeconds": 4.049,
+    "kbps": 71,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.3,
+    "truePeakDbfs": -5.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2159,
+    "spectralRolloffHz": 3531,
+    "spectralFlatness": 0.042
+   },
+   "tags": {
+    "cue": [
+     "party-suv",
+     "provocateur-drop"
+    ]
+   },
+   "note": "Crowd booing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 36068,
+   "sha256": "f70d7539333012e7971d249208dee9cfc14b3cb17cd9cfa9bdb89df8ac610ffc"
+  },
+  {
+   "id": "cheer-a",
+   "kind": "sfx",
+   "file": "sfx/cheer-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Crowd cheer 2.wav",
+   "author": "deleted_user_2104797",
+   "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/346689/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Crowd cheer 2.wav",
+     "author": "deleted_user_2104797",
+     "sourceUrl": "https://freesound.org/people/deleted_user_2104797/sounds/346689/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/346689.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -20.9,
+    "gainDb": 0.9
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 65,
+    "integratedLufs": -20.7,
+    "maxMomentaryLufs": -14.5,
+    "truePeakDbfs": -3.5,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1838,
+    "spectralRolloffHz": 3305,
+    "spectralFlatness": 0.041
+   },
+   "tags": {
+    "cue": [
+     "crew-join",
+     "detainees-escape",
+     "cannon-dance"
+    ]
+   },
+   "note": "Crowd cheer.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 40708,
+   "sha256": "6d8066c626b749152455b2b523f80c929df820176bcc2c0d8302d970b7600234"
+  },
+  {
+   "id": "cheer-big",
+   "kind": "sfx",
+   "file": "sfx/cheer-big.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Free Crowd Cheering Sounds: 04 Strong Cheering II (short)",
+   "author": "Gregor Quendel",
+   "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Free Crowd Cheering Sounds: 04 Strong Cheering II (short)",
+     "author": "Gregor Quendel",
+     "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-quendel-crowd-cheering/quendel_04_strong_cheering_ii_short.mp3",
+     "via": "github SherlockFP/JackID",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0.5
+    ],
+    "seconds": [
+     7
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -11.2,
+    "gainDb": -8.8
+   },
+   "analysis": {
+    "durationSeconds": 7.027,
+    "kbps": 66,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.9,
+    "truePeakDbfs": -8.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1784,
+    "spectralRolloffHz": 2853,
+    "spectralFlatness": 0.032
+   },
+   "tags": {
+    "cue": [
+     "arrival-wave",
+     "detainees-escape",
+     "charge-end"
+    ]
+   },
+   "note": "Big crowd cheer.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 57745,
+   "sha256": "b702e8c707d800ce7c5548a9bf24ac4eedd5f7e2c9b41b4f87694682f51d5722"
+  },
+  {
+   "id": "applause",
+   "kind": "sfx",
+   "file": "sfx/applause.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Small applause",
+   "author": "Breviceps",
+   "sourceUrl": "https://freesound.org/people/Breviceps/sounds/462362/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Small applause",
+     "author": "Breviceps",
+     "sourceUrl": "https://freesound.org/people/Breviceps/sounds/462362/",
+     "fetchedFrom": "repo:d55d7b4:dist/assets/audio/small-applause-cc0.mp3",
+     "via": "this repo (Freesound HQ preview)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -23.1,
+    "gainDb": 3.1
+   },
+   "analysis": {
+    "durationSeconds": 4.415,
+    "kbps": 79,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.9,
+    "truePeakDbfs": -1.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3431,
+    "spectralRolloffHz": 6546,
+    "spectralFlatness": 0.061
+   },
+   "tags": {
+    "cue": [
+     "scene-end",
+     "crew-join"
+    ]
+   },
+   "note": "About 30 people applauding.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 43353,
+   "sha256": "94b0ca49e12750ff66a40daadd475b259dcce1ea3cc67ac20a1257fab2e18748"
+  },
+  {
+   "id": "clap-cheer",
+   "kind": "sfx",
+   "file": "sfx/clap-cheer.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "cheering and clapping crowd 1",
+   "author": "AlaskaRobotics",
+   "sourceUrl": "http://www.freesound.org/people/AlaskaRobotics/sounds/221568/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "cheering and clapping crowd 1",
+     "author": "AlaskaRobotics",
+     "sourceUrl": "http://www.freesound.org/people/AlaskaRobotics/sounds/221568/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/5-221568-A-22.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -19.9,
+    "gainDb": -0.1
+   },
+   "analysis": {
+    "durationSeconds": 4.911,
+    "kbps": 70,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -14.9,
+    "truePeakDbfs": -0.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2839,
+    "spectralRolloffHz": 5997,
+    "spectralFlatness": 0.039
+   },
+   "tags": {
+    "cue": [
+     "crew-block"
+    ]
+   },
+   "note": "Cheering and clapping crowd.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 43269,
+   "sha256": "53faf4ad9b06dce3e5aa83c57613ab53bcae70b69edf0535b6286c10f44eb339"
+  },
+  {
+   "id": "scream-m",
+   "kind": "sfx",
+   "file": "sfx/scream-m.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Wounded man scream",
+   "author": "joseppujol",
+   "sourceUrl": "https://freesound.org/people/joseppujol/sounds/221544/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Wounded man scream",
+     "author": "joseppujol",
+     "sourceUrl": "https://freesound.org/people/joseppujol/sounds/221544/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/scream_m.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -12.0,
+    "gainDb": -8.0
+   },
+   "analysis": {
+    "durationSeconds": 1.228,
+    "kbps": 63,
+    "integratedLufs": -20.7,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -9.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2684,
+    "spectralRolloffHz": 4468,
+    "spectralFlatness": 0.014
+   },
+   "tags": {
+    "cue": [
+     "charge-start",
+     "gas-fired"
+    ]
+   },
+   "note": "Man screaming.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 9616,
+   "sha256": "74aba511c58ef2211d9cc11715a5af830a603ba8dea180a8cfa0b7e05e7ed1d3"
+  },
+  {
+   "id": "scream-f",
+   "kind": "sfx",
+   "file": "sfx/scream-f.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "woman scream.wav",
+   "author": "starnezio",
+   "sourceUrl": "https://freesound.org/people/starnezio/sounds/609973/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "woman scream.wav",
+     "author": "starnezio",
+     "sourceUrl": "https://freesound.org/people/starnezio/sounds/609973/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/scream_f.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -11.5,
+    "gainDb": -8.5
+   },
+   "analysis": {
+    "durationSeconds": 1.228,
+    "kbps": 63,
+    "integratedLufs": -21.1,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -10.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2260,
+    "spectralRolloffHz": 3919,
+    "spectralFlatness": 0.013
+   },
+   "tags": {
+    "cue": [
+     "charge-start",
+     "faint"
+    ]
+   },
+   "note": "Woman screaming.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 9697,
+   "sha256": "954b248b747594d424f4db2599237389d0ce0ede122bf420f4fee49feecf7100"
+  },
+  {
+   "id": "cough-a",
+   "kind": "sfx",
+   "file": "sfx/cough-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Man Coughing.wav",
+   "author": "jyoung20",
+   "sourceUrl": "http://www.freesound.org/people/jyoung20/sounds/125418/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Man Coughing.wav",
+     "author": "jyoung20",
+     "sourceUrl": "http://www.freesound.org/people/jyoung20/sounds/125418/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/3-125418-A-24.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     4
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -32.2,
+    "gainDb": 12.2
+   },
+   "analysis": {
+    "durationSeconds": 3.239,
+    "kbps": 66,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.7,
+    "truePeakDbfs": -2.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1283,
+    "spectralRolloffHz": 2153,
+    "spectralFlatness": 0.032
+   },
+   "tags": {
+    "cue": [
+     "gas-fired"
+    ]
+   },
+   "note": "Man coughing (tear gas).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 26897,
+   "sha256": "6c1f56ccebd635522ca64790d437a268de28fbd09e0e4ecd4057043e2628af35"
+  },
+  {
+   "id": "cough-b",
+   "kind": "sfx",
+   "file": "sfx/cough-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "woman cough.wav",
+   "author": "bowlingballout",
+   "sourceUrl": "http://www.freesound.org/people/bowlingballout/sounds/87412/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "woman cough.wav",
+     "author": "bowlingballout",
+     "sourceUrl": "http://www.freesound.org/people/bowlingballout/sounds/87412/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-87412-A-24.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     4
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -7.0,
+    "gainDb": -13.0
+   },
+   "analysis": {
+    "durationSeconds": 2.064,
+    "kbps": 66,
+    "integratedLufs": -22.3,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -10.1,
+    "silenceSeconds": 0.43,
+    "spectralCentroidHz": 2580,
+    "spectralRolloffHz": 4533,
+    "spectralFlatness": 0.056
+   },
+   "tags": {
+    "cue": [
+     "gas-fired"
+    ]
+   },
+   "note": "Woman coughing (tear gas).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 16991,
+   "sha256": "615864d9cb677482c9cdbd6365d02be1eeb2721db3d8aba7be0c4b0ab076f7ac"
+  },
+  {
+   "id": "whistle-police",
+   "kind": "sfx",
+   "file": "sfx/whistle-police.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "police whistle nearby good detail and echo India.flac",
+   "author": "kyles",
+   "sourceUrl": "https://freesound.org/people/kyles/sounds/451464/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "police whistle nearby good detail and echo India.flac",
+     "author": "kyles",
+     "sourceUrl": "https://freesound.org/people/kyles/sounds/451464/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/whistle.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame (their 1.5 s mono 48 kbps cut)",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -7.6,
+    "gainDb": -12.4
+   },
+   "analysis": {
+    "durationSeconds": 1.541,
+    "kbps": 60,
+    "integratedLufs": -22.6,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -14.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2130,
+    "spectralRolloffHz": 3122,
+    "spectralFlatness": 0.033
+   },
+   "tags": {
+    "cue": [
+     "chase-start",
+     "charge-start",
+     "barricades-up",
+     "caught"
+    ]
+   },
+   "note": "Police whistle recorded in India.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 11488,
+   "sha256": "3bd22e591e273e572e7de159baf82223ad6812e727cd61ed486fb27646afe93c"
+  },
+  {
+   "id": "whistle-sharp",
+   "kind": "sfx",
+   "file": "sfx/whistle-sharp.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Referee whistle blow, gymnasium.wav",
+   "author": "SpliceSound",
+   "sourceUrl": "https://freesound.org/people/SpliceSound/sounds/218318/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Referee whistle blow, gymnasium.wav",
+     "author": "SpliceSound",
+     "sourceUrl": "https://freesound.org/people/SpliceSound/sounds/218318/",
+     "fetchedFrom": "https://raw.githubusercontent.com/danielkuperhand-cell/legacy-league/4caca9d7060b5cee647372e1a0eecc210bedfd25/rush/media/arena/whistle.mp3",
+     "via": "github danielkuperhand-cell/legacy-league",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.0,
+    "gainDb": -2.0
+   },
+   "analysis": {
+    "durationSeconds": 1.176,
+    "kbps": 50,
+    "integratedLufs": -22.3,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -16.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3004,
+    "spectralRolloffHz": 2972,
+    "spectralFlatness": 0.045
+   },
+   "tags": {
+    "cue": [
+     "charge-end",
+     "raf-arrive"
+    ]
+   },
+   "note": "Sharp referee-style whistle blast; a second police whistle voice.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 7381,
+   "sha256": "c2bfba5165e46a8c1e9c86d770c458b2ed1a66f6fb01c4efd11b39dc4a7e8320"
+  },
+  {
+   "id": "siren-wail",
+   "kind": "sfx",
+   "file": "sfx/siren-wail.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "police.wav",
+   "author": "guitarguy1985",
+   "sourceUrl": "http://www.freesound.org/people/guitarguy1985/sounds/70936/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "police.wav",
+     "author": "guitarguy1985",
+     "sourceUrl": "http://www.freesound.org/people/guitarguy1985/sounds/70936/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-70936-A-42.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -8.8,
+    "gainDb": -11.2
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 62,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -17.8,
+    "truePeakDbfs": -11.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1819,
+    "spectralRolloffHz": 2929,
+    "spectralFlatness": 0.01
+   },
+   "tags": {
+    "cue": [
+     "cannon-roll",
+     "raf-arrive"
+    ]
+   },
+   "note": "Police siren wail.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 38869,
+   "sha256": "0b64f4543450e16117800b6004212646b1fdd865a7815e55e444b34a86379157"
+  },
+  {
+   "id": "siren-whelen",
+   "kind": "sfx",
+   "file": "sfx/siren-whelen.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Whelen WPS-3016 Siren.mp3",
+   "author": "2887679652",
+   "sourceUrl": "http://www.freesound.org/people/2887679652/sounds/133989/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Whelen WPS-3016 Siren.mp3",
+     "author": "2887679652",
+     "sourceUrl": "http://www.freesound.org/people/2887679652/sounds/133989/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/5-133989-A-42.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -16.4,
+    "gainDb": -3.6
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 59,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -19.4,
+    "truePeakDbfs": -10.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1556,
+    "spectralRolloffHz": 2810,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "cue": [
+     "party-suv",
+     "cannon-roll"
+    ]
+   },
+   "note": "Electronic yelp siren (VIP convoy / Vajra).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 37254,
+   "sha256": "06cca21c60c665c365e2d9c5b49fe0be937c20d53487bf2d818e8e7685e56716"
+  },
+  {
+   "id": "siren-twotone",
+   "kind": "sfx",
+   "file": "sfx/siren-twotone.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "police siren perpignan.wav",
+   "author": "thfc140491",
+   "sourceUrl": "http://www.freesound.org/people/thfc140491/sounds/90014/",
+   "license": "CC BY 3.0",
+   "sources": [
+    {
+     "title": "police siren perpignan.wav",
+     "author": "thfc140491",
+     "sourceUrl": "http://www.freesound.org/people/thfc140491/sounds/90014/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/4-90014-A-42.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC BY 3.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -28.2,
+    "gainDb": 8.2
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 69,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.8,
+    "truePeakDbfs": -7.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1396,
+    "spectralRolloffHz": 2519,
+    "spectralFlatness": 0.018
+   },
+   "tags": {
+    "cue": [
+     "ambulance"
+    ]
+   },
+   "note": "Two-tone siren for the ambulance.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 43468,
+   "sha256": "0a2964dfbde53c862780dd1a590c8e13e58046df27a0300bd54d975175138ede"
+  },
+  {
+   "id": "lathi-a",
+   "kind": "sfx",
+   "file": "sfx/lathi-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "100 CC0 metal and wood SFX: wood_hit_01",
+   "author": "rubberduck",
+   "sourceUrl": "https://opengameart.org/node/85875",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "100 CC0 metal and wood SFX: wood_hit_01",
+     "author": "rubberduck",
+     "sourceUrl": "https://opengameart.org/node/85875",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-rubberduck-metal-wood/wood_hit_01.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -24.4,
+    "gainDb": 4.4
+   },
+   "analysis": {
+    "durationSeconds": 0.287,
+    "kbps": 80,
+    "integratedLufs": -23.6,
+    "maxMomentaryLufs": -23.6,
+    "truePeakDbfs": -1.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3421,
+    "spectralRolloffHz": 6309,
+    "spectralFlatness": 0.038
+   },
+   "tags": {
+    "cue": [
+     "charge-start"
+    ]
+   },
+   "note": "Wooden stick knock: lathi strike.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 2883,
+   "sha256": "9daca964b8aaaa80307e47e7629d98353a8dcae0461c7a9d858962685e9a443f"
+  },
+  {
+   "id": "lathi-b",
+   "kind": "sfx",
+   "file": "sfx/lathi-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "100 CC0 metal and wood SFX: wood_hit_02",
+   "author": "rubberduck",
+   "sourceUrl": "https://opengameart.org/node/85875",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "100 CC0 metal and wood SFX: wood_hit_02",
+     "author": "rubberduck",
+     "sourceUrl": "https://opengameart.org/node/85875",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-rubberduck-metal-wood/wood_hit_02.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -23.8,
+    "gainDb": 3.8
+   },
+   "analysis": {
+    "durationSeconds": 0.366,
+    "kbps": 80,
+    "integratedLufs": -25.4,
+    "maxMomentaryLufs": -22.7,
+    "truePeakDbfs": -0.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 4685,
+    "spectralRolloffHz": 7364,
+    "spectralFlatness": 0.052
+   },
+   "tags": {
+    "cue": [
+     "charge-start"
+    ]
+   },
+   "note": "Wooden stick knock, second take.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 3667,
+   "sha256": "b390b3a496ee4dee8406c42d54442e529bc6432a27992fcebbff13ab54c1432f"
+  },
+  {
+   "id": "shield-thud",
+   "kind": "sfx",
+   "file": "sfx/shield-thud.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "100 CC0 metal and wood SFX: wood_slam_01 + Impact Sounds: impactPunch_heavy_002",
+   "author": "rubberduck + Kenney (kenney.nl)",
+   "sourceUrl": "https://opengameart.org/node/85875 + https://kenney.nl/assets/impact-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "100 CC0 metal and wood SFX: wood_slam_01",
+     "author": "rubberduck",
+     "sourceUrl": "https://opengameart.org/node/85875",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-rubberduck-metal-wood/wood_slam_01.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+     "title": "Impact Sounds: impactPunch_heavy_002",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/punch_2.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0,
+     0
+    ],
+    "seconds": [
+     null,
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.1,
+    "gainDb": -1.9
+   },
+   "analysis": {
+    "durationSeconds": 0.418,
+    "kbps": 66,
+    "integratedLufs": -22.7,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -1.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1033,
+    "spectralRolloffHz": 2433,
+    "spectralFlatness": 0.03
+   },
+   "tags": {
+    "cue": [
+     "charge-start",
+     "raf-arrive",
+     "crew-block"
+    ]
+   },
+   "note": "Stick on shield thump.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "Layered wood slam and body punch, not a recorded polycarbonate shield.",
+   "bytes": 3456,
+   "sha256": "d74dd4430422f287c555a9d3d9831385687dc8a5bca250cf9e3e2adb8861c05b"
+  },
+  {
+   "id": "body-thud",
+   "kind": "sfx",
+   "file": "sfx/body-thud.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Impact Sounds: impactPunch_medium_000",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Impact Sounds: impactPunch_medium_000",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/punch_0.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.3,
+    "gainDb": -1.7
+   },
+   "analysis": {
+    "durationSeconds": 0.313,
+    "kbps": 66,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -2.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 609,
+    "spectralRolloffHz": 1443,
+    "spectralFlatness": 0.017
+   },
+   "tags": {
+    "cue": [
+     "caught",
+     "faint"
+    ]
+   },
+   "note": "Body impact / someone dropping.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 2595,
+   "sha256": "7d65c43bd9a610a77923a961088bbee5fff50a52be6a941666b93bdffb026c70"
+  },
+  {
+   "id": "barricade-clang",
+   "kind": "sfx",
+   "file": "sfx/barricade-clang.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Various Sound Effects: clang_metal",
+   "author": "laleksic",
+   "sourceUrl": "https://opengameart.org/content/various-sound-effects",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Various Sound Effects: clang_metal",
+     "author": "laleksic",
+     "sourceUrl": "https://opengameart.org/content/various-sound-effects",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-laleksic-various/clang_metal.wav",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -25.2,
+    "gainDb": 5.2
+   },
+   "analysis": {
+    "durationSeconds": 0.34,
+    "kbps": 83,
+    "integratedLufs": -22.4,
+    "maxMomentaryLufs": -22.4,
+    "truePeakDbfs": -0.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 4203,
+    "spectralRolloffHz": 7257,
+    "spectralFlatness": 0.068
+   },
+   "tags": {
+    "cue": [
+     "barricades-up"
+    ]
+   },
+   "note": "Metal barricade clang.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 3509,
+   "sha256": "a3c3f922b6b87f0b4b9fd81c896f4e11c3e06bd651b1645f3514ebdc357f3bcf"
+  },
+  {
+   "id": "barricade-drop",
+   "kind": "sfx",
+   "file": "sfx/barricade-drop.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "100 CC0 metal and wood SFX: metal_falling_01",
+   "author": "rubberduck",
+   "sourceUrl": "https://opengameart.org/node/85875",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "100 CC0 metal and wood SFX: metal_falling_01",
+     "author": "rubberduck",
+     "sourceUrl": "https://opengameart.org/node/85875",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-rubberduck-metal-wood/metal_falling_01.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -14.0,
+    "gainDb": -6.0
+   },
+   "analysis": {
+    "durationSeconds": 1.515,
+    "kbps": 78,
+    "integratedLufs": -22.5,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -5.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 5018,
+    "spectralRolloffHz": 8441,
+    "spectralFlatness": 0.075
+   },
+   "tags": {
+    "cue": [
+     "barricades-up"
+    ]
+   },
+   "note": "Metal falling and clattering.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 14766,
+   "sha256": "710518144a20c2079f9a3e46d0f42d9f0c4dbc94fc6f606af2155166fff4044a"
+  },
+  {
+   "id": "stone-hit",
+   "kind": "sfx",
+   "file": "sfx/stone-hit.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "100 CC0 metal and wood SFX: metal_hit_02",
+   "author": "rubberduck",
+   "sourceUrl": "https://opengameart.org/node/85875",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "100 CC0 metal and wood SFX: metal_hit_02",
+     "author": "rubberduck",
+     "sourceUrl": "https://opengameart.org/node/85875",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-rubberduck-metal-wood/metal_hit_02.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -20.4,
+    "gainDb": 0.4
+   },
+   "analysis": {
+    "durationSeconds": 0.366,
+    "kbps": 90,
+    "integratedLufs": -23.5,
+    "maxMomentaryLufs": -20.7,
+    "truePeakDbfs": -0.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 7208,
+    "spectralRolloffHz": 9830,
+    "spectralFlatness": 0.09
+   },
+   "tags": {
+    "cue": [
+     "stone-thrown"
+    ]
+   },
+   "note": "Stone striking metal/shield.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 4109,
+   "sha256": "0101e9927746c705dcaf6720727a4cf42ff7d922b3bbc845ec5227669575b0d3"
+  },
+  {
+   "id": "bottle-smash",
+   "kind": "sfx",
+   "file": "sfx/bottle-smash.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Breaking a glass bottle",
+   "author": "dasebr",
+   "sourceUrl": "http://www.freesound.org/people/dasebr/sounds/212698/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Breaking a glass bottle",
+     "author": "dasebr",
+     "sourceUrl": "http://www.freesound.org/people/dasebr/sounds/212698/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/4-212698-A-39.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     2.5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -17.1,
+    "gainDb": -2.9
+   },
+   "analysis": {
+    "durationSeconds": 0.758,
+    "kbps": 95,
+    "integratedLufs": -23.9,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -2.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 7556,
+    "spectralRolloffHz": 12425,
+    "spectralFlatness": 0.172
+   },
+   "tags": {
+    "cue": [
+     "stone-thrown"
+    ]
+   },
+   "note": "Glass bottle breaking.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 9011,
+   "sha256": "3daa9e5092a865e76c209a69dcdad4012a224eae541e08b4690d42f0af9d9bae"
+  },
+  {
+   "id": "whoosh",
+   "kind": "sfx",
+   "file": "sfx/whoosh.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Little Whoosh 2",
+   "author": "ch_ase",
+   "sourceUrl": "https://freesound.org/people/ch_ase/sounds/423799/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Little Whoosh 2",
+     "author": "ch_ase",
+     "sourceUrl": "https://freesound.org/people/ch_ase/sounds/423799/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/423799.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     1.2
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -16.6,
+    "gainDb": -3.4
+   },
+   "analysis": {
+    "durationSeconds": 1.228,
+    "kbps": 50,
+    "integratedLufs": -22.4,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -7.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 629,
+    "spectralRolloffHz": 754,
+    "spectralFlatness": 0.006
+   },
+   "tags": {
+    "cue": [
+     "stone-thrown",
+     "clip-posted",
+     "scene-start"
+    ]
+   },
+   "note": "Little whoosh.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 7717,
+   "sha256": "c9026591dc2d6456647bc0793f4ae3343ba23c6d50970e5efd3d9cfc3f260130"
+  },
+  {
+   "id": "swing",
+   "kind": "sfx",
+   "file": "sfx/swing.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Swing Woosh",
+   "author": "Jofae",
+   "sourceUrl": "https://freesound.org/people/Jofae/sounds/389590/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Swing Woosh",
+     "author": "Jofae",
+     "sourceUrl": "https://freesound.org/people/Jofae/sounds/389590/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/swing.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -21.9,
+    "gainDb": 1.9
+   },
+   "analysis": {
+    "durationSeconds": 0.183,
+    "kbps": 87,
+    "integratedLufs": -20.8,
+    "maxMomentaryLufs": -20.7,
+    "truePeakDbfs": -0.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2387,
+    "spectralRolloffHz": 5071,
+    "spectralFlatness": 0.02
+   },
+   "tags": {
+    "cue": [
+     "charge-start",
+     "stone-thrown"
+    ]
+   },
+   "note": "Short swing woosh (lathi swing).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1998,
+   "sha256": "97370267857e696b01093bc3f4f7192fb630d79aed56db6567c1529abc6cdff6"
+  },
+  {
+   "id": "gas-pop-a",
+   "kind": "sfx",
+   "file": "sfx/gas-pop-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Fireworks - explode and fizz.wav (take A)",
+   "author": "soundmary",
+   "sourceUrl": "http://www.freesound.org/people/soundmary/sounds/117615/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Fireworks - explode and fizz.wav (take A)",
+     "author": "soundmary",
+     "sourceUrl": "http://www.freesound.org/people/soundmary/sounds/117615/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-117615-A-48.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -24.5,
+    "gainDb": 4.5
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 69,
+    "integratedLufs": -22.7,
+    "maxMomentaryLufs": -19.4,
+    "truePeakDbfs": -0.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1660,
+    "spectralRolloffHz": 3488,
+    "spectralFlatness": 0.028
+   },
+   "tags": {
+    "cue": [
+     "gas-fired"
+    ]
+   },
+   "note": "Pop and fizz (firework).",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "A firework explode-and-fizz standing in for a tear-gas launcher pop.",
+   "bytes": 43512,
+   "sha256": "1245a1559c92a111318df2524144685bb3a88b733bcffdbf495775ecf9eedfff"
+  },
+  {
+   "id": "gas-pop-b",
+   "kind": "sfx",
+   "file": "sfx/gas-pop-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Fireworks - explode and fizz.wav (take B)",
+   "author": "soundmary",
+   "sourceUrl": "http://www.freesound.org/people/soundmary/sounds/117615/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Fireworks - explode and fizz.wav (take B)",
+     "author": "soundmary",
+     "sourceUrl": "http://www.freesound.org/people/soundmary/sounds/117615/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-117615-B-48.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -26.7,
+    "gainDb": 6.7
+   },
+   "analysis": {
+    "durationSeconds": 5.016,
+    "kbps": 57,
+    "integratedLufs": -24.3,
+    "maxMomentaryLufs": -20.7,
+    "truePeakDbfs": -0.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1401,
+    "spectralRolloffHz": 2713,
+    "spectralFlatness": 0.033
+   },
+   "tags": {
+    "cue": [
+     "gas-fired"
+    ]
+   },
+   "note": "Pop and fizz, second take.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "Firework stand-in for a tear-gas launcher pop.",
+   "bytes": 36019,
+   "sha256": "eccd09b21411f7f65121af69b026e9ec68108773bbcd9af2f76daff8d94313a7"
+  },
+  {
+   "id": "boom-low",
+   "kind": "sfx",
+   "file": "sfx/boom-low.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Horror Hit Soundpack 1: very bassy 02",
+   "author": "psychhead_",
+   "sourceUrl": "https://opengameart.org/content/horror-hit-soundpack-1",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Horror Hit Soundpack 1: very bassy 02",
+     "author": "psychhead_",
+     "sourceUrl": "https://opengameart.org/content/horror-hit-soundpack-1",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-psychhead-horror-hits/very_bassy_02.wav",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     3.5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -33.8,
+    "gainDb": 13.8
+   },
+   "analysis": {
+    "durationSeconds": 3.474,
+    "kbps": 43,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.1,
+    "truePeakDbfs": -1.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 75,
+    "spectralRolloffHz": 86,
+    "spectralFlatness": 0.003
+   },
+   "tags": {
+    "cue": [
+     "gas-fired",
+     "charge-start",
+     "phase"
+    ]
+   },
+   "note": "Sub-bass hit under big moments (music hit).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 18872,
+   "sha256": "8960237035bccd9702c7de0b65072308cc2094588b8e31059652aaa683963ecd"
+  },
+  {
+   "id": "splash",
+   "kind": "sfx",
+   "file": "sfx/splash.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Water splash 1.wav",
+   "author": "Adam_N",
+   "sourceUrl": "http://www.freesound.org/people/Adam_N/sounds/164594/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Water splash 1.wav",
+     "author": "Adam_N",
+     "sourceUrl": "http://www.freesound.org/people/Adam_N/sounds/164594/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/3-164594-A-15.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     2
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -27.1,
+    "gainDb": 7.1
+   },
+   "analysis": {
+    "durationSeconds": 0.758,
+    "kbps": 106,
+    "integratedLufs": -22.3,
+    "maxMomentaryLufs": -20.9,
+    "truePeakDbfs": -0.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 4861,
+    "spectralRolloffHz": 9345,
+    "spectralFlatness": 0.133
+   },
+   "tags": {
+    "cue": [
+     "cannon-spray",
+     "cannon-dance"
+    ]
+   },
+   "note": "Water splash on people/ground.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 10083,
+   "sha256": "a1d1fcb0db750a37d94929489eed04cea5c0c6b8a68a6feedc3101440d10e799"
+  },
+  {
+   "id": "bus-horn",
+   "kind": "sfx",
+   "file": "sfx/bus-horn.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "horn.wav",
+   "author": "guitarguy1985",
+   "sourceUrl": "http://www.freesound.org/people/guitarguy1985/sounds/54086/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "horn.wav",
+     "author": "guitarguy1985",
+     "sourceUrl": "http://www.freesound.org/people/guitarguy1985/sounds/54086/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-54086-A-43.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     3
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -8.5,
+    "gainDb": -11.5
+   },
+   "analysis": {
+    "durationSeconds": 2.664,
+    "kbps": 62,
+    "integratedLufs": -22.5,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -13.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3880,
+    "spectralRolloffHz": 7321,
+    "spectralFlatness": 0.073
+   },
+   "tags": {
+    "cue": [
+     "bus"
+    ]
+   },
+   "note": "Heavy vehicle horn.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 20723,
+   "sha256": "b0a19a7796ec8da1756a8d794e76d87efc524ef9c6c50aea0b986d9760264666"
+  },
+  {
+   "id": "car-horn",
+   "kind": "sfx",
+   "file": "sfx/car-horn.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "120213_01 car horn (3).wav",
+   "author": "toiletrolltube",
+   "sourceUrl": "http://www.freesound.org/people/toiletrolltube/sounds/175846/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "120213_01 car horn (3).wav",
+     "author": "toiletrolltube",
+     "sourceUrl": "http://www.freesound.org/people/toiletrolltube/sounds/175846/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/4-175846-A-43.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     3
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -23.5,
+    "gainDb": 3.5
+   },
+   "analysis": {
+    "durationSeconds": 2.847,
+    "kbps": 65,
+    "integratedLufs": -21.9,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -10.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1200,
+    "spectralRolloffHz": 2089,
+    "spectralFlatness": 0.022
+   },
+   "tags": {
+    "cue": [
+     "party-suv"
+    ]
+   },
+   "note": "Car horn (the VIP SUV).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 23042,
+   "sha256": "4303c4cfe398018a135b905ea7839bcc96c0e91505b28de7db030d939465912f"
+  },
+  {
+   "id": "traffic-horns",
+   "kind": "sfx",
+   "file": "sfx/traffic-horns.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Shanghai Nanjing Road 20100606_02.mp3",
+   "author": "Unice.ys",
+   "sourceUrl": "http://www.freesound.org/people/Unice.ys/sounds/100648/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Shanghai Nanjing Road 20100606_02.mp3",
+     "author": "Unice.ys",
+     "sourceUrl": "http://www.freesound.org/people/Unice.ys/sounds/100648/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-100648-A-43.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -2.4,
+    "gainDb": -17.6
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 68,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.2,
+    "truePeakDbfs": -14.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3648,
+    "spectralRolloffHz": 7752,
+    "spectralFlatness": 0.103
+   },
+   "tags": {
+    "cue": [
+     "arrival-wave"
+    ]
+   },
+   "note": "Busy road honking.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 42620,
+   "sha256": "56e4dbd5a7b66962401fd9e388b98343e0190468b7c80e917d8eb0246ffe05fe"
+  },
+  {
+   "id": "bus-stall",
+   "kind": "sfx",
+   "file": "sfx/bus-stall.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "engine2_down.wav",
+   "author": "ReadeOnly",
+   "sourceUrl": "http://www.freesound.org/people/ReadeOnly/sounds/186938/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "engine2_down.wav",
+     "author": "ReadeOnly",
+     "sourceUrl": "http://www.freesound.org/people/ReadeOnly/sounds/186938/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/4-186938-A-44.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -12.0,
+    "gainDb": -8.0
+   },
+   "analysis": {
+    "durationSeconds": 2.952,
+    "kbps": 74,
+    "integratedLufs": -24.7,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -7.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2244,
+    "spectralRolloffHz": 4554,
+    "spectralFlatness": 0.068
+   },
+   "tags": {
+    "cue": [
+     "bus-stalled"
+    ]
+   },
+   "note": "Engine winding down and dying.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 27248,
+   "sha256": "e4367102b7a5d37b0d62d5d0eb0977de7c505670ccf6164164ccf5484f220ca8"
+  },
+  {
+   "id": "bus-drive",
+   "kind": "sfx",
+   "file": "sfx/bus-drive.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Diesel-drive2.wav",
+   "author": "fastson",
+   "sourceUrl": "http://www.freesound.org/people/fastson/sounds/243773/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Diesel-drive2.wav",
+     "author": "fastson",
+     "sourceUrl": "http://www.freesound.org/people/fastson/sounds/243773/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/5-243773-A-44.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -29.6,
+    "gainDb": 9.6
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 78,
+    "integratedLufs": -19.9,
+    "maxMomentaryLufs": -19.6,
+    "truePeakDbfs": -5.1,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2150,
+    "spectralRolloffHz": 4027,
+    "spectralFlatness": 0.046
+   },
+   "tags": {
+    "cue": [
+     "bus",
+     "cannon-roll"
+    ]
+   },
+   "note": "Diesel pulling away.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 49357,
+   "sha256": "7c455eec19d94b1c95550c963de3c0675f0547daf9258e435528ed51d93eb184"
+  },
+  {
+   "id": "engine-start",
+   "kind": "sfx",
+   "file": "sfx/engine-start.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Car Start",
+   "author": "snakebarney",
+   "sourceUrl": "https://freesound.org/people/snakebarney/sounds/138099/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Car Start",
+     "author": "snakebarney",
+     "sourceUrl": "https://freesound.org/people/snakebarney/sounds/138099/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/eng_start.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -14.5,
+    "gainDb": -5.5
+   },
+   "analysis": {
+    "durationSeconds": 2.456,
+    "kbps": 65,
+    "integratedLufs": -22.6,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -7.1,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3943,
+    "spectralRolloffHz": 7558,
+    "spectralFlatness": 0.024
+   },
+   "tags": {
+    "cue": [
+     "party-suv",
+     "chase-start"
+    ]
+   },
+   "note": "Car engine start.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 19843,
+   "sha256": "54447950ff84f1c1caebce153e1e549c2110ef94353b65414d269a0662d00001"
+  },
+  {
+   "id": "car-door",
+   "kind": "sfx",
+   "file": "sfx/car-door.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Car_Door_Closing_Dull_04",
+   "author": "BlondPanda",
+   "sourceUrl": "https://freesound.org/people/BlondPanda/sounds/778421/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Car_Door_Closing_Dull_04",
+     "author": "BlondPanda",
+     "sourceUrl": "https://freesound.org/people/BlondPanda/sounds/778421/",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/door_car.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.2,
+    "gainDb": -1.8
+   },
+   "analysis": {
+    "durationSeconds": 0.366,
+    "kbps": 69,
+    "integratedLufs": -22.6,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -2.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 970,
+    "spectralRolloffHz": 1960,
+    "spectralFlatness": 0.021
+   },
+   "tags": {
+    "cue": [
+     "party-suv",
+     "provocateur-drop",
+     "caught"
+    ]
+   },
+   "note": "Car door closing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 3142,
+   "sha256": "b88b472a1e69eb01a854ec36d0d54efa7ab813bbe78ba5f9be459d13f683bb32"
+  },
+  {
+   "id": "bike-rev",
+   "kind": "sfx",
+   "file": "sfx/bike-rev.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Moped Motor.wav",
+   "author": "JustinBW",
+   "sourceUrl": "http://www.freesound.org/people/JustinBW/sounds/78651/",
+   "license": "CC BY 3.0",
+   "sources": [
+    {
+     "title": "Moped Motor.wav",
+     "author": "JustinBW",
+     "sourceUrl": "http://www.freesound.org/people/JustinBW/sounds/78651/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/2-78651-A-44.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC BY 3.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -22.8,
+    "gainDb": 2.8
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 82,
+    "integratedLufs": -21.8,
+    "maxMomentaryLufs": -20.6,
+    "truePeakDbfs": -0.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2309,
+    "spectralRolloffHz": 4748,
+    "spectralFlatness": 0.066
+   },
+   "tags": {
+    "cue": [
+     "sena-bikes"
+    ]
+   },
+   "note": "Moped/motorbike revving.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 51870,
+   "sha256": "32aa2e8d655a4c6e54304fb6e64955c3b720bb7cd172958283da05c62b0fcf87"
+  },
+  {
+   "id": "step-a",
+   "kind": "sfx",
+   "file": "sfx/step-a.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Impact Sounds: footstep_concrete_000",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Impact Sounds: footstep_concrete_000",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/step_concrete_0.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -27.1,
+    "gainDb": 7.1
+   },
+   "analysis": {
+    "durationSeconds": 0.078,
+    "kbps": 124,
+    "integratedLufs": -27.1,
+    "maxMomentaryLufs": -27.1,
+    "truePeakDbfs": -1.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 484,
+    "spectralRolloffHz": 463,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "cue": [
+     "footsteps"
+    ]
+   },
+   "note": "Footstep on concrete.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1218,
+   "sha256": "e62ad8cc9f6ad6116b5a1824431837bb8bfb256312e76534cc98c8cbe0b25b86"
+  },
+  {
+   "id": "step-b",
+   "kind": "sfx",
+   "file": "sfx/step-b.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Impact Sounds: footstep_concrete_001",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Impact Sounds: footstep_concrete_001",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/step_concrete_1.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -28.5,
+    "gainDb": 8.5
+   },
+   "analysis": {
+    "durationSeconds": 0.104,
+    "kbps": 109,
+    "integratedLufs": -28.0,
+    "maxMomentaryLufs": -28.0,
+    "truePeakDbfs": -1.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1418,
+    "spectralRolloffHz": 3295,
+    "spectralFlatness": 0.038
+   },
+   "tags": {
+    "cue": [
+     "footsteps"
+    ]
+   },
+   "note": "Footstep on concrete.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1426,
+   "sha256": "40113bf823e1aa17b066d0b82100acaabfe1c44e7c10ae792c93b00247a372f7"
+  },
+  {
+   "id": "step-c",
+   "kind": "sfx",
+   "file": "sfx/step-c.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Impact Sounds: footstep_concrete_002",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Impact Sounds: footstep_concrete_002",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/step_concrete_2.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -28.5,
+    "gainDb": 8.5
+   },
+   "analysis": {
+    "durationSeconds": 0.104,
+    "kbps": 109,
+    "integratedLufs": -27.9,
+    "maxMomentaryLufs": -27.9,
+    "truePeakDbfs": -1.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1394,
+    "spectralRolloffHz": 3122,
+    "spectralFlatness": 0.037
+   },
+   "tags": {
+    "cue": [
+     "footsteps"
+    ]
+   },
+   "note": "Footstep on concrete.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 1426,
+   "sha256": "1f9309457d427321d91e3ae699758146a45f06d8e225d2dc18532dbe119cf871"
+  },
+  {
+   "id": "walk-pavement",
+   "kind": "sfx",
+   "file": "sfx/walk-pavement.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Walking on pavement.wav",
+   "author": "JohnsonBrandEditing",
+   "sourceUrl": "http://www.freesound.org/people/JohnsonBrandEditing/sounds/244310/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Walking on pavement.wav",
+     "author": "JohnsonBrandEditing",
+     "sourceUrl": "http://www.freesound.org/people/JohnsonBrandEditing/sounds/244310/",
+     "fetchedFrom": "https://raw.githubusercontent.com/karolpiczak/ESC-50/master/audio/5-244310-A-25.wav",
+     "via": "ESC-50 dataset",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -30.4,
+    "gainDb": 10.4
+   },
+   "analysis": {
+    "durationSeconds": 5.042,
+    "kbps": 90,
+    "integratedLufs": -21.1,
+    "maxMomentaryLufs": -18.0,
+    "truePeakDbfs": -0.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3206,
+    "spectralRolloffHz": 7515,
+    "spectralFlatness": 0.067
+   },
+   "tags": {
+    "cue": [
+     "raf-arrive"
+    ]
+   },
+   "note": "Walking on pavement (boots arriving).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 56907,
+   "sha256": "f763fb48e3e5a33df4d353d64e2214327d2f3c978f2b75c808f77b86cc4bda57"
+  },
+  {
+   "id": "phone-ding",
+   "kind": "sfx",
+   "file": "sfx/phone-ding.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Interface Sounds: confirmation_002",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Interface Sounds: confirmation_002",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/ui_ding.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -12.7,
+    "gainDb": -7.3
+   },
+   "analysis": {
+    "durationSeconds": 0.549,
+    "kbps": 50,
+    "integratedLufs": -22.4,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -8.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2655,
+    "spectralRolloffHz": 3424,
+    "spectralFlatness": 0.007
+   },
+   "tags": {
+    "cue": [
+     "clip-posted",
+     "phone"
+    ]
+   },
+   "note": "Notification ding.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 3454,
+   "sha256": "3b5120a9f08ba0f5e661211500f0a8960b8ee829029964cb81a83790b40416cc"
+  },
+  {
+   "id": "phone-blip",
+   "kind": "sfx",
+   "file": "sfx/phone-blip.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "202 More Sound Effects: phone1",
+   "author": "OwlishMedia",
+   "sourceUrl": "https://opengameart.org/content/202-more-sound-effects",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "202 More Sound Effects: phone1",
+     "author": "OwlishMedia",
+     "sourceUrl": "https://opengameart.org/content/202-more-sound-effects",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-owlish-more-sfx/phone1.wav",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -35.8,
+    "gainDb": 15.8
+   },
+   "analysis": {
+    "durationSeconds": 1.176,
+    "kbps": 75,
+    "integratedLufs": -21.9,
+    "maxMomentaryLufs": -20.4,
+    "truePeakDbfs": -0.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2363,
+    "spectralRolloffHz": 5685,
+    "spectralFlatness": 0.062
+   },
+   "tags": {
+    "cue": [
+     "phone"
+    ]
+   },
+   "note": "Phone notification blip (chat message).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 11004,
+   "sha256": "90ac3e1b52116c69a28c10343446c65701ebb78bb335b49a685910f845375250"
+  },
+  {
+   "id": "ringtone",
+   "kind": "sfx",
+   "file": "sfx/ringtone.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Modern Ringtone [Chirptone]",
+   "author": "Zane Little Music",
+   "sourceUrl": "https://opengameart.org/content/modern-ringtone-chirptone",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Modern Ringtone [Chirptone]",
+     "author": "Zane Little Music",
+     "sourceUrl": "https://opengameart.org/content/modern-ringtone-chirptone",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-chirptone-ringtone/chirptone.wav",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -19.2,
+    "gainDb": -0.8
+   },
+   "analysis": {
+    "durationSeconds": 2.09,
+    "kbps": 76,
+    "integratedLufs": -23.3,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -5.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 5140,
+    "spectralRolloffHz": 8570,
+    "spectralFlatness": 0.108
+   },
+   "tags": {
+    "cue": [
+     "phone",
+     "scene-start"
+    ]
+   },
+   "note": "Modern chirpy ringtone (Kabir's mummy calling).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 19946,
+   "sha256": "0e2d9b6ca65b0a5764785548e85d634b6835edf7b08f09a0e588fbf7370cc84c"
+  },
+  {
+   "id": "phone-ring",
+   "kind": "sfx",
+   "file": "sfx/phone-ring.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Phone Ringing Sound.wav",
+   "author": "fspera",
+   "sourceUrl": "https://freesound.org/people/fspera/sounds/528111/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Phone Ringing Sound.wav",
+     "author": "fspera",
+     "sourceUrl": "https://freesound.org/people/fspera/sounds/528111/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/528111.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -21.8,
+    "gainDb": 1.8
+   },
+   "analysis": {
+    "durationSeconds": 3.814,
+    "kbps": 56,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.0,
+    "truePeakDbfs": -13.0,
+    "silenceSeconds": 1.39,
+    "spectralCentroidHz": 1603,
+    "spectralRolloffHz": 1744,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "cue": [
+     "phone"
+    ]
+   },
+   "note": "Classic phone ringing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 26503,
+   "sha256": "4650734654c00ab1330c495b4e7d76b49cfd6033473c9851332a6d5e40fe3ebb"
+  },
+  {
+   "id": "megaphone-chant",
+   "kind": "sfx",
+   "file": "sfx/megaphone-chant.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Free Crowd Cheering Sounds: 08 Rhythmic Cheering",
+   "author": "Gregor Quendel",
+   "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+   "license": "CC BY 4.0",
+   "sources": [
+    {
+     "title": "Free Crowd Cheering Sounds: 08 Rhythmic Cheering",
+     "author": "Gregor Quendel",
+     "sourceUrl": "https://opengameart.org/content/free-crowd-cheering-sounds",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-quendel-crowd-cheering/quendel_08_rhythmic_cheering.mp3",
+     "via": "github SherlockFP/JackID",
+     "license": "CC BY 4.0",
+     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     6
+    ],
+    "seconds": [
+     6
+    ],
+    "filters": "highpass=f=550,lowpass=f=3300,acrusher=bits=9:mix=0.35,aecho=0.7:0.5:38:0.35,volume=4dB"
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -17.3,
+    "gainDb": -2.7
+   },
+   "analysis": {
+    "durationSeconds": 6.087,
+    "kbps": 63,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.2,
+    "truePeakDbfs": -5.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1438,
+    "spectralRolloffHz": 2239,
+    "spectralFlatness": 0.008
+   },
+   "tags": {
+    "cue": [
+     "sena-bikes",
+     "arrival-wave"
+    ]
+   },
+   "note": "Crowd chant squeezed through a megaphone-style band-pass and crunch.",
+   "placeholder": true,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "placeholderReason": "No megaphone recording was reachable; a crowd chant processed to sound like a handheld PA. Replace with reel megaphone audio.",
+   "bytes": 47786,
+   "sha256": "c7b1155940561030f650f606667605b26c9066d1efa4158b92be51d33c49fb29"
+  },
+  {
+   "id": "sting-sad-trombone",
+   "kind": "sfx",
+   "file": "sfx/sting-sad-trombone.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "wah wah sad trombone.wav",
+   "author": "kirbydx",
+   "sourceUrl": "https://freesound.org/people/kirbydx/sounds/175409/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "wah wah sad trombone.wav",
+     "author": "kirbydx",
+     "sourceUrl": "https://freesound.org/people/kirbydx/sounds/175409/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/175409.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -20.0,
+    "gainDb": 0.0
+   },
+   "analysis": {
+    "durationSeconds": 4.754,
+    "kbps": 54,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -16.2,
+    "truePeakDbfs": -6.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1255,
+    "spectralRolloffHz": 1443,
+    "spectralFlatness": 0.015
+   },
+   "tags": {
+    "cue": [
+     "chase-lost",
+     "awkward-silence"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Wah-wah sad trombone.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 32004,
+   "sha256": "70afb5ef491fc0ff9c06c21895d8f5eac4337d804af78f3563245d085006e2f1"
+  },
+  {
+   "id": "sting-rimshot",
+   "kind": "sfx",
+   "file": "sfx/sting-rimshot.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Rimshot Joke Funny",
+   "author": "deleted_user_7146007",
+   "sourceUrl": "https://freesound.org/people/deleted_user_7146007/sounds/383898/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Rimshot Joke Funny",
+     "author": "deleted_user_7146007",
+     "sourceUrl": "https://freesound.org/people/deleted_user_7146007/sounds/383898/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/383898.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -17.8,
+    "gainDb": -2.2
+   },
+   "analysis": {
+    "durationSeconds": 3.657,
+    "kbps": 61,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -15.1,
+    "truePeakDbfs": -6.6,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 3996,
+    "spectralRolloffHz": 6783,
+    "spectralFlatness": 0.044
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Ba-dum-tss.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 28002,
+   "sha256": "58a6b38c8147ec9b2ae333b9535e753152e9e33937e732eae322fd18a536a920"
+  },
+  {
+   "id": "sting-scratch",
+   "kind": "sfx",
+   "file": "sfx/sting-scratch.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "record_scratch.wav",
+   "author": "ludvique",
+   "sourceUrl": "https://freesound.org/people/ludvique/sounds/71853/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "record_scratch.wav",
+     "author": "ludvique",
+     "sourceUrl": "https://freesound.org/people/ludvique/sounds/71853/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/71853.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -20.6,
+    "gainDb": 0.6
+   },
+   "analysis": {
+    "durationSeconds": 0.496,
+    "kbps": 78,
+    "integratedLufs": -21.4,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -7.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1884,
+    "spectralRolloffHz": 3101,
+    "spectralFlatness": 0.033
+   },
+   "tags": {
+    "cue": [
+     "awkward-silence"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Record scratch: the music-cut moment.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 4812,
+   "sha256": "8e1573aa4ac77c9ad1decb5fdf4a375e570c9066b01110d9c2f9cbb59b23e4df"
+  },
+  {
+   "id": "sting-airhorn",
+   "kind": "sfx",
+   "file": "sfx/sting-airhorn.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Industrial Air Horn",
+   "author": "mcpable",
+   "sourceUrl": "https://freesound.org/people/mcpable/sounds/131930/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Industrial Air Horn",
+     "author": "mcpable",
+     "sourceUrl": "https://freesound.org/people/mcpable/sounds/131930/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/131930.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.9,
+    "gainDb": -1.1
+   },
+   "analysis": {
+    "durationSeconds": 1.881,
+    "kbps": 70,
+    "integratedLufs": -20.7,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -9.3,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2895,
+    "spectralRolloffHz": 6008,
+    "spectralFlatness": 0.045
+   },
+   "tags": {
+    "cue": [
+     "clip-posted",
+     "detainees-escape"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Air horn.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 16395,
+   "sha256": "793967549a4ab595c30b69fd9333e2423d0abb858a19e58dcb30d976b2fb037e"
+  },
+  {
+   "id": "sting-boing",
+   "kind": "sfx",
+   "file": "sfx/sting-boing.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "SpringBoing.wav",
+   "author": "Slanted",
+   "sourceUrl": "https://freesound.org/people/Slanted/sounds/510496/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "SpringBoing.wav",
+     "author": "Slanted",
+     "sourceUrl": "https://freesound.org/people/Slanted/sounds/510496/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/510496.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -16.1,
+    "gainDb": -3.9
+   },
+   "analysis": {
+    "durationSeconds": 2.873,
+    "kbps": 73,
+    "integratedLufs": -23.7,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -7.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 4759,
+    "spectralRolloffHz": 9130,
+    "spectralFlatness": 0.132
+   },
+   "tags": {
+    "cue": [
+     "crowd-laugh"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Spring boing.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 26382,
+   "sha256": "b25dee7ceb6be9ef2bcd45fa4592d0ad4e0e5cf57f36bd92ac180b4ad640f65e"
+  },
+  {
+   "id": "sting-slide",
+   "kind": "sfx",
+   "file": "sfx/sting-slide.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "SLIDE WHISTLE - 1",
+   "author": "SamuelGremaud",
+   "sourceUrl": "https://freesound.org/people/SamuelGremaud/sounds/517633/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "SLIDE WHISTLE - 1",
+     "author": "SamuelGremaud",
+     "sourceUrl": "https://freesound.org/people/SamuelGremaud/sounds/517633/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/517633.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     2.5
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -16.5,
+    "gainDb": -3.5
+   },
+   "analysis": {
+    "durationSeconds": 1.985,
+    "kbps": 64,
+    "integratedLufs": -24.4,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -12.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1814,
+    "spectralRolloffHz": 3079,
+    "spectralFlatness": 0.029
+   },
+   "tags": {
+    "cue": [
+     "chase-lost"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Slide whistle.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 15861,
+   "sha256": "7fde42b2fced9c104f7a7223653c902b230192d1807d8c5bcef374a20c643a4e"
+  },
+  {
+   "id": "sting-dramatic",
+   "kind": "sfx",
+   "file": "sfx/sting-dramatic.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "5 Super Dramatic Stings",
+   "author": "SoundsExciting",
+   "sourceUrl": "https://freesound.org/people/SoundsExciting/sounds/213101/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "5 Super Dramatic Stings",
+     "author": "SoundsExciting",
+     "sourceUrl": "https://freesound.org/people/SoundsExciting/sounds/213101/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/213101.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.2,
+    "gainDb": -1.8
+   },
+   "analysis": {
+    "durationSeconds": 2.926,
+    "kbps": 53,
+    "integratedLufs": -23.3,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -11.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1383,
+    "spectralRolloffHz": 1680,
+    "spectralFlatness": 0.049
+   },
+   "tags": {
+    "cue": [
+     "provocateur-drop",
+     "scene-start"
+    ],
+    "mood": [
+     "meme",
+     "dramatic"
+    ]
+   },
+   "note": "Super dramatic sting (dun dun dunnn).",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 19528,
+   "sha256": "0ef5ade7de8ceb55a562595794f24dc9601ba2d6c602c93e33555a7f0d2f2d81"
+  },
+  {
+   "id": "sting-fanfare",
+   "kind": "sfx",
+   "file": "sfx/sting-fanfare.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "fasching fanfare - Karnevals Tusch [Tataa] (long)",
+   "author": "Audeption",
+   "sourceUrl": "https://freesound.org/people/Audeption/sounds/418526/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "fasching fanfare - Karnevals Tusch [Tataa] (long)",
+     "author": "Audeption",
+     "sourceUrl": "https://freesound.org/people/Audeption/sounds/418526/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/418526.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     3
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "integrated",
+    "measuredBefore": -20.4,
+    "gainDb": 0.4
+   },
+   "analysis": {
+    "durationSeconds": 3.03,
+    "kbps": 73,
+    "integratedLufs": -20.0,
+    "maxMomentaryLufs": -18.6,
+    "truePeakDbfs": -7.9,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 2723,
+    "spectralRolloffHz": 6869,
+    "spectralFlatness": 0.06
+   },
+   "tags": {
+    "cue": [
+     "crew-join"
+    ],
+    "mood": [
+     "meme"
+    ]
+   },
+   "note": "Carnival 'ta-daa' fanfare.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 27569,
+   "sha256": "48dddb99f714a490794008edb534f5b6a6789596e2391eabd0229492aa74c237"
+  },
+  {
+   "id": "sting-win",
+   "kind": "sfx",
+   "file": "sfx/sting-win.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Win Jingle",
+   "author": "Fupi",
+   "sourceUrl": "https://opengameart.org/content/win-jingle",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Win Jingle",
+     "author": "Fupi",
+     "sourceUrl": "https://opengameart.org/content/win-jingle",
+     "fetchedFrom": "https://raw.githubusercontent.com/SherlockFP/JackID/be774356065b1497433b3a36a7075bef20f6dd57/public/assets/vendor/sfx-oga-wins/win_jingle_fupi.ogg",
+     "via": "github SherlockFP/JackID",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -18.5,
+    "gainDb": -1.5
+   },
+   "analysis": {
+    "durationSeconds": 2.22,
+    "kbps": 53,
+    "integratedLufs": -22.2,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -8.5,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 463,
+    "spectralRolloffHz": 711,
+    "spectralFlatness": 0.005
+   },
+   "tags": {
+    "cue": [
+     "detainees-escape",
+     "scene-end"
+    ]
+   },
+   "note": "Rising win jingle.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 14737,
+   "sha256": "5ace276eb82c212a8d5bf65f21ec7a980e42fde74b05fc0222d14a9760d82d0e"
+  },
+  {
+   "id": "jingle-start",
+   "kind": "sfx",
+   "file": "sfx/jingle-start.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Music Jingles: jingles_SAX03",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/music-jingles",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Music Jingles: jingles_SAX03",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/music-jingles",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/jg_start.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -13.8,
+    "gainDb": -6.2
+   },
+   "analysis": {
+    "durationSeconds": 1.045,
+    "kbps": 58,
+    "integratedLufs": -20.8,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -10.8,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1099,
+    "spectralRolloffHz": 1604,
+    "spectralFlatness": 0.009
+   },
+   "tags": {
+    "cue": [
+     "scene-start"
+    ]
+   },
+   "note": "Sax jingle.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 7562,
+   "sha256": "73081d68cd7ff26c8019c9f184916099b940d990c8256bfb10d51f2937d391b6"
+  },
+  {
+   "id": "jingle-pass",
+   "kind": "sfx",
+   "file": "sfx/jingle-pass.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Music Jingles: jingles_SAX00",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/music-jingles",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Music Jingles: jingles_SAX00",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/music-jingles",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/jg_pass.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -11.7,
+    "gainDb": -8.3
+   },
+   "analysis": {
+    "durationSeconds": 0.366,
+    "kbps": 70,
+    "integratedLufs": -22.3,
+    "maxMomentaryLufs": -20.1,
+    "truePeakDbfs": -9.2,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1336,
+    "spectralRolloffHz": 2132,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "cue": [
+     "chase-lost",
+     "crew-join"
+    ]
+   },
+   "note": "Short sax 'got away' jingle.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 3194,
+   "sha256": "598ddab7fd4f0eb3f942ed8059f2b2a8f2764988ba4c62294b2e22234796f576"
+  },
+  {
+   "id": "jingle-fail",
+   "kind": "sfx",
+   "file": "sfx/jingle-fail.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Music Jingles: jingles_SAX10",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/music-jingles",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Music Jingles: jingles_SAX10",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/music-jingles",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/jg_fail.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -13.8,
+    "gainDb": -6.2
+   },
+   "analysis": {
+    "durationSeconds": 0.601,
+    "kbps": 63,
+    "integratedLufs": -20.3,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -10.4,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1429,
+    "spectralRolloffHz": 2046,
+    "spectralFlatness": 0.011
+   },
+   "tags": {
+    "cue": [
+     "caught"
+    ]
+   },
+   "note": "Short sax 'fail' jingle.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 4753,
+   "sha256": "482fc1fb48add1296a4f4ce141c1f6cbfd0e450fb366e221ebc336bf1bdc5c36"
+  },
+  {
+   "id": "jingle-hit",
+   "kind": "sfx",
+   "file": "sfx/jingle-hit.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "Music Jingles: jingles_HIT05",
+   "author": "Kenney (kenney.nl)",
+   "sourceUrl": "https://kenney.nl/assets/music-jingles",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "Music Jingles: jingles_HIT05",
+     "author": "Kenney (kenney.nl)",
+     "sourceUrl": "https://kenney.nl/assets/music-jingles",
+     "fetchedFrom": "https://raw.githubusercontent.com/Dhruv-Mishra/VoxelGame/89fa46497a4899c42330bbcb14940e1afe872626/assets/sfx/jg_spot.mp3",
+     "via": "github Dhruv-Mishra/VoxelGame",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -14.5,
+    "gainDb": -5.5
+   },
+   "analysis": {
+    "durationSeconds": 0.653,
+    "kbps": 64,
+    "integratedLufs": -20.3,
+    "maxMomentaryLufs": -19.9,
+    "truePeakDbfs": -8.7,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 1985,
+    "spectralRolloffHz": 4027,
+    "spectralFlatness": 0.01
+   },
+   "tags": {
+    "cue": [
+     "chase-start",
+     "phase"
+    ]
+   },
+   "note": "Music hit for 'you've been spotted' and phase changes.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 5222,
+   "sha256": "b1665d9e7c0a5402346e647ec889c68cc7cde4991d8748b70f00ead355e51a4a"
+  },
+  {
+   "id": "cricket-chirp",
+   "kind": "sfx",
+   "file": "sfx/cricket-chirp.mp3",
+   "loop": false,
+   "channels": 1,
+   "title": "cricket chirping (slow)",
+   "author": "_sinny_",
+   "sourceUrl": "https://freesound.org/people/_sinny_/sounds/822935/",
+   "license": "CC0 1.0",
+   "sources": [
+    {
+     "title": "cricket chirping (slow)",
+     "author": "_sinny_",
+     "sourceUrl": "https://freesound.org/people/_sinny_/sounds/822935/",
+     "fetchedFrom": "https://raw.githubusercontent.com/daetrox/void-of-voices/b00629e359482a043950be8ca9bcc544bf9d1da6/sounds/freesound/822935.ogg",
+     "via": "github daetrox/void-of-voices",
+     "license": "CC0 1.0",
+     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+   ],
+   "cut": {
+    "from": [
+     0
+    ],
+    "seconds": [
+     null
+    ],
+    "filters": null
+   },
+   "loudness": {
+    "target": -20.0,
+    "method": "max-momentary",
+    "measuredBefore": -15.0,
+    "gainDb": -5.0
+   },
+   "analysis": {
+    "durationSeconds": 2.9,
+    "kbps": 118,
+    "integratedLufs": -22.5,
+    "maxMomentaryLufs": -20.0,
+    "truePeakDbfs": -8.0,
+    "silenceSeconds": 0,
+    "spectralCentroidHz": 9133,
+    "spectralRolloffHz": 10810,
+    "spectralFlatness": 0.082
+   },
+   "tags": {
+    "cue": [
+     "awkward-silence"
+    ],
+    "mood": [
+     "meme",
+     "awkward"
+    ]
+   },
+   "note": "The lone meme cricket.",
+   "placeholder": false,
+   "verifiedBy": "ffmpeg analysis only (not listened to)",
+   "bytes": 42788,
+   "sha256": "77180b0f795dd55c716c6210afefb8214e490b61c0c8483807832c8fbc26b241"
+  }
+ ]
+}
