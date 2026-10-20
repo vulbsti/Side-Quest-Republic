@@ -774,6 +774,8 @@ function handleEvents() {
     const kind = e.kind && e.kind !== 'line' ? e.kind : ({ wireless: 'wireless', feed: 'feed', stream: 'stream', chat: 'chat', ticker: 'ticker' }[e.who] ?? e.kind ?? null);
     const onPhone = kind === 'wireless' || kind === 'feed' || kind === 'stream' || kind === 'chat' || kind === 'ticker';
     const heard = onPhone || near || here || (bodies[e.who] && dist(sim.player, bodies[e.who]) < 26);
+    // After a time skip the queue holds lines said long ago; only the phone keeps a history.
+    if (!onPhone && day.t - e.t > 8) { if (e.link && heard) learnLink(e.link); continue; }
     if (kind === 'wireless') radio(e.text);
     else if (kind === 'feed') phone.feed({ caption: e.text.replace(/^[^:]{0,40}: /, ''), by: e.by || 'jantar.updates', kind: e.key || 'forward', place: e.place && PLACES[e.place]?.name });
     else if (kind === 'stream') { streamText = e.text.replace(/^Zoya Live: |^Zoya: /, ''); phone.live({ on: day.stream.live, text: streamText, viewers: day.stream.viewers }); }

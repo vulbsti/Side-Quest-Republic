@@ -2311,7 +2311,16 @@ export function opportunities(s, pos = s.player, radius = 10) {
     if (!pl.blocking) push('block', 'block', I('crew-block'), front, null);
     if (s.t >= at(15, 0)) push('stance', 'stance', I('stance'), pl, null, { choices: ['hold', 'scatter', 'block', 'protect'].map((st) => ({ text: I(`stance-${st}`), cmd: { type: 'stance', stance: st } })) });
   }
-  out.sort((a, b) => a.d - b.d);
+  // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
+  // and push down people you have already worked on so the card keeps suggesting something new.
+  const URGENT = { scene: -6, 'scene-choice': -20, chase: -20, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const score = (o) => {
+    let d = o.d + (URGENT[o.kind] ?? 0);
+    if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
+    return d;
+  };
+  for (const o of out) o.rank = score(o);
+  out.sort((a, b) => a.rank - b.rank);
   const near = out.filter((o) => o.d <= radius);
   if (near.length) return near;
   // Nothing in reach: point at the nearest thing that is alive, so the HUD always has a card.
