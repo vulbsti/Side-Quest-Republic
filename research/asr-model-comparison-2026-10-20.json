@@ -1,0 +1,63 @@
+{
+ "date": "2026-10-20",
+ "machine": "uxserver RTX 2070 Max-Q 8 GB, torch 2.7.1+cu126, transformers 5.20.2, faster-whisper 1.2.1",
+ "input": "Demucs htdemucs_ft vocal stem, 16 kHz mono. Fixed 28 s windows for HF models; faster-whisper uses its own Silero VAD.",
+ "reels": {
+  "DbNVvp1pU9l": "peeinghuman 'Dalli police se ek zaroori sawaal', 119.7 s, street Q&A with police over crowd noise",
+  "Deb-onNvjCw": "smitasharmajournalist x peeinghuman CP interview, 96.4 s, fast conversational Hinglish",
+  "DeU2JR_zqYq": "peeinghuman 'Dosti > detention', 30 s, music bed; no model found usable speech (not a speech reel)"
+ },
+ "not_tested": {
+  "Sarvam Saaras v3 / Saarika": "API only (no open weights on HF as of 2026-10-20); needs an API key from the owner",
+  "ai4bharat/indic-conformer-600m-multilingual": "gated on HF; needs the owner to accept terms and an HF token"
+ },
+ "results": {
+  "Trelis/whisper-hinglish-preview (mixedcode)": {
+   "verdict": "WINNER",
+   "seconds_119s_reel": 64.9,
+   "notes": "Hinglish as people write it: Devanagari Hindi with English words in Latin (sir, request, rules, photo, own up, screenshot). Key lines correct. Without n-gram blocking it is best; with no_repeat_ngram_size=5 it respells real repeats, so production uses none.",
+   "sample": [
+    "sir जी एक सवाल बूझ सकता हूँ एक सावल भूज सकता वो cube है cube है क्यों क्यूँ क्युँ मैं मेरे को किसी ने पीछे से लाठी मारी थी मैं loon डराऊंगी किसने मारी है आपने तो नहीं मारीं थी अच्छा आप ने भी नी मारि थी हाँ दो दिन ही मेरेको भी तीन minute पहली �",
+    "तो ये नया जो protest site के तौर पर develop हो रहा है ये सबदर्जन का flyover यहाँ पर हमारी मुलाकात रमित भाई सुही आपको याद होगा पिछला वाला जो आंदोलन था जंतर मंतर वाल और लाठी पड़ी थी survey और फिर news laundry के अनमोहल प्रीतम महतोर ने बोला था इनके sir से blood न"
+   ]
+  },
+  "Systran/faster-whisper-large-v3 (hi)": {
+   "verdict": "usable on clean speech only",
+   "seconds_119s_reel": 94.8,
+   "notes": "All Devanagari incl. English words; garbles noisy stretches and hallucinates 'सब्सक्राइब'. VAD drops quiet lines.",
+   "sample": [
+    "अगर मैंने उनके फोटो निकाल दिया तो आप मेरी मदद करेंगे ना उनको पकड़वाने में",
+    "ठीक है ठीक है मैं निकलवाता हूँ सब फोटो की मेरा वीडियो तो है उसमें पॉज करके मैं स्क्रीन शॉट जरूर निकालूँगा",
+    "आप तो अच्छे लोग लग रहे हैं, आपने नहीं मारी होगी"
+   ]
+  },
+  "Systran/faster-whisper-large-v3 (en)": {
+   "verdict": "gloss only",
+   "seconds_119s_reel": 24.6,
+   "notes": "Translates to English instead of transcribing; useful as a quick meaning check, not verbatim.",
+   "sample": [
+    "Sir, can I ask you a question?",
+    "Can I ask you a question?",
+    "Why?",
+    "Why? Why? Why? Why?"
+   ]
+  },
+  "shunyalabs/zero-stt-hinglish": {
+   "verdict": "second opinion",
+   "seconds_119s_reel": 41.4,
+   "notes": "Gets the gist, misspells (पीचे, रखर्श), spells English in Devanagari, loops without n-gram blocking. Used greedy as the disagreement check.",
+   "sample": [
+    "सर्जी एक सवाल बूच सकता हूँ क्यो बै क्यों बै कियों कियो क्यो कियो मैं मेरे को किसीने पीचे से लाटि मारी थी मैं लून रहूँगी किसने बारिता है आपने तो नहीं बादी थी और अच्छा आप ने भी नहीद बी बाणि थी तो दो दिन बाई आई भी भी बी �"
+   ]
+  },
+  "vasista22/whisper-hindi-large-v2": {
+   "verdict": "reject",
+   "seconds_119s_reel": 83.8,
+   "notes": "Hallucinates an unrelated COVID news sentence on 3 of 4 noisy windows ('शून्य प्रदेश में कोरोना संक्रमण...').",
+   "sample": [
+    "शून्य प्रदेश में कोरोना संक्रमण से स्वस्थ होने वालों की संख्या लगातार बढ़ती जा रही है"
+   ]
+  }
+ },
+ "production": "scripts/reels/transcribe.py: Silero VAD utterances (<=10 s merges) -> Trelis mixedcode beam 5 (primary) + Shunya greedy (second); status agree/disagree/low is a triage flag, human_checked=false until the owner listens."
+}
