@@ -8,7 +8,8 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=6';
+import * as R from './rules.js?v=7';
+import { createRecorder, replayTick } from './trace.js?v=2';
 import { PEOPLE, TALK, AGAIN, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=7';
 import { createLighting } from './lighting.js?v=1';
 import {
@@ -18,11 +19,15 @@ import {
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 
-const { createDay, tick, act, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
+const { createDay, tick, talkState, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
 const QS = new URLSearchParams(location.search);
 const LONG = QS.has('long'), DEV = QS.has('dev');
 const STEP = 0.1;
+// Every loop is recorded as a trace (dist/loop/trace.js): ?dev and K saves it, ?replay=<url> plays one back.
+let rec = null, replaying = null, paused = false;
+const REPLAY_SPEED = Math.max(1, Number(QS.get('speed')) || 1); // ?replay=...&speed=30 for verify/conformance
+function act(s, cmd) { if (!replaying) rec?.act(cmd); return R.act(s, cmd); }
 const CROWD_POOL = 52, CONSTABLES = 8, RAF_POOL = 10, CREW_POOL = 8, PROV_POOL = 3, KIDS = 6, DETAINEES = 10;
 // Crowd bodies per group: each group wears its own outfits (characters.js variants), so pools are per kind.
 const CROWD_KINDS = { students: 36, party: 12, sena: 10, opp: 8 };
@@ -792,12 +797,9 @@ function updateItems(t) {
 }
 
 let honked = false, blockedFor = 0;
+/** The engine stops the shuttle for a player in its lane (busLane in rules.js); this is only the honk. */
 function busWaits() {
-  const b = day.bus, p = sim.player;
-  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
-  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
-  const ahead = (p.z - b.z) * dir;
-  b.blocked = moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8 && !S.detained(day);
+  const b = day.bus;
   if (b.blocked && !honked) toast('Poooon! Iqbal honks and waits for you to get out of the way.', 3);
   blockedFor = b.blocked ? blockedFor + STEP : 0;
   if (blockedFor >= 10) { blockedFor = 0; toast('Iqbal leans out: "Bhai, side ho jao! Poora schedule tumhare peeche ruka hai."', 4); }
@@ -1117,15 +1119,12 @@ function realReels(ph) {
 
 // --- player actions ---------------------------------------------------------
 
+/** Who sees you: the engine's rule (R.witnesses), with the 3D world's walls as the sight-line check. */
 function witnesses() {
-  const out = [];
-  const ranges = { sharma: 14, iqbal: 9, ravi: 9, zoya: 8, dev: 8 };
-  for (const [id, r] of Object.entries(ranges)) {
-    const b = bodies[id];
-    if (!day.people[id].hidden && dist(b, sim.player) < r && visible(b, sim.player, world.obstacles)) out.push(id);
-  }
-  for (const b of police) if (b.model.visible && b.oid && dist(b, sim.player) < 12 && visible(b, sim.player, world.obstacles)) out.push(b.oid);
-  return out;
+  return R.witnesses(day, sim.player, (id) => {
+    const b = bodies[id] || officerById.get(id);
+    return !!b && b.model?.visible !== false && visible(b, sim.player, world.obstacles);
+  });
 }
 const PICKUP = { speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone', phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate' };
 const OWNER = { speaker: 'ravi', key: 'iqbal', megaphone: 'dev', phone: 'zoya', water: 'sana' };
@@ -1331,6 +1330,8 @@ function localOpportunity() {
 
 function resetDay() {
   day = createDay();
+  rec = createRecorder(day, { long: LONG, loop: memory.loops, knownRumours: knownRumours() });
+  if (replaying) replaying.k = 0;
   loopLinks = new Set();
   sim.player.x = SPOTS.metro.x; sim.player.z = SPOTS.metro.z; sim.player.y = 0;
   sim.player.vx = sim.player.vz = 0;
@@ -1638,17 +1639,24 @@ function step(dt) {
   const fast = keys.t && !cine.active ? 8 : 1;
   // The engine asks the client whether the chaser can still see you (walls, buses, kiosks).
   const chaser = S.chasedBy(day);
-  if (day.player) {
-    const cb = chaser ? officerById.get(chaser) || bodies[chaser] : null;
-    day.player.unseen = !!(cb && cb.model?.visible !== false && !visible(cb, sim.player, world.obstacles));
-  }
-  accumulator += dt * fast;
+  const cb = chaser ? officerById.get(chaser) || bodies[chaser] : null;
+  const unseen = !!(cb && cb.model?.visible !== false && !visible(cb, sim.player, world.obstacles));
+  accumulator += paused ? 0 : dt * fast * (replaying ? REPLAY_SPEED : 1);
   while (accumulator >= STEP) {
     accumulator -= STEP;
-    day.player.x = sim.player.x;
-    day.player.z = sim.player.z;
-    busWaits();
+    // The only per-tick inputs the engine takes from the client (verify/ traces record these).
+    if (replaying) {
+      const st = replaying.byK.get(replaying.k++);
+      replayTick(day, st, R);
+      if (st?.in) { sim.player.x = st.in.x; sim.player.z = st.in.z; }
+    } else {
+      const inp = { x: sim.player.x, z: sim.player.z, unseen };
+      R.setInputs(day, inp);
+      rec?.inputs(inp);
+    }
     tick(day, STEP);
+    rec?.tick();
+    busWaits();
     const ph = S.phase(day);
     if (ph !== phaseNow) onPhase(ph);
     handleEvents();
@@ -1996,6 +2004,8 @@ function frame(now) {
 
 function press(k) {
   if (mode !== 'play') return;
+  if (DEV && k === 'k') { saveTrace(); return; }
+  if (replaying) return; // the trace is playing; the keyboard only watches
   if (cine.mode === 'sting') { cine.skip(); return; }
   if (cine.mode === 'scene') { if (k === ' ' || k === 'enter' || k === 'e') cine.next(); return; }
   if (k === 'e' && prompt) prompt.run();
@@ -2004,6 +2014,20 @@ function press(k) {
   if (k === 'f') film();
   if (k === 'r') rally();
   if (k === 'c') openStance();
+}
+function saveTrace() {
+  const t = rec.trace({ savedAt: new Date().toISOString(), clock: R.clockText(day.t), ending: day.ending });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(t)], { type: 'application/json' }));
+  a.download = `sqr-trace-${t.meta.clock.replace(':', '')}.json`;
+  a.click();
+  toast('Trace saved. Put it in verify/traces/ to make it a check.', 3);
+}
+/** ?replay=<url>: play a recorded or verify/-generated trace through the real game. */
+async function loadReplay(url) {
+  const t = await (await fetch(url)).json();
+  if (t.tempo) R.setTempo(t.tempo);
+  replaying = { trace: t, byK: new Map(t.steps.map((st) => [st.k, st])), k: 0 };
 }
 function setupInput() {
   addEventListener('keydown', (e) => {
@@ -2019,7 +2043,7 @@ function setupInput() {
     if (e.repeat) return;
     if (phone.isOpen && /^[1-3]$/.test(k) && !choices) { phone.setTab(['chat', 'feed', 'ticker'][Number(k) - 1]); return; }
     if (choices && /^[1-9]$/.test(k)) { choose(Number(k) - 1); return; }
-    keys[k] = true;
+    if (!replaying) keys[k] = true; // a replay owns the player's movement
     press(k);
   });
   addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
@@ -2101,7 +2125,7 @@ function setupInput() {
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
     $('#loading').classList.add('hidden');
     if (DEV) $('#dev').classList.remove('hidden');
-    showTitle();
+    if (QS.get('replay')) { await loadReplay(QS.get('replay')); startLoop(); } else showTitle();
     requestAnimationFrame(frame);
     // For debugging and automated browser checks.
     window.__loop = {
@@ -2113,6 +2137,18 @@ function setupInput() {
       view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },
       showEnding,
+      // verify/ conformance: the trace so far, and whether a replay is driving the day.
+      trace: () => rec?.trace(), get replaying() { return replaying ? { k: replaying.k, ticks: replaying.trace.ticks } : null },
+      pause: (on = true) => { paused = !!on; },
+      /** Where the engine says everyone is, and where they are drawn. */
+      render: () => ({
+        clock: R.clockText(day.t), over: day.over, ending: day.ending,
+        people: Object.entries(day.people).filter(([, p]) => !p.hidden).map(([id, p]) => ({ id, ex: p.x, ez: p.z, rx: bodies[id]?.x, rz: bodies[id]?.z, shown: !!bodies[id] && isShown(bodies[id].model) })),
+        officers: Object.values(day.officers).filter((o) => !o.hidden).map((o) => { const b = officerById.get(o.id); return { id: o.id, ex: o.x, ez: o.z, rx: b?.x, rz: b?.z, shown: !!b && isShown(b.model) }; }),
+        player: { ex: day.player.x, ez: day.player.z, rx: sim.player.x, rz: sim.player.z },
+      }),
+      /** The static obstacles, in verify/world-obstacles.json's format (the moving shuttle excluded). */
+      obstacles: () => world.obstacles.filter((o) => o.id !== 'shuttle').map((o) => ({ id: o.id ?? null, x: +o.x.toFixed(3), z: +o.z.toFixed(3), w: +o.w.toFixed(3), d: +o.d.toFixed(3), h: +(o.h ?? 0).toFixed(3), base: +(o.base ?? 0).toFixed(3), walkable: o.walkable ?? null })),
     };
   } catch (e) {
     console.error(e);

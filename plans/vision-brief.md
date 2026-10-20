@@ -559,6 +559,8 @@ Real research first. Don't write dialogue or pick music until the reel catalogue
 
 Honest reports. Say what was verified by playing and what wasn't.
 
+Verify, then claim. Before saying a change works, run `npm run verify` and quote its diff: coverage before and after (endings, rules, board links the player can learn), intended routes, and any failed property with its replayable trace. Changes to anything drawn also run `npm run verify:browser`, which replays every ending's witness day in the real game and saves the storyboard frames that "Judge by playing" asks for. A green verify is necessary, not sufficient: it proves what can happen, not that it's fun. See `verify/README.md` and the generated `verify/map.md`.
+
 ## Build plan for agents
 Build one small, complete, fun slice of the day first, prove it by playing, then widen it. Five workstreams run in parallel. Each has one owner agent, and a lead agent integrates and plays the build.
  | 

@@ -1,0 +1,7850 @@
+{
+ "version": 1,
+ "at": "2026-10-20T21:43:37.576Z",
+ "coverage": {
+  "ending": [
+   "cpjam",
+   "ghost",
+   "heat",
+   "march",
+   "noshow",
+   "packed",
+   "quiet",
+   "roast",
+   "scuffle",
+   "singalong",
+   "viral"
+  ],
+  "rule": [
+   "asha-denies-biryani",
+   "asha-sells-stage",
+   "biryani-rush",
+   "cannon-scare",
+   "charge",
+   "charge-end",
+   "cp-piles-up",
+   "cp-refuses",
+   "detainees-escape",
+   "dev-fizzles",
+   "dev-provokes",
+   "escape-now",
+   "evening-clash-ends",
+   "friend-distracts",
+   "heat",
+   "heat-on-stream",
+   "kabir-laughs-off",
+   "march",
+   "march-stop",
+   "meera-posts-biryani",
+   "meera-posts-cannon",
+   "meera-posts-minister",
+   "meera-posts-sena",
+   "minister-noshow",
+   "minister-wait",
+   "no-heat",
+   "rao-recalls",
+   "rao-sends-sharma",
+   "sana-short-one",
+   "sena-called",
+   "singing-no-stone",
+   "stone",
+   "stream-viral",
+   "zoya-covers-minister",
+   "zoya-debunks-biryani",
+   "zoya-debunks-cannon",
+   "zoya-whistle"
+  ],
+  "link": [
+   "asha-denies",
+   "big-speech",
+   "biryani-rush",
+   "cannon-dance",
+   "cannon-scare",
+   "charge",
+   "chase",
+   "chase-lost",
+   "clash-live",
+   "cp-piles-up",
+   "cp-refuses",
+   "crew-block",
+   "crew-join",
+   "detained",
+   "detainees-escape",
+   "dev-fizzles",
+   "dev-provokes",
+   "friend-distracts",
+   "gas",
+   "heat",
+   "joined-stone",
+   "kabir-laughs-off",
+   "kabir-leaves",
+   "kabir-roast",
+   "key-missing",
+   "line-follows-camera",
+   "march",
+   "meera-amplifies",
+   "megaphone-given",
+   "minister-wait",
+   "mira-megaphone",
+   "nikhil-finds-kabir",
+   "officer-annoyed",
+   "opp-photo-op",
+   "owner-reclaims",
+   "pester-soft",
+   "phone-missing",
+   "phone-returned",
+   "police-line",
+   "provocateur-exposed",
+   "provocateur-joined",
+   "provocateur-stone",
+   "rao-recalls",
+   "rao-sends-sharma",
+   "report-wrong",
+   "repost",
+   "roast-viral",
+   "rumour-spreads",
+   "sena-called",
+   "sharma-lets-through",
+   "singalong-line",
+   "singing-no-stone",
+   "sitin",
+   "small-speech",
+   "stream-viral",
+   "water-delivered",
+   "zoya-debunks"
+  ],
+  "board": [
+   "asha-denies",
+   "big-speech",
+   "biryani-rush",
+   "cannon-dance",
+   "cannon-scare",
+   "charge",
+   "chase",
+   "chase-lost",
+   "clash-live",
+   "cp-piles-up",
+   "cp-refuses",
+   "crew-block",
+   "crew-join",
+   "detained",
+   "detainees-escape",
+   "dev-fizzles",
+   "dev-provokes",
+   "friend-distracts",
+   "gas",
+   "heat",
+   "joined-stone",
+   "kabir-laughs-off",
+   "kabir-leaves",
+   "kabir-roast",
+   "key-missing",
+   "line-follows-camera",
+   "march",
+   "meera-amplifies",
+   "megaphone-given",
+   "minister-wait",
+   "mira-megaphone",
+   "nikhil-finds-kabir",
+   "officer-annoyed",
+   "opp-photo-op",
+   "owner-reclaims",
+   "pester-soft",
+   "phone-missing",
+   "phone-returned",
+   "police-line",
+   "provocateur-exposed",
+   "provocateur-joined",
+   "provocateur-stone",
+   "rao-recalls",
+   "rao-sends-sharma",
+   "report-wrong",
+   "repost",
+   "roast-viral",
+   "rumour-spreads",
+   "sena-called",
+   "sharma-lets-through",
+   "singalong-line",
+   "singing-no-stone",
+   "sitin",
+   "small-speech",
+   "stream-viral",
+   "water-delivered",
+   "zoya-debunks"
+  ]
+ },
+ "intents": {
+  "speaker-gone": {
+   "ok": false,
+   "missing": [
+    "ending:quiet",
+    "link:small-speech"
+   ],
+   "ending": "packed",
+   "why": [
+    "speaker taken at 10:09 in sight of ravi"
+   ]
+  },
+  "key-to-march": {
+   "ok": false,
+   "missing": [
+    "ending:march",
+    "link:key-missing",
+    "link:cp-piles-up",
+    "link:rao-sends-sharma",
+    "link:march"
+   ],
+   "ending": "packed",
+   "why": [
+    "key taken at 11:05 in sight of c2"
+   ]
+  },
+  "key-caught": {
+   "ok": true
+  },
+  "key-returned": {
+   "ok": false,
+   "missing": [
+    "link:key-returned",
+    "link:rao-recalls"
+   ],
+   "ending": "packed",
+   "why": [
+    "key taken at 11:05 in sight of c2",
+    "give iqbal refused at 12:30 (detained)"
+   ]
+  },
+  "speaker-and-key-cpjam": {
+   "ok": false,
+   "missing": [
+    "ending:cpjam"
+   ],
+   "ending": "packed",
+   "why": [
+    "speaker taken at 10:09 in sight of ravi",
+    "drop  refused at 10:18",
+    "key taken at 11:05 in sight of c2"
+   ]
+  },
+  "speaker-party": {
+   "ok": false,
+   "missing": [
+    "link:cp-party",
+    "link:rao-sends-sharma",
+    "link:sharma-kills-party",
+    "link:rao-recalls"
+   ],
+   "ending": "packed",
+   "why": [
+    "speaker taken at 10:09 in sight of ravi",
+    "drop  refused at 10:11"
+   ]
+  },
+  "phone-scare-ghost": {
+   "ok": true
+  },
+  "phone-returned": {
+   "ok": true
+  },
+  "meera-biryani": {
+   "ok": true
+  },
+  "biryani-ending": {
+   "ok": false,
+   "missing": [
+    "ending:biryani"
+   ],
+   "ending": "packed",
+   "why": [
+    "speaker taken at 10:09 in sight of ravi",
+    "drop  refused at 10:18",
+    "key taken at 11:05 in sight of c2",
+    "whisper mira refused at 12:05 (detained)"
+   ]
+  },
+  "megaphone-singalong": {
+   "ok": true
+  },
+  "minister-viral": {
+   "ok": true
+  },
+  "minister-no-phone": {
+   "ok": true
+  },
+  "minister-no-megaphone": {
+   "ok": true
+  },
+  "water-hidden-heat": {
+   "ok": true
+  },
+  "kabir-roast": {
+   "ok": true
+  },
+  "soft-sharma-cannon": {
+   "ok": true
+  }
+ },
+ "witness": {
+  "ending": {
+   "packed": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "ghost": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "cannon"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singalong": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "viral": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "scuffle": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "noshow": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "heat": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "roast": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "kabir"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "march": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "quiet": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "asha"
+      },
+      "id": "talk:asha"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      },
+      "id": "pester:sharma#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.5,
+       "z": -31
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:cp"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 3.2,
+       "z": -10.4
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -2.3326643177892574,
+       "z": 31.781568865860876
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.5,
+       "z": -31
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:cp"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cpjam": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "asha"
+      },
+      "id": "talk:asha"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      },
+      "id": "pester:sharma#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.5,
+       "z": -31
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:cp"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 3.2,
+       "z": -10.4
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -2.3326643177892574,
+       "z": 31.781568865860876
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   }
+  },
+  "rule": {
+   "zoya-whistle": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "stream-viral": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "asha-sells-stage": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "stone": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "charge": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "charge-end": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "cannon-scare": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-posts-cannon": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singing-no-stone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-posts-minister": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "zoya-covers-minister": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "minister-wait": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "minister-noshow": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-provokes": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "evening-clash-ends": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-fizzles": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "heat": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "heat-on-stream": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-sends-sharma": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "march": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "zoya-debunks-cannon": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": 30
+      },
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "zoya",
+       "rumour": "cannon"
+      },
+      "id": "whisper:zoya:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "biryani-rush": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-posts-biryani": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "zoya-debunks-biryani": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "asha-denies-biryani": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-recalls": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "march-stop": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "detainme"
+      },
+      "id": "pester:sharma#3"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-laughs-off": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "cannon"
+      },
+      "id": "whisper:ravi:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sena-called": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "sena"
+      },
+      "id": "whisper:mira:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-posts-sena": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "sena"
+      },
+      "id": "whisper:mira:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "no-heat": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "sena"
+      },
+      "id": "whisper:mira:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "sana"
+      },
+      "id": "give:sana"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "detainees-escape": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 19,
+       "z": -11
+      },
+      "follow": "c3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c3",
+       "how": "cannon"
+      },
+      "id": "pester:c3#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 38.5,
+       "z": -6.5
+      },
+      "follow": "r1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "r1",
+       "how": "career"
+      },
+      "id": "pester:r1#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "escape-now": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 19,
+       "z": -11
+      },
+      "follow": "c3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c3",
+       "how": "cannon"
+      },
+      "id": "pester:c3#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 38.5,
+       "z": -6.5
+      },
+      "follow": "r1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "r1",
+       "how": "career"
+      },
+      "id": "pester:r1#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "friend-distracts": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -14.8,
+       "z": -32.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "sena"
+      },
+      "id": "whisper:dev:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 12.892969074769345,
+       "z": 6.036630274216891
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.2,
+       "z": -3.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "dev"
+      },
+      "id": "give:dev"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": 5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "plead"
+      },
+      "id": "plead"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cp-refuses": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -1.720939942429406,
+       "z": 35.248006992900045
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.730286481896836,
+       "z": -31.2431960608562
+      },
+      "follow": "iqbal"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "iqbal"
+      },
+      "id": "talk:iqbal"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4.809632103784516,
+       "z": -30.655262996757006
+      },
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "zoya",
+       "rumour": "cannon"
+      },
+      "id": "whisper:zoya:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cp-piles-up": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -1.5,
+       "z": 36.5
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4,
+       "z": -27.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 55,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sana-short-one": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -8.4,
+       "z": -8.4
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 16
+      },
+      "follow": "c1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c1",
+       "how": "detainme"
+      },
+      "id": "pester:c1#3"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 38.5,
+       "z": -6.5
+      },
+      "follow": "r1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "r1",
+       "how": "career"
+      },
+      "id": "pester:r1#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "scene",
+       "id": "cannon-request"
+      },
+      "id": "scene:cannon-request"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": 0.5
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -0.6606102498102876,
+       "z": -29.165152562452572
+      },
+      "follow": "iqbal"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "iqbal"
+      },
+      "id": "talk:iqbal"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.3,
+       "z": -5.5
+      },
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "cannon"
+      },
+      "id": "whisper:meera:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.786607805064039,
+       "z": -6.814681986855489
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "scene",
+       "id": "cannon-request",
+       "option": 1
+      },
+      "id": "scene:cannon-request#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   }
+  },
+  "link": {
+   "big-speech": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "stream-viral": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "water-delivered": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "opp-photo-op": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "kabir-leaves": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "line-follows-camera": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "provocateur-stone": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "charge": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "gas": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "phone-missing": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rumour-spreads": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cannon-scare": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-amplifies": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "megaphone-given": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "mira-megaphone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singalong-line": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singing-no-stone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sitin": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "minister-wait": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "clash-live": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-fizzles": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-provokes": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "heat": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "nikhil-finds-kabir": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-roast": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "kabir"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "roast-viral": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "kabir"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-sends-sharma": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "march": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "zoya-debunks": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "biryani-rush": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "asha-denies": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-recalls": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "repost": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 5.2,
+       "z": -3.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "biryani"
+      },
+      "id": "whisper:dev:biryani"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 2,
+       "z": -5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:biryani-rush"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-laughs-off": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "cannon"
+      },
+      "id": "whisper:ravi:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sena-called": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "sena"
+      },
+      "id": "whisper:mira:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "detainees-escape": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "provocateur-exposed": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 57,
+       "z": -3.4000000000000004
+      },
+      "follow": "r5"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "r5",
+       "how": "cannon"
+      },
+      "id": "pester:r5#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 1.8,
+       "z": -4.3
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "chase": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "until",
+      "clock": "11:05"
+     },
+     {
+      "op": "go",
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "detained": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "until",
+      "clock": "11:05"
+     },
+     {
+      "op": "go",
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "friend-distracts": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -14.8,
+       "z": -32.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "sena"
+      },
+      "id": "whisper:dev:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 12.892969074769345,
+       "z": 6.036630274216891
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.2,
+       "z": -3.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "dev"
+      },
+      "id": "give:dev"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": 5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "plead"
+      },
+      "id": "plead"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cp-refuses": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -1.720939942429406,
+       "z": 35.248006992900045
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.730286481896836,
+       "z": -31.2431960608562
+      },
+      "follow": "iqbal"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "iqbal"
+      },
+      "id": "talk:iqbal"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4.809632103784516,
+       "z": -30.655262996757006
+      },
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "zoya",
+       "rumour": "cannon"
+      },
+      "id": "whisper:zoya:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "key-missing": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -1.5,
+       "z": 36.5
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4,
+       "z": -27.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 55,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "owner-reclaims": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:17"
+   },
+   "cp-piles-up": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -1.5,
+       "z": 36.5
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4,
+       "z": -27.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 55,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "phone-returned": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16,
+       "z": -33
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:18"
+     },
+     {
+      "op": "go",
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "zoya"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "pester-soft": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:30"
+   },
+   "cannon-dance": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "c1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c1",
+       "how": "cannon"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "provocateur-joined": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "joined-stone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "crew-join": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 19,
+       "z": -11
+      },
+      "follow": "c3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c3",
+       "how": "cannon"
+      },
+      "id": "pester:c3#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:40"
+   },
+   "chase-lost": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0.3,
+       "z": -7.5
+      },
+      "follow": "p3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p3",
+       "how": "join"
+      },
+      "id": "prov:p3#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "cannon"
+      },
+      "id": "whisper:ravi:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "report-wrong": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.3,
+       "z": -5.5
+      },
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      },
+      "id": "whisper:meera:biryani"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 62,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 1.8,
+       "z": -4.3
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": 0.5
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": 0.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:stone-thrown"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0.36000000000000004,
+       "z": 1.54
+      },
+      "follow": "c1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "report",
+       "to": "c1"
+      },
+      "id": "prov:p2#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "crew-block": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:pester-career"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "small-speech": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "ravi"
+      },
+      "id": "talk:ravi"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "asha"
+      },
+      "id": "talk:asha"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.7342544644680284,
+       "z": 34.81105357361638
+      },
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "kabir",
+       "rumour": "minister"
+      },
+      "id": "whisper:kabir:minister"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 3.2,
+       "z": -10.4
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "asha",
+       "rumour": "sena"
+      },
+      "id": "whisper:asha:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "12:00"
+   },
+   "police-line": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "ravi"
+      },
+      "id": "talk:ravi"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      },
+      "id": "pester:sharma#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sharma-lets-through": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:pester-career"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "officer-annoyed": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cannon"
+      },
+      "id": "pester:sharma#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:30"
+   }
+  },
+  "board": {
+   "stream-viral": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "line-follows-camera": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "provocateur-stone": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "charge": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "gas": {
+    "plan": [],
+    "clock": "18:00"
+   },
+   "phone-missing": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rumour-spreads": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cannon-scare": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "meera-amplifies": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "megaphone-given": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singalong-line": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "singing-no-stone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sitin": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "big-speech": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "water-delivered": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "opp-photo-op": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "minister-wait": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "clash-live": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-fizzles": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "dev-provokes": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "heat": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 6.2,
+       "z": -37.2
+      },
+      "follow": "water"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "water"
+      },
+      "id": "take:water"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "nikhil-finds-kabir": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     }
+    ],
+    "clock": "18:00"
+   },
+   "roast-viral": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "kabir"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-leaves": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 36.5,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-sends-sharma": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "march": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "zoya-debunks": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "biryani-rush": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "rao-recalls": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "repost": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 5.2,
+       "z": -3.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "biryani"
+      },
+      "id": "whisper:dev:biryani"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 2,
+       "z": -5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:biryani-rush"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-laughs-off": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "12:10"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "cannon"
+      },
+      "id": "whisper:ravi:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "sena-called": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "mira",
+       "rumour": "sena"
+      },
+      "id": "whisper:mira:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "detainees-escape": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "provocateur-exposed": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 57,
+       "z": -3.4000000000000004
+      },
+      "follow": "r5"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "r5",
+       "how": "cannon"
+      },
+      "id": "pester:r5#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 1.8,
+       "z": -4.3
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "chase": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "until",
+      "clock": "11:05"
+     },
+     {
+      "op": "go",
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "detained": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": -31
+      }
+     },
+     {
+      "op": "until",
+      "clock": "11:05"
+     },
+     {
+      "op": "go",
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "friend-distracts": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -14.8,
+       "z": -32.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "sena"
+      },
+      "id": "whisper:dev:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 12.892969074769345,
+       "z": 6.036630274216891
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.2,
+       "z": -3.2
+      },
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "dev"
+      },
+      "id": "give:dev"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7.6,
+       "z": 5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "plead"
+      },
+      "id": "plead"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "cp-refuses": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:10"
+     },
+     {
+      "op": "go",
+      "follow": "dev"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "dev",
+       "rumour": "minister"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -1.720939942429406,
+       "z": 35.248006992900045
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4.730286481896836,
+       "z": -31.2431960608562
+      },
+      "follow": "iqbal"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "iqbal"
+      },
+      "id": "talk:iqbal"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4.809632103784516,
+       "z": -30.655262996757006
+      },
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "zoya",
+       "rumour": "cannon"
+      },
+      "id": "whisper:zoya:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "key-missing": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -1.5,
+       "z": 36.5
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4,
+       "z": -27.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 55,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "owner-reclaims": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:17"
+   },
+   "cp-piles-up": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -1.5,
+       "z": 36.5
+      },
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      },
+      "id": "talk:nikhil"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 4,
+       "z": -27.2
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -14.5
+      },
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "mira"
+      },
+      "id": "talk:mira"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 55,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": -31
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "phone-returned": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -16,
+       "z": -33
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:18"
+     },
+     {
+      "op": "go",
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "zoya"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "pester-soft": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:30"
+   },
+   "cannon-dance": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "c1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c1",
+       "how": "cannon"
+      }
+     }
+    ],
+    "clock": "18:00"
+   },
+   "provocateur-joined": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "joined-stone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "mira-megaphone": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "mira"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "mira"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 8.55,
+       "z": 5
+      },
+      "follow": "key"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "key"
+      },
+      "id": "take:key"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "crew-join": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 19,
+       "z": -11
+      },
+      "follow": "c3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c3",
+       "how": "cannon"
+      },
+      "id": "pester:c3#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:40"
+   },
+   "chase-lost": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "drop"
+      },
+      "id": "drop"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 13.127083622017196,
+       "z": 6.254782465970569
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "join"
+      },
+      "id": "prov:p2#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0.3,
+       "z": -7.5
+      },
+      "follow": "p3"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p3",
+       "how": "join"
+      },
+      "id": "prov:p3#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "cannon"
+      },
+      "id": "whisper:ravi:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "report-wrong": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -16.9,
+       "z": -35.6
+      }
+     },
+     {
+      "op": "until",
+      "clock": "13:12"
+     },
+     {
+      "op": "go",
+      "follow": "phone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "phone"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -7,
+       "z": 34
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.3,
+       "z": -5.5
+      },
+      "follow": "meera"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "meera",
+       "rumour": "biryani"
+      },
+      "id": "whisper:meera:biryani"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 62,
+       "z": -4
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 1.8,
+       "z": -4.3
+      },
+      "follow": "p2"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "expose"
+      },
+      "id": "prov:p2#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": 0.5
+      }
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": 0.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:stone-thrown"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0.36000000000000004,
+       "z": 1.54
+      },
+      "follow": "c1"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "provocateur",
+       "id": "p2",
+       "how": "report",
+       "to": "c1"
+      },
+      "id": "prov:p2#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "crew-block": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:pester-career"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "police-line": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "ravi"
+      },
+      "id": "talk:ravi"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      },
+      "id": "pester:sharma#0"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -9.5,
+       "z": -9
+      },
+      "follow": "sana"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "sana",
+       "rumour": "cannon"
+      },
+      "id": "whisper:sana:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "asha-denies": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": 30
+      },
+      "follow": "zoya"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "zoya",
+       "rumour": "cannon"
+      },
+      "id": "whisper:zoya:cannon"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 57,
+       "z": -1
+      },
+      "follow": "c5"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c5",
+       "how": "cute"
+      },
+      "id": "pester:c5#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 57,
+       "z": -1
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:pester-cute"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "asha",
+       "rumour": "biryani"
+      },
+      "id": "whisper:asha:biryani"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "kabir-roast": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:05"
+     },
+     {
+      "op": "go",
+      "follow": "nikhil"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "nikhil"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -4,
+       "z": 14
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -3,
+       "z": -1
+      }
+     },
+     {
+      "op": "until",
+      "clock": "14:20"
+     },
+     {
+      "op": "go",
+      "follow": "megaphone"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "megaphone"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "give",
+       "to": "kabir"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "ravi",
+       "rumour": "minister"
+      },
+      "id": "whisper:ravi:minister"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "officer-annoyed": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      },
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cannon"
+      },
+      "id": "pester:sharma#2"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "10:30"
+   },
+   "sharma-lets-through": {
+    "plan": [
+     {
+      "op": "until",
+      "clock": "10:20"
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "career"
+      }
+     },
+     {
+      "op": "go",
+      "follow": "sharma"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "sharma",
+       "how": "cute"
+      }
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 40,
+       "z": -4.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film:pester-career"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 0,
+       "z": -5.5
+      }
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "rally"
+      },
+      "id": "rally:stage"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "18:00"
+   },
+   "small-speech": {
+    "plan": [
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -30.8
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 5.6,
+       "z": -9.6
+      },
+      "follow": "ravi"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "ravi"
+      },
+      "id": "talk:ravi"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "film"
+      },
+      "id": "film"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "talk",
+       "to": "asha"
+      },
+      "id": "talk:asha"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -5.7342544644680284,
+       "z": 34.81105357361638
+      },
+      "follow": "kabir"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "kabir",
+       "rumour": "minister"
+      },
+      "id": "whisper:kabir:minister"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 3.2,
+       "z": -10.4
+      },
+      "follow": "speaker"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "take",
+       "object": "speaker"
+      },
+      "id": "take:speaker"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": 7,
+       "z": 1
+      },
+      "follow": "c4"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "pester",
+       "to": "c4",
+       "how": "cute"
+      },
+      "id": "pester:c4#1"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     },
+     {
+      "op": "go",
+      "to": {
+       "x": -18,
+       "z": -34.2
+      },
+      "follow": "asha"
+     },
+     {
+      "op": "act",
+      "cmd": {
+       "type": "whisper",
+       "to": "asha",
+       "rumour": "sena"
+      },
+      "id": "whisper:asha:sena"
+     },
+     {
+      "op": "waitChange",
+      "max": 25
+     }
+    ],
+    "clock": "12:00"
+   }
+  }
+ }
+}

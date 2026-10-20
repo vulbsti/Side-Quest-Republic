@@ -23,4 +23,12 @@ Open `http://localhost:4173` (add `?long` for the full 32-minute day; the defaul
 - `dist/loop/main.js` draws the state in the 3D city and turns keys into actions, with `lighting.js` (phase light), `props.js` (set pieces), `cinematic.js` (reels), `phone-ui.js`, `audio.js` (cue manager) and `models.js` / `../characters.js` (glTF people with mocap clips, vehicles, props; Blender sources in `assets-src/`).
 - `npm test` (or `node tests/test-loop.mjs`) plays about twenty scripted days (idle, stolen speaker or key, rumours at different times, a stolen phone, the megaphone handed to Mira or Kabir, the minister rumour with and without a camera, hidden water, Nikhil brought to Kabir) and checks they end differently. It also checks every rule says something visible and every board link happens in at least one of those days.
 
+- `npm run verify` checks the whole game the way a model checker would (`verify/README.md`):
+  - it explores the days a player can make, walking and seen by real witnesses;
+  - it checks invariants and day properties;
+  - it keeps the shortest replayable trace for every ending, rule and board link;
+  - it diffs coverage against `verify/baseline.json` and writes `verify/map.md`.
+
+  `npm run verify:browser` replays every ending's trace through the real 3D game and checks it draws what the engine says. Any day can be replayed with `?replay=<trace>`; `?dev` plus K saves one.
+
 The old Codex build (v5–v27) was deleted in the vision rebuild; it is in git history before that commit. Its city, character, movement and bus modules in `dist/` are still used.

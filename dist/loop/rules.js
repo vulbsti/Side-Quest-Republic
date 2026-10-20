@@ -210,6 +210,7 @@ export function createDay(opts = {}) {
     clash: null, // { place, live, t, over }
     timers: { arrival: 0, party: 0, speech: 0, march: 0, calm: 0, chase: 0, push: 0, line: 0, leave: 0, lose: 0, block: 0 },
     fired: {}, // rule latches
+    seq: { crew: 0 }, // id counters live in the day, so two days in one process never share them
     schedule: 0,
     events: [],
     cues: [],
@@ -1777,6 +1778,7 @@ export function tick(s, dt) {
   runSchedule(s);
   const phase = phaseAt(s.t);
   if (phase !== s.phase) { s.phase = phase; cue(s, 'phase', { data: phase }); }
+  busLane(s);
   updateBus(s, dt);
   if (s.bus.detention && (s.bus.phase === 'detention' || s.bus.phase === 'parked')) s.detention.vehicle = 'bus';
   Object.assign(s.detention, detentionPos(s));
@@ -1794,6 +1796,76 @@ export function tick(s, dt) {
   if (s.scene) { sceneBeats(s); if (s.t >= s.scene.until) endScene(s, null); }
   if (!s.over && s.t >= at(18, 0)) finish(s);
   return s;
+}
+
+/** A moving shuttle stops for the player standing 4-8 m ahead in its lane (it honks and waits). */
+function busLane(s) {
+  const b = s.bus, p = s.player;
+  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
+  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
+  const ahead = (p.z - b.z) * dir;
+  b.blocked = moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8 && !p.detained;
+}
+
+// --- inputs, witnesses, affordances: the contract with the client and with verify/ -----------------
+// The client may change the day only through setInputs() and act(). Everything else is the engine's.
+
+/** Per-tick inputs from the client: where the player stands, and whether the chaser has lost sight of them
+ *  (sight lines need the 3D world's walls, so the client works that out). Traces record exactly these. */
+export function setInputs(s, { x, z, unseen } = {}) {
+  if (x !== undefined) s.player.x = x;
+  if (z !== undefined) s.player.z = z;
+  if (unseen !== undefined) s.player.unseen = !!unseen;
+  return s;
+}
+
+/** How far each watcher notices you taking something. Officers other than Sharma use `officer`. */
+export const WITNESS_RANGE = { sharma: 14, iqbal: 9, ravi: 9, zoya: 8, dev: 8, officer: 12 };
+/**
+ * Who can see the player at pos. lineOfSight(id, entity) is the client's wall check; without one
+ * (tests, verify/) everyone in range can see. The client and the checker share this one rule.
+ */
+export function witnesses(s, pos = s.player, lineOfSight = () => true) {
+  const out = [];
+  for (const [id, r] of Object.entries(WITNESS_RANGE)) {
+    const p = s.people[id];
+    if (!p || p.hidden || dist(p, pos) >= r) continue;
+    if (lineOfSight(id, p)) out.push(id);
+  }
+  for (const o of Object.values(s.officers)) {
+    if (o.hidden || dist(o, pos) >= WITNESS_RANGE.officer) continue;
+    if (lineOfSight(o.id, o)) out.push(o.id);
+  }
+  return out;
+}
+
+/** Places worth walking to on purpose: standing somewhere is itself an action (the bus lane, a crowd, the line). */
+export const WAYPOINTS = {
+  metro: SPOTS.metro, chai: SPOTS.chai, busDoor: SPOTS.busDoor, keyHook: SPOTS.keyHook, waterCP: SPOTS.waterCP,
+  ...Object.fromEntries(Object.entries(CROWD_CENTERS).map(([k, v]) => [`crowd:${k}`, v])),
+  ...Object.fromEntries(Object.entries(LINE_FRONT).map(([k, v]) => [`line:${k}`, v])),
+};
+
+/**
+ * Every command the player could try right now, wherever it is on the map: { id, kind, cmd, at }.
+ * `at` is where to stand first (null: anywhere). This is a superset: act() stays the authority on what
+ * succeeds, so preconditions are never written twice. knownRumours: rumours unlocked in earlier loops
+ * (the client keeps that memory); default all.
+ */
+export function affordances(s, { knownRumours = Object.keys(RUMOURS), waypoints = true } = {}) {
+  if (s.over) return [];
+  const out = [];
+  const add = (id, kind, cmd, at) => out.push({ id, kind, cmd, at: at ? { x: at.x, z: at.z } : null });
+  const list = opportunities(s, s.player, Infinity);
+  for (const o of list) {
+    if (o.choices?.length) for (const [i, c] of o.choices.entries()) add(`${o.id}#${i}`, o.kind, c.cmd, o);
+    else if (o.cmd) add(o.id, o.kind, o.cmd, o);
+    if (o.kind === 'talk') for (const r of knownRumours) add(`whisper:${o.cmd.to}:${r}`, 'whisper', { type: 'whisper', to: o.cmd.to, rumour: r }, o);
+  }
+  if (s.player.carrying) add('drop', 'drop', { type: 'drop' }, null);
+  if (!s.player.detained) add('film', 'film', { type: 'film' }, null);
+  if (waypoints && !s.player.detained) for (const [id, p] of Object.entries(WAYPOINTS)) add(`go:${id}`, 'go', null, p);
+  return out;
 }
 
 /** Fast-forward in fixed steps; used by tests and the "wait" action. */
@@ -1890,6 +1962,7 @@ const MOODS = ['bored', 'amused', 'soft'];
  */
 export function act(s, cmd) {
   if (s.over) return { ok: false };
+  if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at() below must use this day's tempo, not the last one ticked
   const pl = s.player;
   // On the bus you can still talk your way out, play the scene, or film through the window.
   if (pl.detained && !['plead', 'scene', 'film'].includes(cmd.type)) return { ok: false, say: 'detained' };
@@ -2049,7 +2122,8 @@ function pester(s, { to, how }) {
     cue(s, 'awkward-silence', { pos: o, data: { who: o.id } });
     return { ok: true, say: 'annoyed' };
   }
-  o.mood = MOODS[Math.min(2, MOODS.indexOf(o.mood) + 1)];
+  // Scenes can leave an officer in a mood outside MOODS (the jawan goes 'tense'); count those as the bottom.
+  o.mood = MOODS[Math.min(2, Math.max(0, MOODS.indexOf(o.mood)) + 1)];
   addRep(s, { aura: how === 'cannon' ? 12 : how === 'detainme' ? 8 : 10, heat: how === 'cannon' || how === 'detainme' ? 0 : 2 });
   const lines = PESTER[how][o.mood];
   say(s, o.id, lines[(o.kind === 'raf' ? 1 : 0) % lines.length], { key: `pester-${how}`, link: o.mood === 'soft' ? 'pester-soft' : null });
@@ -2063,7 +2137,6 @@ function pester(s, { to, how }) {
   return { ok: true, mood: o.mood };
 }
 
-let crewSeq = 0;
 function rally(s) {
   const pl = s.player, place = placeAt(pl);
   if (!place || !CROWD_PLACES.includes(place) || crowdAt(s, place) < 4 || !nearPlace(pl, place, 0)) return { ok: false, say: 'no-crowd' };
@@ -2075,7 +2148,8 @@ function rally(s) {
   const n = crowdTake(s, place, Math.max(0, Math.min(want, crowdAt(s, place) - 2)));
   if (!n) return { ok: false, say: 'crew-full' };
   for (let i = 0; i < n; i++) {
-    const id = `k${++crewSeq}`;
+    s.seq ??= { crew: 0 }; // days saved before seq existed
+    const id = `k${++s.seq.crew}`;
     const c = CROWD_CENTERS[place];
     s.crew[id] = { id, x: c.x + (i % 3) - 1, z: c.z + Math.floor(i / 3), path: [], mode: 'follow' };
     pl.crew.push(id);
