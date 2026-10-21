@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+// npm run verify:smoke: open the real game in headless Chromium, start a day, and poke the story layer
+// (detention, the bus-andar conversation card, a named officer) to check the client draws it without errors.
+// Screenshots go to verify/out/smoke/. Slow under software GL; it checks wiring, not frame rate.
+import { createServer } from 'node:http';
+import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+
+const ROOT = fileURLToPath(new URL('../', import.meta.url)).replace(/\/$/, '');
+const OUT = join(ROOT, 'verify/out/smoke');
+mkdirSync(OUT, { recursive: true });
+async function loadPlaywright() {
+  try { return await import('playwright'); } catch {}
+  for (const dir of ['/opt/node-tools/node_modules', '/usr/lib/node_modules', '/usr/local/lib/node_modules']) if (existsSync(join(dir, 'playwright'))) return createRequire(join(dir, 'x.js'))('playwright');
+  throw new Error('Playwright is not installed');
+}
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.glb': 'model/gltf-binary', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.svg': 'image/svg+xml' };
+const server = createServer((req, res) => {
+  const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  const file = join(ROOT, 'dist', path.endsWith('/') ? path + 'index.html' : path);
+  if (!existsSync(file)) { res.writeHead(404); res.end(); return; }
+  res.writeHead(200, { 'content-type': TYPES[extname(file)] || 'application/octet-stream' });
+  res.end(readFileSync(file));
+});
+await new Promise((r) => server.listen(0, r));
+const { chromium } = await loadPlaywright();
+const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+const errors = [];
+page.on('pageerror', (e) => errors.push(e.message));
+page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+await page.goto(`http://localhost:${server.address().port}/index.html?nostings`);
+try { await page.waitForFunction(() => window.__loop && document.querySelector('#go'), null, { timeout: 240000 }); }
+catch (e) { console.log('did not load:', await page.evaluate(() => document.querySelector('#loadtext')?.textContent), errors); await page.screenshot({ path: join(OUT, '0-load.jpg') }); process.exit(1); }
+await page.evaluate(() => window.__loop.startLoop());
+await page.waitForTimeout(4000);
+const shot = (n) => page.screenshot({ path: join(OUT, `${n}.jpg`), type: 'jpeg', quality: 70, timeout: 180000 }).catch(() => console.log(`(no screenshot for ${n}: the renderer is too slow here)`));
+await shot('1-start');
+const step = async (label, fn, wait = 3000) => { await page.evaluate(fn); await page.waitForTimeout(wait); await shot(label); };
+// A named constable: talk to Yadav.
+await step('2-yadav', () => { const L = window.__loop, d = L.day, o = d.officers.c1; Object.assign(L.sim.player, { x: o.x + 1.5, z: o.z }); Object.assign(d.player, { x: o.x + 1.5, z: o.z }); L.act(d, { type: 'talk', to: 'c1' }); });
+// Detained at 14:30: the bus-andar card.
+await step('3-detained', () => { const L = window.__loop, d = L.day; L.advance(d, L.at(14, 30) - d.t); L.snap(); const o = d.officers.c3; Object.assign(d.player, { x: o.x, z: o.z }); d.player.rep.heat = 60; L.act(d, { type: 'pester', to: 'c3', how: 'detainme' }); }, 2000);
+// The card opens once the opening beats have played. Software GL runs at a frame or two a second, so play them on the engine clock.
+await page.evaluate(() => { const L = window.__loop; L.act(L.day, { type: 'plead' }); L.advance(L.day, 12); });
+await page.waitForFunction(() => !document.querySelector('#choices').classList.contains('hidden'), null, { timeout: 180000, polling: 1000 }).catch(() => {});
+await shot('4-bus-andar');
+const state = await page.evaluate(() => ({ convo: window.__loop.day.story.convo?.id ?? null, mode: window.__loop.mode, cine: !!window.__loop.cine.active, queue: (window.__loop.day.story.queue || []).length, t: window.__loop.day.t, choices: !document.querySelector('#choices').classList.contains('hidden'), title: document.querySelector('#choicesTitle')?.textContent, items: [...document.querySelectorAll('#choicesList button')].map((b) => b.textContent.trim()) }));
+console.log(JSON.stringify(state, null, 1));
+console.log(errors.length ? `errors:\n${[...new Set(errors)].join('\n')}` : 'no page errors');
+await browser.close(); server.close();
+process.exit(errors.length || !state.choices ? 1 : 0);

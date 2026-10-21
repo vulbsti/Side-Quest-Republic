@@ -1,0 +1,17 @@
+{
+ "name": "route roast",
+ "note": "The designed roast day: bring Nikhil to Kabir so he stays, give Kabir Dev's megaphone at 14:20, and he roasts Rao from the stage at 15:30.",
+ "tempo": "long",
+ "expect": { "history": "ending:roast" },
+ "trace": [
+  { "wait": 5 },
+  { "do": "talk:nikhil", "cmd": { "type": "talk", "to": "nikhil" }, "at": { "x": -1.5, "z": 36.5 } },
+  { "do": "leave", "cmd": { "type": "leave" }, "at": null },
+  { "do": "go:stage", "cmd": null, "at": { "x": -3, "z": -1 }, "hold": 4 },
+  { "wait": 248 },
+  { "do": "take:megaphone", "cmd": { "type": "take", "object": "megaphone" }, "at": null },
+  { "do": "give:kabir", "cmd": { "type": "give", "to": "kabir" }, "at": null },
+  { "do": "go:metro", "cmd": null, "at": { "x": -7, "z": 34 }, "hold": 1 },
+  { "finish": true }
+ ]
+}

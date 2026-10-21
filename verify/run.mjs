@@ -6,7 +6,7 @@
 //   npm run verify -- --quick            a smaller search, for a fast look while working
 //   npm run verify -- --update           accept today's results as the new baseline
 //   npm run verify -- --steps 6000       search harder
-import { writeFileSync, mkdirSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync, rmSync, readdirSync } from 'node:fs';
 import * as H from './lib/harness.mjs';
 import { buildMap, causeGraph } from './lib/map.mjs';
 import { lint, LINT_RULES } from './lib/lint.mjs';
@@ -30,6 +30,13 @@ const pct = (x) => `${Math.round(x * 100)}%`;
 const slug = (k) => k.replace(/[^\w-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80);
 
 mkdirSync(OUT, { recursive: true });
+// Last run's witnesses are replayed first: something the search happens not to find this time is still reachable if
+// its old trace still gets there. Only a trace that no longer replays counts as lost.
+const oldWitnesses = existsSync(WIT) ? readdirSync(WIT).filter((f) => f.endsWith('.json') && !f.startsWith('fails_')).map((f) => JSON.parse(readFileSync(new URL(f, WIT), 'utf8'))) : [];
+// Designed routes (verify/routes/*.json) are hand-written days that must keep reaching what they were made for.
+const ROUTES = new URL('./routes/', DIR);
+const routes = existsSync(ROUTES) ? readdirSync(ROUTES).filter((f) => f.endsWith('.json')).map((f) => ({ file: `verify/routes/${f}`, ...JSON.parse(readFileSync(new URL(f, ROUTES), 'utf8')) })) : [];
+oldWitnesses.push(...routes);
 rmSync(WIT, { recursive: true, force: true });
 mkdirSync(WIT, { recursive: true });
 
@@ -68,7 +75,12 @@ const active = days.filter((d) => d.metrics && d.name !== 'idle');
 const mean = (f, list = active) => (list.length ? list.reduce((n, d) => n + f(d.metrics), 0) / list.length : 0);
 const crashes = days.filter((d) => d.crash).map((d) => ({ who: `${d.name} #${d.seed}`, msg: d.crash, trace: d.run.trace }));
 
-const hits = new Set([...ex.hits.keys(), ...days.flatMap((d) => Object.keys(d.run.s.history))]);
+const replayed = oldWitnesses.map((w) => ({ w, run: H.replay(w.trace, w.tempo || 'long') }));
+const routeFails = replayed.filter(({ w, run }) => w.file && w.expect?.history && !(w.expect.history in run.s.history)).map(({ w }) => w);
+R.setTempo('long');
+const hits = new Set([...ex.hits.keys(), ...days.flatMap((d) => Object.keys(d.run.s.history)), ...replayed.flatMap((x) => Object.keys(x.run.s.history))]);
+// A key only an old witness reached keeps that witness, so the next run can replay it again.
+for (const { w, run } of replayed) for (const k of Object.keys(run.s.history)) if (!ex.hits.has(k)) ex.hits.set(k, { clock: R.clockText(run.s.history[k]), trace: w.trace });
 const cover = (label, ids, prefix) => {
   const reached = ids.filter((id) => hits.has(prefix + id));
   return { label, total: ids.length, reached: reached.length, ids: reached, missing: ids.filter((id) => !hits.has(prefix + id)) };
@@ -80,8 +92,10 @@ const coverage = {
   rules: cover('Rules ("when X, Y does Z")', map.rules.map((r) => r.id), 'rule:'),
   callbacks: cover('Ending-card callbacks', map.callbacks.map((c) => c.id), 'callback:'),
   links: cover('Chaos-board links learned', map.links.map((l) => l.id), 'link:'),
-  scenes: cover('Scenes started', map.scenes.map((s) => s.id), 'scene:'),
-  choices: cover('Scene choices taken', map.scenes.flatMap((s) => s.options.map((o) => `${s.id}:${o.i}`)), 'choice:'),
+  situationsDone: cover('Situations played to done', map.situations.map((s) => s.id + ':done'), 'situation:'),
+  situationsFail: cover('Situations played to fail', map.situations.map((s) => s.id + ':fail'), 'situation:'),
+  nodes: cover('Situation stages reached', map.situations.flatMap((s) => s.nodes.map((n) => `${s.id}:${n.id}`)), 'node:situation:'),
+  situationChoices: cover('Situation choices taken', map.situations.flatMap((s) => s.nodes.flatMap((n) => n.options.map((o) => `${s.id}:${n.id}:${o.i}`))), 'choice:'),
   lines: cover('Lines the player saw or heard', map.lines.filter((l) => l.emitted && l.speakers.length).map((l) => l.id), 'seen:'),
 };
 // A line that is said but never reaches the player is a hole in the screen.
@@ -107,6 +121,7 @@ const properties = [
   prop('chase-ends', RUN_CHECKS['chase-ends'], violationsBy('chase-ends').length, examples(violationsBy('chase-ends'))),
   prop('detention-exit', RUN_CHECKS['detention-exit'], violationsBy('detention-exit').length, examples(violationsBy('detention-exit'))),
   prop('lines-reach-player', 'Every line the engine says reaches the player somewhere (in earshot, on screen or on the phone)', unseenLines.length, unseenLines.length ? { msg: unseenLines.slice(0, 6).join(', ') } : null),
+  prop('designed-routes', 'Every designed route (verify/routes/) still reaches what it was made for', routeFails.length, routeFails[0] ? { msg: `${routeFails[0].name}: never reached ${routeFails[0].expect.history}`, trace: routeFails[0].trace } : null),
   prop('replay-deterministic', 'A witness trace replays from 10:00 to the same result', determinism.filter((d) => !d.ok).length),
 ];
 
@@ -121,7 +136,7 @@ const metrics = [
   metric('talk-repeat', 'Talking to someone gets a line you already heard', mean((m) => m.talkRepeat), 0.1, 'low', pct, 'share of talks, active bots'),
   metric('screen-repeat', 'Lines on screen that are repeats', mean((m) => m.lineRepeat), 0.15, 'low', pct, 'bubbles, toasts, wireless'),
   metric('constables-shared', 'Officer lines shared with another officer', probe.sharedFraction, 0.2, 'low', pct, `${probe.distinctLines} distinct lines across ${probe.officers} officers`),
-  metric('things-per-hour', 'New things to do per game hour (scenes, objects, people to help, provocateurs, crowds)', mean((m) => m.storyThingsPerHour), 6, 'high'),
+  metric('things-per-hour', 'New things to do per game hour (situations, objects, people to help, provocateurs, crowds)', mean((m) => m.storyThingsPerHour), 6, 'high'),
   metric('nothing-new', 'Longest stretch with nothing new to do (real seconds, 32-minute day)', Math.max(...active.map((d) => d.metrics.longestNothingNewSeconds)), 90, 'low', (x) => `${Math.round(x)} s`),
   metric('quiet', 'Longest stretch with nothing new on screen or phone (real seconds)', Math.max(...active.map((d) => d.metrics.longestQuietSeconds)), 60, 'low', (x) => `${Math.round(x)} s`),
   metric('phone-rate', 'Phone posts per game hour (feed, chat, ticker)', feedPerHour, 10, 'high'),
@@ -145,7 +160,8 @@ if (base) {
   for (const e of now.lint) if (!base.lint.includes(e)) regressions.push(`new lint error: ${e}`);
   for (const e of base.lint) if (!now.lint.includes(e)) improvements.push(`lint error gone: ${e}`);
   for (const [k, ids] of Object.entries(now.coverage)) {
-    for (const id of base.coverage[k] || []) if (!ids.includes(id)) regressions.push(`${coverage[k].label}: "${id}" was reachable and is not now`);
+    const exists = new Set([...ids, ...coverage[k].missing]); // a line or choice that was deleted on purpose is not a regression
+    for (const id of base.coverage[k] || []) if (!ids.includes(id) && exists.has(id)) regressions.push(`${coverage[k].label}: "${id}" was reachable and is not now`);
     for (const id of ids) if (!(base.coverage[k] || []).includes(id)) improvements.push(`${coverage[k].label}: "${id}" is reachable now`);
   }
   for (const m of metrics) { const b = base.metrics[m.id]; if (b?.ok && !m.ok) regressions.push(`metric "${m.id}" met its target before (${b.value}) and misses it now (${m.shown})`); else if (b && !b.ok && m.ok) improvements.push(`metric "${m.id}" meets its target now (${m.shown})`); }
@@ -162,7 +178,25 @@ const saveWitness = (name, trace, expect, note = '') => {
 };
 for (const p of properties) if (!p.ok && p.example?.trace) p.witness = saveWitness(`fails ${p.id}`, p.example.trace, null, p.example.msg);
 for (const [k, e] of ex.endings) saveWitness(`ending ${k}`, e.trace, { ending: e.ending, outcome: e.outcome, role: e.role });
-for (const id of coverage.scenes.ids) saveWitness(`scene ${id}`, witnessOf('scene:' + id), { history: 'scene:' + id });
+// Everything else covered keeps one trace (greedy: the trace that covers most of what is still uncovered), so the next
+// run can replay it and a key is only lost when its trace stops reaching it.
+{
+  const prefix = { endings: 'ending:', outcomes: 'outcome:', roles: 'role:', rules: 'rule:', callbacks: 'callback:', links: 'link:', situationsDone: 'situation:', situationsFail: 'situation:', nodes: 'node:situation:', situationChoices: 'choice:', lines: 'seen:' };
+  const want = new Set(Object.entries(coverage).flatMap(([k, c]) => c.ids.map((id) => prefix[k] + id)));
+  const traces = [...ex.hits.entries()].filter(([k]) => want.has(k)).map(([, h]) => h.trace);
+  for (const d of days) traces.push(d.run.trace);
+  const reach = traces.map((t) => new Set(Object.keys(H.replay(t, 'long').s.history).filter((k) => want.has(k))));
+  R.setTempo('long');
+  let n = 0;
+  while (want.size) {
+    let best = -1, bestN = 0;
+    reach.forEach((r, i) => { let c = 0; for (const k of r) if (want.has(k)) c++; if (c > bestN) { bestN = c; best = i; } });
+    if (best < 0) break;
+    for (const k of reach[best]) want.delete(k);
+    saveWitness(`cover ${++n}`, traces[best], null, `${bestN} covered keys`);
+  }
+}
+for (const id of [...coverage.situationsDone.ids, ...coverage.situationsFail.ids]) saveWitness(`situation ${id}`, witnessOf('situation:' + id), { history: 'situation:' + id });
 
 // --- the report -------------------------------------------------------------------------------------
 const failing = properties.filter((p) => !p.ok), lintErrors = findings.filter((f) => f.level === 'error'), lintWarn = findings.filter((f) => f.level === 'warn');
@@ -204,7 +238,7 @@ if (unseenLines.length) L.push(`- **warn** said but never reached the player in 
 L.push('', '## Tempo', '', 'Each ending\'s witness replayed at the 10-minute tempo. Walking takes more game minutes when the clock runs faster, so some timing windows close.', '');
 L.push('| At 32 minutes | At 10 minutes | Same? |', '| --- | --- | --- |');
 for (const t of tempo) L.push(`| ${t.want} | ${t.got} | ${t.same ? 'yes' : 'no'} |`);
-L.push('', '## The system map', '', `${map.verbs.length} verbs, ${map.rules.length} rules, ${map.routines.length} timed routines, ${map.cues.length} cues, ${map.lines.length} line keys, ${map.links.length} board links, ${map.callbacks.length} callbacks, ${map.scenes.length} scenes, ${edges.length} cause→effect edges. Open \`verify/out/map.html\` for the whole map.`, '');
+L.push('', '## The system map', '', `${map.verbs.length} verbs, ${map.rules.length} rules, ${map.routines.length} timed routines, ${map.cues.length} cues, ${map.lines.length} line keys, ${map.links.length} board links, ${map.callbacks.length} callbacks, ${map.situations.length} situations, ${edges.length} cause→effect edges. Open \`verify/out/map.html\` for the whole map.`, '');
 writeFileSync(new URL('./report.md', DIR), L.join('\n') + '\n');
 const { clientMentions: _cm, ...mapJson } = map;
 writeFileSync(new URL('map.json', OUT), JSON.stringify({ ...mapJson, edges }, null, 1));

@@ -1,0 +1,198 @@
+{
+ "name": "situation cannon-request:done",
+ "note": "",
+ "tempo": "long",
+ "expect": {
+  "history": "situation:cannon-request:done"
+ },
+ "trace": [
+  {
+   "clock": "10:00",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "10:36",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "10:38",
+   "wait": 45
+  },
+  {
+   "clock": "11:23",
+   "wait": 45
+  },
+  {
+   "clock": "12:08",
+   "do": "say:tomar-m1:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 17.184753313074808,
+    "z": -12.719707387613344
+   }
+  },
+  {
+   "clock": "12:09",
+   "do": "pester:c2:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c2",
+    "how": "cute"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "12:11",
+   "wait": 20
+  },
+  {
+   "clock": "12:31",
+   "do": "drop:barricade",
+   "cmd": {
+    "type": "drop",
+    "x": 34,
+    "z": -6
+   },
+   "at": {
+    "x": 34,
+    "z": -6
+   }
+  },
+  {
+   "clock": "12:34",
+   "wait": 45
+  },
+  {
+   "clock": "13:19",
+   "do": "rally:stage",
+   "cmd": {
+    "type": "rally"
+   },
+   "at": {
+    "x": 0,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "13:22",
+   "wait": 45
+  },
+  {
+   "clock": "14:07",
+   "do": "pester:r1:career",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "career"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:09",
+   "do": "whisper:cannon:iqbal",
+   "cmd": {
+    "type": "whisper",
+    "to": "iqbal",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -7.800859050879933,
+    "z": -30.950214762719984
+   }
+  },
+  {
+   "clock": "14:16",
+   "do": "whisper:minister:iqbal",
+   "cmd": {
+    "type": "whisper",
+    "to": "iqbal",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": -16,
+    "z": -33
+   }
+  },
+  {
+   "clock": "14:16",
+   "do": "situation:cannon-request",
+   "cmd": {
+    "type": "situation",
+    "id": "cannon-request"
+   },
+   "at": {
+    "x": 38,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "14:20",
+   "do": "say:cannon-request:heat:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 33.68978704976642,
+    "z": -6.547351151360944
+   }
+  }
+ ]
+}

@@ -1,0 +1,111 @@
+{
+ "name": "cover 16",
+ "note": "3 covered keys",
+ "tempo": "long",
+ "expect": null,
+ "trace": [
+  {
+   "clock": "10:00",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
+   }
+  },
+  {
+   "clock": "10:33",
+   "do": "situation:nikhil-lost",
+   "cmd": {
+    "type": "situation",
+    "id": "nikhil-lost"
+   },
+   "at": {
+    "x": -7,
+    "z": 36
+   }
+  },
+  {
+   "clock": "10:36",
+   "wait": 45
+  },
+  {
+   "clock": "11:21",
+   "do": "say:nikhil-lost:mila:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": -6.351476222879262,
+    "z": 31.244158967781246
+   }
+  },
+  {
+   "clock": "11:21",
+   "do": "whisper:minister:ravi",
+   "cmd": {
+    "type": "whisper",
+    "to": "ravi",
+    "rumour": "minister"
+   },
+   "at": {
+    "x": -19.5,
+    "z": -31.5
+   }
+  },
+  {
+   "clock": "11:25",
+   "wait": 3
+  },
+  {
+   "clock": "11:28",
+   "do": "whisper:cannon:iqbal",
+   "cmd": {
+    "type": "whisper",
+    "to": "iqbal",
+    "rumour": "cannon"
+   },
+   "at": {
+    "x": -16,
+    "z": -33
+   }
+  },
+  {
+   "clock": "11:29",
+   "do": "pester:sharma:cannon",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "cannon"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  }
+ ]
+}

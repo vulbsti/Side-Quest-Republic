@@ -26,9 +26,10 @@ const morning = H.replay([{ wait: 72 }], 'long');
 assert(R.affordances(morning.s).some((x) => x.id === 'take:key'), 'taking the key is on the list at 11:12');
 assert(!R.affordances(H.newRun('long').s).some((x) => x.id === 'take:key'), 'but not at 10:00, while Iqbal drives');
 
-// Talking is the engine's job now: it picks the line, and a repeat says so.
+// Talking is the engine's job now (story.js): a conversation opens, and walking away from it ends it.
 const t = H.newRun('long');
-const lines = [1, 2, 3, 4].map(() => R.act(t.s, { type: 'talk', to: 'ravi' }));
-assert(lines.every((x) => x.ok && x.line), 'every talk returns a line');
-assert(lines.at(-1).repeat, 'after the situation lines run out, the line is marked a repeat');
+Object.assign(t.s.player, { x: t.s.people.asha.x + 1, z: t.s.people.asha.z });
+const r = R.act(t.s, { type: 'talk', to: 'asha' });
+assert(r.ok && r.said, 'talking to Asha says something');
+if (t.s.story.convo) { assert(R.act(t.s, { type: 'leave' }).ok, 'and you can walk away'); assert(!t.s.story.convo); }
 console.log('verify harness ok');

@@ -1,0 +1,2484 @@
+{
+ "name": "situation detain-me:done",
+ "note": "",
+ "tempo": "long",
+ "expect": {
+  "history": "situation:detain-me:done"
+ },
+ "trace": [
+  {
+   "clock": "10:00",
+   "do": "talk:ravi",
+   "cmd": {
+    "type": "talk",
+    "to": "ravi"
+   },
+   "at": {
+    "x": -19.5,
+    "z": -31.5
+   }
+  },
+  {
+   "clock": "10:04",
+   "do": "say:ravi-m-bhaukaal:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -18.69661493928247,
+    "z": -29.141676112087254
+   }
+  },
+  {
+   "clock": "10:05",
+   "do": "talk:zoya",
+   "cmd": {
+    "type": "talk",
+    "to": "zoya"
+   },
+   "at": {
+    "x": -3,
+    "z": 30
+   }
+  },
+  {
+   "clock": "10:09",
+   "do": "say:zoya-m-checklist:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -3.139977935918287,
+    "z": 27.76035302530741
+   }
+  },
+  {
+   "clock": "10:10",
+   "do": "situation:nikhil-lost",
+   "cmd": {
+    "type": "situation",
+    "id": "nikhil-lost"
+   },
+   "at": {
+    "x": -7,
+    "z": 36
+   }
+  },
+  {
+   "clock": "10:11",
+   "do": "say:nikhil-lost:mila:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -4.934451814928531,
+    "z": 31.59085736514961
+   }
+  },
+  {
+   "clock": "10:12",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -6.1155297689306956,
+    "z": 29.947206105581678
+   }
+  },
+  {
+   "clock": "10:13",
+   "do": "say:nikhil-m-walking:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -4.934451814928531,
+    "z": 31.59085736514961
+   }
+  },
+  {
+   "clock": "10:13",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -6.1155297689306956,
+    "z": 29.947206105581678
+   }
+  },
+  {
+   "clock": "10:14",
+   "do": "say:nikhil-m-found:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -4.934451814928531,
+    "z": 31.59085736514961
+   }
+  },
+  {
+   "clock": "10:15",
+   "do": "talk:c5",
+   "cmd": {
+    "type": "talk",
+    "to": "c5"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "10:20",
+   "do": "say:gill-m1:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 54.89937154802576,
+    "z": -1.7002094839914195
+   }
+  },
+  {
+   "clock": "10:21",
+   "do": "talk:zoya",
+   "cmd": {
+    "type": "talk",
+    "to": "zoya"
+   },
+   "at": {
+    "x": -4.9555371304908045,
+    "z": 8.676293130122657
+   }
+  },
+  {
+   "clock": "10:25",
+   "do": "say:zoya-m-channels:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -5.29458371327944,
+    "z": -6.235138762240188
+   }
+  },
+  {
+   "clock": "10:26",
+   "wait": 4
+  },
+  {
+   "clock": "10:30",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "10:31",
+   "do": "say:nikhil-m-first:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -4.133312734426578,
+    "z": -3.6653431062250816
+   }
+  },
+  {
+   "clock": "10:32",
+   "do": "pester:sharma:career",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "career"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "10:35",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -11,
+    "z": 30.5
+   }
+  },
+  {
+   "clock": "10:40",
+   "do": "say:meera-m-content:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -10.095789474655307,
+    "z": 28.368646618830358
+   }
+  },
+  {
+   "clock": "10:40",
+   "wait": 15
+  },
+  {
+   "clock": "10:55",
+   "do": "situation:chabi",
+   "cmd": {
+    "type": "situation",
+    "id": "chabi"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "11:00",
+   "do": "say:chabi:intro:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -13.503923719056884,
+    "z": -32.90113351883866
+   }
+  },
+  {
+   "clock": "11:01",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "11:03",
+   "do": "say:nikhil-lost:reunion:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -2.9491665830983607,
+    "z": -3.7477611322202886
+   }
+  },
+  {
+   "clock": "11:04",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -0.02862933614625841,
+    "z": -28.692234636427727
+   }
+  },
+  {
+   "clock": "11:06",
+   "do": "say:meera-m-followers:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -0.7292624276408518,
+    "z": -31.18778728292256
+   }
+  },
+  {
+   "clock": "11:07",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "11:09",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "11:10",
+   "do": "say:dev-m-groups:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 2.6781353812874613,
+    "z": -3.3695117414481737
+   }
+  },
+  {
+   "clock": "11:11",
+   "do": "talk:kabir",
+   "cmd": {
+    "type": "talk",
+    "to": "kabir"
+   },
+   "at": {
+    "x": -4.6,
+    "z": -2.4
+   }
+  },
+  {
+   "clock": "11:12",
+   "do": "say:kabir-m-arrive:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -2.4465964282289248,
+    "z": -2.6868523237801023
+   }
+  },
+  {
+   "clock": "11:13",
+   "do": "pester:c1:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cute"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "11:15",
+   "do": "talk:c4",
+   "cmd": {
+    "type": "talk",
+    "to": "c4"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "11:16",
+   "do": "say:rawat-m1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 5.326777035404432,
+    "z": 2.9669057292002172
+   }
+  },
+  {
+   "clock": "11:17",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "11:18",
+   "do": "situation:career-counselling",
+   "cmd": {
+    "type": "situation",
+    "id": "career-counselling"
+   },
+   "at": {
+    "x": 38,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "11:21",
+   "wait": 8
+  },
+  {
+   "clock": "11:29",
+   "do": "say:career-counselling:intro:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 33.701691551536356,
+    "z": -6.541696513020227
+   }
+  },
+  {
+   "clock": "11:30",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:31",
+   "do": "say:tomar-m1:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 20.96547874014088,
+    "z": -12.591397598433083
+   }
+  },
+  {
+   "clock": "11:32",
+   "do": "talk:ravi",
+   "cmd": {
+    "type": "talk",
+    "to": "ravi"
+   },
+   "at": {
+    "x": -19.5,
+    "z": -31.5
+   }
+  },
+  {
+   "clock": "11:35",
+   "do": "say:ravi-m-playlist:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -17.357094712791582,
+    "z": -30.498668857466285
+   }
+  },
+  {
+   "clock": "11:36",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:39",
+   "do": "say:tomar-m2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 17.378091585990465,
+    "z": -12.53654481327219
+   }
+  },
+  {
+   "clock": "11:39",
+   "do": "pester:c1:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "career"
+   },
+   "at": {
+    "x": -4,
+    "z": 14
+   }
+  },
+  {
+   "clock": "11:42",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "11:43",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 14
+   }
+  },
+  {
+   "clock": "11:45",
+   "do": "say:yadav-m1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -3.8591537008064942,
+    "z": 11.865692748083235
+   }
+  },
+  {
+   "clock": "11:45",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:48",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "11:51",
+   "do": "say:asha-m-hello:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -15.910516831015826,
+    "z": -33.596371528960134
+   }
+  },
+  {
+   "clock": "11:51",
+   "do": "pester:c3:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c3",
+    "how": "career"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "11:54",
+   "do": "talk:sharma",
+   "cmd": {
+    "type": "talk",
+    "to": "sharma"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "11:56",
+   "do": "say:sharma-m-what:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 37.706983460351495,
+    "z": -5.490166233030028
+   }
+  },
+  {
+   "clock": "11:57",
+   "do": "talk:c4",
+   "cmd": {
+    "type": "talk",
+    "to": "c4"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "12:00",
+   "do": "say:rawat-m2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 8.458846525243917,
+    "z": -0.9893361707871637
+   }
+  },
+  {
+   "clock": "12:01",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "12:02",
+   "do": "say:nikhil-d-charger:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -0.9282858433759693,
+    "z": -1.481012786062726
+   }
+  },
+  {
+   "clock": "12:03",
+   "do": "talk:c2",
+   "cmd": {
+    "type": "talk",
+    "to": "c2"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "12:05",
+   "wait": 5
+  },
+  {
+   "clock": "12:10",
+   "wait": 8
+  },
+  {
+   "clock": "12:18",
+   "wait": 7
+  },
+  {
+   "clock": "12:25",
+   "do": "say:meena-d1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -0.07264018610265294,
+    "z": -26.846585330541014
+   }
+  },
+  {
+   "clock": "12:25",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 6.2,
+    "z": -37.2
+   }
+  },
+  {
+   "clock": "12:27",
+   "do": "talk:sana",
+   "cmd": {
+    "type": "talk",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:29",
+   "do": "say:sana-d-countdown:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -8.442747219399639,
+    "z": -11.22579532757971
+   }
+  },
+  {
+   "clock": "12:30",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "12:31",
+   "do": "say:nikhil-d-saathi:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -4.39623133910758,
+    "z": -3.796306164081039
+   }
+  },
+  {
+   "clock": "12:32",
+   "do": "situation:mira-mic",
+   "cmd": {
+    "type": "situation",
+    "id": "mira-mic"
+   },
+   "at": {
+    "x": 2,
+    "z": -5
+   }
+  },
+  {
+   "clock": "12:33",
+   "do": "say:mira-mic:speech:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -2.5486622699215538,
+    "z": -4.143996449517781
+   }
+  },
+  {
+   "clock": "12:33",
+   "do": "talk:sana",
+   "cmd": {
+    "type": "talk",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:34",
+   "do": "give:dev",
+   "cmd": {
+    "type": "give",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "12:36",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "12:37",
+   "do": "say:nikhil-d-biryani:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -0.8714026534506354,
+    "z": -2.4630624493267237
+   }
+  },
+  {
+   "clock": "12:37",
+   "do": "talk:sana",
+   "cmd": {
+    "type": "talk",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:39",
+   "do": "talk:c4",
+   "cmd": {
+    "type": "talk",
+    "to": "c4"
+   },
+   "at": {
+    "x": 7,
+    "z": 1
+   }
+  },
+  {
+   "clock": "12:40",
+   "do": "say:afwaah:forward:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 4.953068855450148,
+    "z": -0.20055369281053306
+   }
+  },
+  {
+   "clock": "12:41",
+   "do": "say:afwaah:stage:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 4.953068855450148,
+    "z": -0.20055369281053306
+   }
+  },
+  {
+   "clock": "12:42",
+   "do": "talk:ravi",
+   "cmd": {
+    "type": "talk",
+    "to": "ravi"
+   },
+   "at": {
+    "x": 5.6,
+    "z": -9.6
+   }
+  },
+  {
+   "clock": "12:43",
+   "do": "say:ravi-d-soundcheck:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 5.437150580874193,
+    "z": -7.233914545426476
+   }
+  },
+  {
+   "clock": "12:44",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "12:45",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": -2.5486622699215538,
+    "z": -4.143996449517781
+   }
+  },
+  {
+   "clock": "12:46",
+   "do": "give:sana",
+   "cmd": {
+    "type": "give",
+    "to": "sana"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "12:47",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "12:49",
+   "do": "say:tomar-d1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 16.595053850802675,
+    "z": -10.697365638793347
+   }
+  },
+  {
+   "clock": "12:49",
+   "do": "talk:kabir",
+   "cmd": {
+    "type": "talk",
+    "to": "kabir"
+   },
+   "at": {
+    "x": -4.6,
+    "z": -2.4
+   }
+  },
+  {
+   "clock": "12:51",
+   "do": "say:kabir-d-speech:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -2.2242630722490175,
+    "z": -3.3300451930857893
+   }
+  },
+  {
+   "clock": "12:52",
+   "do": "lane",
+   "cmd": null,
+   "at": {
+    "x": 10,
+    "z": -4.600000000000037
+   },
+   "hold": 3
+  },
+  {
+   "clock": "12:56",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "12:58",
+   "do": "say:yadav-d1:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -2.644853890283141,
+    "z": 13.93205669820376
+   }
+  },
+  {
+   "clock": "12:58",
+   "do": "talk:c5",
+   "cmd": {
+    "type": "talk",
+    "to": "c5"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "13:03",
+   "do": "say:mira-mic:neta:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 54.60645327988892,
+    "z": -1.7978489067037022
+   }
+  },
+  {
+   "clock": "13:04",
+   "wait": 12
+  },
+  {
+   "clock": "13:16",
+   "do": "talk:c2",
+   "cmd": {
+    "type": "talk",
+    "to": "c2"
+   },
+   "at": {
+    "x": 2.5,
+    "z": -27
+   }
+  },
+  {
+   "clock": "13:19",
+   "do": "say:meena-d2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 4.964821431380818,
+    "z": -26.526779078006953
+   }
+  },
+  {
+   "clock": "13:20",
+   "do": "say:meena-d2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 4.964821431380818,
+    "z": -26.526779078006953
+   }
+  },
+  {
+   "clock": "13:21",
+   "wait": 7
+  },
+  {
+   "clock": "13:28",
+   "do": "say:meena-d2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 4.964821431380818,
+    "z": -26.526779078006953
+   }
+  },
+  {
+   "clock": "13:29",
+   "wait": 10
+  },
+  {
+   "clock": "13:39",
+   "do": "say:meena-d2:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 4.964821431380818,
+    "z": -26.526779078006953
+   }
+  },
+  {
+   "clock": "13:39",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": -8.4,
+    "z": -8.4
+   }
+  },
+  {
+   "clock": "13:42",
+   "wait": 14
+  },
+  {
+   "clock": "13:56",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "13:57",
+   "do": "hide:stage",
+   "cmd": null,
+   "at": {
+    "x": 0,
+    "z": -5.5
+   },
+   "hold": 3
+  },
+  {
+   "clock": "14:00",
+   "do": "talk:c5",
+   "cmd": {
+    "type": "talk",
+    "to": "c5"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "14:04",
+   "do": "say:gill-d2:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 54.813347113016945,
+    "z": -1.7288842956610249
+   }
+  },
+  {
+   "clock": "14:05",
+   "do": "talk:zoya",
+   "cmd": {
+    "type": "talk",
+    "to": "zoya"
+   },
+   "at": {
+    "x": -7.5,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "14:09",
+   "do": "say:zoya-d-interview:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -5.380608148288259,
+    "z": -6.206463950570582
+   }
+  },
+  {
+   "clock": "14:09",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "14:10",
+   "do": "say:nikhil-t-charger:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -4.1740378722454405,
+    "z": -3.657623396716742
+   }
+  },
+  {
+   "clock": "14:11",
+   "do": "talk:r1",
+   "cmd": {
+    "type": "talk",
+    "to": "r1"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:14",
+   "do": "say:cannon-request:heat:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": 36.07118369113635,
+    "z": -7.388591332511096
+   }
+  },
+  {
+   "clock": "14:15",
+   "do": "talk:r1",
+   "cmd": {
+    "type": "talk",
+    "to": "r1"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:16",
+   "do": "say:pandey-t4:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 36.07118369113635,
+    "z": -7.388591332511096
+   }
+  },
+  {
+   "clock": "14:16",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "14:23",
+   "do": "say:asha-t-joote:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -15.889065084542562,
+    "z": -33.01553096410445
+   }
+  },
+  {
+   "clock": "14:24",
+   "do": "talk:ravi",
+   "cmd": {
+    "type": "talk",
+    "to": "ravi"
+   },
+   "at": {
+    "x": 5.6,
+    "z": -9.6
+   }
+  },
+  {
+   "clock": "14:26",
+   "do": "say:ravi-t-battery:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 4.970252568927358,
+    "z": -11.78162502907308
+   }
+  },
+  {
+   "clock": "14:27",
+   "wait": 4
+  },
+  {
+   "clock": "14:31",
+   "do": "prov:p3:expose",
+   "cmd": {
+    "type": "provocateur",
+    "id": "p3",
+    "how": "expose"
+   },
+   "at": {
+    "x": 3.1090431304046793,
+    "z": -4.53808377406309
+   }
+  },
+  {
+   "clock": "14:32",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "14:33",
+   "do": "say:nikhil-t-after-joote:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -1.522938859954228,
+    "z": -3.3660243326161243
+   }
+  },
+  {
+   "clock": "14:34",
+   "do": "talk:r1",
+   "cmd": {
+    "type": "talk",
+    "to": "r1"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:37",
+   "do": "say:pandey-t1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 36.405674051892696,
+    "z": -7.266216810283162
+   }
+  },
+  {
+   "clock": "14:37",
+   "do": "talk:c5",
+   "cmd": {
+    "type": "talk",
+    "to": "c5"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "14:39",
+   "do": "say:gill-t3:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 54.84118400283549,
+    "z": -1.6568609783989512
+   }
+  },
+  {
+   "clock": "14:40",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": -14.8,
+    "z": -32.2
+   }
+  },
+  {
+   "clock": "14:46",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": 0.07206787390537511,
+    "z": -27.16495103437501
+   }
+  },
+  {
+   "clock": "14:47",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "14:49",
+   "do": "say:asha-t-hideout:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -15.695380551537223,
+    "z": -33.302863558271724
+   }
+  },
+  {
+   "clock": "14:50",
+   "do": "drop:sanaTent",
+   "cmd": {
+    "type": "drop",
+    "x": -9.5,
+    "z": -9
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "14:52",
+   "do": "pester:r1:career",
+   "cmd": {
+    "type": "pester",
+    "to": "r1",
+    "how": "career"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:56",
+   "do": "film:pester-career@barricade",
+   "cmd": {
+    "type": "film"
+   },
+   "at": {
+    "x": 38.5,
+    "z": -6.5
+   }
+  },
+  {
+   "clock": "14:56",
+   "do": "pester:r5:detainme",
+   "cmd": {
+    "type": "pester",
+    "to": "r5",
+    "how": "detainme"
+   },
+   "at": {
+    "x": 57,
+    "z": -3.4000000000000004
+   }
+  },
+  {
+   "clock": "14:58",
+   "wait": 12
+  },
+  {
+   "clock": "15:10",
+   "do": "talk:sharma",
+   "cmd": {
+    "type": "talk",
+    "to": "sharma"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "15:13",
+   "do": "say:sharma-t-raf:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 37.859060478987374,
+    "z": -5.4244966113463535
+   }
+  },
+  {
+   "clock": "15:14",
+   "do": "talk:ravi",
+   "cmd": {
+    "type": "talk",
+    "to": "ravi"
+   },
+   "at": {
+    "x": 5.6,
+    "z": -9.6
+   }
+  },
+  {
+   "clock": "15:16",
+   "do": "say:ravi-t-permission:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 7.823188527656517,
+    "z": -10.388873348523276
+   }
+  },
+  {
+   "clock": "15:17",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "15:19",
+   "wait": 6
+  },
+  {
+   "clock": "15:25",
+   "do": "say:nikhil-t-raf:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -1.3640732707363505,
+    "z": -3.063798560659941
+   }
+  },
+  {
+   "clock": "15:25",
+   "do": "pester:c5:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "career"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "15:29",
+   "do": "pester:c1:cute",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "cute"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "15:34",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "15:36",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "15:37",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "15:37",
+   "do": "talk:iqbal",
+   "cmd": {
+    "type": "talk",
+    "to": "iqbal"
+   },
+   "at": {
+    "x": -16,
+    "z": -33
+   }
+  },
+  {
+   "clock": "15:40",
+   "do": "say:iqbal-t-offduty:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -13.880036513338831,
+    "z": -32.47000912833471
+   }
+  },
+  {
+   "clock": "15:41",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -5.3,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "15:44",
+   "do": "say:meera-t-missed:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -4.814345200145071,
+    "z": -7.653375055960532
+   }
+  },
+  {
+   "clock": "15:45",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "15:47",
+   "do": "say:asha-t-iqbal-bus:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -15.55128622225974,
+    "z": -33.49259379754171
+   }
+  },
+  {
+   "clock": "15:48",
+   "wait": 4
+  },
+  {
+   "clock": "15:52",
+   "do": "pester:sharma:career",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "career"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "15:56",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -3.1999999999999997,
+    "z": -1.5999999999999999
+   }
+  },
+  {
+   "clock": "15:59",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "16:02",
+   "do": "say:asha-s-gas:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -15.87159856103453,
+    "z": -33.58512847318776
+   }
+  },
+  {
+   "clock": "16:03",
+   "do": "situation:detain-me",
+   "cmd": {
+    "type": "situation",
+    "id": "detain-me"
+   },
+   "at": {
+    "x": 10,
+    "z": 2
+   }
+  },
+  {
+   "clock": "16:06",
+   "do": "say:detain-me:window:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 8.491505075320596,
+    "z": -2.6763342665061436
+   }
+  },
+  {
+   "clock": "16:07",
+   "do": "say:detain-me:window2:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 8.491505075320596,
+    "z": -2.6763342665061436
+   }
+  },
+  {
+   "clock": "16:08",
+   "do": "talk:meera",
+   "cmd": {
+    "type": "talk",
+    "to": "meera"
+   },
+   "at": {
+    "x": -5.3,
+    "z": -5.5
+   }
+  },
+  {
+   "clock": "16:09",
+   "do": "say:dhuan:smoke:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:10",
+   "do": "say:dhuan:kabir:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:10",
+   "wait": 11
+  },
+  {
+   "clock": "16:21",
+   "do": "say:dhuan:hub:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:22",
+   "do": "say:dhuan:nikhil:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:23",
+   "do": "say:dhuan:nikhil-found:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:24",
+   "do": "say:dhuan:hub:3",
+   "cmd": {
+    "type": "say",
+    "option": 3
+   },
+   "at": {
+    "x": -3.019706654369742,
+    "z": -5.033133900382476
+   }
+  },
+  {
+   "clock": "16:24",
+   "do": "talk:mira",
+   "cmd": {
+    "type": "talk",
+    "to": "mira"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "16:26",
+   "wait": 5
+  },
+  {
+   "clock": "16:31",
+   "do": "say:mira-s-list:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -0.7344465658758335,
+    "z": -12.19748916292612
+   }
+  },
+  {
+   "clock": "16:31",
+   "do": "talk:mira",
+   "cmd": {
+    "type": "talk",
+    "to": "mira"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "16:32",
+   "do": "say:mira-s-choice:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -0.7344465658758335,
+    "z": -12.19748916292612
+   }
+  },
+  {
+   "clock": "16:33",
+   "do": "stance:protect",
+   "cmd": {
+    "type": "stance",
+    "stance": "protect"
+   },
+   "at": {
+    "x": -0.7344465658758335,
+    "z": -12.19748916292612
+   }
+  },
+  {
+   "clock": "16:34",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "16:35",
+   "do": "say:nikhil-s-smoke:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -7.357556452667167,
+    "z": -9.78151825509489
+   }
+  },
+  {
+   "clock": "16:36",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "16:36",
+   "do": "pester:c5:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "career"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "16:41",
+   "do": "say:detain-me:ask:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": 55.1593668972088,
+    "z": -1.6135443675970735
+   }
+  },
+  {
+   "clock": "16:41",
+   "do": "say:detain-me:naam:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 55.1593668972088,
+    "z": -1.6135443675970735
+   }
+  },
+  {
+   "clock": "16:42",
+   "do": "say:detain-me:update:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "16:43",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "16:45",
+   "wait": 7
+  },
+  {
+   "clock": "16:52",
+   "do": "say:nikhil-s-dead:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -7.8466819122978775,
+    "z": -7.302885406663383
+   }
+  },
+  {
+   "clock": "16:52",
+   "do": "stance:protect",
+   "cmd": {
+    "type": "stance",
+    "stance": "protect"
+   },
+   "at": {
+    "x": -7.8466819122978775,
+    "z": -7.302885406663383
+   }
+  },
+  {
+   "clock": "16:53",
+   "wait": 13
+  },
+  {
+   "clock": "17:06",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "17:08",
+   "do": "say:yadav-a1:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -4.402000594041365,
+    "z": 13.564713176203183
+   }
+  },
+  {
+   "clock": "17:09",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "17:09",
+   "do": "say:yadav-a2:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -4.402000594041365,
+    "z": 13.564713176203183
+   }
+  },
+  {
+   "clock": "17:10",
+   "do": "pester:c4:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c4",
+    "how": "career"
+   },
+   "at": {
+    "x": 6.8,
+    "z": 6.2
+   }
+  },
+  {
+   "clock": "17:12",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "17:13",
+   "do": "talk:c1",
+   "cmd": {
+    "type": "talk",
+    "to": "c1"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "17:14",
+   "do": "talk:mira",
+   "cmd": {
+    "type": "talk",
+    "to": "mira"
+   },
+   "at": {
+    "x": 0,
+    "z": -14.5
+   }
+  },
+  {
+   "clock": "17:16",
+   "do": "say:mira-a-form:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -0.19579940714325103,
+    "z": -12.179520278387455
+   }
+  },
+  {
+   "clock": "17:17",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "17:18",
+   "do": "talk:asha",
+   "cmd": {
+    "type": "talk",
+    "to": "asha"
+   },
+   "at": {
+    "x": -18,
+    "z": -34.2
+   }
+  },
+  {
+   "clock": "17:20",
+   "do": "say:asha-a-ledger:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": -15.88643884169925,
+    "z": -33.58941566537979
+   }
+  },
+  {
+   "clock": "17:21",
+   "do": "leave",
+   "cmd": {
+    "type": "leave"
+   },
+   "at": {
+    "x": -15.88643884169925,
+    "z": -33.58941566537979
+   }
+  },
+  {
+   "clock": "17:22",
+   "do": "talk:dev",
+   "cmd": {
+    "type": "talk",
+    "to": "dev"
+   },
+   "at": {
+    "x": 5.2,
+    "z": -3.2
+   }
+  },
+  {
+   "clock": "17:25",
+   "do": "say:dev-a-kal:a:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 4.718921728498096,
+    "z": -5.5868883470671395
+   }
+  },
+  {
+   "clock": "17:26",
+   "do": "pester:sharma:career",
+   "cmd": {
+    "type": "pester",
+    "to": "sharma",
+    "how": "career"
+   },
+   "at": {
+    "x": 40,
+    "z": -4.5
+   }
+  },
+  {
+   "clock": "17:28",
+   "do": "take:water",
+   "cmd": {
+    "type": "take",
+    "object": "water"
+   },
+   "at": {
+    "x": 7.6,
+    "z": 5
+   }
+  },
+  {
+   "clock": "17:31",
+   "wait": 8
+  },
+  {
+   "clock": "17:39",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "17:41",
+   "do": "say:nikhil-a-dhuan:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -7.7505848982036145,
+    "z": -7.723277939212333
+   }
+  },
+  {
+   "clock": "17:42",
+   "do": "drop:sanaTent",
+   "cmd": {
+    "type": "drop",
+    "x": -9.5,
+    "z": -9
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "17:43",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "17:43",
+   "do": "say:nikhil-a-slogan:a:0",
+   "cmd": {
+    "type": "say",
+    "option": 0
+   },
+   "at": {
+    "x": -9.269181512319287,
+    "z": -8.831548810252631
+   }
+  },
+  {
+   "clock": "17:44",
+   "do": "pester:c5:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c5",
+    "how": "career"
+   },
+   "at": {
+    "x": 57,
+    "z": -1
+   }
+  },
+  {
+   "clock": "17:49",
+   "do": "talk:nikhil",
+   "cmd": {
+    "type": "talk",
+    "to": "nikhil"
+   },
+   "at": {
+    "x": -9.5,
+    "z": -9
+   }
+  },
+  {
+   "clock": "17:53",
+   "do": "say:nikhil-a-first:a:2",
+   "cmd": {
+    "type": "say",
+    "option": 2
+   },
+   "at": {
+    "x": -6.9948804853945035,
+    "z": -9.455476275382814
+   }
+  },
+  {
+   "clock": "17:53",
+   "do": "talk:c3",
+   "cmd": {
+    "type": "talk",
+    "to": "c3"
+   },
+   "at": {
+    "x": 19,
+    "z": -11
+   }
+  },
+  {
+   "clock": "17:55",
+   "do": "say:ghar-jaana-hai:late:1",
+   "cmd": {
+    "type": "say",
+    "option": 1
+   },
+   "at": {
+    "x": 16.46374781688755,
+    "z": -10.849304878680623
+   }
+  },
+  {
+   "clock": "17:56",
+   "do": "pester:c1:career",
+   "cmd": {
+    "type": "pester",
+    "to": "c1",
+    "how": "career"
+   },
+   "at": {
+    "x": -4,
+    "z": 16
+   }
+  },
+  {
+   "clock": "17:59",
+   "do": "talk:zoya",
+   "cmd": {
+    "type": "talk",
+    "to": "zoya"
+   },
+   "at": {
+    "x": -7.5,
+    "z": -5.5
+   }
+  }
+ ]
+}

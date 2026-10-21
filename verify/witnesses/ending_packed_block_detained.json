@@ -10,165 +10,66 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "talk:sana",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
    "cmd": {
     "type": "talk",
-    "to": "sana"
+    "to": "dev"
    },
    "at": {
-    "x": -9.5,
-    "z": -9
+    "x": 5.2,
+    "z": -3.2
    }
   },
   {
-   "clock": "10:02",
-   "do": "take:speaker",
+   "clock": "10:22",
+   "wait": 10
+  },
+  {
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
    "cmd": {
-    "type": "take",
-    "object": "speaker"
+    "type": "say",
+    "option": 1
    },
    "at": {
-    "x": -18,
-    "z": -30.8
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
    }
   },
   {
-   "clock": "10:05",
-   "do": "take:water",
+   "clock": "10:33",
+   "do": "situation:nikhil-lost",
    "cmd": {
-    "type": "take",
-    "object": "water"
+    "type": "situation",
+    "id": "nikhil-lost"
    },
    "at": {
-    "x": 6.2,
-    "z": -37.2
+    "x": -7,
+    "z": 36
    }
   },
   {
-   "clock": "10:07",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "10:10",
-   "do": "talk:ravi",
-   "cmd": {
-    "type": "talk",
-    "to": "ravi"
-   },
-   "at": {
-    "x": 5.6,
-    "z": -9.6
-   }
-  },
-  {
-   "clock": "10:11",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:12",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": -8.4,
-    "z": -8.4
-   }
-  },
-  {
-   "clock": "10:13",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "10:14",
+   "clock": "10:36",
    "wait": 45
   },
   {
-   "clock": "10:59",
-   "do": "give:sana",
+   "clock": "11:21",
+   "do": "say:nikhil-lost:mila:3",
    "cmd": {
-    "type": "give",
-    "to": "sana"
+    "type": "say",
+    "option": 3
    },
    "at": {
-    "x": -9.5,
-    "z": -9
+    "x": -6.351476222879262,
+    "z": 31.244158967781246
    }
   },
   {
-   "clock": "11:00",
-   "do": "pester:c3:cute",
-   "cmd": {
-    "type": "pester",
-    "to": "c3",
-    "how": "cute"
-   },
-   "at": {
-    "x": 19,
-    "z": -11
-   }
-  },
-  {
-   "clock": "11:02",
-   "do": "scene:mummy-call",
-   "cmd": {
-    "type": "scene",
-    "id": "mummy-call"
-   },
-   "at": {
-    "x": -4.359642715080937,
-    "z": 4.169765787787576
-   }
-  },
-  {
-   "clock": "11:04",
-   "do": "pester:c2:detainme",
-   "cmd": {
-    "type": "pester",
-    "to": "c2",
-    "how": "detainme"
-   },
-   "at": {
-    "x": 2.5,
-    "z": -27
-   }
-  },
-  {
-   "clock": "11:07",
-   "do": "film:pester-cute@null",
-   "cmd": {
-    "type": "film"
-   },
-   "at": {
-    "x": 19,
-    "z": -11
-   }
-  },
-  {
-   "clock": "11:08",
+   "clock": "11:21",
    "do": "take:key",
    "cmd": {
     "type": "take",
@@ -180,29 +81,15 @@
    }
   },
   {
-   "clock": "11:10",
-   "do": "plead",
-   "cmd": {
-    "type": "plead"
-   },
-   "at": {
-    "x": 22,
-    "z": -9
-   }
+   "clock": "11:26",
+   "wait": 3
   },
   {
-   "clock": "11:11",
-   "do": "plead",
-   "cmd": {
-    "type": "plead"
-   },
-   "at": {
-    "x": 22,
-    "z": -9
-   }
+   "clock": "11:29",
+   "wait": 20
   },
   {
-   "clock": "11:12",
+   "clock": "11:49",
    "finish": true
   }
  ]

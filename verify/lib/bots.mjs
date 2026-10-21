@@ -5,8 +5,8 @@ import * as H from './harness.mjs';
 import { rng } from './explore.mjs';
 
 const { R } = H;
-const STORY = new Set(['scene', 'scene-choice', 'take', 'give', 'film', 'provocateur', 'rally', 'plead', 'stance']);
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio']);
+const STORY = new Set(['situation', 'say', 'go', 'take', 'give', 'film', 'provocateur', 'rally', 'plead', 'stance']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'convo']);
 const PHONE = new Set(['feed', 'chat', 'ticker', 'stream']);
 
 // weight(a, s) for each affordance; wait: weight of standing around for a while.
@@ -16,17 +16,17 @@ export const PERSONAS = {
   helpful: {
     about: 'Returns things, finds Nikhil, brings water, exposes provocateurs, picks kind choices',
     wait: 0.4,
-    weight: (a, s) => ({ give: 6, 'scene-choice': 4, scene: 3, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0 }[a.kind] ?? 0.2),
+    weight: (a, s) => ({ give: 6, say: 4, situation: 5, leave: 0.2, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0 }[a.kind] ?? 0.2),
   },
   chaotic: {
     about: 'Steals keys and speakers, spreads rumours, pesters police, joins provocateurs, blocks roads',
     wait: 0.3,
-    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, scene: 2, 'scene-choice': 2, film: 1, talk: 0.3, give: 0.1 }[a.kind] ?? 0.3),
+    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, situation: 2, say: 2, leave: 0.5, film: 1, talk: 0.3, give: 0.1 }[a.kind] ?? 0.3),
   },
   filmer: {
     about: 'Films whatever happens and follows the crowd',
     wait: 0.5,
-    weight: (a, s) => ({ film: 10, go: a.id.startsWith('hide') && a.id.endsWith(s.director.hotspot) ? 3 : 0.2, talk: a.cmd?.to === 'zoya' || a.cmd?.to === 'meera' ? 1.5 : 0.3, scene: 2, 'scene-choice': 2, provocateur: a.cmd?.how === 'expose' ? 3 : 0 }[a.kind] ?? 0.05),
+    weight: (a, s) => ({ film: 10, go: a.id.startsWith('hide') && a.id.endsWith(s.director.hotspot) ? 3 : 0.2, talk: a.cmd?.to === 'zoya' || a.cmd?.to === 'meera' ? 1.5 : 0.3, situation: 2, say: 2, leave: 0.5, provocateur: a.cmd?.how === 'expose' ? 3 : 0 }[a.kind] ?? 0.05),
   },
   explorer: { about: 'Tries whatever it has not tried yet', wait: 0.2, weight: (a, s, tried) => 1 / (1 + 3 * (tried.get(a.id) || 0)) },
 };
@@ -85,7 +85,7 @@ export function measure(run, acts, affSeen) {
     storyThingsPerHour: affSeen.size / hours,
     longestQuietSeconds: Math.round(gap), longestQuietAt: R.clockText(gapAt),
     longestNothingNewSeconds: Math.round(idle), longestNothingNewAt: R.clockText(idleAt),
-    milestones: Object.keys(s.history).filter((k) => /^(rule|callback|scene|flag):/.test(k)).sort(),
+    milestones: Object.keys(s.history).filter((k) => /^(rule|callback|situation|flag):/.test(k)).sort(),
     secondsPerMinute: spm,
   };
 }
@@ -105,7 +105,7 @@ export function constableProbe({ tempo = 'long' } = {}) {
       const from = run.log.length;
       const out = H.perform(run, { do: `pester:${id}:${how}`, cmd: { type: 'pester', to: id, how }, at: { x: o.x, z: o.z } });
       const lines = run.log.slice(from).filter((i) => i.who === id && i.text).map((i) => i.text);
-      said[id].push(...(lines.length ? lines : [run.s.scene ? `(starts the ${run.s.scene.id} scene)` : out.r?.say ? `(${out.r.say})` : '(nothing)']));
+      said[id].push(...(lines.length ? lines : [run.s.story.convo ? `(opens ${run.s.story.convo.id})` : out.r?.say ? `(${out.r.say})` : '(nothing)']));
     }
   }
   const all = Object.values(said).flat().filter((l) => !l.startsWith('('));

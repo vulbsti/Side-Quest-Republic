@@ -6,6 +6,7 @@
 //   s      the engine's day (rules.js createDay), plain JSON, clones exactly
 //   trace  the macro steps that led here, replayable from 10:00 with replay()
 //   log    what the player saw or heard: [{ t, clock, kind, channel, who, key, text, seen }]
+import { readFileSync } from 'node:fs';
 import * as R from '../../dist/loop/rules.js';
 import { routeEvent, engineView, chatFor, tickerFor, reelsFor } from '../../dist/loop/present.js';
 import { createDriver, targetOf as driveTarget, ticksFor, STEP, JOG, FEEDBACK_SECONDS } from '../../dist/loop/drive.js';
@@ -33,7 +34,7 @@ const mark = (s, key) => { if (!(key in s.history)) s.history[key] = s.t; };
 export function observe(run) {
   const s = run.s, log = run.log;
   const nf = Object.keys(s.flags).length, nm = Object.keys(s.memo).length;
-  const quiet = !s.events.length && !s.cues.length && s.callbacks.length === run._cb && nf === run._nf && nm === run._nm && !s.scene;
+  const quiet = !s.events.length && !s.cues.length && s.callbacks.length === run._cb && nf === run._nf && nm === run._nm && !s.story.convo && !s.story.queue.length;
   if (quiet) return;
   run._cb = s.callbacks.length; run._nf = nf; run._nm = nm;
   const v = engineView(s, R.placeAt);
@@ -64,7 +65,13 @@ export function observe(run) {
   }
   for (const c of s.callbacks) mark(s, 'callback:' + c.key);
   for (const k of Object.keys(s.memo)) mark(s, 'memo:' + k);
-  if (s.scene) mark(s, 'scene:' + s.scene.id);
+  const st = s.story;
+  if (st.convo) mark(s, `node:${st.convo.kind}:${st.convo.id}:${st.convo.node}`);
+  for (const [id, x] of Object.entries(st.sits)) {
+    if (x.state !== 'waiting') mark(s, `situation:${id}:${x.state}`);
+    if (x.node) mark(s, `node:situation:${id}:${x.node}`);
+    if (x.last) mark(s, `situation:${id}:${x.last}`);
+  }
 }
 
 /** Let the world run for some real seconds, watching (outside any trace: for probes and finishing a day). */
@@ -81,22 +88,28 @@ export { targetOf };
  * What the client itself shows after a command, before any engine line (main.js: talk bubble, toasts,
  * the record flash, the carrying HUD, a scene's cinematic). raw: the client would toast a machine code.
  */
+// The codes the client turns into words (main.js SAY); anything else would reach the screen as a code.
+const CLIENT_WORDS = (() => {
+  const m = readFileSync(new URL('../../dist/loop/main.js', import.meta.url), 'utf8').match(/const SAY = \{([\s\S]*?)\n\};/);
+  return new Set(m ? [...m[1].matchAll(/'([a-z-]+)':/g)].map((x) => x[1]) : []);
+})();
 export function clientFeedback(cmd, r, before, s) {
   const code = r && !r.ok && r.say ? r.say : null;
-  const raw = code && /^[a-z]+(-[a-z]+)*$/.test(code) ? code : null;
+  const raw = code && /^[a-z]+(-[a-z]+)*$/.test(code) && !CLIENT_WORDS.has(code) ? code : null;
   switch (cmd.type) {
     case 'take': case 'drop': case 'give': return { shown: before.carrying !== s.player.carrying, raw: null };
     case 'talk': return { shown: !!r?.line, raw: null };
     case 'film': case 'rally': case 'stance': return { shown: true, raw };
     case 'pester': case 'provocateur': case 'whisper': return { shown: !r?.ok, raw };
-    case 'scene': return { shown: !!r?.ok && cmd.option == null, raw: null }; // a starting scene plays its cinematic
-    case 'plead': return { shown: !r?.ok && !!r?.say, raw };
+    case 'leave': return { shown: true, raw: null }; // the card closes
+    case 'say': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
+
     default: return { shown: false, raw };
   }
 }
 // Answers to a command show up where the player is looking: a bubble, a toast, the wireless. A chat line on a
 // closed phone is not an answer to "talk your way off the bus".
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
 const seenTexts = (log, from, to = log.length) => new Set(log.slice(from, to).filter((i) => i.seen && ON_SCREEN.has(i.channel)).map((i) => `${i.channel}|${i.who}|${i.text}`));
 
 /**
@@ -122,11 +135,12 @@ export function perform(run, step) {
         for (let k = ticksFor(FEEDBACK_SECONDS); k > 0 && !ghost.s.over; k--) { R.tick(ghost.s, STEP); observe(ghost); }
         without = seenTexts(ghost.log, 0);
         before = { carrying: s.player.carrying };
+        run._convo = s.story.convo ? `${s.story.convo.id}:${s.story.convo.node}` : null;
         const r = (run.act || R.act)(s, cmd) || { ok: false }; // run.act: the map's recording proxy
         out.r = r;
         out.verb = cmd.type + (cmd.how ? ':' + cmd.how : '');
         mark(s, `verb:${out.verb}:${r.ok ? 'ok' : 'no'}`);
-        if (cmd.type === 'scene' && cmd.option != null && r.ok) mark(s, `choice:${cmd.id}:${cmd.option}`);
+        if (cmd.type === 'say' && r.ok) mark(s, `choice:${run._convo}:${cmd.option}`);
         fb = clientFeedback(cmd, r, before, s);
         from = run.log.length;
         observe(run);

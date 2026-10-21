@@ -10,34 +10,38 @@
  "trace": [
   {
    "clock": "10:00",
-   "do": "whisper:biryani:asha",
+   "wait": 20
+  },
+  {
+   "clock": "10:20",
+   "do": "talk:dev",
    "cmd": {
-    "type": "whisper",
-    "to": "asha",
-    "rumour": "biryani"
+    "type": "talk",
+    "to": "dev"
    },
    "at": {
-    "x": -18,
-    "z": -34.2
+    "x": 5.2,
+    "z": -3.2
    }
   },
   {
-   "clock": "10:05",
+   "clock": "10:22",
    "wait": 10
   },
   {
-   "clock": "10:15",
-   "do": "rally:stage",
+   "clock": "10:32",
+   "do": "say:dev-m-groups:a:1",
    "cmd": {
-    "type": "rally"
+    "type": "say",
+    "option": 1
    },
    "at": {
-    "x": 0,
-    "z": -5.5
+    "x": 3.973871604285897,
+    "z": -0.9076729993171118
    }
   },
   {
-   "clock": "10:17",
+   "clock": "10:33",
    "do": "take:water",
    "cmd": {
     "type": "take",
@@ -49,95 +53,53 @@
    }
   },
   {
-   "clock": "10:20",
-   "do": "give:sana",
-   "cmd": {
-    "type": "give",
-    "to": "sana"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "10:22",
-   "do": "whisper:cannon:ravi",
-   "cmd": {
-    "type": "whisper",
-    "to": "ravi",
-    "rumour": "cannon"
-   },
-   "at": {
-    "x": -19.5,
-    "z": -31.5
-   }
-  },
-  {
-   "clock": "10:24",
-   "do": "take:speaker",
-   "cmd": {
-    "type": "take",
-    "object": "speaker"
-   },
-   "at": {
-    "x": -18,
-    "z": -30.8
-   }
-  },
-  {
-   "clock": "10:25",
-   "wait": 20
-  },
-  {
-   "clock": "10:45",
-   "do": "pester:c3:detainme",
+   "clock": "10:36",
+   "do": "pester:c2:detainme",
    "cmd": {
     "type": "pester",
-    "to": "c3",
+    "to": "c2",
     "how": "detainme"
    },
    "at": {
-    "x": 19,
-    "z": -11
+    "x": 2.5,
+    "z": -27
    }
   },
   {
-   "clock": "10:48",
-   "do": "rally:stage",
+   "clock": "10:37",
+   "do": "situation:nikhil-lost",
    "cmd": {
-    "type": "rally"
+    "type": "situation",
+    "id": "nikhil-lost"
    },
    "at": {
-    "x": 0,
-    "z": -5.5
+    "x": -7,
+    "z": 36
    }
   },
   {
-   "clock": "10:50",
-   "do": "take:water",
+   "clock": "10:41",
+   "do": "leave",
    "cmd": {
-    "type": "take",
-    "object": "water"
+    "type": "leave"
    },
    "at": {
-    "x": -8.4,
-    "z": -8.4
+    "x": -6.3647675724248085,
+    "z": 31.341628864448584
    }
   },
   {
-   "clock": "10:51",
-   "do": "film:pester-detainme@null",
-   "cmd": {
-    "type": "film"
-   },
+   "clock": "10:42",
+   "do": "lane",
+   "cmd": null,
    "at": {
-    "x": 19,
-    "z": -11
-   }
+    "x": 10,
+    "z": -29.91999999999998
+   },
+   "hold": 1
   },
   {
-   "clock": "10:52",
+   "clock": "10:47",
    "finish": true
   }
  ]
