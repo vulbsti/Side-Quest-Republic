@@ -20,7 +20,8 @@
   "detention-exit": false,
   "lines-reach-player": false,
   "designed-routes": true,
-  "replay-deterministic": true
+  "replay-deterministic": true,
+  "no-hidden-state": true
  },
  "lint": [],
  "coverage": {
@@ -246,9 +247,11 @@
    "cannon-request:to-sharma",
    "cannon-request:bottle",
    "naye-joote:suv",
+   "naye-joote:listen",
    "naye-joote:overhear",
    "naye-joote:pull",
    "naye-joote:joined",
+   "naye-joote:swept",
    "bus-andar:inside",
    "bus-andar:pandey",
    "bus-andar:uncle",
@@ -323,6 +326,7 @@
    "afwaah:stage:2",
    "afwaah:stage:3",
    "afwaah:bikes:0",
+   "afwaah:bikes:1",
    "afwaah:bikes:3",
    "afwaah:rawat:1",
    "afwaah:source:0",
@@ -343,6 +347,7 @@
    "naye-joote:suv:0",
    "naye-joote:suv:1",
    "naye-joote:suv:2",
+   "naye-joote:suv:3",
    "naye-joote:overhear:2",
    "naye-joote:joined:0",
    "naye-joote:joined:2",
@@ -358,6 +363,7 @@
    "detain-me:window:0",
    "detain-me:window:1",
    "detain-me:window:2",
+   "detain-me:window:3",
    "detain-me:window2:0",
    "detain-me:ask:2",
    "detain-me:naam:1",
@@ -518,7 +524,7 @@
    "ok": true
   },
   "screen-repeat": {
-   "value": 0.14806621220598673,
+   "value": 0.14884096229215468,
    "ok": true
   },
   "constables-shared": {
@@ -526,7 +532,7 @@
    "ok": true
   },
   "things-per-hour": {
-   "value": 21.658333333333335,
+   "value": 21.491666666666667,
    "ok": true
   },
   "nothing-new": {
@@ -538,7 +544,7 @@
    "ok": true
   },
   "phone-rate": {
-   "value": 60.208333333333336,
+   "value": 60.18333333333333,
    "ok": true
   },
   "endings-by-bots": {
@@ -546,11 +552,11 @@
    "ok": true
   },
   "divergence": {
-   "value": 0.6055326088330457,
+   "value": 0.6048106672792054,
    "ok": true
   },
   "silent-acts": {
-   "value": 23.733333333333334,
+   "value": 23.533333333333335,
    "ok": false
   }
  }

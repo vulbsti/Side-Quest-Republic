@@ -1,6 +1,6 @@
 {
  "name": "route nikhil-lost-again",
- "note": "Nikhil follows you, you keep him away from the stage until the bus parks, then lift the key in front of the police and get caught: he can't follow you onto the bus and is lost again.",
+ "note": "Nikhil follows you, you keep him away from the stage until the bus parks, then lift the key in front of the police and get caught: he can't follow you onto the bus and is lost again. Steps up to the hook from the west, in Constable Meena's line of sight: from the east side of the bus the walls hide you and nobody catches you.",
  "tempo": "long",
  "expect": {
   "history": "said:nikhil-lost-again"
@@ -49,8 +49,8 @@
    "do": "go:bus",
    "cmd": null,
    "at": {
-    "x": 9,
-    "z": -30
+    "x": 7.4,
+    "z": -31
    },
    "hold": 1
   },

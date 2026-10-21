@@ -1956,6 +1956,7 @@ const MOODS = ['bored', 'amused', 'soft'];
  */
 export function act(s, cmd) {
   if (s.over) return { ok: false };
+  if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film'].includes(cmd.type)) return { ok: false, say: 'detained' };

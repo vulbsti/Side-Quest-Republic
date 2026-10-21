@@ -1,120 +1,16 @@
-{
- "name": "ending march · riot · spectator",
- "note": "",
- "tempo": "long",
- "expect": {
-  "ending": "march",
-  "outcome": "riot",
-  "role": "spectator"
- },
- "trace": [
-  {
-   "clock": "10:00",
-   "wait": 20
-  },
-  {
-   "clock": "10:20",
-   "do": "talk:dev",
-   "cmd": {
-    "type": "talk",
-    "to": "dev"
-   },
-   "at": {
-    "x": 5.2,
-    "z": -3.2
-   }
-  },
-  {
-   "clock": "10:22",
-   "wait": 10
-  },
-  {
-   "clock": "10:32",
-   "do": "say:dev-m-groups:a:1",
-   "cmd": {
-    "type": "say",
-    "option": 1
-   },
-   "at": {
-    "x": 3.973871604285897,
-    "z": -0.9076729993171118
-   }
-  },
-  {
-   "clock": "10:33",
-   "do": "take:water",
-   "cmd": {
-    "type": "take",
-    "object": "water"
-   },
-   "at": {
-    "x": 6.2,
-    "z": -37.2
-   }
-  },
-  {
-   "clock": "10:36",
-   "do": "talk:c3",
-   "cmd": {
-    "type": "talk",
-    "to": "c3"
-   },
-   "at": {
-    "x": 19,
-    "z": -11
-   }
-  },
-  {
-   "clock": "10:38",
-   "wait": 45
-  },
-  {
-   "clock": "11:23",
-   "wait": 45
-  },
-  {
-   "clock": "12:08",
-   "do": "say:tomar-m1:a:2",
-   "cmd": {
-    "type": "say",
-    "option": 2
-   },
-   "at": {
-    "x": 17.184753313074808,
-    "z": -12.719707387613344
-   }
-  },
-  {
-   "clock": "12:09",
-   "wait": 10
-  },
-  {
-   "clock": "12:19",
-   "wait": 20
-  },
-  {
-   "clock": "12:39",
-   "do": "hide:stage",
-   "cmd": null,
-   "at": {
-    "x": 0,
-    "z": -5.5
-   },
-   "hold": 1
-  },
-  {
-   "clock": "12:41",
-   "do": "lane",
-   "cmd": null,
-   "at": {
-    "x": 10,
-    "z": -27.64
-   },
-   "hold": 4
-  },
-  {
-   "clock": "12:47",
-   "finish": true
-  }
- ]
-}
+{"name":"ending march · riot · spectator","note":"","tempo":"long","expect":{"ending":"march","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"10:22","wait":10},
+{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
+{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:36","do":"talk:c3","cmd":{"type":"talk","to":"c3"},"at":{"x":19,"z":-11}},
+{"clock":"10:38","wait":45},
+{"clock":"11:23","wait":45},
+{"clock":"12:08","do":"say:tomar-m1:a:2","cmd":{"type":"say","option":2},"at":{"x":17.184753313074808,"z":-12.719707387613344}},
+{"clock":"12:09","wait":10},
+{"clock":"12:19","wait":20},
+{"clock":"12:39","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
+{"clock":"12:41","do":"lane","cmd":null,"at":{"x":10,"z":-27.64},"hold":4},
+{"clock":"12:47","finish":true}
+]}

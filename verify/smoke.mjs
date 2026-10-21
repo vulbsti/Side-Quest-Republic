@@ -1,37 +1,20 @@
 #!/usr/bin/env node
 // npm run verify:smoke: open the real game in headless Chromium, start a day, and poke the story layer
 // (detention, the bus-andar conversation card, a named officer) to check the client draws it without errors.
-// Screenshots go to verify/out/smoke/. Slow under software GL; it checks wiring, not frame rate.
-import { createServer } from 'node:http';
-import { readFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
+// Screenshots go to verify/out/smoke/. It checks wiring, not frame rate.
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { ROOT, serve, launch } from './lib/browser.mjs';
 
-const ROOT = fileURLToPath(new URL('../', import.meta.url)).replace(/\/$/, '');
 const OUT = join(ROOT, 'verify/out/smoke');
 mkdirSync(OUT, { recursive: true });
-async function loadPlaywright() {
-  try { return await import('playwright'); } catch {}
-  for (const dir of ['/opt/node-tools/node_modules', '/usr/lib/node_modules', '/usr/local/lib/node_modules']) if (existsSync(join(dir, 'playwright'))) return createRequire(join(dir, 'x.js'))('playwright');
-  throw new Error('Playwright is not installed');
-}
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.glb': 'model/gltf-binary', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  const file = join(ROOT, 'dist', path.endsWith('/') ? path + 'index.html' : path);
-  if (!existsSync(file)) { res.writeHead(404); res.end(); return; }
-  res.writeHead(200, { 'content-type': TYPES[extname(file)] || 'application/octet-stream' });
-  res.end(readFileSync(file));
-});
-await new Promise((r) => server.listen(0, r));
-const { chromium } = await loadPlaywright();
-const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+const server = await serve();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
-await page.goto(`http://localhost:${server.address().port}/index.html?nostings`);
+await page.goto(`${server.url}/dist/index.html?nostings`);
 try { await page.waitForFunction(() => window.__loop && document.querySelector('#go'), null, { timeout: 240000 }); }
 catch (e) { console.log('did not load:', await page.evaluate(() => document.querySelector('#loadtext')?.textContent), errors); await page.screenshot({ path: join(OUT, '0-load.jpg') }); process.exit(1); }
 await page.evaluate(() => window.__loop.startLoop());

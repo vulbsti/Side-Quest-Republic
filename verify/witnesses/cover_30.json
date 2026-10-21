@@ -1,267 +1,36 @@
-{
- "name": "cover 30",
- "note": "1 covered keys",
- "tempo": "long",
- "expect": null,
- "trace": [
-  {
-   "clock": "10:00",
-   "wait": 20
-  },
-  {
-   "clock": "10:20",
-   "do": "talk:dev",
-   "cmd": {
-    "type": "talk",
-    "to": "dev"
-   },
-   "at": {
-    "x": 5.2,
-    "z": -3.2
-   }
-  },
-  {
-   "clock": "10:22",
-   "wait": 10
-  },
-  {
-   "clock": "10:32",
-   "do": "say:dev-m-groups:a:1",
-   "cmd": {
-    "type": "say",
-    "option": 1
-   },
-   "at": {
-    "x": 3.973871604285897,
-    "z": -0.9076729993171118
-   }
-  },
-  {
-   "clock": "10:33",
-   "wait": 20
-  },
-  {
-   "clock": "10:53",
-   "wait": 20
-  },
-  {
-   "clock": "11:13",
-   "wait": 3
-  },
-  {
-   "clock": "11:16",
-   "do": "pester:c1:detainme",
-   "cmd": {
-    "type": "pester",
-    "to": "c1",
-    "how": "detainme"
-   },
-   "at": {
-    "x": -4,
-    "z": 16
-   }
-  },
-  {
-   "clock": "11:18",
-   "do": "situation:chabi",
-   "cmd": {
-    "type": "situation",
-    "id": "chabi"
-   },
-   "at": {
-    "x": -18,
-    "z": -34.2
-   }
-  },
-  {
-   "clock": "11:21",
-   "wait": 10
-  },
-  {
-   "clock": "11:31",
-   "do": "say:chabi:intro:0",
-   "cmd": {
-    "type": "say",
-    "option": 0
-   },
-   "at": {
-    "x": -13.249856443533723,
-    "z": -32.827736305909745
-   }
-  },
-  {
-   "clock": "11:32",
-   "do": "rally:stage",
-   "cmd": {
-    "type": "rally"
-   },
-   "at": {
-    "x": 0,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "11:35",
-   "do": "talk:kabir",
-   "cmd": {
-    "type": "talk",
-    "to": "kabir"
-   },
-   "at": {
-    "x": -4.6,
-    "z": -2.4
-   }
-  },
-  {
-   "clock": "11:36",
-   "do": "say:kabir-m-arrive:a:0",
-   "cmd": {
-    "type": "say",
-    "option": 0
-   },
-   "at": {
-    "x": -2.9199978733614387,
-    "z": -3.7628738267344137
-   }
-  },
-  {
-   "clock": "11:37",
-   "wait": 45
-  },
-  {
-   "clock": "12:22",
-   "do": "whisper:cannon:sana",
-   "cmd": {
-    "type": "whisper",
-    "to": "sana",
-    "rumour": "cannon"
-   },
-   "at": {
-    "x": -9.5,
-    "z": -9
-   }
-  },
-  {
-   "clock": "12:23",
-   "wait": 10
-  },
-  {
-   "clock": "12:33",
-   "do": "whisper:biryani:meera",
-   "cmd": {
-    "type": "whisper",
-    "to": "meera",
-    "rumour": "biryani"
-   },
-   "at": {
-    "x": -5.3,
-    "z": -5.5
-   }
-  },
-  {
-   "clock": "12:34",
-   "do": "film:biryani-rush@stage",
-   "cmd": {
-    "type": "film"
-   },
-   "at": {
-    "x": 2,
-    "z": -5
-   }
-  },
-  {
-   "clock": "12:34",
-   "do": "whisper:biryani:ravi",
-   "cmd": {
-    "type": "whisper",
-    "to": "ravi",
-    "rumour": "biryani"
-   },
-   "at": {
-    "x": 5.6,
-    "z": -9.6
-   }
-  },
-  {
-   "clock": "12:36",
-   "do": "situation:mira-mic",
-   "cmd": {
-    "type": "situation",
-    "id": "mira-mic"
-   },
-   "at": {
-    "x": 2,
-    "z": -5
-   }
-  },
-  {
-   "clock": "12:36",
-   "wait": 45
-  },
-  {
-   "clock": "13:21",
-   "do": "say:mira-mic:speech:1",
-   "cmd": {
-    "type": "say",
-    "option": 1
-   },
-   "at": {
-    "x": 4.351202560467329,
-    "z": -8.919980837059972
-   }
-  },
-  {
-   "clock": "13:22",
-   "wait": 20
-  },
-  {
-   "clock": "13:42",
-   "do": "say:mira-mic:neta:2",
-   "cmd": {
-    "type": "say",
-    "option": 2
-   },
-   "at": {
-    "x": 4.351202560467329,
-    "z": -8.919980837059972
-   }
-  },
-  {
-   "clock": "13:43",
-   "do": "pester:c5:cannon",
-   "cmd": {
-    "type": "pester",
-    "to": "c5",
-    "how": "cannon"
-   },
-   "at": {
-    "x": 57,
-    "z": -1
-   }
-  },
-  {
-   "clock": "13:47",
-   "do": "situation:mummy-call",
-   "cmd": {
-    "type": "situation",
-    "id": "mummy-call"
-   },
-   "at": {
-    "x": 33,
-    "z": -1.5
-   }
-  },
-  {
-   "clock": "13:48",
-   "do": "say:mummy-call:call:0",
-   "cmd": {
-    "type": "say",
-    "option": 0
-   },
-   "at": {
-    "x": 37.6247482931345,
-    "z": -1.5340134105810923
-   }
-  }
- ]
-}
+{"name":"cover 30","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"10:22","wait":10},
+{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
+{"clock":"10:33","wait":20},
+{"clock":"10:53","wait":20},
+{"clock":"11:13","wait":3},
+{"clock":"11:16","do":"pester:c1:detainme","cmd":{"type":"pester","to":"c1","how":"detainme"},"at":{"x":-4,"z":16}},
+{"clock":"11:18","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":-18,"z":-34.2}},
+{"clock":"11:21","wait":10},
+{"clock":"11:31","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":{"x":-13.249856443533723,"z":-32.827736305909745}},
+{"clock":"11:32","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"11:35","do":"talk:kabir","cmd":{"type":"talk","to":"kabir"},"at":{"x":-4.6,"z":-2.4}},
+{"clock":"11:36","do":"say:kabir-m-arrive:a:0","cmd":{"type":"say","option":0},"at":{"x":-2.9199978733614387,"z":-3.7628738267344137}},
+{"clock":"11:37","wait":45},
+{"clock":"12:22","do":"whisper:cannon:sana","cmd":{"type":"whisper","to":"sana","rumour":"cannon"},"at":{"x":-9.5,"z":-9}},
+{"clock":"12:23","wait":10},
+{"clock":"12:33","do":"whisper:biryani:asha","cmd":{"type":"whisper","to":"asha","rumour":"biryani"},"at":{"x":-18,"z":-34.2}},
+{"clock":"12:36","do":"situation:mira-mic","cmd":{"type":"situation","id":"mira-mic"},"at":{"x":2,"z":-5}},
+{"clock":"12:38","wait":20},
+{"clock":"12:58","do":"leave","cmd":{"type":"leave"},"at":{"x":1.5943915261872028,"z":-9.867301685753564}},
+{"clock":"12:59","wait":45},
+{"clock":"13:44","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":40,"z":-4.5}},
+{"clock":"13:47","do":"say:mummy-call:call:3","cmd":{"type":"say","option":3},"at":{"x":37.850223176326935,"z":-5.428312719313361}},
+{"clock":"13:48","wait":45},
+{"clock":"14:33","do":"pester:r5:cute","cmd":{"type":"pester","to":"r5","how":"cute"},"at":{"x":57,"z":-3.4000000000000004}},
+{"clock":"14:34","do":"talk:asha","cmd":{"type":"talk","to":"asha"},"at":{"x":-18,"z":-34.2}},
+{"clock":"14:41","do":"leave","cmd":{"type":"leave"},"at":{"x":-15.986087211048886,"z":-33.069971157310775}},
+{"clock":"14:42","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
+{"clock":"14:48","wait":20},
+{"clock":"15:08","do":"pester:r6:cannon","cmd":{"type":"pester","to":"r6","how":"cannon"},"at":{"x":55.4,"z":-2}},
+{"clock":"15:12","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
+{"clock":"15:16","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":10,"z":2}},
+{"clock":"15:17","do":"say:detain-me:window:3","cmd":{"type":"say","option":3},"at":{"x":6.50450897075184,"z":-0.9867144255552117}}
+]}

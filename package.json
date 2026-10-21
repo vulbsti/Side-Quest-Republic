@@ -10,5 +10,8 @@
     "verify:playback": "node verify/playback.mjs",
     "story:check": "node verify/story-check.mjs",
     "verify:smoke": "node verify/smoke.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
   }
 }

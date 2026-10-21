@@ -8,7 +8,7 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=7';
+import * as R from './rules.js?v=8';
 import { SPEAKERS } from './talks.js?v=1';
 import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=8';
 import { createLighting } from './lighting.js?v=1';
@@ -19,7 +19,8 @@ import {
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 import { routeEvent } from './present.js?v=2';
-import { createDriver } from './drive.js?v=2';
+import { createDriver } from './drive.js?v=3';
+import { canSee, lostSight } from './sight.js?v=1';
 
 const { createDay, tick, act, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -1115,13 +1116,12 @@ function realReels(ph) {
 
 // --- player actions ---------------------------------------------------------
 
-// Who sees you: the engine owns the ranges (R.witnesses); the client only adds the sight-line test.
-function witnesses() {
-  return R.witnesses(day, (id) => {
-    const b = bodies[id] || officerById.get(id);
-    return !!b && b.model.visible !== false && visible(b, sim.player, world.obstacles);
-  });
-}
+// Who sees you: the engine's ranges and positions, the world's walls (sight.js). The verifier and ?replay= use
+// the same rule, so a theft that is witnessed here is witnessed there.
+/** The live walls, with the shuttle where the engine has the bus right now. */
+function walls() { shuttleObstacle.x = day.bus.x; shuttleObstacle.z = day.bus.z; return world.obstacles; }
+const SIGHT = { canSee: (s) => canSee(s, walls()), lost: (s) => lostSight(s, walls()) };
+function witnesses() { return R.witnesses(day, SIGHT.canSee(day)); }
 const PICKUP = { speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone', phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate' };
 const OWNER = { speaker: 'ravi', key: 'iqbal', megaphone: 'dev', phone: 'zoya', water: 'sana' };
 const GIVES = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] };
@@ -1635,13 +1635,9 @@ function devPlayScene(data) {
 const sepList = [];
 function step(dt) {
   const fast = replayer ? (replayer.paused ? 0 : replayer.speed) : keys.t && !cine.active ? 8 : 1;
-  // The engine asks the client whether the chaser can still see you (walls, buses, kiosks).
-  // A replay leaves sight lines out, as the verifier does.
-  const chaser = S.chasedBy(day);
-  if (day.player && !replayer) {
-    const cb = chaser ? officerById.get(chaser) || bodies[chaser] : null;
-    day.player.unseen = !!(cb && cb.model?.visible !== false && !visible(cb, sim.player, world.obstacles));
-  }
+  // The engine asks the client whether the chaser can still see you (walls, buses, kiosks): sight.js, as in
+  // the verifier. A replay's driver sets it itself, every tick.
+  if (day.player && !replayer) day.player.unseen = SIGHT.lost(day);
   accumulator += dt * fast;
   while (accumulator >= STEP) {
     accumulator -= STEP;
@@ -1651,6 +1647,7 @@ function step(dt) {
       sim.player.x = day.player.x; sim.player.z = day.player.z;
       if (cmd) replayAct(cmd);
       if (replayer.pauseAt != null && (replayer.index > replayer.pauseAt || replayer.drive.done)) { replayer.paused = true; accumulator = 0; break; }
+      if (replayer.pauseClock != null && clockMinutes(day.t) >= replayer.pauseClock) { replayer.pauseClock = null; replayer.paused = true; accumulator = 0; break; }
     } else {
       day.player.x = sim.player.x;
       day.player.z = sim.player.z;
@@ -1984,7 +1981,7 @@ function updateDev(dt) {
 function replayAct(cmd) {
   replayer.acts.push({ t: day.t, cmd });
   if (cmd.type === 'talk') talk(cmd.to);
-  else runCmd(cmd); // no witnesses: the engine's own ranges, as in Node
+  else runCmd(cmd); // a take carries its witnesses, stamped by the driver with sight.js, as in Node
 }
 async function startReplay() {
   const data = await (await fetch(REPLAY)).json();
@@ -1992,13 +1989,14 @@ async function startReplay() {
   startLoop();
   stingsOn = false;
   replayer = { data, speed: Number(QS.get('speed') || 1), paused: false, index: -1, pauseAt: null, acts: [] };
-  replayer.drive = createDriver(R, data.trace, { onStep: (st, i) => { replayer.index = i; } });
+  replayer.drive = createDriver(R, data.trace, { onStep: (st, i) => { replayer.index = i; } }, { sight: SIGHT });
   window.__replay = {
     get index() { return replayer.index; }, get steps() { return data.trace.length; }, get done() { return replayer.drive.done || day.over; },
     get t() { return day.t; }, get clock() { return clockText(day.t); }, get history() { return day.history; },
     get ending() { return day.over ? { ending: day.ending, outcome: day.outcome?.outcome, role: day.outcome?.role } : null; },
     get drawn() { return window.__drawn; }, get acts() { return replayer.acts; }, get paused() { return replayer.paused; },
     pauseAfter: (i) => { replayer.pauseAt = i; }, resume: () => { replayer.paused = false; replayer.pauseAt = null; },
+    pauseAtClock: (minutes) => { replayer.pauseClock = minutes; },
     speed: (n) => { replayer.speed = n; },
     data,
   };
@@ -2143,6 +2141,14 @@ function setupInput() {
       view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },
       showEnding,
+      // verify:playback: where the engine has everyone vs where they are drawn, and the walls sight.js uses.
+      render: () => ({
+        clock: clockText(day.t), over: day.over,
+        people: Object.entries(day.people).filter(([, p]) => !p.hidden).map(([id, p]) => ({ id, ex: p.x, ez: p.z, rx: bodies[id]?.x, rz: bodies[id]?.z, shown: !!bodies[id] && isShown(bodies[id].model) })),
+        officers: Object.values(day.officers).filter((o) => !o.hidden).map((o) => { const b = officerById.get(o.id); return { id: o.id, ex: o.x, ez: o.z, rx: b?.x, rz: b?.z, shown: !!b && isShown(b.model) }; }),
+      }),
+      obstacles: () => world.obstacles.filter((o) => o.id !== 'shuttle').map((o) => ({ id: o.id ?? null, x: +o.x.toFixed(3), z: +o.z.toFixed(3), w: +o.w.toFixed(3), d: +o.d.toFixed(3), h: +(o.h ?? 0).toFixed(3), base: +(o.base ?? 0).toFixed(3), walkable: o.walkable ?? null })),
+      shuttle: () => ({ w: shuttleObstacle.w, d: shuttleObstacle.d, h: shuttleObstacle.h }),
     };
   } catch (e) {
     console.error(e);

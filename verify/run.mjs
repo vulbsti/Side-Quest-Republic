@@ -62,6 +62,18 @@ say('4/5 replays');
 const witnessOf = (key) => ex.hits.get(key)?.trace ?? days.find((d) => key in d.run.s.history)?.run.trace ?? null;
 const endingKeys = [...ex.hits.keys()].filter((k) => k.startsWith('ending:'));
 const determinism = endingKeys.slice(0, 6).map((k) => ({ key: k, ok: checkDeterminism(ex.hits.get(k).trace, 'long', k) }));
+// No state outside the day object: a normal and a ?long day ticked alternately must end exactly as each alone
+// (module-level counters, or a helper reading the last-ticked day's tempo, make them differ).
+const hiddenState = (() => {
+  const key = (s) => JSON.stringify({ ...s, events: null, cues: null });
+  const alone = (tempo) => { R.setTempo(tempo); const s = R.createDay({ tempo }); R.advance(s, 1e6); return key(s); };
+  const [a0, b0] = [alone('slice'), alone('long')];
+  R.setTempo('slice'); const a = R.createDay({ tempo: 'slice' });
+  R.setTempo('long'); const b = R.createDay({ tempo: 'long' });
+  while (!a.over || !b.over) { if (!a.over) R.tick(a, H.STEP); if (!b.over) R.tick(b, H.STEP); }
+  R.setTempo('long');
+  return key(a) === a0 && key(b) === b0;
+})();
 const tempo = [...ex.endings.values()].slice(0, 8).map((e) => {
   const slice = H.replay(e.trace, 'slice');
   const got = slice.s.over ? `${slice.s.ending} · ${slice.s.outcome.outcome} · ${slice.s.outcome.role}` : 'unfinished';
@@ -123,6 +135,7 @@ const properties = [
   prop('lines-reach-player', 'Every line the engine says reaches the player somewhere (in earshot, on screen or on the phone)', unseenLines.length, unseenLines.length ? { msg: unseenLines.slice(0, 6).join(', ') } : null),
   prop('designed-routes', 'Every designed route (verify/routes/) still reaches what it was made for', routeFails.length, routeFails[0] ? { msg: `${routeFails[0].name}: never reached ${routeFails[0].expect.history}`, trace: routeFails[0].trace } : null),
   prop('replay-deterministic', 'A witness trace replays from 10:00 to the same result', determinism.filter((d) => !d.ok).length),
+  prop('no-hidden-state', 'Two days in one process (normal and ?long, ticked alternately) end exactly as each played alone', hiddenState ? 0 : 1),
 ];
 
 // Experience targets. `better` says which way is good.
@@ -170,10 +183,12 @@ if (flag('update') || !base) writeFileSync(BASE, JSON.stringify(now, null, 1) + 
 
 // --- witnesses ------------------------------------------------------------------------------------
 const witnessFiles = {};
+// One trace step per line: a 200-step witness stays a 200-line file and diffs step by step.
+const witnessJson = ({ trace, ...head }) => `${JSON.stringify(head).slice(0, -1)},"trace":[\n${trace.map((st) => JSON.stringify(st)).join(',\n')}\n]}\n`;
 const saveWitness = (name, trace, expect, note = '') => {
   if (!trace) return null;
   const file = `${slug(name)}.json`;
-  writeFileSync(new URL(file, WIT), JSON.stringify({ name, note, tempo: 'long', expect, trace }, null, 1) + '\n');
+  writeFileSync(new URL(file, WIT), witnessJson({ name, note, tempo: 'long', expect, trace }));
   return (witnessFiles[name] = `verify/witnesses/${file}`);
 };
 for (const p of properties) if (!p.ok && p.example?.trace) p.witness = saveWitness(`fails ${p.id}`, p.example.trace, null, p.example.msg);

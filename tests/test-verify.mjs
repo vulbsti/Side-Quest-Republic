@@ -32,4 +32,24 @@ Object.assign(t.s.player, { x: t.s.people.asha.x + 1, z: t.s.people.asha.z });
 const r = R.act(t.s, { type: 'talk', to: 'asha' });
 assert(r.ok && r.said, 'talking to Asha says something');
 if (t.s.story.convo) { assert(R.act(t.s, { type: 'leave' }).ok, 'and you can walk away'); assert(!t.s.story.convo); }
+// Sight lines (sight.js): the same theft is unseen from behind the parked shuttle and seen from the constable's side.
+{
+  const k = H.replay([{ wait: 64 }], 'long').s;
+  Object.assign(k.player, { x: 12, z: -31 });
+  assert(R.witnesses(k).includes('c2'), 'without walls Constable Meena is in range');
+  assert.deepEqual(R.witnesses(k, H.SIGHT.canSee(k)), [], 'behind the parked shuttle she can\'t see you');
+  Object.assign(k.player, { x: 7.4, z: -31 });
+  assert(R.witnesses(k, H.SIGHT.canSee(k)).includes('c2'), 'west of the hook, she sees you');
+}
+
+// act() uses its own day's tempo even when another day (another tempo) was ticked last.
+{
+  R.setTempo('slice');
+  const s = R.createDay({ tempo: 'slice' });
+  R.advance(s, R.at(13, 30));
+  R.setTempo('long');
+  R.act(s, { type: 'drop' });
+  assert.equal(R.clockText(s.t), '13:30', 'after act() the global tempo is this day\'s again');
+  R.setTempo('long');
+}
 console.log('verify harness ok');

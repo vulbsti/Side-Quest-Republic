@@ -10,8 +10,15 @@ import { readFileSync } from 'node:fs';
 import * as R from '../../dist/loop/rules.js';
 import { routeEvent, engineView, chatFor, tickerFor, reelsFor } from '../../dist/loop/present.js';
 import { createDriver, targetOf as driveTarget, ticksFor, STEP, JOG, FEEDBACK_SECONDS } from '../../dist/loop/drive.js';
+import { canSee, lostSight } from '../../dist/loop/sight.js';
 
 export { R };
+
+// The world's walls, snapshotted from the live game (npm run verify:playback -- --snapshot-world refreshes it,
+// and every playback run checks it is still current), plus the shuttle where the engine has the bus.
+const WORLD = JSON.parse(readFileSync(new URL('../world-obstacles.json', import.meta.url), 'utf8'));
+const wallsAt = (s) => [...WORLD.obstacles, { id: 'shuttle', x: s.bus.x, z: s.bus.z, ...WORLD.shuttle }];
+export const SIGHT = { canSee: (s) => canSee(s, wallsAt(s)), lost: (s) => !!s.player.chasedBy && lostSight(s, wallsAt(s)) };
 export { STEP, JOG };
 const targetOf = (s, cmd, at) => driveTarget(R, s, cmd, at);
 
@@ -126,7 +133,7 @@ export function perform(run, step) {
   let fb = null, from = 0, without = null, before = null;
   const drv = createDriver(R, [step], {
     onEnd: (st, i, info) => { if (info.mode === 'never-reached') out.r = { ok: false, say: 'never-reached' }; },
-  });
+  }, { sight: SIGHT });
   try {
     while (true) {
       const cmd = drv.before(s);

@@ -18,4 +18,5 @@ See `verify/README.md` for what the verifier checks and how to replay a witness 
 - What the player sees is decided by `dist/loop/present.js`, which both the client and the verifier use.
   Don't route lines to the screen anywhere else.
 - Engine state lives in the day object (`createDay`). No module-level counters or randomness in `rules.js`.
+- Who can see the player is decided by `dist/loop/sight.js` on engine positions, for play, replay and the verifier alike. After moving walls in the 3D world, run `npm run verify:playback -- --snapshot-world`.
 - A bug found by playing becomes a check in `verify/lib/` first.

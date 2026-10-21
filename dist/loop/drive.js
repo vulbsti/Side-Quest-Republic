@@ -39,8 +39,10 @@ export function targetOf(R, s, cmd, at) {
  * A driver over one trace. Call before(s) once before every tick: it moves s.player and returns the command
  * to act() right now, or null. step() tells you which macro step is running. Hooks: onStep(step, i),
  * onAct(step, i) are called as steps start and commands go out; onEnd(step, i, info) when a step finishes.
+ * sight ({ canSee(s), lost(s) }, from sight.js): sets the engine's `unseen` input every tick and stamps a take
+ * with who saw it, so the client and the verifier judge witnesses and chases against the same walls.
  */
-export function createDriver(R, trace, hooks = {}) {
+export function createDriver(R, trace, hooks = {}, { sight = null } = {}) {
   const steps = trace.slice();
   let i = -1, cur = null, mode = 'next', ticksLeft = 0, walked = 0, route = null;
   const d = {
@@ -51,6 +53,7 @@ export function createDriver(R, trace, hooks = {}) {
     /** Push more steps (the verifier decides as it goes). */
     push(...more) { steps.push(...more); if (mode === 'done') mode = 'next'; },
     before(s) {
+      if (sight && !s.over) s.player.unseen = sight.lost(s);
       for (let guard = 0; guard < 4; guard++) {
         if (s.over) { mode = 'done'; return null; }
         if (mode === 'next') {
@@ -83,6 +86,7 @@ export function createDriver(R, trace, hooks = {}) {
             if (!reached && !ANYWHERE(cur.cmd)) { mode = 'next'; hooks.onEnd?.(cur, i, { mode: 'never-reached' }); continue; }
             mode = 'feedback'; ticksLeft = ticksFor(FEEDBACK_SECONDS) - 1; // the tick right after the act is the first
             hooks.onAct?.(cur, i);
+            if (sight && cur.cmd.type === 'take') return { ...cur.cmd, witnesses: R.witnesses(s, sight.canSee(s)) };
             return cur.cmd;
           }
           // Plan the waypoints once (round the observatory, via the CP post); a moving target only moves the end.

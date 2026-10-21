@@ -52,8 +52,27 @@ A witness is a list of decisions from 10:00, saved in `verify/witnesses/`:
   matches Node's for the same trace. Results land in `verify/out/playback/`.
 - Open the game with `?replay=/verify/witnesses/<file>.json&speed=8` (serving the repo root) to watch it.
 
-Node and the browser drive a trace with the same code (`dist/loop/drive.js`) and decide what the player
-can see with the same code (`dist/loop/present.js`), so a trace found in Node replays exactly in the browser.
+Node and the browser share three pieces of code, so a trace found in Node replays exactly in the browser and
+behaves as it would in real play:
+- `dist/loop/drive.js` drives a trace.
+- `dist/loop/present.js` decides what reaches the player's screen.
+- `dist/loop/sight.js` decides who can see the player: a theft's witnesses, and whether a chaser has lost
+  you. It uses the engine's positions and the world's real walls. The client passes its live walls; the
+  verifier passes `verify/world-obstacles.json`, a snapshot of the same list.
+
+## The 3D game against the engine
+
+`npm run verify:playback` runs headless Chrome on the GPU by default (about 50 s per ending day).
+`PLAYBACK_GL=swiftshader` forces software rendering on a machine without a GPU, which is far slower.
+
+Besides "same rules, same ending as Node", it checks two things the engine alone can't:
+- **The walls.** `verify/world-obstacles.json` must match the live world. If someone moved a building or
+  a barricade, refresh it with `npm run verify:playback -- --snapshot-world`.
+- **Drawn vs engine positions.** At 10:30, 12:00, 13:30 and so on in each ending's day, the replay pauses,
+  people walk into place, and anyone drawn more than 2.5 m from where the engine has them is reported.
+  Rules decide "who saw you" and "who heard that" from the engine's positions, so a person stuck behind a
+  wall makes the player see one world while the rules run on another. People already filed are listed in
+  `verify/playback-known.json` (`--update-known` adds the current ones); anyone new fails the run.
 
 ## Rules for changing the game
 
@@ -69,4 +88,5 @@ can see with the same code (`dist/loop/present.js`), so a trace found in Node re
 npm run verify -- --quick        # a smaller search, about 15 seconds
 npm run verify -- --steps 6000   # search harder (default 3000 decisions)
 npm run verify -- --update       # accept the results as the new baseline
+npm run verify:playback -- --snapshot-world   # after changing the 3D world's walls
 ```
