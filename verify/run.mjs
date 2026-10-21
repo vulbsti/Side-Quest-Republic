@@ -11,7 +11,8 @@ import * as H from './lib/harness.mjs';
 import { buildMap, causeGraph } from './lib/map.mjs';
 import { lint, LINT_RULES } from './lib/lint.mjs';
 import { explore, checkDeterminism } from './lib/explore.mjs';
-import { INVARIANTS, RUN_CHECKS } from './lib/properties.mjs';
+import { INVARIANTS, RUN_CHECKS, checkInvariants } from './lib/properties.mjs';
+import { replayRecording } from '../dist/loop/trace.js';
 import { playDay, constableProbe, divergence, PERSONAS } from './lib/bots.mjs';
 import { renderMapPage } from './lib/page.mjs';
 
@@ -89,6 +90,18 @@ const crashes = days.filter((d) => d.crash).map((d) => ({ who: `${d.name} #${d.s
 
 const replayed = oldWitnesses.map((w) => ({ w, run: H.replay(w.trace, w.tempo || 'long') }));
 const routeFails = replayed.filter(({ w, run }) => w.file && w.expect?.history && !(w.expect.history in run.s.history)).map(({ w }) => w);
+// Played days (verify/recordings/*.json, saved in the game with ?dev and K) replay tick for tick: no crash, no
+// broken invariant, and the same ending as when they were played.
+const RECS = new URL('./recordings/', DIR);
+const recordingFails = (existsSync(RECS) ? readdirSync(RECS).filter((f) => f.endsWith('.json')) : []).flatMap((f) => {
+  const rec = JSON.parse(readFileSync(new URL(f, RECS), 'utf8'));
+  let bad = null, prev = null;
+  try {
+    const s = replayRecording(rec, R, { onTick: (s) => { if (!bad) { const v = checkInvariants(s, prev); if (v.length) bad = `${v[0].id} at ${R.clockText(s.t)}: ${v[0].msg}`; } prev = { phase: s.phase }; } });
+    if (!bad && rec.meta?.ending && s.ending !== rec.meta.ending) bad = `ended ${s.ending ?? 'unfinished'}, played as ${rec.meta.ending}`;
+  } catch (e) { bad = `crashed: ${e.message}`; }
+  return bad ? [{ file: `verify/recordings/${f}`, msg: bad }] : [];
+});
 R.setTempo('long');
 const hits = new Set([...ex.hits.keys(), ...days.flatMap((d) => Object.keys(d.run.s.history)), ...replayed.flatMap((x) => Object.keys(x.run.s.history))]);
 // A key only an old witness reached keeps that witness, so the next run can replay it again.
@@ -134,6 +147,7 @@ const properties = [
   prop('detention-exit', RUN_CHECKS['detention-exit'], violationsBy('detention-exit').length, examples(violationsBy('detention-exit'))),
   prop('lines-reach-player', 'Every line the engine says reaches the player somewhere (in earshot, on screen or on the phone)', unseenLines.length, unseenLines.length ? { msg: unseenLines.slice(0, 6).join(', ') } : null),
   prop('designed-routes', 'Every designed route (verify/routes/) still reaches what it was made for', routeFails.length, routeFails[0] ? { msg: `${routeFails[0].name}: never reached ${routeFails[0].expect.history}`, trace: routeFails[0].trace } : null),
+  prop('recordings-replay', 'Every played day saved in verify/recordings/ replays without a crash or a broken invariant, to the same ending', recordingFails.length, recordingFails[0] ? { msg: `${recordingFails[0].file}: ${recordingFails[0].msg}` } : null),
   prop('replay-deterministic', 'A witness trace replays from 10:00 to the same result', determinism.filter((d) => !d.ok).length),
   prop('no-hidden-state', 'Two days in one process (normal and ?long, ticked alternately) end exactly as each played alone', hiddenState ? 0 : 1),
 ];

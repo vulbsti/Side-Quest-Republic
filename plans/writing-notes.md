@@ -1,6 +1,6 @@
-# Writing notes (scenes, barks, phone)
+# Writing notes (situations, talks, barks, phone)
 
-Files: `dist/loop/scenes.js`, `dist/loop/barks.js`, `dist/loop/phone.js`. Data only. All
+Files: `dist/loop/story/*.js` (situations, talks, chatter), `dist/loop/barks.js`, `dist/loop/phone.js`, `dist/loop/phone-timeline.js`. Data only. All
 characters and groups are fictional; RUP/DRS/LJM are stand-ins, no real names.
 
 ## Jokes I'm proudest of

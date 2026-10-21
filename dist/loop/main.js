@@ -1,7 +1,7 @@
 // Client for the looping day: draws the rules' world state in the 3D city.
 // The rules (rules.js) decide what happens; this file only shows it and turns keys into actions.
 // Every engine field beyond the original loop is read defensively through S (below), so this
-// client runs against both the old engine and the slice-spec engine (plans/slice-spec.md).
+// client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
 import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
 import { expandWorld } from '../world-expansion.js?v=27';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
@@ -21,9 +21,22 @@ import { createPhone } from './phone-ui.js?v=1';
 import { routeEvent } from './present.js?v=2';
 import { createDriver } from './drive.js?v=3';
 import { canSee, lostSight } from './sight.js?v=1';
+import { createRecorder, setInputs } from './trace.js?v=1';
 
-const { createDay, tick, act, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
+const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
+// Every loop is recorded (dist/loop/trace.js): with ?dev, K saves it; put it in verify/recordings/ to make it a check.
+let rec = null;
+function act(s, cmd) { rec?.act(cmd); return R.act(s, cmd); }
+function saveRecording() {
+  if (!rec) return;
+  const r = rec.recording({ savedAt: new Date().toISOString(), clock: clockText(day.t), ending: day.ending ?? null });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(r)], { type: 'application/json' }));
+  a.download = `sqr-day-${r.meta.clock.replace(':', '')}.json`;
+  a.click();
+  toast('Day saved. Put it in verify/recordings/ and npm run verify replays it.', 3);
+}
 const QS = new URLSearchParams(location.search);
 const LONG = !QS.has('short'), DEV = QS.has('dev');
 const STEP = 0.1;
@@ -58,15 +71,14 @@ R.setTempo(LONG ? 'long' : 'slice');
 const MODELS_READY = true;
 let MODELS = null, MOD = null;
 const optional = async (path) => { try { return await import(path); } catch { return null; } };
-let SCENES = {}, BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null };
+let BARKS = null, CALLBACK_BARKS = {}, REAL_REELS = [], PHONE = { CAPTIONS: {}, CHAT: {}, TICKER: {}, REAL: null };
 /** Audio swap point: audio.js createAudio() (or anything with the same methods, via __loop.setAudio). */
 const NOOP = () => {};
 let audio = { cue: NOOP, phase: NOOP, music: NOOP, chase: NOOP, intensity: NOOP, crowd: NOOP, update: NOOP, unlock: NOOP, silence: NOOP, duck: NOOP };
 async function loadOptional() {
-  const [sc, bk, ph, au, mo] = await Promise.all([
-    optional('./scenes.js'), optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js?v=1') : null,
+  const [bk, ph, au, mo] = await Promise.all([
+    optional('./barks.js'), optional('./phone.js'), optional('./audio.js'), MODELS_READY || QS.has('models') ? optional('./models.js?v=1') : null,
   ]);
-  SCENES = sc?.SCENES ?? {};
   BARKS = bk?.BARKS ?? null;
   CALLBACK_BARKS = bk?.CALLBACK_BARKS ?? {};
   REAL_REELS = ph?.REAL_REELS ?? [];
@@ -1002,7 +1014,6 @@ function nextBark(type) {
 // (mixed into the current bag at once, so they come up soon, and into every refill after).
 const flagBarks = {};
 const flagsSeen = new Set();
-const pendingLines = []; // scene callbacks[flag]: [who, line] said once that person is near you
 function updateFlags() {
   for (const f of S.flags(day)) {
     if (flagsSeen.has(f)) continue;
@@ -1012,12 +1023,6 @@ function updateFlags() {
       (flagBarks[type] ??= []).push(line);
       for (const [k, bag] of Object.entries(bags)) if (k.endsWith(':' + type)) bag.splice(Math.floor(Math.random() * (bag.length + 1)), 0, line);
     }
-    for (const sc of Object.values(SCENES)) for (const l of sc.callbacks?.[f] || []) pendingLines.push(l);
-  }
-  for (let i = pendingLines.length - 1; i >= 0; i--) {
-    const [who, line] = pendingLines[i];
-    const b = bodies[who];
-    if (b?.model.visible && dist(b, sim.player) < 12 && !speakingNow(b)) { say(who, line, 5); pendingLines.splice(i, 1); break; }
   }
 }
 const BARK_TYPE = { students: 'student', party: 'party', sena: 'sena', opp: 'opp', constable: 'constable', raf: 'raf' };
@@ -1345,6 +1350,7 @@ function localOpportunity() {
 
 function resetDay() {
   day = createDay();
+  rec = replayer ? null : createRecorder(day, { loop: memory.loops });
   loopLinks = new Set();
   sim.player.x = SPOTS.metro.x; sim.player.z = SPOTS.metro.z; sim.player.y = 0;
   sim.player.vx = sim.player.vz = 0;
@@ -1357,7 +1363,7 @@ function resetDay() {
   ambientClock = 12; blockedFor = 0; streamText = '';
   phaseNow = null; lastClips = 0; sceneShown = null; stung = new Set(); crewBlock = null; detainedShown = false;
   chatQueue.length = 0; lastStingT = -99;
-  flagsSeen.clear(); pendingLines.length = 0; convoShown = null; convoOpen = null; 
+  flagsSeen.clear(); convoShown = null; convoOpen = null; 
   for (const k of Object.keys(flagBarks)) delete flagBarks[k];
   for (const k of Object.keys(bags)) delete bags[k];
   closeChoices();
@@ -1649,11 +1655,14 @@ function step(dt) {
       if (replayer.pauseAt != null && (replayer.index > replayer.pauseAt || replayer.drive.done)) { replayer.paused = true; accumulator = 0; break; }
       if (replayer.pauseClock != null && clockMinutes(day.t) >= replayer.pauseClock) { replayer.pauseClock = null; replayer.paused = true; accumulator = 0; break; }
     } else {
-      day.player.x = sim.player.x;
-      day.player.z = sim.player.z;
+      // The only per-tick inputs the engine takes from the client; recordings store exactly these.
+      const inp = { x: sim.player.x, z: sim.player.z, unseen: day.player.unseen };
+      setInputs(day, inp);
+      rec?.inputs(inp);
     }
     busWaits();
     tick(day, STEP);
+    rec?.tick();
     const ph = S.phase(day);
     if (ph !== phaseNow) onPhase(ph);
     handleEvents();
@@ -2025,6 +2034,7 @@ function frame(now) {
 
 function press(k) {
   if (mode !== 'play') return;
+  if (DEV && k === 'k') { saveRecording(); return; }
   if (cine.mode === 'sting') { cine.skip(); return; }
   if (cine.mode === 'scene') { if (k === ' ' || k === 'enter' || k === 'e') cine.next(); return; }
   if (k === 'e' && prompt) prompt.run();
@@ -2141,6 +2151,8 @@ function setupInput() {
       view: (y, p = pitch, z = zoom) => { yaw = y; pitch = p; zoom = z; },
       sting: (name) => { const st = STINGS[name]; if (st) cine.playSting({ target: () => props.focus[st[0]], title: st[1], sub: st[2] }); },
       showEnding,
+      // The day so far as a recording (dist/loop/trace.js).
+      recording: () => rec?.recording({ clock: clockText(day.t) }),
       // verify:playback: where the engine has everyone vs where they are drawn, and the walls sight.js uses.
       render: () => ({
         clock: clockText(day.t), over: day.over,

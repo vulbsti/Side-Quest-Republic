@@ -6,7 +6,7 @@ You can pester police (career advice, "uncle aap cute ho", asking for the water 
 
 The cast: Ravi, Iqbal, Officer Sharma, Mira, Asha, Zoya, Meera, Kabir, Nikhil, Dev, Sana, Inspector Rao on the wireless, constables and RAF jawans. The political groups (RUP, DRS, LJM) are fictional stand-ins.
 
-Design docs: `plans/vision-brief.md` (the owner's vision), `plans/slice-spec.md` (the contract this build follows), `docs/playtest-1.md` (the latest playtest), `research/` (sourced protest moments and situations).
+Design docs: `plans/vision-brief.md` (the owner's vision), `plans/story-rebuild.md` (the situations format this build follows), `plans/slice-spec.md` (the engine and audio-cue contract), `docs/playtest-1.md` (the latest playtest), `research/` (sourced protest moments and situations).
 
 ## Run and play
 
@@ -14,13 +14,14 @@ Design docs: `plans/vision-brief.md` (the owner's vision), `plans/slice-spec.md`
 python3 -m http.server 4173 --directory dist
 ```
 
-Open `http://localhost:4173` (add `?long` for the full 32-minute day; the default is a 10-minute slice). WASD/arrows move, Shift runs, drag to look, wheel zooms. E acts on whatever is nearest, F films, R rallies, C commands your crew, P opens the phone, number keys whisper a rumour after you talk to someone, Q puts down what you carry, hold T to let time pass faster, Tab opens the chaos board. Talking to people adds their routine to the board; seeing a rule fire adds a cause-and-effect link.
+Open `http://localhost:4173` (the day runs 32 minutes; add `?short` for a 10-minute slice). WASD/arrows move, Shift runs, drag to look, wheel zooms. E acts on whatever is nearest, F films, R rallies, C commands your crew, P opens the phone, number keys whisper a rumour after you talk to someone, Q puts down what you carry, hold T to let time pass faster, Tab opens the chaos board. Talking to people adds their routine to the board; seeing a rule fire adds a cause-and-effect link.
 
 ## How it is built
 
 - `dist/loop/rules.js` holds the whole day as one world state plus routines and rules ("when X happens on screen, person Y does Z"). It has no DOM or Three.js, so whole days can be played in tests.
-- `dist/loop/content.js`, `scenes.js`, `barks.js` and `phone.js` hold every line, scene, bark, caption, hint, board link and ending. Writers can change the day's words without touching the engine.
+- `dist/loop/story.js` runs the side stories: situations you walk into and play to done or fail (`dist/loop/story/*.js`, one file each), conversations with friends, locals and every named officer, and ambient chatter. `content.js`, `barks.js`, `phone.js` and `phone-timeline.js` hold the rest of the words: lines, barks, captions, hints, board links and endings. Writers can change the day's words without touching the engine.
 - `dist/loop/main.js` draws the state in the 3D city and turns keys into actions, with `lighting.js` (phase light), `props.js` (set pieces), `cinematic.js` (reels), `phone-ui.js`, `audio.js` (cue manager) and `models.js` / `../characters.js` (glTF people with mocap clips, vehicles, props; Blender sources in `assets-src/`).
+- `npm run verify` model-checks the day (see `verify/README.md`): it searches for every reachable ending and situation, checks invariants, and hands back a replayable trace for anything that breaks.
 - `npm test` (or `node tests/test-loop.mjs`) plays about twenty scripted days (idle, stolen speaker or key, rumours at different times, a stolen phone, the megaphone handed to Mira or Kabir, the minister rumour with and without a camera, hidden water, Nikhil brought to Kabir) and checks they end differently. It also checks every rule says something visible and every board link happens in at least one of those days.
 
 The old Codex build (v5–v27) was deleted in the vision rebuild; it is in git history before that commit. Its city, character, movement and bus modules in `dist/` are still used.

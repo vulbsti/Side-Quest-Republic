@@ -74,12 +74,20 @@ Besides "same rules, same ending as Node", it checks two things the engine alone
   wall makes the player see one world while the rules run on another. People already filed are listed in
   `verify/playback-known.json` (`--update-known` adds the current ones); anyone new fails the run.
 
+## Played days
+
+Every loop you play is recorded tick by tick (`dist/loop/trace.js`). Open the game with `?dev` and press
+**K** to save the day so far. Drop the file in `verify/recordings/` and every `npm run verify` replays it in
+Node: it must not crash, break an invariant, or end differently from how it was played. That is the
+quickest way to turn a bug you hit while playing into a check.
+
 ## Rules for changing the game
 
 - Run `npm run verify` before calling a change done, and quote the report's summary in the PR.
 - A change is done when nothing got worse than the baseline. If a regression is intended (content cut on
   purpose), say why and accept it with `--update`.
-- A bug found by playing becomes a property or a metric first, so it can't come back.
+- A bug found by playing becomes a check first, so it can't come back: save the day into `verify/recordings/`,
+  or add a property or a metric.
 - The report says whether the game works. Whether it is fun is still for a person playing it.
 
 ## Options

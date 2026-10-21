@@ -112,8 +112,7 @@ export default {
         ],
         goal: {
           text: 'Bring Meera to the barricade to film the panel',
-          // with:meera + you at the barricade, not at:meera:barricade: followers get stuck at the midway
-          // waypoint (plans/notes/act1-situations.md). Swap back once that's fixed.
+          // with:meera + you at the barricade, not at:meera:barricade: a follower trails a few metres behind you.
           until: ['with:meera', 'at:player:barricade', 'near:c1:sharma', 'near:c2:sharma'],
           by: '11:45',
           marker: 'meera',
