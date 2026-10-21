@@ -1,0 +1,19 @@
+{"name":"ending noshow · riot · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"10:22","wait":10},
+{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
+{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:36","do":"talk:c3","cmd":{"type":"talk","to":"c3"},"at":{"x":19,"z":-11}},
+{"clock":"10:38","wait":45},
+{"clock":"11:23","wait":45},
+{"clock":"12:08","do":"say:tomar-m1:a:2","cmd":{"type":"say","option":2},"at":{"x":17.184753313074808,"z":-12.719707387613344}},
+{"clock":"12:09","wait":10},
+{"clock":"12:19","do":"whisper:sena:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"sena"},"at":{"x":-7.5,"z":-5.5}},
+{"clock":"12:21","do":"whisper:minister:kabir","cmd":{"type":"whisper","to":"kabir","rumour":"minister"},"at":{"x":-4.6,"z":-2.4}},
+{"clock":"12:22","do":"pester:c4:cute","cmd":{"type":"pester","to":"c4","how":"cute"},"at":{"x":7,"z":1}},
+{"clock":"12:23","do":"situation:mira-mic","cmd":{"type":"situation","id":"mira-mic"},"at":{"x":2,"z":-5}},
+{"clock":"12:24","do":"leave","cmd":{"type":"leave"},"at":{"x":4.3789266837981184,"z":-0.6639809269918334}},
+{"clock":"12:25","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":{"x":-9.5,"z":-9}},
+{"clock":"12:26","finish":true}
+]}

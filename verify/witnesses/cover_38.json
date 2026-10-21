@@ -1,0 +1,23 @@
+{"name":"cover 38","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"10:22","wait":10},
+{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
+{"clock":"10:33","wait":20},
+{"clock":"10:53","wait":20},
+{"clock":"11:13","wait":3},
+{"clock":"11:16","do":"pester:c1:detainme","cmd":{"type":"pester","to":"c1","how":"detainme"},"at":{"x":-4,"z":16}},
+{"clock":"11:18","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":-18,"z":-34.2}},
+{"clock":"11:21","wait":20},
+{"clock":"11:41","do":"say:chabi:intro:1","cmd":{"type":"say","option":1},"at":{"x":-13.249856443533723,"z":-32.827736305909745}},
+{"clock":"11:42","wait":45},
+{"clock":"12:27","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":-18,"z":-34.2}},
+{"clock":"12:33","wait":45},
+{"clock":"13:18","wait":10},
+{"clock":"13:28","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":{"x":-13.249856443533725,"z":-32.827736305909745}},
+{"clock":"13:29","wait":3},
+{"clock":"13:32","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-8.4,"z":-8.4}},
+{"clock":"13:34","do":"goal:afwaah","cmd":null,"at":{"x":38,"z":-4.5},"hold":1},
+{"clock":"13:38","do":"say:afwaah:bikes:0","cmd":{"type":"say","option":0},"at":{"x":37.12113277959364,"z":-4.917461929693021}}
+]}

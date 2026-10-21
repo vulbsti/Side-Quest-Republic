@@ -1,0 +1,6 @@
+{"name":"ending heat · block · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"block","role":"spectator"},"trace":[
+{"clock":"10:00","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
+{"clock":"10:05","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:06","do":"pester:sharma:career","cmd":{"type":"pester","to":"sharma","how":"career"},"at":{"x":40,"z":-4.5}},
+{"clock":"10:10","finish":true}
+]}

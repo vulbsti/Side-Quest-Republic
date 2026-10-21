@@ -1,0 +1,5 @@
+{"name":"situation nikhil-lost:fail","note":"","tempo":"long","expect":{"history":"situation:nikhil-lost:fail"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"pester:c4:cannon","cmd":{"type":"pester","to":"c4","how":"cannon"},"at":{"x":7,"z":1}},
+{"clock":"10:22","finish":true}
+]}

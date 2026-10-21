@@ -1,0 +1,21 @@
+{"name":"situation afwaah:done","note":"","tempo":"long","expect":{"history":"situation:afwaah:done"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
+{"clock":"10:22","wait":10},
+{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
+{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:36","do":"talk:c3","cmd":{"type":"talk","to":"c3"},"at":{"x":19,"z":-11}},
+{"clock":"10:38","wait":45},
+{"clock":"11:23","wait":45},
+{"clock":"12:08","do":"say:tomar-m1:a:2","cmd":{"type":"say","option":2},"at":{"x":17.184753313074808,"z":-12.719707387613344}},
+{"clock":"12:09","wait":10},
+{"clock":"12:19","wait":20},
+{"clock":"12:39","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":-18,"z":-34.2}},
+{"clock":"12:42","wait":10},
+{"clock":"12:52","wait":10},
+{"clock":"13:02","wait":10},
+{"clock":"13:12","do":"say:afwaah:forward:0","cmd":{"type":"say","option":0},"at":{"x":-13.380825312796619,"z":-32.86557175703014}},
+{"clock":"13:12","do":"pester:c3:cute","cmd":{"type":"pester","to":"c3","how":"cute"},"at":{"x":19,"z":-11}},
+{"clock":"13:15","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"13:17","do":"say:afwaah:stage:2","cmd":{"type":"say","option":2},"at":{"x":0.9063699133158996,"z":-5.856656853357327}}
+]}

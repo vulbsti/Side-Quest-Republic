@@ -5,3 +5,5 @@ qa/game-review.html
 
 research/audio-candidate-*.mp3
 .claude/worktrees/
+verify/out/
+node_modules/
