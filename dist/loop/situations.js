@@ -13,10 +13,11 @@ import busAndar from './story/bus-andar.js';
 import detainMe from './story/detain-me.js';
 import dhuan from './story/dhuan.js';
 import gharJaanaHai from './story/ghar-jaana-hai.js';
+import pattiyan from './story/pattiyan.js';
 
 export const SITUATIONS = {
   ...nikhilLost, ...careerCounselling, ...chabi, ...speakerRun,
   ...miraMic, ...afwaah, ...mummyCall,
   ...cannonRequest, ...nayeJoote, ...busAndar, ...detainMe,
-  ...dhuan, ...gharJaanaHai,
+  ...dhuan, ...pattiyan, ...gharJaanaHai,
 };

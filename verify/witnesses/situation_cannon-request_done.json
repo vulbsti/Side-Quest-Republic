@@ -15,6 +15,7 @@
 {"clock":"13:19","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
 {"clock":"13:22","wait":45},
 {"clock":"14:07","do":"pester:r1:career","cmd":{"type":"pester","to":"r1","how":"career"},"at":{"x":38.5,"z":-6.5}},
-{"clock":"14:09","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":38,"z":-4.5}},
-{"clock":"14:10","do":"say:cannon-request:heat:0","cmd":{"type":"say","option":0},"at":{"x":36.441789356109226,"z":-7.253003894106384}}
+{"clock":"14:09","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":34,"z":-6}},
+{"clock":"14:10","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":38,"z":-4.5}},
+{"clock":"14:11","do":"say:cannon-request:heat:0","cmd":{"type":"say","option":0},"at":{"x":35.18731453996551,"z":-6.60927030351072}}
 ]}

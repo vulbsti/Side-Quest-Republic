@@ -138,9 +138,10 @@ export function storyCheck() {
         if (!g2.until?.length) f('error', 'goal-until', `${w}: goal has no until`);
         for (const p of g2.until || []) checkPred(w, p);
         if (g2.by && !HHMM.test(g2.by)) f('error', 'goal-by', `${w}: goal.by "${g2.by}"`);
+        if (g2.within != null && !(g2.within > 0)) f('error', 'goal-within', `${w}: goal.within ${g2.within} is not a number of minutes`);
         if (g2.marker && typeof g2.marker === 'string' && !PLACE_IDS.has(g2.marker) && !BODIES.has(g2.marker) && !OBJECTS.includes(g2.marker) && g2.marker !== 'player') f('error', 'goal-marker', `${w}: marker "${g2.marker}"`);
         if (g2.onDone) queue.push(g2.onDone); else ends.add('done');
-        if (g2.by) { if (g2.onFail) queue.push(g2.onFail); else ends.add('fail'); }
+        if (g2.by || g2.within) { if (g2.onFail) queue.push(g2.onFail); else ends.add('fail'); }
       }
     }
     for (const id of Object.keys(nodes)) if (!seen.has(id)) f('warn', 'graph-unreachable', `${where}: node "${id}" can't be reached from "${start}"`);

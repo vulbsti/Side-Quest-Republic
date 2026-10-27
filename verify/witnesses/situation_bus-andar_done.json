@@ -8,6 +8,5 @@
 {"clock":"11:21","do":"say:nikhil-lost:mila:3","cmd":{"type":"say","option":3},"at":{"x":-6.351476222879262,"z":31.244158967781246}},
 {"clock":"11:21","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":8.55,"z":-31}},
 {"clock":"11:26","wait":3},
-{"clock":"11:29","wait":20},
-{"clock":"11:49","finish":true}
+{"clock":"11:29","wait":45}
 ]}

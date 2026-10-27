@@ -208,7 +208,7 @@ assert(scenes.card.callbacks.some((c) => c.key === 'repost'), 'the morning clip 
 assert(scenes.card.callbacks.some((c) => c.key === 'report-wrong'));
 assert(scenes.links.has('cannon-dance'), 'the cannon request turns into a dance');
 
-// Witnessed key theft and you stand there: caught, and you film it all from the van.
+// Witnessed key theft and you stand there: caught at 11:10, processed and let go long before the showdown.
 // Also: the water hidden, the cannon rumour at Asha's stall.
 const caught = play([
   [at(10, 5), (s) => { moveTo(s, s.people.asha); act(s, { type: 'whisper', to: 'asha', rumour: 'cannon' }); }],
@@ -221,7 +221,7 @@ const caught = play([
   }],
 ]);
 assert(caught.cues.has('caught'));
-assert.equal(caught.card.role, 'detained', 'you sat out the showdown in the van');
+assert.notEqual(caught.card.role, 'detained', 'a morning detention no longer eats the whole day');
 
 // Speaker party at CP, the speech flops, biryani and a minister who never comes.
 const party = play([

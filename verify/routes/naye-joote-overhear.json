@@ -1,0 +1,17 @@
+{
+ "name": "route naye-joote-overhear",
+ "note": "Walk up to the white SUV after half past two, ask the fixer for a receipt, and his phone rings: you overhear the plan for the stone at half past three.",
+ "tempo": "long",
+ "expect": { "history": "node:situation:naye-joote:overhear" },
+ "trace": [
+  { "do": "go:suv", "cmd": null, "at": { "x": 13, "z": 9 }, "hold": 1 },
+  { "wait": 272 },
+  { "do": "situation:naye-joote", "cmd": { "type": "situation", "id": "naye-joote" }, "at": { "x": 15, "z": 8 } },
+  { "wait": 1 },
+  { "do": "say:naye-joote:suv:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 2 },
+  { "do": "say:naye-joote:overhear:2", "cmd": { "type": "say", "option": 2 }, "at": null },
+  { "wait": 10 },
+  { "finish": true }
+ ]
+}

@@ -8,9 +8,9 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=8';
+import * as R from './rules.js?v=9';
 import { SPEAKERS } from './talks.js?v=1';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=8';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=9';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -661,7 +661,7 @@ function updatePolice(dt) {
     const ox = b.x, oz = b.z;
     if (dist(b, { x: tx, z: tz }) > 18) { b.x = tx; b.z = tz; }
     b.speed = posture === 'seat' ? 0 : dist(b, { x: tx, z: tz }) > 0.3 ? steer(b, tmpTarget(tx, tz), speed, dt, world.obstacles) : 0;
-    if (posture === 'seat') { b.x = tx; b.z = tz; }
+    if (posture === 'seat') { b.x = tx; b.z = tz; } else unstick(b, tx, tz, dt);
     if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
     else if (o.yaw !== undefined) b.yaw = o.yaw;
     else if (fx.hotspotPos) b.yaw = Math.atan2(fx.hotspotPos.x - b.x, fx.hotspotPos.z - b.z);
@@ -743,6 +743,7 @@ function updateBodies(dt) {
       if (dist(b, s) > 14) Object.assign(b, { x: s.x, z: s.z });
       const ox = b.x, oz = b.z;
       b.speed = dist(b, s) > 0.3 ? steer(b, s, 3.8, dt, world.obstacles) : 0;
+      unstick(b, s.x, s.z, dt);
       if (b.speed > 0.1) b.yaw = Math.atan2(b.x - ox, b.z - oz);
       else if (looks.has(id)) { const l = looks.get(id); b.yaw = Math.atan2(l.x - b.x, l.z - b.z); }
       else if (id === 'sharma' && s.post === 'barricade') b.yaw = -Math.PI / 2;
@@ -751,6 +752,19 @@ function updateBodies(dt) {
       else if (id === 'asha' && s.mode === 'stall') b.yaw = 0.3;
     }
   }
+}
+
+/**
+ * Bodies walk to where the engine has them, around the 3D world's walls. The engine walks in straight lines,
+ * so a body can wedge itself behind a wall the engine went through: if it makes no headway for a second
+ * while more than 2.5 m off, it is put where the engine says (verify:playback checks drawn vs engine).
+ */
+function unstick(b, tx, tz, dt) {
+  const d = Math.hypot(b.x - tx, b.z - tz);
+  if (d > 2.5 && b.lastD != null && b.lastD - d < 0.3 * dt) b.stuckT = (b.stuckT || 0) + dt;
+  else b.stuckT = 0;
+  b.lastD = d;
+  if (b.stuckT > 1) { b.x = tx; b.z = tz; b.stuckT = 0; b.lastD = 0; }
 }
 
 // The detention bus fills up: you, named friends and other detainees sit inside, visible through the glass.
@@ -1181,6 +1195,7 @@ function runOpportunity(o) {
 }
 // What a refused command means, in words (the engine answers with a short code).
 const SAY = {
+  'goal-pending': 'You\'re already on it: the goal is on your screen.',
   'detained': 'Not from inside the bus. Talk your way out first.',
   'already-dead': 'Nobody believes that one any more.',
   'too-far': 'Get closer first.',
