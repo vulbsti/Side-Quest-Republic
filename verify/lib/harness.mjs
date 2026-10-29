@@ -107,7 +107,8 @@ export function clientFeedback(cmd, r, before, s) {
     case 'take': case 'drop': case 'give': return { shown: before.carrying !== s.player.carrying, raw: null };
     case 'talk': return { shown: !!r?.line, raw: null };
     case 'film': case 'rally': case 'stance': return { shown: true, raw };
-    case 'pester': case 'provocateur': case 'whisper': return { shown: !r?.ok, raw };
+    case 'pester': case 'provocateur': return { shown: !r?.ok, raw };
+    case 'whisper': return { shown: !r?.ok || r?.say === 'already-dead', raw }; // main.js toasts a dead rumour
     case 'leave': return { shown: true, raw: null }; // the card closes
     case 'say': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
 

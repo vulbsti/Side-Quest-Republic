@@ -1,6 +1,6 @@
 // Plays whole looping days with scripted players and checks the rules actually change the outcome.
 import assert from 'node:assert/strict';
-import { createDay, advance, act, at, SPOTS, RULES, drainEvents, dist, setTempo } from '../dist/loop/rules.js';
+import { createDay, advance, act, at, SPOTS, RULES, drainEvents, dist, setTempo, mins } from '../dist/loop/rules.js';
 import { LINKS, LINES, ENDINGS, HINTS, TALK, AGAIN, RUMOURS, PEOPLE, AMBIENT } from '../dist/loop/content.js';
 
 setTempo('slice'); // these chains were tuned on the 10-minute slice; verify/ checks the full day
@@ -71,24 +71,26 @@ assert(r.links.has('key-returned') && r.links.has('rao-recalls'));
 assert.notEqual(r.s.ending, 'march', 'a returned key stops the chain before the march');
 
 // Taken in front of the CP constable: he chases you. Stand there and he catches you, the key goes back,
-// and you sit out the showdown in the police van until 17:30. The day itself carries on.
+// and you sit on the detention bus until they take your name and let you go (about twenty minutes).
 {
   const s = createDay();
   runUntil(s, at(11, 10));
   moveTo(s, SPOTS.keyHook);
   act(s, { type: 'take', object: 'key', witnesses: ['c2'] });
   assert.equal(s.player.chasedBy, 'c2', 'a constable who sees you take the key runs at you');
-  advance(s, 30);
+  advance(s, 10);
   assert(s.player.detained, 'standing still gets you caught');
   assert.equal(s.player.carrying, null);
   assert.equal(s.objects.key.holder, 'hook', 'the police hang the key back');
   const seen = links(drainEvents(s));
   for (const l of ['chase', 'detained']) { assert(seen.has(l), `caught chain fires ${l}`); everSeen.add(l); }
-  runUntil(s, at(17, 31));
-  assert(!s.player.detained, 'everyone is released at 17:30');
-  advance(s, 1000);
+  const since = s.detention.since;
+  drainEvents(s);
+  while (s.player.detained && s.t < since + mins(25)) advance(s, 1);
+  assert(!s.player.detained, 'nobody sits on the bus all day: processed and let go within twenty-five minutes');
+  assert(drainEvents(s).some((e) => /^released-/.test(e.key)), 'the release says how it happened');
+  advance(s, 100000);
   assert(s.over && s.t >= at(18, 0) - 1, 'the day runs to 18:00 even after you are detained');
-  assert.equal(s.outcome.role, 'detained');
 }
 
 // Speaker party at CP: Sharma comes, switches it off, then goes back.

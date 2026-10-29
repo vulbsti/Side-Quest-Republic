@@ -56,6 +56,17 @@ export default {
             next: 'window',
           },
           {
+            intent: 'Sign the maafinama and walk off, head down',
+            beats: [
+              { who: 'r1', line: 'Yahan sign karo. "Main aage se kabhi bheed ka hissa nahi banunga."' },
+              { who: 'player', line: '(sign karte hue) ...Bheed ka hissa nahi. Bheed ka hero ban sakta hoon na?' },
+              { who: 'student', line: 'Bhai ne maafinama sign kiya. Screenshot le liya maine.', react: 'laugh' },
+            ],
+            effects: { aura: -8, heat: -10 },
+            do: ['release:player', 'callback:maafi'],
+            end: 'done',
+          },
+          {
             intent: 'Just sit and wait it out',
             beats: [
               { who: 'student', line: 'Smart. Paanch baje sab chhoot jaate hain. Tab tak gaana suno.' },
@@ -87,7 +98,7 @@ export default {
               { who: 'r1', line: 'Hah. Bakwas.' },
               { who: 'r1', line: '...Thoda achha tha.', react: 'laugh' },
             ],
-            effects: { aura: 5, mood: { r1: 'amused' } },
+            effects: { aura: 5, help: 5, mood: { r1: 'amused' } },
             next: 'inside',
           },
           {
@@ -95,7 +106,10 @@ export default {
             beats: [
               { who: 'player', line: 'Bhaiya ek call. Mummy ko. Bas bolna hai main zinda hoon.' },
               { who: 'r1', line: 'Mera phone bhi Amma ke liye hai. Nahi.' },
+              { who: 'r1', line: '...Achha. Ek minute. Jaldi. Aur speaker pe mat daalna.' },
+              { who: 'player', line: 'Mummy? Haan, main theek hoon. Bas... bus mein hoon. Police wali. Nahi nahi, kuch nahi kiya!' },
             ],
+            effects: { flags: ['mummy-called-thana'] },
             next: 'inside',
           },
         ],
@@ -127,13 +141,14 @@ export default {
         goal: {
           text: 'Wait for a friend to make a scene outside',
           until: ['free'],
-          by: '17:30',
+          within: 15, // nobody comes in fifteen minutes: back to working the bus
           onFail: 'inside',
         },
       },
     },
     callbacks: { // keys for do: ['callback:<key>']
       gali: 'Because you got Jawan Pandey talking about Muzaffarpur at {t}, the bus door was "open for the heat" at {at}.',
+      maafi: 'Because you signed a maafinama on the bus at {t}, you were free at {at}, and the screenshot is in three group chats.',
       kele: 'Because you took up the banana uncle\'s case at {t}, the whole bus chanted its way out at {at}.',
     },
     outcomes: {

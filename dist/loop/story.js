@@ -101,6 +101,8 @@ export function createStory(api) {
   /** Queue lines to be said in order, a beat apart, by whoever says them (people, officers, the phone). */
   function speak(s, beats, { key, gap = CHATTER_GAP, kind = 'beat', place = null } = {}) {
     const q = story(s).queue;
+    // Your conversation never waits behind ambient chatter: the chatter still queued is dropped.
+    if (kind === 'beat') for (let i = q.length - 1; i >= 0; i--) if (q[i].kind !== 'beat') q.splice(i, 1);
     let t = Math.max(s.t, q.length ? q[q.length - 1].t + gap : s.t);
     for (const b of beats || []) {
       const who = b.who ?? b[0], line = b.line ?? b[1];
@@ -222,6 +224,9 @@ export function createStory(api) {
     if (!o) return { ok: false, say: 'no such option' };
     if (!meets(s, o.requires)) return { ok: false, say: why(s, o.requires) };
     st.convo = null;
+    // Answering before the last lines have played skips them (the client only offers choices once they have).
+    for (const q of st.queue) if (q.kind === 'beat') q.t = s.t;
+    flushQueue(s);
     speak(s, o.beats, { key: `${c.kind}:${c.id}:${c.node}:${i}` });
     apply(s, o, { id: c.id });
     if (o.payoff?.caption) postFeed(s, { by: o.payoff.by, caption: o.payoff.caption, kind: c.id, id: `${c.id}-${c.node}-${i}` });
@@ -293,6 +298,8 @@ export function createStory(api) {
     if (!def) return { ok: false };
     const sit = (st.sits[id] ??= { state: 'waiting' });
     if (!forced && !['hooked', 'active'].includes(sit.state)) return { ok: false, say: 'not now' };
+    // Already working on its goal: reopening would replay the node and restart the goal's clock.
+    if (sit.state === 'active' && sit.node && def.nodes[sit.node]?.goal) return { ok: false, say: 'goal-pending' };
     if (sit.state !== 'active') { sit.state = 'active'; sit.since = s.t; sit.node = def.start; api.memo(s, 'situation:' + id); api.cue(s, 'situation-start', { pos: s.player, data: { id } }); }
     open(s, 'situation', id, (def.cast || [])[0] || null, def, sit.node || def.start);
     return { ok: true, said: true };
@@ -382,7 +389,7 @@ export function createStory(api) {
         const g = def.nodes[sit.node]?.goal;
         if (g) {
           if ((g.until || []).every((p) => holds(s, p))) { const next = g.onDone; sit.node = null; if (next) open(s, 'situation', id, null, def, next); else endSituation(s, id, 'done'); }
-          else if (g.by && now >= clock(g.by) - 1e-9) { const next = g.onFail; sit.node = null; if (next) open(s, 'situation', id, null, def, next); else endSituation(s, id, 'fail'); }
+          else if ((g.by && now >= clock(g.by) - 1e-9) || (g.within && s.t >= sit.goalSince + api.mins(g.within) - 1e-9)) { const next = g.onFail; sit.node = null; if (next) open(s, 'situation', id, null, def, next); else endSituation(s, id, 'fail'); }
         }
       }
     }

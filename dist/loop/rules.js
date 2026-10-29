@@ -852,6 +852,7 @@ function detainPlayer(s, why) {
   if (n.mode === 'follow') { n.mode = 'lost'; n.path = []; emit(s, 'nikhil-lost-again'); }
   for (const p of s.provocateurs) if (p.state === 'joined') { p.state = 'acting'; goTo(p, p.slot); }
   pl.detained = true; pl.stance = null;
+  if (s.story?.convo && s.story.convo.id !== 'bus-andar') s.story.convo = null; // hauled off mid-conversation
   if (s.police.charge && !s.police.charge.over && s.showdown) s.showdown.playerDetained = true; // taken in the charge
   s.detention.since = s.t;
   Object.assign(pl, detentionPos(s));
@@ -861,6 +862,7 @@ function detainPlayer(s, why) {
 function releasePlayer(s, key) {
   const pl = s.player;
   pl.detained = false;
+  if (s.story?.convo?.id === 'bus-andar') s.story.convo = null; // the bus card closes as you step off
   const d = detentionPos(s);
   Object.assign(pl, { x: d.x - 2, z: d.z + 1.5 });
   addRep(s, { heat: -15 });
@@ -1278,7 +1280,7 @@ function updateBus(s, dt) {
       if (b.phase === 'toJantar') {
         const joining = s.police.line === 'stage' || s.scared ? 0 : b.load;
         s.crowd.stage += joining; b.unloaded = b.load; b.load = 0; b.phase = 'jantar'; b.timer = BUS.dwellJantar;
-        if (w.holder === 'bus') { w.holder = null; Object.assign(w, SPOTS.waterJantar); emit(s, 'water-arrives'); }
+        if (w.holder === 'bus') { w.holder = null; Object.assign(w, SPOTS.waterJantar); emit(s, 'water-arrives', { pos: SPOTS.waterJantar }); }
       } else { b.phase = 'cp'; b.timer = BUS.dwellCP; }
     } else b.z += Math.sign(d) * step;
   }
@@ -1746,6 +1748,22 @@ export const RULES = [
       callback(s, 'distraction', 'detained', { who: who[0].toUpperCase() + who.slice(1) });
       releasePlayer(s, 'released-distraction');
     },
+  },
+  {
+    // Mummy called back the thana after you rang her from the jawan's phone.
+    id: 'mummy-gets-you-out',
+    says: 'released-mummy',
+    when: (s) => s.player.detained && s.flags['mummy-called-thana'] && !s.flags['player-stays-detained'] && s.t >= s.detention.since + mins(12),
+    then: (s) => { delete s.flags['mummy-called-thana']; releasePlayer(s, 'released-mummy'); },
+    repeat: true,
+  },
+  {
+    // Nobody is held all day: names are taken and you are let go after about twenty minutes.
+    id: 'processed-and-released',
+    says: 'released-processed',
+    repeat: true,
+    when: (s) => s.player.detained && !s.flags['player-stays-detained'] && s.t >= s.detention.since + mins(20) && s.t < at(17, 30),
+    then: (s) => releasePlayer(s, 'released-processed'),
   },
   {
     id: 'sana-short-one',

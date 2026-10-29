@@ -17,9 +17,10 @@
   "prompt-works": true,
   "no-raw-code": true,
   "chase-ends": true,
-  "detention-exit": false,
-  "lines-reach-player": false,
+  "detention-exit": true,
+  "lines-reach-player": true,
   "designed-routes": true,
+  "recordings-replay": true,
   "replay-deterministic": true,
   "no-hidden-state": true
  },
@@ -90,6 +91,8 @@
    "detainees-escape",
    "escape-now",
    "friend-distracts",
+   "mummy-gets-you-out",
+   "processed-and-released",
    "sana-short-one"
   ],
   "callbacks": [
@@ -101,6 +104,7 @@
    "key-stall",
    "key-escape",
    "caught",
+   "caught-charge",
    "water-noheat",
    "water-hidden",
    "expose",
@@ -151,6 +155,7 @@
    "megaphone-given",
    "mira-megaphone",
    "singalong-line",
+   "kabir-roast",
    "roast-viral",
    "minister-wait",
    "dev-provokes",
@@ -186,6 +191,7 @@
   "situationsDone": [
    "nikhil-lost:done",
    "career-counselling:done",
+   "chabi:done",
    "speaker-run:done",
    "mira-mic:done",
    "afwaah:done",
@@ -195,6 +201,7 @@
    "bus-andar:done",
    "detain-me:done",
    "dhuan:done",
+   "pattiyan:done",
    "ghar-jaana-hai:done"
   ],
   "situationsFail": [
@@ -209,6 +216,7 @@
    "bus-andar:fail",
    "detain-me:fail",
    "dhuan:fail",
+   "pattiyan:fail",
    "ghar-jaana-hai:fail"
   ],
   "nodes": [
@@ -225,6 +233,9 @@
    "chabi:break",
    "chabi:rishta",
    "chabi:lift",
+   "chabi:decide",
+   "chabi:return",
+   "chabi:returned",
    "speaker-run:intro",
    "speaker-run:carry",
    "speaker-run:setup",
@@ -273,6 +284,7 @@
    "dhuan:meera-saved",
    "dhuan:meera-caught",
    "dhuan:kabir",
+   "pattiyan:tent",
    "ghar-jaana-hai:walk",
    "ghar-jaana-hai:gate",
    "ghar-jaana-hai:count",
@@ -306,7 +318,10 @@
    "chabi:intro:1",
    "chabi:intro:2",
    "chabi:rishta:0",
+   "chabi:rishta:1",
    "chabi:rishta:2",
+   "chabi:decide:2",
+   "chabi:decide:3",
    "speaker-run:intro:2",
    "speaker-run:intro:3",
    "speaker-run:setup:2",
@@ -349,12 +364,16 @@
    "naye-joote:suv:2",
    "naye-joote:suv:3",
    "naye-joote:overhear:2",
+   "naye-joote:overhear:3",
    "naye-joote:joined:0",
+   "naye-joote:joined:1",
    "naye-joote:joined:2",
+   "naye-joote:swept:0",
    "bus-andar:inside:0",
    "bus-andar:inside:1",
    "bus-andar:inside:2",
    "bus-andar:inside:3",
+   "bus-andar:inside:4",
    "bus-andar:pandey:0",
    "bus-andar:pandey:1",
    "bus-andar:pandey:2",
@@ -367,6 +386,7 @@
    "detain-me:window2:0",
    "detain-me:ask:2",
    "detain-me:naam:1",
+   "detain-me:naam:2",
    "detain-me:update:0",
    "dhuan:smoke:0",
    "dhuan:smoke:1",
@@ -377,26 +397,35 @@
    "dhuan:hub:3",
    "dhuan:nikhil:0",
    "dhuan:nikhil:1",
+   "dhuan:nikhil:2",
    "dhuan:nikhil-found:0",
    "dhuan:nikhil-found:1",
    "dhuan:nikhil-gone:0",
    "dhuan:meera:0",
    "dhuan:meera:2",
+   "dhuan:meera:3",
    "dhuan:meera-saved:1",
    "dhuan:meera-caught:1",
    "dhuan:kabir:1",
    "dhuan:kabir:2",
+   "dhuan:kabir:3",
+   "pattiyan:tent:0",
+   "pattiyan:tent:1",
+   "pattiyan:tent:2",
    "ghar-jaana-hai:gate:0",
    "ghar-jaana-hai:gate:1",
    "ghar-jaana-hai:gate:2",
    "ghar-jaana-hai:gate:3",
    "ghar-jaana-hai:count:1",
    "ghar-jaana-hai:count:4",
+   "ghar-jaana-hai:nikhil-text:0",
    "ghar-jaana-hai:nikhil-text:1",
    "ghar-jaana-hai:repost:0",
+   "ghar-jaana-hai:repost:1",
    "ghar-jaana-hai:repost:2",
    "ghar-jaana-hai:mummy:0",
    "ghar-jaana-hai:mummy:1",
+   "ghar-jaana-hai:mummy:3",
    "ghar-jaana-hai:late:1"
   ],
   "lines": [
@@ -430,12 +459,14 @@
    "heat-on-stream",
    "zoya-whistle",
    "water-out",
+   "water-arrives",
    "water-delivered",
    "line-stage",
    "line-cp",
    "line-parliament",
    "singalong",
    "line-withdraws",
+   "roast",
    "roast-viral",
    "dev-missing-meg",
    "dev-chai",
@@ -498,6 +529,8 @@
    "detained-asked",
    "released-1730",
    "detained-story",
+   "released-mummy",
+   "released-processed",
    "released-distraction",
    "detain-me-leave",
    "friend-distracts",
@@ -524,7 +557,7 @@
    "ok": true
   },
   "screen-repeat": {
-   "value": 0.14884096229215468,
+   "value": 0.14496758349443503,
    "ok": true
   },
   "constables-shared": {
@@ -532,11 +565,11 @@
    "ok": true
   },
   "things-per-hour": {
-   "value": 21.491666666666667,
+   "value": 24.075,
    "ok": true
   },
   "nothing-new": {
-   "value": 1522,
+   "value": 199,
    "ok": false
   },
   "quiet": {
@@ -544,7 +577,7 @@
    "ok": true
   },
   "phone-rate": {
-   "value": 60.18333333333333,
+   "value": 62.74166666666667,
    "ok": true
   },
   "endings-by-bots": {
@@ -552,12 +585,12 @@
    "ok": true
   },
   "divergence": {
-   "value": 0.6048106672792054,
+   "value": 0.6028023977267262,
    "ok": true
   },
   "silent-acts": {
-   "value": 23.533333333333335,
-   "ok": false
+   "value": 0,
+   "ok": true
   }
  }
 }

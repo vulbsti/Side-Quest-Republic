@@ -12,6 +12,9 @@
 {"clock":"10:43","do":"say:career-counselling:intro:0","cmd":{"type":"say","option":0},"at":{"x":33.52951634446429,"z":-6.6234797363794575}},
 {"clock":"10:44","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
 {"clock":"10:49","do":"say:career-counselling:panel:2","cmd":{"type":"say","option":2},"at":{"x":6.839089469558514,"z":-35.94348511069851}},
-{"clock":"10:50","wait":10},
-{"clock":"11:00","finish":true}
+{"clock":"10:50","do":"say:career-counselling:tomar:3","cmd":{"type":"say","option":3},"at":{"x":6.839089469558514,"z":-35.94348511069851}},
+{"clock":"10:51","wait":3},
+{"clock":"10:54","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":-18,"z":-34.2}},
+{"clock":"10:55","do":"leave","cmd":{"type":"leave"},"at":{"x":-13.321308402283695,"z":-34.52840290495211}},
+{"clock":"10:56","finish":true}
 ]}

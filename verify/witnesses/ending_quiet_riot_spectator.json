@@ -1,0 +1,7 @@
+{"name":"ending quiet · riot · spectator","note":"","tempo":"long","expect":{"ending":"quiet","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"whisper:cannon:asha","cmd":{"type":"whisper","to":"asha","rumour":"cannon"},"at":{"x":-18,"z":-34.2}},
+{"clock":"10:25","do":"whisper:sena:mira","cmd":{"type":"whisper","to":"mira","rumour":"sena"},"at":{"x":0,"z":-14.5}},
+{"clock":"10:27","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
+{"clock":"10:29","finish":true}
+]}

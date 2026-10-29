@@ -8,7 +8,6 @@
 {"clock":"10:31","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":38,"z":-4.5}},
 {"clock":"10:35","do":"say:career-counselling:intro:1","cmd":{"type":"say","option":1},"at":{"x":33.79585214263713,"z":-6.49697023224736}},
 {"clock":"10:36","wait":10},
-{"clock":"10:46","do":"say:career-counselling:panel:1","cmd":{"type":"say","option":1},"at":{"x":33.79585214263713,"z":-6.49697023224736}},
-{"clock":"10:47","wait":45},
-{"clock":"11:32","do":"say:career-counselling:tomar:0","cmd":{"type":"say","option":0},"at":{"x":33.79585214263713,"z":-6.49697023224736}}
+{"clock":"10:46","do":"say:career-counselling:panel:3","cmd":{"type":"say","option":3},"at":{"x":33.79585214263713,"z":-6.49697023224736}},
+{"clock":"10:47","do":"say:career-counselling:tomar:0","cmd":{"type":"say","option":0},"at":{"x":33.79585214263713,"z":-6.49697023224736}}
 ]}
