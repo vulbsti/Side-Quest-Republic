@@ -77,7 +77,7 @@ export function createStory(api) {
       case 'at': { const x = a === 'player' ? s.player : visibleBody(s, a) || s.objects[a]; return !!x && placeAt(x) === b; }
       case 'with': return story(s).followers.includes(a) || (a === 'nikhil' && ['follow', 'waitStage'].includes(s.people.nikhil.mode));
       case 'holding': return s.player.carrying === a;
-      case 'given': return holderOf(s, a) === b;
+      case 'given': return holderOf(s, a) === b || s.objects[a]?.givenTo === b; // or handed over and put away since
       case 'flag': return !!s.flags[a];
       case '!flag': return !s.flags[a];
       case 'time': return s.t >= clock(`${a}:${b ?? '00'}`) - 1e-9;

@@ -1,0 +1,15 @@
+{"name":"cover 73","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
+{"clock":"17:00","wait":1},
+{"clock":"17:01","do":"say:ghar-jaana-hai:gate:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"17:02","wait":1},
+{"clock":"17:03","do":"say:ghar-jaana-hai:mummy:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"17:04","wait":1},
+{"clock":"17:05","do":"say:ghar-jaana-hai:gate:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"17:06","wait":1},
+{"clock":"17:07","do":"say:ghar-jaana-hai:count:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"17:07","wait":1},
+{"clock":"17:08","wait":44},
+{"clock":"17:52","do":"say:ghar-jaana-hai:nikhil-text:1","cmd":{"type":"say","option":1},"at":{"x":150,"z":-296.5899999999999}}
+]}

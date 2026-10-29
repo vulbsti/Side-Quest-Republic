@@ -3,10 +3,9 @@
 // Every engine field beyond the original loop is read defensively through S (below), so this
 // client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
 import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
-import { expandWorld } from '../world-expansion.js?v=27';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
-import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
+import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
 import * as R from './rules.js?v=9';
 import { SPEAKERS } from './talks.js?v=1';
@@ -265,14 +264,14 @@ function waterModel() {
   return g;
 }
 function placeProps() {
-  world.put('chai-cart', -18, -36, 0.3);
+  world.put('chai-cart', 86, -193, 0.3);
   world.obstacles.push({ id: 'cp-chai', x: 86, z: -193, w: 3, d: 2, h: 3 });
   // The standing barricade across Jantar Mantar Road, with a gap in the middle for the marshals.
   for (const x of [-57, -54, -48, -45]) {
     world.put('barricade', x, 80, 0);
     world.obstacles.push({ id: 'loop-barricade', x, z: 80, w: 3, d: 0.7, h: 1.3 });
   }
-  for (const [text, x, z, r] of [['PARLIAMENT STREET →', 50, -9, -Math.PI / 2], ['CP SHUTTLE STOP', 4, -38.5, 0], ['JANTAR MANTAR STOP', 4, 5.5, 0]]) {
+  for (const [text, x, z, r] of [['PARLIAMENT STREET ↑', -49, 62, 0], ['CP SHUTTLE STOP', SPOTS.busCP.x + 3.5, SPOTS.busCP.z + 2, 0], ['JANTAR MANTAR STOP', SPOTS.busJantar.x + 3, SPOTS.busJantar.z, Math.PI / 2]]) {
     const s = sign(text, 3.4, 0.6);
     s.position.set(x, 2.6, z); s.rotation.y = r;
     world.scene.add(s);
@@ -414,7 +413,8 @@ const GROUPS = {
 };
 // Arriving groups stand beside the students at their place, each on its own side.
 const KIND_OFFSET = { party: { x: -7.5, z: 6.5 }, sena: { x: 7, z: 7 }, opp: { x: -8, z: -4 }, students: { x: 0, z: 0 } };
-const KIND_SPAWN = { party: { x: -60, z: 3 }, sena: { x: 80, z: 2 }, opp: { x: -60, z: -3 }, students: { x: -7, z: 34 } };
+// Where each kind of group walks in from: the party from its SUV, the DRS bikes off Sansad Marg, students up Jantar Mantar Road.
+const KIND_SPAWN = { party: { x: -36, z: 118 }, sena: { x: -30, z: 60 }, opp: { x: -62, z: 122 }, students: { x: -40, z: 132 } };
 const LINE_LAYOUT = {
   stage: { x: -51, z: 111.8, axis: 'x', yaw: Math.PI },
   cp: { x: 108.5, z: -183.4, axis: 'x', yaw: Math.PI },
@@ -710,7 +710,7 @@ function updateProvs(dt) {
     const place = placePos(pv.place) || PLACES.stage;
     let tx = pv.x ?? place.x + Math.cos(i * 2.1) * 3, tz = pv.z ?? place.z + Math.sin(i * 2.1) * 3;
     let speed = 3.2;
-    if (pv.state === 'exposed') { const s = props.suvPos || { x: -60, z: 3 }; tx = s.x; tz = s.z; speed = 6.5; }
+    if (pv.state === 'exposed') { const s = props.suvPos || SPOTS.suv; tx = s.x; tz = s.z; speed = 6.5; }
     if (pv.state === 'reported') { b.goneT = (b.goneT || 0) + dt; const s = bodies.sharma; tx = s.x + 1; tz = s.z + 1; }
     if (!b.model.visible) { b.model.visible = true; b.x = tx; b.z = tz; b.goneT = 0; }
     const ox = b.x, oz = b.z;
@@ -749,7 +749,7 @@ function updateBodies(dt) {
       else if (looks.has(id)) { const l = looks.get(id); b.yaw = Math.atan2(l.x - b.x, l.z - b.z); }
       else if (id === 'sharma' && s.post === 'barricade') b.yaw = -Math.PI / 2;
       else if (id === 'dev' && s.mode === 'waiting') b.yaw = Math.PI / 2;
-      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(-b.x, -14 - b.z);
+      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(SPOTS.stageTop.x - b.x, SPOTS.stageTop.z - b.z);
       else if (id === 'asha' && s.mode === 'stall') b.yaw = 0.3;
     }
   }
@@ -1413,7 +1413,7 @@ function startLoop() {
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
   realReels(phaseNow);
-  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, south of here. The stage is in between. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
+  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, just south of here. The stage is down Sansad Marg, on Jantar Mantar Road. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
 const WHERE_NAME = { stage: 'the stage', cp: 'the CP shuttle stop', barricade: 'the barricade', parliament: 'Parliament Street' };
@@ -1861,7 +1861,7 @@ function camera(dt) {
   }
   camTarget.set(p.x, 1.55 + p.y * 0.7, p.z);
   camDesired.set(camTarget.x + Math.sin(yaw) * zoom, camTarget.y + zoom * pitch, camTarget.z + Math.cos(yaw) * zoom);
-  for (const o of world.obstacles) {
+  for (const o of nearObstacles(world.obstacles, Math.min(camTarget.x, camDesired.x) - 2, Math.min(camTarget.z, camDesired.z) - 2, Math.max(camTarget.x, camDesired.x) + 2, Math.max(camTarget.z, camDesired.z) + 2)) {
     if (o.h < 2) continue;
     if (o.h < 3.5) {
       if (Math.abs(camDesired.x - o.x) < o.w / 2 + 1 && Math.abs(camDesired.z - o.z) < o.d / 2 + 1) camDesired.y = Math.max(camDesired.y, o.h + 1.2);
@@ -2117,7 +2117,6 @@ function setupInput() {
   try {
     world = await buildWorld($('#scene'), (name) => ($('#loadtext').textContent = 'Preparing ' + name.replaceAll('-', ' ') + '…'));
     await enhanceEnvironment(THREE, world);
-    expandWorld(world, { bodies: () => (sim ? [sim.player] : []) });
     await loadCharacters((name) => ($('#loadtext').textContent = 'Preparing ' + name + ' characters…'));
     placeProps();
     const box = new THREE.Box3(), size = new THREE.Vector3();

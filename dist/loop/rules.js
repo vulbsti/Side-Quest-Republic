@@ -450,15 +450,16 @@ export const SCHEDULE = [
       goTo(r, SPOTS.cpPost, SPOTS.raviStage);
     } else startRaviSearch(s);
   }],
+  // Ravi's 11:15 chai at CP: Sansad Marg to CP is a twenty-minute walk, so he leaves the stage well before.
+  [10, 56, (s) => {
+    const r = s.people.ravi;
+    if (r.mode === 'stage') { r.mode = 'toChai'; goTo(r, SPOTS.cpPost, SPOTS.raviChai); }
+  }],
   [11, 0, (s) => {
     s.bus.breakPending = true;
     const k = s.people.kabir;
     k.hidden = false; Object.assign(k, SPOTS.kabirStart); k.mode = 'toStage'; walkTo(k, SPOTS.kabirStage);
     const m = s.people.meera; m.target = 'cp'; walkTo(m, FILM_SPOTS.cp);
-  }],
-  [11, 15, (s) => {
-    const r = s.people.ravi;
-    if (r.mode === 'stage') { r.mode = 'toChai'; goTo(r, SPOTS.cpPost, SPOTS.raviChai); }
   }],
   [11, 30, (s) => endIqbalBreak(s)],
   [11, 40, (s) => {
@@ -560,7 +561,8 @@ function startSpeech(s) {
   emit(s, big ? 'big-speech' : 'small-speech', { link: big ? 'big-speech' : 'small-speech', place: 'stage', pos: SPOTS.stageTop });
   happen(s, big ? 'big-speech' : 'small-speech', SPOTS.stageTop, 'stage');
   if (big) callback(s, s.memo['speaker-returned'] ? 'speaker-speech' : 'world-speech', s.memo['speaker-returned'] ? 'speaker-returned' : null);
-  else callback(s, 'speaker-flop', 'speaker');
+  else if (s.memo.speaker) callback(s, 'speaker-flop', 'speaker');
+  else callback(s, 'world-small-speech');
 }
 
 function startIqbalBreak(s) {
@@ -607,6 +609,7 @@ function formPoliceLine(s) {
   s.police.line = place;
   emit(s, `line-${place}`, { link: s.police.watch ? 'line-follows-camera' : 'police-line', place, pos: LINE_FRONT[place] });
   if (s.police.watch) callback(s, 'world-viral-line', null, { place });
+  else callback(s, 'world-line', null, { place });
   const sh = s.people.sharma;
   if (place === 'cp' && sh.post === 'cp') { sh.post = 'barricade'; sh.mode = 'toPost'; walkTo(sh, SPOTS.barricade); }
 }
@@ -2040,6 +2043,7 @@ export function act(s, cmd) {
     if (!o || pl.carrying || !isFree(o)) return { ok: false };
     const fromDetentionBus = cmd.object === 'key' && s.bus.phase === 'detention' && o.holder === 'hook';
     o.holder = 'player'; pl.carrying = cmd.object;
+    o.givenTo = null;
     if (cmd.object === 'speaker') o.on = false;
     const seen = new Set(cmd.witnesses ?? witnesses(s));
     const police = [...seen].filter((id) => isOfficer(s, id) && officerById(s, id).mode !== 'chase');
@@ -2098,6 +2102,7 @@ export function act(s, cmd) {
       addRep(s, { help: 10 });
       if (q.mode === 'search') { k.holder = 'iqbal'; emit(s, 'key-returned', { link: 'key-returned' }); q.mode = 'toBusWithKey'; goTo(q, SPOTS.busDoor); }
       else { k.holder = 'hook'; Object.assign(k, s.bus.phase === 'detention' ? { x: s.bus.x - 1.45, z: s.bus.z + 3 } : SPOTS.keyHook); }
+      k.givenTo = 'iqbal'; // he may hang it straight back on the hook, but you did hand it to him
       return { ok: true };
     }
     if (id === 'speaker' && cmd.to === 'ravi') {

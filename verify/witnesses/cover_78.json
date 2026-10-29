@@ -1,0 +1,11 @@
+{"name":"cover 78","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":153.39811141832968,"z":-296.2743800037734}},
+{"clock":"10:20","wait":10},
+{"clock":"10:30","do":"say:nikhil-lost:mila:1","cmd":{"type":"say","option":1},"at":{"x":151.25718667485498,"z":-297.36157877183854}},
+{"clock":"10:31","do":"whisper:minister:meera","cmd":{"type":"whisper","to":"meera","rumour":"minister"},"at":{"x":146,"z":-301.5}},
+{"clock":"10:32","wait":20},
+{"clock":"10:52","do":"whisper:biryani:meera","cmd":{"type":"whisper","to":"meera","rumour":"biryani"},"at":{"x":146,"z":-301.5}},
+{"clock":"10:53","do":"talk:asha","cmd":{"type":"talk","to":"asha"},"at":{"x":86,"z":-191.2}},
+{"clock":"11:03","do":"say:chabi:intro:2","cmd":{"type":"say","option":2},"at":{"x":88.42347060915378,"z":-190.6614509757436}}
+]}

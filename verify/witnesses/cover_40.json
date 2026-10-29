@@ -1,21 +1,8 @@
-{"name":"cover 40","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"pester:c4:cannon","cmd":{"type":"pester","to":"c4","how":"cannon"},"at":{"x":7,"z":1}},
-{"clock":"10:22","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:27","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:31","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
-{"clock":"10:32","do":"pester:c3:detainme","cmd":{"type":"pester","to":"c3","how":"detainme"},"at":{"x":19,"z":-11}},
-{"clock":"10:33","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":3.2,"z":-10.4}},
-{"clock":"10:35","do":"whisper:minister:meera","cmd":{"type":"whisper","to":"meera","rumour":"minister"},"at":{"x":-11,"z":30.5}},
-{"clock":"10:38","do":"film:pester-detainme@null","cmd":{"type":"film"},"at":{"x":19,"z":-11}},
-{"clock":"10:41","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":38,"z":-4.5}},
-{"clock":"10:43","do":"say:career-counselling:intro:0","cmd":{"type":"say","option":0},"at":{"x":33.52951634446429,"z":-6.6234797363794575}},
-{"clock":"10:44","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:49","do":"say:career-counselling:panel:2","cmd":{"type":"say","option":2},"at":{"x":6.839089469558514,"z":-35.94348511069851}},
-{"clock":"10:50","wait":10},
-{"clock":"11:00","do":"leave","cmd":{"type":"leave"},"at":{"x":6.839089469558514,"z":-35.94348511069851}},
-{"clock":"11:01","do":"talk:iqbal","cmd":{"type":"talk","to":"iqbal"},"at":{"x":-1.6468546694435264,"z":-31.783631751647754}},
-{"clock":"11:02","wait":10},
-{"clock":"11:12","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":{"x":-12.891526327883565,"z":-32.814632363339584}},
-{"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":{"x":-12.891526327883565,"z":-32.814632363339584}}
+{"name":"cover 40","note":"2 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
+{"clock":"16:01","wait":45},
+{"clock":"16:46","do":"say:dhuan:smoke:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:47","do":"say:dhuan:kabir:1","cmd":{"type":"say","option":1},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:48","do":"say:dhuan:hub:3","cmd":{"type":"say","option":3},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
 ]}

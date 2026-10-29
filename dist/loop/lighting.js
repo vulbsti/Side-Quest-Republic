@@ -11,15 +11,15 @@ const P = (sun, sunI, sunPos, sky, ground, hemiI, fog, near, far, exposure, bg, 
 /** What each phase looks like. Times are clock minutes from midnight. */
 export const LOOKS = {
   // Warm, low eastern sun, soft long shadows, clear air.
-  morning: P('#ffd9a8', 2.35, [52, 34, 34], '#e4ecf2', '#8d7a63', 0.78, '#d8d5cb', 110, 270, 1.02, 0.85, 0.0, '#9fc2dc', '#f3dcc0', 0),
+  morning: P('#ffd9a8', 2.35, [52, 34, 34], '#e4ecf2', '#8d7a63', 0.78, '#d8d5cb', 180, 520, 1.02, 0.85, 0.0, '#9fc2dc', '#f3dcc0', 0),
   // Harsh white noon: sun overhead, short hard shadows, bleached sky.
-  midday: P('#fffaf0', 3.2, [8, 74, 14], '#eef3f6', '#9a8e7c', 0.62, '#dfe0dc', 115, 280, 1.1, 1.0, 0.18, '#c8d8e2', '#f4f1e8', 0),
+  midday: P('#fffaf0', 3.2, [8, 74, 14], '#eef3f6', '#9a8e7c', 0.62, '#dfe0dc', 200, 560, 1.1, 1.0, 0.18, '#c8d8e2', '#f4f1e8', 0),
   // Amber haze: dust in the air, the sun dropping west, the far city washing out.
-  tense: P('#ffcd86', 2.3, [-44, 40, -12], '#e7cf9f', '#7c6346', 0.72, '#d6b47e', 45, 185, 1.0, 0.7, 0.55, '#c7a56e', '#e8bf80', 0),
+  tense: P('#ffcd86', 2.3, [-44, 40, -12], '#e7cf9f', '#7c6346', 0.72, '#d6b47e', 90, 380, 1.0, 0.7, 0.55, '#c7a56e', '#e8bf80', 0),
   // Dusty orange showdown: low sun through smoke, short visibility.
-  showdown: P('#ff9a4f', 1.75, [-58, 22, -22], '#dc9f66', '#5d4330', 0.68, '#c58a57', 22, 135, 0.96, 0.45, 0.82, '#9d6440', '#e2914f', 0.25),
+  showdown: P('#ff9a4f', 1.75, [-58, 22, -22], '#dc9f66', '#5d4330', 0.68, '#c58a57', 45, 240, 0.96, 0.45, 0.82, '#9d6440', '#e2914f', 0.25),
   // Dusk: the sun nearly gone, blue sky, sodium lamps doing the work.
-  aftermath: P('#ff7a45', 0.55, [-70, 9, -24], '#5a6a94', '#3b2e28', 0.5, '#46434f', 28, 150, 0.92, 0.18, 0.96, '#1c2443', '#c4673c', 1),
+  aftermath: P('#ff7a45', 0.55, [-70, 9, -24], '#5a6a94', '#3b2e28', 0.5, '#46434f', 60, 300, 0.92, 0.18, 0.96, '#1c2443', '#c4673c', 1),
 };
 // The clock track: hold each look for most of its phase and cross-fade around the boundaries.
 const TRACK = [
@@ -49,32 +49,22 @@ export function createLighting(world) {
   const sun = world.sun;
   let hemi = null;
   scene.traverse((o) => { if (o.isHemisphereLight && !hemi) hemi = o; });
-  if (!scene.fog) scene.fog = new THREE.Fog('#d8d5cb', 110, 270);
+  if (!scene.fog) scene.fog = new THREE.Fog('#d8d5cb', 180, 520);
 
   // A gradient dome that fades in over the photographic sky as the day turns.
   const skyMat = new THREE.ShaderMaterial({
     uniforms: { top: { value: new THREE.Color() }, horizon: { value: new THREE.Color() }, alpha: { value: 0 } },
     vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, transparent: true, depthWrite: false, fog: false,
   });
-  const sky = new THREE.Mesh(new THREE.SphereGeometry(170, 24, 12), skyMat);
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(700, 24, 12), skyMat);
   sky.renderOrder = -10; sky.frustumCulled = false; sky.name = 'phase-sky';
   scene.add(sky);
 
-  // Sodium lamps: the existing lamp heads glow, plus warm pools of light on the ground.
+  // Sodium lamps: the city's street lamps glow (the ones near where the day happens get a halo), plus warm pools.
   const lampGlow = glowTexture();
-  const lampHeads = [];
-  for (const x of [-36, -12, 12, 36]) for (const z of [-40, 39]) lampHeads.push([x + 1, 4.9, z]);
-  // Extra posts around the square and the barricade, where the evening happens.
-  const extra = [[-14, 4.9, -18], [16, 4.9, -18], [30, 4.9, 8.5], [46, 4.9, -12], [-14, 4.9, 9], [2, 4.9, -24], [56, 4.9, 8.5]];
-  const poleMat = new THREE.MeshStandardMaterial({ color: '#3d5141', roughness: 0.8 });
-  const headMat = new THREE.MeshStandardMaterial({ color: '#f1d9a8', emissive: '#ff9a3c', emissiveIntensity: 0, roughness: 0.5 });
-  const poleGeo = new THREE.CylinderGeometry(0.055, 0.1, 5, 8), headGeo = new THREE.SphereGeometry(0.25, 10, 6);
-  for (const [x, y, z] of extra) {
-    const pole = new THREE.Mesh(poleGeo, poleMat); pole.position.set(x - 1, 2.5, z); pole.castShadow = true; scene.add(pole);
-    const arm = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.09, 0.09), poleMat); arm.position.set(x - 0.5, 5, z); scene.add(arm);
-    const head = new THREE.Mesh(headGeo, headMat); head.scale.set(1, 0.55, 1); head.position.set(x, y, z); scene.add(head);
-    lampHeads.push([x, y, z]);
-  }
+  const near = (p) => [[-49, 95], [100, -190], [150, -296], [-55, 60]].some(([x, z]) => Math.hypot(p.x - x, p.z - z) < 140);
+  const lampHeads = (world.city?.lamps || []).filter(near).map((p) => [p.x, 5.9, p.z]);
+  const headMat = scene.getObjectByName('Street lamp heads')?.material || null;
   const glowMat = new THREE.SpriteMaterial({ map: lampGlow, color: '#ffb060', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
   const poolMat = new THREE.MeshBasicMaterial({ map: lampGlow, color: '#ff9a40', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
   const poolGeo = new THREE.PlaneGeometry(9, 9);
@@ -138,7 +128,7 @@ export function createLighting(world) {
     skyMat.uniforms.alpha.value = look.overlay;
     sky.position.copy(world.camera.position);
     const L = look.lamps;
-    headMat.emissiveIntensity = L * 2.2;
+    if (headMat) headMat.emissiveIntensity = L * 2.2;
     glowMat.opacity = L * 0.9;
     poolMat.opacity = L * 0.55;
     pools.visible = glowMat.visible = L > 0.02;

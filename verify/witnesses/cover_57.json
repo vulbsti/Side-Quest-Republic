@@ -1,0 +1,12 @@
+{"name":"cover 57","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
+{"clock":"16:01","wait":1},
+{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:03","wait":1},
+{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:05","wait":20},
+{"clock":"16:25","wait":45},
+{"clock":"17:10","wait":20},
+{"clock":"17:30","do":"say:dhuan:meera-saved:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
+]}

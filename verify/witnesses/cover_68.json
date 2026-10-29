@@ -1,0 +1,9 @@
+{"name":"cover 68","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
+{"clock":"10:51","wait":1},
+{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:53","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":110.2,"z":-194.2}},
+{"clock":"10:55","wait":45},
+{"clock":"11:40","do":"say:chabi:rishta:0","cmd":{"type":"say","option":0},"at":{"x":109.15127091880203,"z":-194.1194552354792}}
+]}

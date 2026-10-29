@@ -1,36 +1,36 @@
 {
- "about": "The real places the map should replicate, and where the game currently puts them. 'src: wiki' coordinates are from the Wikipedia article of the place; 'approx' ones are estimates to replace with OpenStreetMap or a photo walk before they are trusted. Shops have no coordinates yet: they count once they stand in the world (a mesh, a sign, a storefront), matched by name in the world-building code.",
+ "about": "The real places the map should replicate, and where the game puts them. 'osm' coordinates are from OpenStreetMap (research/osm); 'wiki' from the Wikipedia article of the place; 'approx' ones are estimates to replace with OpenStreetMap or a photo walk before they are trusted. A game reference is a PLACES/SPOTS entry of the rules, or map:<name>, a place the city draws from OpenStreetMap (dist/city.js). Shops count once their name is on a board the city draws (dist/map/labels.js) or in the world files.",
  "landmarks": [
   {
    "id": "rajiv-chowk",
-   "name": "Rajiv Chowk metro",
-   "lat": 28.6328,
-   "lon": 77.2196,
-   "src": "wiki",
+   "name": "Rajiv Chowk metro, gate 6",
+   "lat": 28.631592,
+   "lon": 77.219236,
+   "src": "osm",
    "game": "PLACES.metro"
   },
   {
    "id": "cp-south",
-   "name": "CP outer circle, A block side (Regal corner bus stop)",
-   "lat": 28.6309,
-   "lon": 77.2184,
-   "src": "approx",
+   "name": "CP outer circle by Jeevan Bharti (LIC), the shuttle stop",
+   "lat": 28.629818,
+   "lon": 77.218479,
+   "src": "osm",
    "game": "PLACES.cp"
   },
   {
    "id": "jm-observatory",
-   "name": "Jantar Mantar observatory (Misra Yantra)",
-   "lat": 28.6271,
-   "lon": 77.2164,
-   "src": "wiki",
-   "game": "district:jantar"
+   "name": "Jantar Mantar observatory (Samrat Yantra)",
+   "lat": 28.627315,
+   "lon": 77.216703,
+   "src": "osm",
+   "game": "map:Samrat Yantra"
   },
   {
    "id": "jm-road",
-   "name": "Jantar Mantar Road protest strip",
-   "lat": 28.6257,
-   "lon": 77.215,
-   "src": "approx",
+   "name": "Jantar Mantar Road protest site",
+   "lat": 28.625626,
+   "lon": 77.215836,
+   "src": "osm",
    "game": "PLACES.stage"
   },
   {
@@ -44,26 +44,26 @@
   {
    "id": "parliament-street",
    "name": "Parliament Street police station, Sansad Marg",
-   "lat": 28.6238,
-   "lon": 77.2127,
-   "src": "approx",
-   "game": "PLACES.parliament"
+   "lat": 28.625421,
+   "lon": 77.214414,
+   "src": "osm",
+   "game": "map:Police Station Parliament Street"
   },
   {
    "id": "palika-bazaar",
    "name": "Palika Bazaar",
-   "lat": 28.631,
-   "lon": 77.2186,
-   "src": "wiki",
-   "game": null
+   "lat": 28.630762,
+   "lon": 77.218917,
+   "src": "osm",
+   "game": "map:Palika Bazaar"
   },
   {
    "id": "hanuman-mandir",
    "name": "Hanuman Mandir, Baba Kharak Singh Marg",
-   "lat": 28.63,
-   "lon": 77.215,
-   "src": "wiki",
-   "game": null
+   "lat": 28.63035,
+   "lon": 77.215021,
+   "src": "osm",
+   "game": "map:Prachin Hanuman Mandir"
   },
   {
    "id": "regal",
@@ -84,18 +84,18 @@
   {
    "id": "patel-chowk",
    "name": "Patel Chowk metro",
-   "lat": 28.623,
-   "lon": 77.214,
-   "src": "approx",
-   "game": null
+   "lat": 28.622954,
+   "lon": 77.214059,
+   "src": "osm",
+   "game": "map:Patel Chowk"
   },
   {
    "id": "bangla-sahib",
    "name": "Gurudwara Bangla Sahib",
-   "lat": 28.6264,
-   "lon": 77.2091,
-   "src": "approx",
-   "game": null
+   "lat": 28.626358,
+   "lon": 77.209097,
+   "src": "osm",
+   "game": "map:Gurudwara Bangla Sahib Sikh Temple"
   },
   {
    "id": "shivaji-stadium",
@@ -168,10 +168,9 @@
  },
  "worldFiles": [
   "dist/world.js",
-  "dist/world-expansion.js",
+  "dist/city.js",
+  "dist/map/labels.js",
   "dist/environment-detail.js",
-  "dist/districts.js",
-  "dist/destinations.js",
   "dist/loop/props.js"
  ],
  "dialogueFiles": [

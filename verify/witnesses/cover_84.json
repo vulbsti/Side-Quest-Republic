@@ -1,0 +1,23 @@
+{"name":"cover 84","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"10:49","wait":10},
+{"clock":"10:59","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":-48.300948767709166,"z":106.48355342122865}},
+{"clock":"10:59","wait":20},
+{"clock":"11:19","wait":20},
+{"clock":"11:39","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"11:40","do":"give:ravi","cmd":{"type":"give","to":"ravi"},"at":{"x":108.80422747189552,"z":-198.05861095445775}},
+{"clock":"11:49","wait":45},
+{"clock":"12:34","do":"talk:c5","cmd":{"type":"talk","to":"c5"},"at":{"x":-55,"z":60}},
+{"clock":"12:41","do":"say:gill-d1:a:0","cmd":{"type":"say","option":0},"at":{"x":-52.5146946197532,"z":59.63737537156542}},
+{"clock":"12:42","do":"whisper:biryani:mira","cmd":{"type":"whisper","to":"mira","rumour":"biryani"},"at":{"x":-51,"z":95.5}},
+{"clock":"12:45","wait":10},
+{"clock":"12:55","do":"talk:asha","cmd":{"type":"talk","to":"asha"},"at":{"x":86,"z":-191.2}},
+{"clock":"13:07","do":"say:afwaah:forward:1","cmd":{"type":"say","option":1},"at":{"x":-12.05513295410331,"z":-79.19342756679146}},
+{"clock":"13:07","wait":3},
+{"clock":"13:10","do":"say:afwaah:source:0","cmd":{"type":"say","option":0},"at":{"x":-12.05513295410331,"z":-79.19342756679146}},
+{"clock":"13:11","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"13:23","wait":45},
+{"clock":"14:08","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-191.2}},
+{"clock":"14:30","do":"say:afwaah:stage:0","cmd":{"type":"say","option":0},"at":{"x":90.04179837700397,"z":-194.1023211874342}}
+]}

@@ -1,11 +1,12 @@
 {"name":"ending heat · block · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:36","do":"pester:c2:detainme","cmd":{"type":"pester","to":"c2","how":"detainme"},"at":{"x":2.5,"z":-27}},
-{"clock":"10:37","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:39","do":"pester:c4:detainme","cmd":{"type":"pester","to":"c4","how":"detainme"},"at":{"x":7,"z":1}},
-{"clock":"10:40","finish":true}
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","do":"pester:c1:detainme","cmd":{"type":"pester","to":"c1","how":"detainme"},"at":{"x":147,"z":-284}},
+{"clock":"10:20","wait":45},
+{"clock":"11:05","do":"whisper:biryani:asha","cmd":{"type":"whisper","to":"asha","rumour":"biryani"},"at":{"x":86,"z":-191.2}},
+{"clock":"11:15","do":"pester:c2:cannon","cmd":{"type":"pester","to":"c2","how":"cannon"},"at":{"x":106.5,"z":-184}},
+{"clock":"11:16","do":"pester:sharma:cute","cmd":{"type":"pester","to":"sharma","how":"cute"},"at":{"x":-51,"z":80}},
+{"clock":"11:29","wait":45},
+{"clock":"12:14","do":"situation:mira-mic","cmd":{"type":"situation","id":"mira-mic"},"at":{"x":-49,"z":105}},
+{"clock":"12:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-49.92044543896572,"z":100.45513330795498}},
+{"clock":"12:26","finish":true}
 ]}

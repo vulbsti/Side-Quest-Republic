@@ -1,0 +1,23 @@
+{
+ "name": "route ghar-jaana-hai",
+ "note": "Wait at the Rajiv Chowk gate at five: pick up Kabir's mummy's call, count heads, and when Nikhil is missing go back for him; too late to reach CP, so get him to send the auto's number instead.",
+ "tempo": "long",
+ "expect": { "history": "choice:ghar-jaana-hai:nikhil-text:0" },
+ "trace": [
+  { "do": "go:metro", "cmd": null, "at": { "x": 150, "z": -296 }, "hold": 420 },
+  { "do": "situation:ghar-jaana-hai", "cmd": { "type": "situation", "id": "ghar-jaana-hai" }, "at": { "x": 150, "z": -296 } },
+  { "wait": 1 },
+  { "do": "say:ghar-jaana-hai:gate:2", "cmd": { "type": "say", "option": 2 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:ghar-jaana-hai:mummy:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:ghar-jaana-hai:gate:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:ghar-jaana-hai:count:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "wait": 1 },
+  { "wait": 44 },
+  { "do": "say:ghar-jaana-hai:nikhil-text:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "finish": true }
+ ]
+}

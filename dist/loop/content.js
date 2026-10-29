@@ -731,6 +731,8 @@ export const CALLBACKS = {
   'sana-short': 'Because Sana\'s crate went short, one more person went down at {at}.',
   'world-stone': 'Nobody dealt with the man with {tell}. At {at} he threw the first stone.',
   'world-speech': 'Ravi got his speaker to the stage, and Mira\'s noon speech packed it.',
+  'world-small-speech': 'Nobody switched Ravi\'s speaker on by noon, so Mira\'s speech reached the first row and the pigeons.',
   'world-viral-line': 'Zoya\'s stream went viral, so Rao put his line where her camera was.',
+  'world-line': 'At three Rao put his line at {place}, where the crowd was biggest.',
   'world-sitin': 'The day never boiled over, and at {at} the lathis stayed in their holders.',
 };

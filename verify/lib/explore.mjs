@@ -14,34 +14,43 @@ export function rng(seed = 1) {
 }
 const pick = (rand, list) => list[Math.floor(rand() * list.length)];
 
-/** A cell: the half hour, what you hold, whether you're on the bus, and everything that has happened so far. */
+/** A cell: the half hour, where you are, what you hold, whether you're on the bus, and everything that has happened so far. */
 export function cellKey(s) {
   const half = Math.floor((R.clockMinutes(s.t) - R.DAY_START) / 30);
   const done = Object.keys(s.history).filter((k) => MILESTONE.test(k)).sort().join(',');
-  return `${half}|${s.player.carrying ?? '-'}|${s.player.detained ? 'D' : ''}${s.player.chasedBy ? 'C' : ''}${s.player.crew.length ? 'K' : ''}|${s.over ? 'over' : ''}|${done}`;
+  return `${half}|${R.placeAt(s.player) ?? '-'}|${s.player.carrying ?? '-'}|${s.player.detained ? 'D' : ''}${s.player.chasedBy ? 'C' : ''}${s.player.crew.length ? 'K' : ''}|${s.over ? 'over' : ''}|${done}`;
 }
+
+// The map is real-sized (CP to the stage is a 20-minute walk), so like a player the search mostly does what is
+// near: something NEAR metres away is half as likely as something underfoot, and a far kind of thing still gets picked.
+const NEAR = 60;
+const nearness = (run, a) => 1 / (1 + (a.at ? R.dist(run.s.player, a.at) : 0) / NEAR);
+const choose = (rand, list, w) => {
+  let x = rand() * w.reduce((n, v) => n + v, 0);
+  for (let i = 0; i < list.length; i++) { x -= w[i]; if (x <= 0) return list[i]; }
+  return list[list.length - 1];
+};
 
 /** The next decision: a kind of thing to do (balanced, so 40 whispers don't drown one scene), then which one. */
 export function chooseStep(run, rand, tried) {
   const affs = R.affordances(run.s);
   const kinds = [...new Set(affs.map((a) => a.kind))];
-  const options = [...kinds, 'wait', 'wait'];
-  const kind = pick(rand, options);
+  // A kind is as likely as its nearest instance is near; waiting counts as two kinds right here.
+  const kw = kinds.map((k) => Math.max(...affs.filter((a) => a.kind === k).map((a) => nearness(run, a))));
+  const kind = choose(rand, [...kinds, 'wait'], [...kw, 2]);
   if (kind === 'wait') return { wait: pick(rand, [3, 10, 20, 45]) };
   const list = affs.filter((a) => a.kind === kind);
-  // Prefer what has been tried least anywhere in the search.
-  const w = list.map((a) => 1 / (1 + (tried.get(a.id) || 0)));
-  let x = rand() * w.reduce((n, v) => n + v, 0), a = list[list.length - 1];
-  for (let i = 0; i < list.length; i++) { x -= w[i]; if (x <= 0) { a = list[i]; break; } }
+  // Prefer what is near and what has been tried least anywhere in the search.
+  const a = choose(rand, list, list.map((x) => nearness(run, x) / (1 + (tried.get(x.id) || 0))));
   tried.set(a.id, (tried.get(a.id) || 0) + 1);
   return a.cmd ? { do: a.id, cmd: a.cmd, at: a.at } : { do: a.id, cmd: null, at: a.at, hold: pick(rand, [1, 4]) };
 }
 
 /**
- * Explore for a budget of macro steps (with a wall-clock cap). Returns { hits, violations, silent, raw, endings, cells, steps, days }.
+ * Explore for a budget of macro steps (with a wall-clock cap), starting from 10:00 and from every cell the seed traces pass. Returns { hits, violations, silent, raw, endings, cells, steps, days }.
  * hits: key -> { clock, trace }   the shortest trace seen that makes key happen
  */
-export function explore({ steps: budget = 2500, seconds = 600, seed = 7, tempo = 'long', log = () => {} } = {}) {
+export function explore({ steps: budget = 2500, seconds = 600, seed = 7, tempo = 'long', seeds = [], log = () => {} } = {}) {
   const rand = rng(seed), tried = new Map();
   const archive = new Map(), hits = new Map(), violations = new Map(), silent = new Map(), raw = new Map(), endings = new Map();
   const start = Date.now();
@@ -88,6 +97,17 @@ export function explore({ steps: budget = 2500, seconds = 600, seed = 7, tempo =
 
   const root = H.newRun(tempo);
   visit(root);
+  // The designed routes (verify/routes/) walk the long ways across the real map to each story; every situation
+  // they pass through becomes a cell, so the search branches from there instead of having to find the walk first.
+  for (const trace of seeds) {
+    const run = H.newRun(tempo);
+    for (const { clock: _c, reached: _r, ...step } of trace) {
+      if (step.finish || run.s.over) break;
+      if (H.perform(run, step).crash) break;
+      run.log.length = 0;
+      visit(run);
+    }
+  }
   // A step budget, not a time budget, so the same code and seed always explore the same way.
   while (steps < budget && (Date.now() - start) / 1000 < seconds) {
     // Pick a cell to return to: rarely visited ones first.

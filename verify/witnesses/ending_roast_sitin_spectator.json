@@ -1,0 +1,19 @@
+{"name":"ending roast · sitin · spectator","note":"","tempo":"long","expect":{"ending":"roast","outcome":"sitin","role":"spectator"},"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:48","do":"give:kabir","cmd":{"type":"give","to":"kabir"},"at":null},
+{"clock":"14:49","do":"go:metro","cmd":null,"at":{"x":150,"z":-298},"hold":1},
+{"clock":"15:18","do":"pester:c1:cute","cmd":{"type":"pester","to":"c1","how":"cute"},"at":{"x":147,"z":-284}},
+{"clock":"15:20","wait":10},
+{"clock":"15:30","do":"whisper:minister:mira","cmd":{"type":"whisper","to":"mira","rumour":"minister"},"at":{"x":-51,"z":95.5}},
+{"clock":"15:58","wait":45},
+{"clock":"16:43","wait":10},
+{"clock":"16:53","wait":20},
+{"clock":"17:13","wait":45},
+{"clock":"17:58","do":"talk:zoya","cmd":{"type":"talk","to":"zoya"},"at":{"x":-58.5,"z":104.5}},
+{"clock":"17:59","wait":20}
+]}

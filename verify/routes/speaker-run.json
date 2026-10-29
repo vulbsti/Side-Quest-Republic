@@ -1,0 +1,17 @@
+{
+ "name": "route speaker-run",
+ "note": "Be at Ravi's chai at CP by 10:12, offer to carry the speaker yourself, carry it down Sansad Marg to the Jantar Mantar stage and let Dev mic-check it.",
+ "tempo": "long",
+ "expect": { "history": "situation:speaker-run:done" },
+ "trace": [
+  { "do": "go:cp", "cmd": null, "at": { "x": 90, "z": -190 }, "hold": 3 },
+  { "do": "situation:speaker-run", "cmd": { "type": "situation", "id": "speaker-run" }, "at": { "x": 84.5, "z": -188.5 } },
+  { "wait": 1 },
+  { "do": "say:speaker-run:intro:2", "cmd": { "type": "say", "option": 2 }, "at": null },
+  { "wait": 1 },
+  { "do": "go:stage", "cmd": null, "at": { "x": -49, "z": 105 }, "hold": 1 },
+  { "do": "say:speaker-run:setup:2", "cmd": { "type": "say", "option": 2 }, "at": null },
+  { "wait": 2 },
+  { "finish": true }
+ ]
+}

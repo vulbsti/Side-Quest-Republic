@@ -1,10 +1,5 @@
 {"name":"situation career-counselling:fail","note":"","tempo":"long","expect":{"history":"situation:career-counselling:fail"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","do":"leave","cmd":{"type":"leave"},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:23","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:24","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":38,"z":-4.5}},
-{"clock":"10:27","wait":45},
-{"clock":"11:12","wait":20},
-{"clock":"11:32","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":33.75990373075595,"z":-6.51404572789092}}
+{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
+{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
+{"clock":"10:28","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":-51.43281252159288,"z":81.50666432988982}}
 ]}

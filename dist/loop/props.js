@@ -5,6 +5,7 @@
 // No per-frame allocation in the update paths: all vectors and particle buffers are preallocated.
 import * as THREE from 'three';
 import { aimVajra } from './models.js?v=1';
+import { streetPath } from '../map/route.js?v=1';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const v1 = new THREE.Vector3(), v2 = new THREE.Vector3(), v3 = new THREE.Vector3();
@@ -493,9 +494,12 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
     const cur = d.g.rotation.y, diff = Math.atan2(Math.sin(d.yaw - cur), Math.cos(d.yaw - cur));
     d.g.rotation.y = cur + diff * Math.min(1, dt * 5);
   }
-  function routeTo(x, z, fromEast = true) {
-    const sx = fromEast ? 95 : -95;
-    return [[sx, 2.8], [x + (fromEast ? 10 : -10), 2.8], [x, z]];
+  // Vehicles drive in along the real roads: police vehicles from Sansad Marg's end of Jantar Mantar Road, the
+  // party's SUV up from its south end.
+  const ENTRY = { north: { x: -45, z: 30 }, south: { x: -46, z: 180 } };
+  function routeTo(x, z, fromNorth = true) {
+    const from = fromNorth ? ENTRY.north : ENTRY.south;
+    return [[from.x, from.z], ...streetPath(from, { x, z }, { car: true, direct: 8 }).map((p) => [p.x, p.z])];
   }
 
   // Tear gas.
@@ -526,8 +530,8 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
   function ambulanceTo(p) {
     const key = Math.round(p.x) + ':' + Math.round(p.z);
     if (ambKey === key) return; ambKey = key;
-    const tx = THREE.MathUtils.clamp(p.x, -40, 45), tz = 4.5;
-    setPath(ambD, [[-95, 4.5], [tx, tz]]);
+    const path = routeTo(p.x + 6, p.z, true), [tx, tz] = path[path.length - 1];
+    setPath(ambD, path);
     focus.ambulance.set(tx, 1, tz);
   }
 
@@ -623,7 +627,7 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
       const c = placeOf(PLACES, sena.place);
       bikeD.forEach((d, i) => {
         const px = c.x + 6 + i * 1.1, pz = c.z + 9.5;
-        setPath(d, [[95 + i * 4, 1.5 + (i % 2) * 1.2], [px + 8, pz], [px, pz]]);
+        setPath(d, [[ENTRY.north.x + (i % 2) * 1.2, ENTRY.north.z - i * 4], ...routeTo(px, pz, true).slice(1)]);
       });
       focus.bikes.set(c.x + 8, 1, c.z + 8);
     }

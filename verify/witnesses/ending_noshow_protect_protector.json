@@ -1,0 +1,20 @@
+{"name":"ending noshow · protect · protector","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"protect","role":"protector"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
+{"clock":"15:01","wait":50},
+{"clock":"15:51","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"15:52","wait":45},
+{"clock":"16:37","do":"leave","cmd":{"type":"leave"},"at":{"x":-46.7084125118345,"z":104.83849130377595}},
+{"clock":"16:38","do":"talk:mira","cmd":{"type":"talk","to":"mira"},"at":{"x":-51,"z":95.5}},
+{"clock":"16:39","do":"say:mira-s-list:a:1","cmd":{"type":"say","option":1},"at":{"x":-50.044835422928614,"z":97.5784374363224}},
+{"clock":"16:40","wait":10},
+{"clock":"16:50","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
+{"clock":"16:51","wait":10},
+{"clock":"17:01","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":-44.9,"z":108.5}},
+{"clock":"17:02","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
+{"clock":"17:04","wait":10},
+{"clock":"17:14","finish":true}
+]}

@@ -1,0 +1,15 @@
+{"name":"cover 74","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
+{"clock":"10:51","wait":1},
+{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:53","wait":20},
+{"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"11:14","wait":1},
+{"clock":"11:15","do":"take:key","cmd":{"type":"take","object":"key"},"at":null},
+{"clock":"11:17","wait":1},
+{"clock":"11:18","do":"say:chabi:decide:3","cmd":{"type":"say","option":3},"at":null},
+{"clock":"11:18","do":"whisper:biryani:iqbal","cmd":{"type":"whisper","to":"iqbal","rumour":"biryani"},"at":{"x":88,"z":-190}},
+{"clock":"11:20","do":"drop:here","cmd":{"type":"drop"},"at":{"x":89.10350917319083,"z":-189.9185316266556}},
+{"clock":"11:21","do":"whisper:biryani:kabir","cmd":{"type":"whisper","to":"kabir","rumour":"biryani"},"at":{"x":-55.6,"z":107.6}}
+]}

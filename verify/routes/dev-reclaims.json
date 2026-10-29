@@ -4,7 +4,7 @@
  "tempo": "long",
  "expect": { "history": "said:dev-reclaims" },
  "trace": [
-  { "do": "go:stage", "cmd": null, "at": { "x": -3, "z": -9 }, "hold": 1 },
+  { "do": "go:stage", "cmd": null, "at": { "x": -54, "z": 101 }, "hold": 1 },
   { "wait": 258 },
   { "do": "take:megaphone", "cmd": { "type": "take", "object": "megaphone" }, "at": null },
   { "wait": 30 },

@@ -1,12 +1,13 @@
-{"name":"cover 21","note":"3 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"pester:c4:cannon","cmd":{"type":"pester","to":"c4","how":"cannon"},"at":{"x":7,"z":1}},
-{"clock":"10:22","do":"pester:c2:detainme","cmd":{"type":"pester","to":"c2","how":"detainme"},"at":{"x":2.5,"z":-27}},
-{"clock":"10:24","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:30","do":"situation:nikhil-lost","cmd":{"type":"situation","id":"nikhil-lost"},"at":{"x":-7,"z":36}},
-{"clock":"10:33","wait":45},
-{"clock":"11:18","do":"say:nikhil-lost:mila:0","cmd":{"type":"say","option":0},"at":{"x":-6.381177302320719,"z":31.46196688368526}},
-{"clock":"11:18","do":"goal:nikhil-lost","cmd":null,"at":{"x":2,"z":-5},"hold":4},
-{"clock":"11:24","do":"whisper:cannon:ravi","cmd":{"type":"whisper","to":"ravi","rumour":"cannon"},"at":{"x":-19.5,"z":-31.5}},
-{"clock":"11:27","finish":true}
+{"name":"cover 21","note":"4 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"16:33","do":"prov:p3:expose","cmd":{"type":"provocateur","id":"p3","how":"expose"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"16:34","do":"stance:block","cmd":{"type":"stance","stance":"block"},"at":{"x":-50.74380785901582,"z":108.55245904528033}},
+{"clock":"16:35","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"16:39","do":"say:detain-me:window:2","cmd":{"type":"say","option":2},"at":{"x":-50.92699303622197,"z":77.44792002558833}},
+{"clock":"16:40","wait":45},
+{"clock":"17:25","wait":3},
+{"clock":"17:28","do":"say:detain-me:window2:0","cmd":{"type":"say","option":0},"at":{"x":-50.92699303622197,"z":77.44792002558833}},
+{"clock":"17:28","wait":10},
+{"clock":"17:38","do":"say:detain-me:ask:1","cmd":{"type":"say","option":1},"at":{"x":-50.92699303622197,"z":77.44792002558833}}
 ]}

@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from '../dist/districts.js';
+import {EXTENT as B} from '../dist/map/geo.js';
 import assert from 'node:assert/strict';
 import {Simulation,moveWithCollisions,visible,findPath,verticalStep,supportHeight,separateBodies,overlapsXZ,nearestFreePoint} from '../dist/simulation.js';
 const wall={x:0,z:0,w:2,d:8,h:3};let e={x:-2,z:0,y:0};for(let i=0;i<60;i++)moveWithCollisions(e,.05,0,[wall]);assert(e.x< -1.3,'wall collision');assert(!visible({x:-3,z:0},{x:3,z:0},[wall]),'occluded vision');assert(visible({x:-3,z:7},{x:3,z:7},[wall]));const path=findPath({x:-5,z:0},{x:5,z:0},[wall]);assert(path.length>0);assert(path.some(p=>Math.abs(p.z)>=6),'path around wall');let s=new Simulation([]);let z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1});assert(s.player.z<z-3);const walk=z-s.player.z;s=new Simulation([]);z=s.player.z;for(let i=0;i<60;i++)s.step(1/60,{z:-1,sprint:true});assert(z-s.player.z>walk);assert(s.player.stamina<100);for(let i=0;i<120;i++)s.step(1/60,{});assert.equal(s.player.stamina,100);
@@ -99,16 +99,16 @@ const precisePath=findPath({x:5.3,z:5.1},{x:-2.3,z:-2.1},[tinyPost]);
 assert(precisePath.length,'off-grid destination remains reachable');
 let prev={x:5.3,z:5.1};for(const p of precisePath){for(let t=0;t<=1;t+=.02)assert(!overlapsXZ({x:prev.x+(p.x-prev.x)*t,z:prev.z+(p.z-prev.z)*t},tinyPost,.36),'connector never crosses post');prev=p;}
 assert.equal(findPath({x:0,z:0},{x:NaN,z:0},[]).length,0,'invalid coordinates rejected');
-const {EXPANSION_SOLIDS}=await import('../dist/districts.js');
-const tentSolids=EXPANSION_SOLIDS.filter(o=>o.id.startsWith('aidTent0'));
+// A roof on posts (a tent, a bus shelter): walk in under it, its side wall stops you, it stops your head.
+const tentSolids=[{id:'tentRoof',x:-74,z:0,w:6,d:6,h:2.2,base:2},{id:'tentWall',x:-77,z:0,w:.2,d:6,h:2,base:0}];
 const tentPath=findPath({x:-74,z:10},{x:-74,z:2},tentSolids);
 assert(tentPath.length,'open tent entrance is navigable under roof');
 body={x:-74,z:10,y:0,vy:0,radius:.36,height:1.8,stamina:100};
 for(let i=0;i<120;i++)moveWithCollisions(body,0,-.06,tentSolids);
 assert(body.z<3,'player can physically walk into tent');
 for(let i=0;i<160;i++)moveWithCollisions(body,-.06,0,tentSolids);
-assert(body.x>-79,'tent side wall stops the player');
+assert(body.x>-77,'tent side wall stops the player');
 body={x:-74,z:2,y:0,vy:0,radius:.36,height:1.8,stamina:100};let highest=0;
 for(let i=0;i<90;i++){verticalStep(body,1/60,tentSolids,i===0);highest=Math.max(highest,body.y);}
-assert(highest<=1.421&&body.y===0,'tent roof blocks head contact and player lands on ground');
+assert(highest<=.21&&body.y===0,'tent roof blocks head contact and player lands on ground');
 console.log('PASS: safe off-grid navigation, real tent entry, wall contact and roof clearance');

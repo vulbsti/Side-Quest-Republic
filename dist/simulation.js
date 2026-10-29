@@ -1,4 +1,4 @@
-import {WORLD_BOUNDS as B} from './districts.js?v=27';
+import {EXTENT as B} from './map/geo.js?v=1';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Broad phase: a city has thousands of walls, so each query looks only at the grid cells it touches. The index is

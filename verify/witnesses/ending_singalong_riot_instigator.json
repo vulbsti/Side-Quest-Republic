@@ -1,0 +1,11 @@
+{"name":"ending singalong · riot · instigator","note":"","tempo":"long","expect":{"ending":"singalong","outcome":"riot","role":"instigator"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","do":"give:mira","cmd":{"type":"give","to":"mira"},"at":{"x":-51,"z":95.5}},
+{"clock":"14:48","wait":20},
+{"clock":"15:08","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"15:10","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
+{"clock":"15:11","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"15:12","finish":true}
+]}
