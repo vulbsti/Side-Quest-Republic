@@ -1,6 +1,27 @@
 import {WORLD_BOUNDS as B} from './districts.js?v=27';
 export const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
+// Broad phase: a city has thousands of walls, so each query looks only at the grid cells it touches. The index is
+// rebuilt when the list changes length; obstacles that move (the shuttle, anything flagged moving) are always checked.
+const CELL=8,INDEX=new WeakMap();let stamp=0;
+function indexOf(obstacles){
+ let ix=INDEX.get(obstacles);
+ if(ix&&ix.n===obstacles.length&&ix.first===obstacles[0]&&ix.last===obstacles[obstacles.length-1])return ix;
+ ix={n:obstacles.length,first:obstacles[0],last:obstacles[obstacles.length-1],cells:new Map(),loose:[]};
+ for(const o of obstacles){
+  if(o.moving||o.id==='shuttle'||!Number.isFinite(o.w+o.d+o.x+o.z)){ix.loose.push(o);continue;}
+  for(let x=Math.floor((o.x-o.w/2)/CELL);x<=Math.floor((o.x+o.w/2)/CELL);x++)for(let z=Math.floor((o.z-o.d/2)/CELL);z<=Math.floor((o.z+o.d/2)/CELL);z++){const k=x*65536+z;let c=ix.cells.get(k);if(!c)ix.cells.set(k,c=[]);c.push(o);}
+ }
+ INDEX.set(obstacles,ix);return ix;
+}
+/** The obstacles that may touch the box [minX,maxX] x [minZ,maxZ]. Small lists are returned whole. */
+export function nearObstacles(obstacles,minX,minZ,maxX,maxZ){
+ if(obstacles.length<48)return obstacles;
+ const ix=indexOf(obstacles),out=ix.loose.slice(),s=++stamp;
+ for(let x=Math.floor(minX/CELL);x<=Math.floor(maxX/CELL);x++)for(let z=Math.floor(minZ/CELL);z<=Math.floor(maxZ/CELL);z++){const c=ix.cells.get(x*65536+z);if(c)for(const o of c)if(o.__q!==s){o.__q=s;out.push(o);}}
+ return out;
+}
+const around=(obstacles,e,r)=>nearObstacles(obstacles,e.x-r,e.z-r,e.x+r,e.z+r);
 // Feet are y; all bodies have a radius and standing height. Boxes have bottom/top.
 export function overlapsXZ(e,o,r=e.radius??.36){
  const nx=clamp(e.x,o.x-o.w/2,o.x+o.w/2),nz=clamp(e.z,o.z-o.d/2,o.z+o.d/2);
@@ -13,6 +34,7 @@ export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={})
  const legal=p=>p.x>=B.minX+radius&&p.x<=B.maxX-radius&&p.z>=B.minZ+radius&&p.z<=B.maxZ-radius;
  const free=p=>legal(p)&&!obstacles.some(o=>(o.h??0)>0&&(o.base||0)<1.8&&overlapsXZ(p,o,radius));
  const origin={x:position.x,z:position.z};
+ obstacles=around(obstacles,origin,maxRadius+radius+1);
  if(free(origin))return origin;
  // Include the exact radius limit even when not divisible by the ring spacing.
  const step=.2,rings=Math.ceil(maxRadius/step);
@@ -31,6 +53,7 @@ export function nearestFreePoint(position,obstacles,{radius=.4,maxRadius=12}={})
 function stepSupport(entity,obstacles,radius){
  const feet=entity.y||0,maxStep=entity.stepHeight||0;
  if(!maxStep||entity.grounded===false||(entity.vy||0)>0)return null;
+ obstacles=around(obstacles,entity,radius+1);
  const top=Math.max(feet,...obstacles.filter(o=>o.walkable!==false&&o.h>feet+.025&&o.h<=feet+maxStep+.001&&overlapsXZ(entity,o,radius)).map(o=>o.h));
  if(top<=feet)return null;
  if(obstacles.some(o=>o.h>top+.025&&(o.base||0)<top+(entity.height||1.8)-.01&&overlapsXZ(entity,o,radius)))return null;
@@ -38,19 +61,21 @@ function stepSupport(entity,obstacles,radius){
 }
 export function moveWithCollisions(entity,dx,dz,obstacles,radius=entity.radius??.36){
  if(![entity.x,entity.z,dx,dz,radius].every(Number.isFinite)||radius<0)return entity;
- const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12)),all=obstacles;
+ obstacles=nearObstacles(all,Math.min(entity.x,entity.x+dx)-radius-1,Math.min(entity.z,entity.z+dz)-radius-1,Math.max(entity.x,entity.x+dx)+radius+1,Math.max(entity.z,entity.z+dz)+radius+1);
  for(let i=0;i<steps;i++)for(const axis of ['x','z']){
   const delta=(axis==='x'?dx:dz)/steps;if(!delta)continue;
   const old=entity[axis];entity[axis]=clamp(old+delta,(axis==='x'?B.minX:B.minZ)+radius,(axis==='x'?B.maxX:B.maxZ)-radius);
   for(const o of obstacles){const feet=entity.y||0,top=o.h,bottom=o.base||0;
    if(feet>=top-.025||feet+(entity.height||1.8)<=bottom+.01)continue;
-   if(overlapsXZ(entity,o,radius)){const raised=stepSupport(entity,obstacles,radius);if(raised!==null){entity.y=raised;entity.vy=0;entity.grounded=true;}else entity[axis]=old;break;}
+   if(overlapsXZ(entity,o,radius)){const raised=stepSupport(entity,all,radius);if(raised!==null){entity.y=raised;entity.vy=0;entity.grounded=true;}else entity[axis]=old;break;}
   }
  }
  return entity;
 }
 export function supportHeight(entity,obstacles,ceiling=Infinity){
  let y=0;const r=(entity.radius??.36)*(entity.stepHeight?1:.65);
+ obstacles=around(obstacles,entity,r+1);
  for(const o of obstacles)if(o.walkable!==false&&o.h<=ceiling+.025&&overlapsXZ(entity,o,r))y=Math.max(y,o.h);
  return y;
 }
@@ -62,7 +87,7 @@ export function verticalStep(entity,dt,obstacles,jump=false){
  else entity.jumpStarted=false;
  entity.vy=(entity.vy||0)-18*dt;
  let next=oldY+entity.vy*dt;
- if(entity.vy>0){for(const o of obstacles){const base=o.base||0;if(base>=oldY+(entity.height||1.8)-.00001&&base<=next+(entity.height||1.8)&&overlapsXZ(entity,o)){next=base-(entity.height||1.8);entity.vy=0;}}}
+ if(entity.vy>0){for(const o of around(obstacles,entity,(entity.radius??.36)+1)){const base=o.base||0;if(base>=oldY+(entity.height||1.8)-.00001&&base<=next+(entity.height||1.8)&&overlapsXZ(entity,o)){next=base-(entity.height||1.8);entity.vy=0;}}}
  const floor=supportHeight(entity,obstacles,oldY);
  entity.landed=false;
  if(next<=floor&&entity.vy<=0){entity.landed=entity.vy< -2;entity.impact=-entity.vy;next=floor;entity.vy=0;entity.grounded=true;}
@@ -96,7 +121,7 @@ export function visible(a,b,obstacles){
  const dx=b.x-a.x,dz=b.z-a.z;
  if(!Number.isFinite(dx)||!Number.isFinite(dz))return false;
  if(dx===0&&dz===0)return true;
- for(const o of obstacles){
+ for(const o of nearObstacles(obstacles,Math.min(a.x,b.x),Math.min(a.z,b.z),Math.max(a.x,b.x),Math.max(a.z,b.z))){
   if(!(o.h>1.65)||!(o.w>0)||!(o.d>0))continue;
   const minX=o.x-o.w/2,maxX=o.x+o.w/2,minZ=o.z-o.d/2,maxZ=o.z+o.d/2;
   let enter=0,leave=1;
