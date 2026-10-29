@@ -116,6 +116,12 @@ const LOSE_AFTER = 3; // seconds out of sight or inside a crowd to lose a chaser
 const LUNGE = { range: 3, windup: 0.5, slow: 0.5, dash: 0.45, speed: 18, reach: 1.1, near: 2.6, stumble: 1.2, cool: 1.5 };
 const CHASE_TIRES = 22; // seconds of running before a constable gives up, hands on knees
 const WHIFFS_TO_QUIT = 3; // grab air this often and he's done
+// The window escape off the detention bus ("1 Min Ago / 1 Minute Later"): Pandey looks away for a few seconds
+// every so often, the cops below reach up in a rhythm. Climb while he isn't looking, edge along while their hands are down.
+const WINDOW = { lookCycle: 6, lookAway: 2.6, steps: 4, handsCycle: 1.8, handsUp: 0.7, giveUp: 30 };
+// The kabaddi raid (the Mumbai maidan reel): shout "kabaddi" at the constables and you're on one breath. They close in
+// a loose ring and lunge one at a time, each telegraphed; dodge in the wind-up, and get home to a crowd before the breath ends.
+const RAID = { breath: 12, ring: 3, reach: 25, near: 10, home: 35, approach: 6, gap: 2.2, lungeAt: 3.5, windup: 0.6, windupFirst: 0.85, dash: 0.45, speed: 18, grab: 1, stumble: 2, between: 1.4, again: 20 };
 const PINNED = 5; // seconds of uthak-baithak when a constable catches you over his topi
 const TOPI_AGAIN = 30; // clock minutes before the same constable lets his guard down again
 /** A constable whose topi you can flick off right now: standing at his post, not busy, not just robbed. */
@@ -219,6 +225,8 @@ export function createDay(opts = {}) {
     moment: null, // what happened with the megaphone at 15:30: 'singalong' | 'roast' | null
     roastViral: false,
     clash: null, // { place, live, t, over }
+    raid: null, // a kabaddi raid in progress: { since, breath, ring, lunge, nextAt, dodges }
+    action: null, // a low-level game in progress: { game: 'window', phase, since, ... }
     chase: null, // the chase in progress: { since, prev, lunge, whiffs, cool }, see updateChase
     timers: { arrival: 0, party: 0, speech: 0, march: 0, calm: 0, chase: 0, push: 0, line: 0, leave: 0, lose: 0, block: 0 },
     fired: {}, // rule latches
@@ -242,7 +250,14 @@ function where(s, who) {
   return p ? { place: placeAt(p), pos: { x: p.x, z: p.z } } : { place: null, pos: null };
 }
 function emit(s, key, { link = null, place = null, pos = null } = {}) {
-  for (const [who, text] of LINES[key] || []) say(s, who, text, { key, link, place, pos });
+  // A line that comes round often can have takes (key#1, key#2 in LINES): they come in turn, counted in the day.
+  let lines = LINES[key];
+  if (LINES[`${key}#1`]) {
+    const n = (s.seq.takes ??= {})[key] = ((s.seq.takes[key] ?? -1) + 1);
+    const takes = [lines, ...[1, 2, 3, 4].map((i) => LINES[`${key}#${i}`]).filter(Boolean)];
+    lines = takes[n % takes.length];
+  }
+  for (const [who, text] of lines || []) say(s, who, text, { key, link, place, pos });
   if (!LINES[key] && link) s.events.push({ t: s.t, key, who: 'street', text: '', link, place, pos, kind: 'line' });
 }
 /** One line of text from someone (a person or officer id, 'player', 'wireless', 'street', 'feed', 'chat' or 'stream'). */
@@ -901,16 +916,17 @@ const detainees = (s) => s.detention.people.length + s.detention.count;
 
 // --- chases --------------------------------------------------------------
 
-function startChase(s, id, why, { startle = 0 } = {}) {
+function startChase(s, id, why, { startle = 0, lines: key = null } = {}) {
   const pl = s.player, o = officerById(s, id);
   if (!o || pl.detained || pl.chasedBy) return;
   pl.chasedBy = id; o.mode = 'chase'; s.timers.lose = 0;
   s.chase = { since: s.t, prev: { x: pl.x, z: pl.z }, lunge: null, whiffs: 0, cool: 0, startle, why };
   s.memo.chase = { t: s.t, data: { why } }; // this chase, for the callback if it ends in a catch
   cue(s, 'chase-start', { pos: o, data: { by: id, why } });
-  const lines = LINES[`chase-start-${why}`] || LINES['chase-start'];
-  say(s, id, lines[0][1], { key: 'chase-start', link: 'chase' });
-  for (const [who, text] of lines.slice(1)) say(s, who, text, { key: 'chase-start' });
+  const lines = LINES[key] || LINES[`chase-start-${why}`] || LINES['chase-start'];
+  const said = LINES[key] ? key : LINES[`chase-start-${why}`] ? `chase-start-${why}` : 'chase-start';
+  say(s, id, lines[0][1], { key: said, link: 'chase' });
+  for (const [who, text] of lines.slice(1)) say(s, who, text, { key: said });
   happen(s, 'chase', pl);
 }
 function sendHome(s, o) {
@@ -924,7 +940,7 @@ function endChase(s, c, how) {
   cue(s, 'chase-lost', { pos: pl, data: { by: c.id, crowd, how } });
   emit(s, how === 'tired' || how === 'whiffs' ? `chase-lost-${how}` : 'chase-lost', { link: 'chase-lost', pos: pl });
   addRep(s, { aura: how === 'whiffs' ? 12 : 8 });
-  if (s.memo.chase?.data?.why === 'topi') { addRep(s, { aura: 6 }); emit(s, 'topi-kept', { pos: pl }); happen(s, 'topi', pl); }
+  if (s.memo.chase?.data?.why === 'topi') { addRep(s, { aura: 6 }); emit(s, `topi-kept-${(s.seq.topi || 0) % 3}`, { pos: pl }); happen(s, 'topi', pl); }
 }
 function caught(s, c) {
   const pl = s.player;
@@ -934,7 +950,7 @@ function caught(s, c) {
     pl.pinned = { until: s.t + PINNED, x: pl.x, z: pl.z };
     c.mode = 'post'; Object.assign(c, { x: pl.x + 1.2, z: pl.z }); c.path = [];
     cue(s, 'caught', { pos: pl, data: { by: c.id, light: true, seconds: PINNED } });
-    emit(s, 'caught-topi', { pos: pl });
+    emit(s, `caught-topi-${(s.seq.topi || 0) % 3}`, { pos: pl });
     cue(s, 'crowd-laugh', { pos: pl, data: { who: 'player' } });
     addRep(s, { heat: 5, aura: -3 });
     return;
@@ -985,7 +1001,7 @@ function updateChase(s, dt) {
         Object.assign(L, { phase: 'stumble', t: 0 });
         const near = L.closest <= LUNGE.near;
         cue(s, 'lunge-miss', { pos: c, data: { by: c.id, near, closest: Math.round(L.closest * 10) / 10, whiffs: ch.whiffs } });
-        if (near) { emit(s, 'near-miss', { pos: pl }); addRep(s, { aura: 3 }); }
+        if (near) addRep(s, { aura: 3 }); // the client pops BACH GAYA
         if (ch.whiffs >= WHIFFS_TO_QUIT) { endChase(s, c, 'whiffs'); return; }
       }
       return;
@@ -1008,6 +1024,173 @@ function updateChase(s, dt) {
   const cover = pl.unseen || crowded || d > 24;
   s.timers.lose = cover ? s.timers.lose + dt : 0;
   if (s.timers.lose >= LOSE_AFTER) endChase(s, c, crowded ? 'crowd' : 'sight');
+}
+
+// --- low-level games ---------------------------------------------------------------
+// Each one emits action:<game>:start, :win and :fail, and sets s.action while it runs (eval/README.md).
+
+function startGame(s, game) {
+  if (s.action) return;
+  if (game === 'window') {
+    if (!s.player.detained || s.flags['pane-shut']) return;
+    s.action = { game, phase: 'pane', since: s.t, steps: 0 };
+    cue(s, 'action:window:start', { pos: s.player });
+    emit(s, 'window-start', { pos: s.player });
+  }
+}
+/** Is Pandey watching you right now? He looks at his phone (the photo of home) for a few seconds at a time. */
+export function jawanWatching(s) {
+  const a = s.action;
+  if (!a || a.game !== 'window') return true;
+  return (s.t - a.since) % WINDOW.lookCycle < WINDOW.lookCycle - WINDOW.lookAway;
+}
+/** Are the hands of the cops below up, reaching for your ankles? */
+export function handsUp(s) {
+  const a = s.action;
+  if (!a || a.game !== 'window' || a.phase !== 'edge') return false;
+  return (s.t - a.edgeSince) % WINDOW.handsCycle < WINDOW.handsUp;
+}
+function windowStep(s, { step }) {
+  const a = s.action;
+  if (!a || a.game !== 'window') return { ok: false };
+  if (step === 'climb' && a.phase === 'pane') {
+    if (jawanWatching(s)) return windowFail(s, 'spotted');
+    Object.assign(a, { phase: 'edge', edgeSince: s.t });
+    cue(s, 'window-climb', { pos: s.player });
+    emit(s, 'window-climb', { pos: s.player });
+    return { ok: true };
+  }
+  if (step === 'edge' && a.phase === 'edge') {
+    if (handsUp(s)) return windowFail(s, 'grabbed');
+    a.steps++;
+    cue(s, 'window-step', { pos: s.player, data: { steps: a.steps, of: WINDOW.steps } });
+    if (a.steps >= WINDOW.steps) return windowWin(s);
+    return { ok: true };
+  }
+  return { ok: false };
+}
+function windowWin(s) {
+  s.action = null;
+  releasePlayer(s, 'window-escape');
+  s.flags['window-escaped'] = true;
+  addRep(s, { aura: 15, heat: 10 });
+  cue(s, 'action:window:win', { pos: s.player });
+  happen(s, 'window-escape', s.player);
+  memo(s, 'window-escape');
+  // The cops at the bus door saw you drop: the nearest one runs.
+  const o = allOfficers(s).filter((x) => !x.hidden && x.mode !== 'charge' && x.id !== 'sharma').sort((x, y) => dist(x, s.player) - dist(y, s.player))[0];
+  if (o && dist(o, s.player) < 30) startChase(s, o.id, 'window', { startle: 1 });
+  return { ok: true };
+}
+function windowFail(s, why) {
+  s.action = null;
+  s.flags['pane-shut'] = true; // Pandey shuts it and sits closer
+  addRep(s, { heat: 5 });
+  cue(s, 'action:window:fail', { pos: s.player, data: { why } });
+  emit(s, `window-fail-${why}`, { pos: s.player });
+  return { ok: true, say: why };
+}
+// The kabaddi raid.
+const raidRing = (s, pl = s.player) => Object.values(s.officers).filter((o) => !o.hidden && (o.mode === 'post' || o.mode === 'toPost') && dist(o, pl) <= RAID.reach).sort((a, b) => dist(a, pl) - dist(b, pl)).slice(0, RAID.ring);
+const raidHome = (s, pl = s.player) => CROWD_PLACES.filter((p) => crowdAt(s, p) >= 6 && dist(pl, CROWD_CENTERS[p]) <= RAID.home).sort((a, b) => dist(pl, CROWD_CENTERS[a]) - dist(pl, CROWD_CENTERS[b]))[0] ?? null;
+/** Can you start a raid here: a constable within 10 m, a crowd to run home to, and you're out in the open. */
+export function raidable(s, pl = s.player) {
+  if (pl.detained || pl.chasedBy || pl.pinned || s.raid || s.action || pl.carrying || s.t < (s.raidAgainAt ?? 0)) return false;
+  if (inCrowd(s, pl) || !raidHome(s, pl)) return false;
+  return raidRing(s, pl).some((o) => dist(o, pl) <= RAID.near);
+}
+function startRaid(s) {
+  if (!raidable(s)) return { ok: false };
+  const ring = raidRing(s);
+  for (const o of ring) { o.mode = 'raid'; o.path = []; }
+  const first = !s.flags['raided'];
+  s.raid = { since: s.t, breath: RAID.breath, ring: ring.map((o) => o.id), lunge: null, nextAt: s.t + 1.2, dodges: 0, first, prev: { x: s.player.x, z: s.player.z }, home: raidHome(s) };
+  cue(s, 'action:kabaddi:start', { pos: s.player, data: { ring: s.raid.ring, home: s.raid.home } });
+  cue(s, 'crowd-chant', { pos: CROWD_CENTERS[s.raid.home], data: { chant: 'kabaddi' } });
+  s.seq.raid = (s.seq.raid || 0) + 1;
+  emit(s, `raid-start-${s.seq.raid % 3}`, { pos: s.player });
+  return { ok: true };
+}
+function raidDodge(s) {
+  const r = s.raid;
+  if (!r) return { ok: false };
+  if (r.lunge?.phase !== 'windup' || r.lunge.dodged) { r.breath -= 1.5; return { ok: true, say: 'early' }; } // a spin at nothing costs breath
+  r.lunge.dodged = true; r.dodges++;
+  addRep(s, { aura: 3 });
+  cue(s, 'raid-dodge', { pos: s.player, data: { by: r.lunge.by, dodges: r.dodges } });
+  if (r.dodges === 1 || r.dodges === 3) emit(s, `raid-dodge-${r.dodges}`, { pos: s.player });
+  return { ok: true };
+}
+function endRaid(s, won, why) {
+  const r = s.raid, pl = s.player;
+  for (const id of r.ring) { const o = s.officers[id]; if (o) { o.stumbleUntil = null; if (won && MOODS.includes(o.mood)) o.mood = 'amused'; sendHome(s, o); } }
+  s.raid = null; s.flags['raided'] = true; s.raidAgainAt = s.t + mins(RAID.again);
+  if (won) {
+    addRep(s, { aura: 20 + 2 * r.dodges, heat: 10 });
+    cue(s, 'action:kabaddi:win', { pos: pl, data: { dodges: r.dodges } });
+    cue(s, 'crowd-chant', { pos: pl, data: { chant: 'kabaddi' } });
+    emit(s, `raid-win-${s.seq.raid % 3}`, { pos: pl });
+    happen(s, 'kabaddi', pl); memo(s, 'kabaddi', { dodges: r.dodges });
+    return;
+  }
+  cue(s, 'action:kabaddi:fail', { pos: pl, data: { why, dodges: r.dodges } });
+  cue(s, 'crowd-chant', { pos: pl, data: { chant: 'india' } }); // the reel: "kabaddi kabaddi" turns to "India India"
+  emit(s, `raid-fail-${why}-${s.seq.raid % 3}`, { pos: pl });
+  detainPlayer(s, 'raid');
+}
+function updateRaid(s, dt) {
+  const r = s.raid, pl = s.player;
+  if (!r) return;
+  const v = { x: (pl.x - r.prev.x) / dt, z: (pl.z - r.prev.z) / dt };
+  r.prev = { x: pl.x, z: pl.z };
+  r.breath -= dt;
+  if (inCrowd(s, pl)) { endRaid(s, true); return; }
+  if (r.breath <= 0) { endRaid(s, false, 'breath'); return; }
+  const ring = r.ring.map((id) => s.officers[id]).filter(Boolean);
+  const L = r.lunge;
+  // The ring mirrors you in a crouch, a couple of metres off, spread round you.
+  ring.forEach((o, i) => {
+    if (L?.by === o.id || (o.stumbleUntil ?? 0) > s.t) return;
+    const a = (i / ring.length) * Math.PI * 2 + (s.t - r.since) * 0.4;
+    o.path = [{ x: pl.x + Math.cos(a) * RAID.gap, z: pl.z + Math.sin(a) * RAID.gap }];
+    walk(o, dt, RAID.approach);
+  });
+  if (!L) {
+    if (s.t < r.nextAt) return;
+    const o = ring.filter((x) => (x.stumbleUntil ?? 0) <= s.t && dist(x, pl) <= RAID.lungeAt).sort((a, b) => dist(a, pl) - dist(b, pl))[0];
+    if (!o) return;
+    const windup = r.first ? RAID.windupFirst : RAID.windup, ahead = windup + RAID.dash;
+    r.lunge = { by: o.id, phase: 'windup', t: 0, windup, aim: { x: pl.x + v.x * ahead, z: pl.z + v.z * ahead }, dodged: false };
+    cue(s, 'raid-lunge', { pos: o, data: { by: o.id } });
+    return;
+  }
+  const o = s.officers[L.by];
+  L.t += dt;
+  if (L.phase === 'windup') {
+    o.path = [{ x: pl.x, z: pl.z }]; walk(o, dt, RAID.approach * 0.5); // arms out, closing
+    if (L.t >= L.windup) {
+      const d = dist(o, L.aim) || 1;
+      Object.assign(L, { phase: 'dash', t: 0, dir: { x: (L.aim.x - o.x) / d, z: (L.aim.z - o.z) / d }, left: Math.min(RAID.speed * RAID.dash, d + 0.5) });
+    }
+    return;
+  }
+  const step = Math.min(RAID.speed * dt, L.left), from = { x: o.x, z: o.z };
+  o.x += L.dir.x * step; o.z += L.dir.z * step; o.path = []; L.left -= step;
+  if (!L.dodged && segDist(from, o, pl) <= RAID.grab) { endRaid(s, false, 'caught'); return; }
+  if (L.left <= 1e-9) {
+    o.stumbleUntil = s.t + RAID.stumble;
+    cue(s, 'raid-miss', { pos: o, data: { by: o.id, dodged: L.dodged } });
+    r.lunge = null; r.nextAt = s.t + RAID.between;
+  }
+}
+
+function updateGame(s) {
+  const a = s.action;
+  if (!a) return;
+  if (a.game === 'window') {
+    if (!s.player.detained) { s.action = null; return; } // let off some other way mid-climb
+    if (a.phase === 'pane' && s.t - a.since >= WINDOW.giveUp) windowFail(s, 'slow');
+  }
 }
 
 // --- crew -------------------------------------------------------------------
@@ -1089,7 +1272,7 @@ function updatePeople(s, dt) {
 
 function updateOfficers(s, dt) {
   for (const o of Object.values(s.officers)) {
-    if (o.mode === 'chase') continue;
+    if (o.mode === 'chase' || o.mode === 'raid') continue;
     walk(o, dt, o.mode === 'charge' ? WALK * 1.5 : WALK);
     if (o.mode === 'toPost' && arrived(o)) o.mode = 'post';
     if (o.mode === 'away' && s.t >= (o.backAt ?? 0)) { o.mode = 'toPost'; walkTo(o, o.post); }
@@ -1821,7 +2004,9 @@ export const RULES = [
     when: (s) => s.player.detained && !s.flags['player-stays-detained'] && !s.story.convo && rep(s).help >= 15 && s.t >= s.detention.since + mins(8) && distractor(s),
     then: (s) => {
       const who = distractor(s);
-      say(s, who, LINES['friend-distracts'].find(([w]) => w === who)?.[1] ?? LINES['friend-distracts'][0][1], { key: 'friend-distracts', link: 'friend-distracts' });
+      const n = (s.seq.takes ??= {})['friend-distracts'] = ((s.seq.takes['friend-distracts'] ?? -1) + 1); // a different scene each time
+      const lines = [LINES['friend-distracts'], LINES['friend-distracts#1'], LINES['friend-distracts#2']][n % 3];
+      say(s, who, lines.find(([w]) => w === who)?.[1] ?? lines[0][1], { key: 'friend-distracts', link: 'friend-distracts' });
       callback(s, 'distraction', 'detained', { who: who[0].toUpperCase() + who.slice(1) });
       releasePlayer(s, 'released-distraction');
     },
@@ -1913,6 +2098,8 @@ export function tick(s, dt) {
   updateCrew(s, dt);
   updateProvocateurs(s, dt);
   updateChase(s, dt);
+  updateRaid(s, dt);
+  updateGame(s);
   const pin = s.player.pinned;
   if (pin) {
     if (s.t < pin.until) Object.assign(s.player, { x: pin.x, z: pin.z });
@@ -2059,7 +2246,7 @@ export function act(s, cmd) {
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
-  if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film'].includes(cmd.type)) return { ok: false, say: 'detained' };
+  if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
   if (cmd.type === 'say') return STORY.say(s, cmd.option);
   if (cmd.type === 'leave') return STORY.leave(s);
   if (cmd.type === 'situation') return STORY.startSituation(s, cmd.id);
@@ -2180,6 +2367,8 @@ export function act(s, cmd) {
   }
   if (cmd.type === 'pester') return pester(s, cmd);
   if (cmd.type === 'snatch') return snatch(s, cmd);
+  if (cmd.type === 'window') return windowStep(s, cmd);
+  if (cmd.type === 'raid') return cmd.move === 'dodge' ? raidDodge(s) : startRaid(s);
   if (cmd.type === 'rally') return rally(s);
   if (cmd.type === 'stance') {
     if (!['hold', 'scatter', 'block', 'protect'].includes(cmd.stance)) return { ok: false };
@@ -2206,7 +2395,8 @@ function snatch(s, { to }) {
   o.topiAt = s.t; o.mood = 'annoyed'; o.annoyedAt = s.t; o.pestered = [];
   addRep(s, { heat: 8, nuisance: 3 });
   cue(s, 'crowd-gasp', { pos: o, data: { who: o.id, how: 'topi' } });
-  startChase(s, o.id, 'topi', { startle: 0.8 });
+  s.seq.topi = (s.seq.topi || 0) + 1; // three ways each of it going, so the fifth topi isn't the first one again
+  startChase(s, o.id, 'topi', { startle: 0.8, lines: `chase-start-topi-${s.seq.topi % 3}` });
   return { ok: true };
 }
 function pester(s, { to, how }) {
@@ -2424,7 +2614,7 @@ function nikhilFoundByPlayer(s) {
 const STORY = createStory({
   at, mins, dist, placeAt, phaseAt, SPOTS, PLACES, CROWD_CENTERS,
   officerById, meets, say, cue, memo, callback, addRep, happen, walkTo, sendHome, startChase,
-  detainPlayer, detainPerson, releasePlayer, releasePerson, giveObject, crowdAdd, crowdTake, applyFlag,
+  detainPlayer, detainPerson, releasePlayer, releasePerson, startGame, giveObject, crowdAdd, crowdTake, applyFlag,
   provocateurs: storyProvocateurs, rumour: storyRumour,
   nikhilFound: nikhilFoundByPlayer,
 });
@@ -2447,7 +2637,10 @@ export function opportunities(s, pos = s.player, radius = 10) {
   if (c) push(`convo:${c.id}`, 'convo', I('convo-choose'), pl, null, { choices: [...c.options.map((o) => ({ text: o.intent, ok: o.ok, why: o.why, cmd: { type: 'say', option: o.i } })), { text: I('convo-leave'), ok: true, cmd: { type: 'leave' } }] });
   if (pl.detained) {
     const d = detentionPos(s);
-    if (!c) push('plead', 'plead', I('plead'), d, { type: 'plead' });
+    const a = s.action;
+    if (a?.game === 'window' && a.phase === 'pane') push('window:climb', 'window', I(jawanWatching(s) ? 'window-wait' : 'window-climb'), d, { type: 'window', step: 'climb' });
+    else if (a?.game === 'window' && a.phase === 'edge') push('window:edge', 'window', I(handsUp(s) ? 'window-hands' : 'window-edge', { n: WINDOW.steps - a.steps }), d, { type: 'window', step: 'edge' });
+    else if (!c) push('plead', 'plead', I('plead'), d, { type: 'plead' });
     return out;
   }
   for (const a of STORY.affordances(s)) {
@@ -2476,6 +2669,8 @@ export function opportunities(s, pos = s.player, radius = 10) {
     const best = o.mood === 'annoyed' ? I('pester-annoyed', { name }) : choices[(o.pestered.length + (o.id === 'sharma' ? 0 : 1)) % 4].text;
     push(`pester:${o.id}`, 'pester', best, o, choices[0].cmd, { choices, mood: o.mood });
   }
+  if (s.raid) { const r = s.raid; push('raid:dodge', 'raid', I(r.lunge?.phase === 'windup' && !r.lunge.dodged ? 'raid-dodge' : 'raid-run', { n: Math.ceil(r.breath) }), pl, { type: 'raid', move: 'dodge' }); }
+  else if (raidable(s)) { const o = raidRing(s)[0]; push(`raid:${o.id}`, 'raid', I('raid', { name: OFFICER_NAMES[o.id] ?? 'police' }), o, { type: 'raid', move: 'start' }); }
   if (!pl.carrying && !pl.chasedBy && !pl.pinned) for (const o of Object.values(s.officers)) if (snatchable(s, o)) push(`snatch:${o.id}`, 'snatch', I('snatch', { name: OFFICER_NAMES[o.id] }), o, { type: 'snatch', to: o.id });
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) push(`take:${id}`, 'take', I(`take-${id}`), o, { type: 'take', object: id });
   if (pl.carrying) {
@@ -2501,7 +2696,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
-  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, raid: -25, provocateur: -5, film: -4, give: -3, plead: -20 };
   const score = (o) => {
     let d = o.d + (URGENT[o.kind] ?? 0);
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
@@ -2545,6 +2740,8 @@ export function affordances(s) {
     return out;
   }
   if (pl.detained) {
+    const a = s.action;
+    if (a?.game === 'window') { add(`window:${a.phase === 'pane' ? 'climb' : 'edge'}`, 'window', { type: 'window', step: a.phase === 'pane' ? 'climb' : 'edge' }, null); return out; }
     add('plead', 'plead', { type: 'plead' }, null);
     for (const id of s.detention.people) add(`talk:${id}`, 'talk', { type: 'talk', to: id }, null);
     return out;
@@ -2567,6 +2764,8 @@ export function affordances(s) {
     for (const how of ['career', 'cute', 'cannon', 'detainme']) add(`pester:${o.id}:${how}`, 'pester', { type: 'pester', to: o.id, how }, o);
     if (!pl.carrying && !pl.chasedBy && !pl.pinned && snatchable(s, o)) add(`snatch:${o.id}`, 'snatch', { type: 'snatch', to: o.id }, o);
   }
+  if (s.raid) add('raid:dodge', 'raid', { type: 'raid', move: 'dodge' }, null);
+  for (const o of Object.values(s.officers)) if (!o.hidden && (o.mode === 'post' || o.mode === 'toPost') && raidable(s, { ...pl, x: o.x + 3, z: o.z })) { add(`raid:${o.id}`, 'raid', { type: 'raid', move: 'start' }, { x: o.x + 3, z: o.z }); }
   for (const place of CROWD_PLACES) {
     if (crowdAt(s, place) < 4) continue;
     const c = CROWD_CENTERS[place];

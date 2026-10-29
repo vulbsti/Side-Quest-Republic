@@ -1,11 +1,15 @@
 {"name":"situation chabi:fail","note":"","tempo":"long","expect":{"history":"situation:chabi:fail"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"whisper:biryani:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"biryani"},"at":{"x":-3.0199610515696578,"z":29.680623174885476}},
-{"clock":"10:21","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:23","do":"lane","cmd":null,"at":{"x":10,"z":-9.040000000000001},"hold":4},
-{"clock":"10:28","do":"film:biryani-rush@stage","cmd":{"type":"film"},"at":{"x":2,"z":-5}},
-{"clock":"10:28","wait":45},
-{"clock":"11:13","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":3.2,"z":-10.4}},
-{"clock":"11:14","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":-18,"z":-34.2}},
-{"clock":"11:17","do":"say:chabi:intro:2","cmd":{"type":"say","option":2},"at":{"x":-13.422947275347378,"z":-32.877740323989244}}
+{"clock":"10:00","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
+{"clock":"10:03","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"10:03","do":"whisper:cannon:mira","cmd":{"type":"whisper","to":"mira","rumour":"cannon"},"at":{"x":0,"z":-14.5}},
+{"clock":"10:05","wait":3},
+{"clock":"10:08","do":"snatch:c4","cmd":{"type":"snatch","to":"c4"},"at":{"x":7,"z":1}},
+{"clock":"10:09","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"10:11","wait":20},
+{"clock":"10:31","wait":10},
+{"clock":"10:41","wait":20},
+{"clock":"11:01","wait":10},
+{"clock":"11:11","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":-18,"z":-34.2}},
+{"clock":"11:14","wait":10},
+{"clock":"11:24","do":"say:chabi:intro:2","cmd":{"type":"say","option":2},"at":{"x":-13.526555493105185,"z":-32.90767158689706}}
 ]}

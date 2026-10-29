@@ -1,10 +1,10 @@
 {"name":"ending heat · block · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":3.2,"z":-10.4}},
-{"clock":"10:34","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:36","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:39","finish":true}
+{"clock":"10:00","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
+{"clock":"10:03","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"10:03","do":"whisper:cannon:mira","cmd":{"type":"whisper","to":"mira","rumour":"cannon"},"at":{"x":0,"z":-14.5}},
+{"clock":"10:05","wait":3},
+{"clock":"10:08","do":"snatch:c4","cmd":{"type":"snatch","to":"c4"},"at":{"x":7,"z":1}},
+{"clock":"10:09","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
+{"clock":"10:13","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:15","finish":true}
 ]}

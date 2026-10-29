@@ -1,4 +1,4 @@
-{"name":"cover 12","note":"9 covered keys","tempo":"long","expect":null,"trace":[
+{"name":"cover 12","note":"8 covered keys","tempo":"long","expect":null,"trace":[
 {"clock":"10:00","do":"whisper:biryani:dev","cmd":{"type":"whisper","to":"dev","rumour":"biryani"},"at":{"x":5.2,"z":-3.2}},
 {"clock":"10:02","do":"whisper:sena:asha","cmd":{"type":"whisper","to":"asha","rumour":"sena"},"at":{"x":-18,"z":-34.2}},
 {"clock":"10:05","do":"whisper:minister:asha","cmd":{"type":"whisper","to":"asha","rumour":"minister"},"at":{"x":-18,"z":-34.2}},

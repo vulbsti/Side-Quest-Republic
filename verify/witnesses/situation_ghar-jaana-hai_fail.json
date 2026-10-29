@@ -1,4 +1,5 @@
 {"name":"situation ghar-jaana-hai:fail","note":"","tempo":"long","expect":{"history":"situation:ghar-jaana-hai:fail"},"trace":[
-{"clock":"10:00","do":"pester:c2:cannon","cmd":{"type":"pester","to":"c2","how":"cannon"},"at":{"x":2.5,"z":-27}},
-{"clock":"10:04","finish":true}
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":10,"z":1}},
+{"clock":"10:22","finish":true}
 ]}

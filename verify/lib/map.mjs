@@ -164,7 +164,8 @@ export function buildMap({ record = true } = {}) {
     rules: R.RULES.map((r) => ({ id: r.id, says: r.says, repeat: !!r.repeat })),
     routines: R.SCHEDULE.map(([h, m, fn], i) => ({ id: `routine:${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}#${i}`, at: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`, does: (fn.toString().match(/=> \{?\s*([\s\S]{0,90})/)?.[1] || '').replace(/\s+/g, ' ').trim() })),
     cues: cueNames.map((c) => ({ id: c, handledBy: handled[c] })),
-    lines: Object.keys(C.LINES).map((k) => ({ id: k, speakers: C.LINES[k].map(([w]) => w), emitted: matches(emits, k) || linesUsedDirect.has(k) || quoted(k) })),
+    // key#1, key#2 are takes of key (rules.js emit): said whenever key is.
+    lines: Object.keys(C.LINES).map((k) => { const b = k.split('#')[0]; return { id: k, speakers: C.LINES[k].map(([w]) => w), emitted: [k, b].some((x) => matches(emits, x) || linesUsedDirect.has(x) || quoted(x)) }; }),
     emitted: { literal: [...emits.literal].sort(), patterns: emits.patterns.map(String) },
     links: Object.keys(C.LINKS).map((k) => ({ id: k, from: C.LINKS[k].from, to: C.LINKS[k].to, emitted: links.has(k) })),
     linksEmittedUnknown: [...links].filter((l) => !C.LINKS[l]).sort(),

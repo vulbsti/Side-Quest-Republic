@@ -1,0 +1,20 @@
+{"name":"ending noshow · riot · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":10,"z":1}},
+{"clock":"10:22","wait":45},
+{"clock":"11:07","wait":20},
+{"clock":"11:27","wait":3},
+{"clock":"11:30","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":10,"z":1}},
+{"clock":"11:32","wait":45},
+{"clock":"12:17","wait":45},
+{"clock":"13:02","wait":10},
+{"clock":"13:12","do":"snatch:c3","cmd":{"type":"snatch","to":"c3"},"at":{"x":19,"z":-11}},
+{"clock":"13:13","do":"whisper:cannon:sana","cmd":{"type":"whisper","to":"sana","rumour":"cannon"},"at":{"x":-9.5,"z":-9}},
+{"clock":"13:15","wait":20},
+{"clock":"13:35","do":"whisper:sena:kabir","cmd":{"type":"whisper","to":"kabir","rumour":"sena"},"at":{"x":-4.6,"z":-2.4}},
+{"clock":"13:37","wait":20},
+{"clock":"13:57","do":"hide:cp","cmd":null,"at":{"x":4.5,"z":-31},"hold":4},
+{"clock":"14:02","do":"snatch:c2","cmd":{"type":"snatch","to":"c2"},"at":{"x":2.5,"z":-27}},
+{"clock":"14:03","do":"whisper:minister:asha","cmd":{"type":"whisper","to":"asha","rumour":"minister"},"at":{"x":-17.174039562515393,"z":-33.9613892069489}},
+{"clock":"14:06","finish":true}
+]}

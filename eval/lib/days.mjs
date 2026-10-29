@@ -51,7 +51,7 @@ export function timedDay(name, seed = 1) {
     H.observe(run);
     R.tick(s, STEP);
     const pl = s.player;
-    const mode = pl.detained ? 'detained' : s.story.convo ? 'reading' : pl.chasedBy || s.raid || s.action ? 'action' : 'free';
+    const mode = pl.chasedBy || s.raid || s.action ? 'action' : pl.detained ? 'detained' : s.story.convo ? 'reading' : 'free'; // a game on the bus (the window escape) is play, not detention
     time[mode] += STEP;
     if (pl.detained && !wasDetained) detainedSince = s.t;
     if (!pl.detained && wasDetained) freedAfter.push(s.t - detainedSince);

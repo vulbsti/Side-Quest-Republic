@@ -650,6 +650,11 @@ function updatePolice(dt) {
     const o = b.plan;
     let tx = o.x, tz = o.z, speed = 4, posture = o.posture;
     // A chaser runs at the player; the engine moves him, we only make sure he looks like it.
+    const raid = day.raid;
+    if (raid?.ring.includes(o.id)) { // the ring: crouched and mirroring you; the one lunging dives
+      const l = raid.lunge?.by === o.id ? raid.lunge.phase : null;
+      posture = l ? 'charge' : 'chase'; speed = l === 'dash' ? 18 : 6.5;
+    }
     if (chasedBy && chasedBy === o.id) {
       const lunge = day.chase?.lunge?.phase; // wind-up: lathi up, the telegraph; dash: he dives at you
       posture = lunge === 'windup' || lunge === 'dash' ? 'charge' : 'chase'; speed = lunge === 'dash' ? 18 : 7.5;
@@ -782,8 +787,16 @@ function updateDetainees() {
     shuttle.updateMatrixWorld(); _seat.copy(st.position); shuttle.localToWorld(_seat);
     m.position.copy(_seat); m.rotation.y = shuttle.rotation.y + st.yaw; m.visible = true;
   };
-  playerSeated = holds && S.detained(day);
+  const edging = day.action?.game === 'window' && day.action.phase === 'edge';
+  playerSeated = holds && S.detained(day) && !edging;
   if (playerSeated) { seatAt(playerModel); playerModel.visible = true; }
+  if (edging && !holds) { // the morning van: along its side from the door
+    const dp = R.detentionPos(day), n = day.action.steps || 0;
+    playerModel.position.set(dp.x + 0.2, 1.1, dp.z - 1 - n * 1.1); playerModel.rotation.y = Math.PI / 2; playerModel.visible = true;
+  } else if (edging) { // out of the pane, flat against the outside of the bus, a step further towards the rear each time
+    shuttle.updateMatrixWorld(); _seat.copy(busSeats?.[0]?.position ?? _seat.set(0, 0, 0)); _seat.x += Math.sign(_seat.x || 1) * 0.9; _seat.y += 0.9; _seat.z -= (day.action.steps || 0) * 1.4;
+    shuttle.localToWorld(_seat); playerModel.position.copy(_seat); playerModel.rotation.y = shuttle.rotation.y + Math.PI / 2; playerModel.visible = true;
+  }
   seatedIds.clear();
   for (const id of day.detention?.people || []) if (holds && bodies[id]) { seatAt(bodies[id].model); seatedIds.add(id); }
   const n = holds ? Math.min(DETAINEES, day.detention?.count || 0) : 0;
@@ -1095,6 +1108,18 @@ function handleCues() {
     if (name === 'crew-block') crewBlock = { x: sim.player.x, z: sim.player.z };
     if (name === 'faint') faintNear(c.pos || PLACES.stage);
     if (name === 'chase-start') { toast('BHAAG! Jab woh haath failaye, side mein kat. Ya bheed mein ghus ja.', 5); }
+    if (name === 'crowd-chant') toast(c.data?.chant === 'india' ? '"INDIA! INDIA!"' : '"KABADDI! KABADDI!"', 1.5);
+    if (name === 'raid-miss' && !c.data?.dodged) toast('Hawa pakdi!', 0.8);
+    if (name === 'action:kabaddi:start') toast('KABADDI KABADDI! Ek saans. Jab koi jhapte, E se jhuk. Bheed tak pahunch.', 4);
+    if (name === 'raid-lunge') toast('⚠ JHUK! (E)', 0.8);
+    if (name === 'raid-dodge') toast('BACH GAYA!', 1);
+    if (name === 'action:kabaddi:win') toast('GHAR! Raid successful. PKL wale call kar rahe hain.', 4);
+    if (name === 'action:kabaddi:fail') toast('Raid khatam. Bheed: "INDIA! INDIA!"', 3);
+    if (name === 'action:window:start') toast('Pane khula hai. Jab jawan phone dekhe, E: bahar nikal.', 4);
+    if (name === 'window-climb') toast('Bahar! Jab neeche ke haath neeche hon, E se sarak.', 3);
+    if (name === 'window-step') toast(`${c.data?.steps}/${c.data?.of}`, 0.8);
+    if (name === 'action:window:win') toast('1 MINUTE LATER. Kood ke bhaag!', 3);
+    if (name === 'action:window:fail') toast(c.data?.why === 'grabbed' ? 'Pair pakda gaya. Wapas andar.' : 'Pakde gaye. Pane band. Ab jawan paas baithega.', 3);
     if (name === 'lunge') toast('⚠ WOH JHAPATNE WALA HAI · side mein kat!', 0.9);
     if (name === 'lunge-miss' && c.data?.near) toast('BACH GAYA!', 1.2);
     if (name === 'chase-lost') toast(c.data?.how === 'tired' ? 'Uncle thak gaye. Haath ghutno pe, saans Lodhi Garden tak.' : c.data?.how === 'whiffs' ? 'Teen baar hawa pakdi. Woh gave up.' : 'Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
@@ -1214,6 +1239,10 @@ const SAY = {
   'protected': 'He is protected. You are not.',
   'no-camera': 'You need a camera on him: put down what you carry, or get Zoya live nearby.',
   'never-reached': 'You could not get there.',
+  'early': 'Jhuk toh gaye, par koi jhapta hi nahi. Saans gayi.',
+  'spotted': 'Jawan ne dekh liya. Pane band.',
+  'grabbed': 'Pair pakda gaya. Wapas andar.',
+  'slow': 'Bahut der laga di. Pane band.',
 };
 const words = (code) => (code ? SAY[code] ?? (/^[a-z]+(-[a-z]+)*$/.test(code) ? 'Not now.' : code) : null);
 function runCmd(cmd) {
