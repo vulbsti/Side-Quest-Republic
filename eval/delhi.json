@@ -1,0 +1,184 @@
+{
+ "about": "The real places the map should replicate, and where the game currently puts them. 'src: wiki' coordinates are from the Wikipedia article of the place; 'approx' ones are estimates to replace with OpenStreetMap or a photo walk before they are trusted. Shops have no coordinates yet: they count once they stand in the world (a mesh, a sign, a storefront), matched by name in the world-building code.",
+ "landmarks": [
+  {
+   "id": "rajiv-chowk",
+   "name": "Rajiv Chowk metro",
+   "lat": 28.6328,
+   "lon": 77.2196,
+   "src": "wiki",
+   "game": "PLACES.metro"
+  },
+  {
+   "id": "cp-south",
+   "name": "CP outer circle, A block side (Regal corner bus stop)",
+   "lat": 28.6309,
+   "lon": 77.2184,
+   "src": "approx",
+   "game": "PLACES.cp"
+  },
+  {
+   "id": "jm-observatory",
+   "name": "Jantar Mantar observatory (Misra Yantra)",
+   "lat": 28.6271,
+   "lon": 77.2164,
+   "src": "wiki",
+   "game": "district:jantar"
+  },
+  {
+   "id": "jm-road",
+   "name": "Jantar Mantar Road protest strip",
+   "lat": 28.6257,
+   "lon": 77.215,
+   "src": "approx",
+   "game": "PLACES.stage"
+  },
+  {
+   "id": "sansad-barricade",
+   "name": "Sansad Marg barricade at the Jantar Mantar Road turn",
+   "lat": 28.6262,
+   "lon": 77.216,
+   "src": "approx",
+   "game": "PLACES.barricade"
+  },
+  {
+   "id": "parliament-street",
+   "name": "Parliament Street police station, Sansad Marg",
+   "lat": 28.6238,
+   "lon": 77.2127,
+   "src": "approx",
+   "game": "PLACES.parliament"
+  },
+  {
+   "id": "palika-bazaar",
+   "name": "Palika Bazaar",
+   "lat": 28.631,
+   "lon": 77.2186,
+   "src": "wiki",
+   "game": null
+  },
+  {
+   "id": "hanuman-mandir",
+   "name": "Hanuman Mandir, Baba Kharak Singh Marg",
+   "lat": 28.63,
+   "lon": 77.215,
+   "src": "wiki",
+   "game": null
+  },
+  {
+   "id": "regal",
+   "name": "Regal Building (Khadi, Madame Tussauds)",
+   "lat": 28.6298,
+   "lon": 77.2181,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "janpath-market",
+   "name": "Janpath market",
+   "lat": 28.6268,
+   "lon": 77.2195,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "patel-chowk",
+   "name": "Patel Chowk metro",
+   "lat": 28.623,
+   "lon": 77.214,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "bangla-sahib",
+   "name": "Gurudwara Bangla Sahib",
+   "lat": 28.6264,
+   "lon": 77.2091,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "shivaji-stadium",
+   "name": "Shivaji Stadium bus terminal",
+   "lat": 28.6316,
+   "lon": 77.2128,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "parliament-house",
+   "name": "Sansad Bhavan (Parliament House)",
+   "lat": 28.6175,
+   "lon": 77.208,
+   "src": "approx",
+   "game": null
+  }
+ ],
+ "places": [
+  "Wenger's",
+  "Keventers",
+  "Kake Da Hotel",
+  "United Coffee House",
+  "Odeon",
+  "Regal",
+  "Plaza",
+  "Rivoli",
+  "Palika Bazaar",
+  "Janpath",
+  "Hanuman Mandir",
+  "Bangla Sahib",
+  "Khadi",
+  "Mohan Singh Place",
+  "Shivaji Stadium",
+  "Patel Chowk",
+  "Rajiv Chowk",
+  "Sansad Marg",
+  "Parliament Street",
+  "Jantar Mantar Road",
+  "Baba Kharak Singh Marg",
+  "State Emporium",
+  "Barakhamba",
+  "Kasturba Gandhi Marg",
+  "Western Court",
+  "Ashoka Road",
+  "Central Park",
+  "Imperial",
+  "Haldiram",
+  "Starbucks",
+  "Saravana Bhavan",
+  "Hotel Saravana",
+  "A Block",
+  "B Block",
+  "E Block",
+  "N Block",
+  "Gate No"
+ ],
+ "invented": [
+  "People’s Square",
+  "People's Square",
+  "Civic Court",
+  "Seva Camp",
+  "Press Lane",
+  "Assembly Garden",
+  "Service Gali"
+ ],
+ "realExtent": {
+  "about": "The patch the vision covers: CP's outer circle to Sansad Bhavan, Bangla Sahib to Janpath.",
+  "km2": 1.2
+ },
+ "worldFiles": [
+  "dist/world.js",
+  "dist/world-expansion.js",
+  "dist/environment-detail.js",
+  "dist/districts.js",
+  "dist/destinations.js",
+  "dist/loop/props.js"
+ ],
+ "dialogueFiles": [
+  "dist/loop/content.js",
+  "dist/loop/barks.js",
+  "dist/loop/phone.js",
+  "dist/loop/phone-timeline.js",
+  "dist/loop/story"
+ ]
+}

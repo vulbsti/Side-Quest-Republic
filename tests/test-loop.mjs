@@ -20,6 +20,16 @@ function walkPlayer(s, to) {
 }
 
 const everSeen = new Set();
+// Sprint somewhere with a constable on your heels: when he winds up a lunge, cut sideways for the wind-up.
+function runTo(s, to, speed = 0.8) {
+  for (let i = 0; i < 120; i++) {
+    const d = dist(s.player, to); if (d < 0.5) break;
+    let dx = (to.x - s.player.x) / d, dz = (to.z - s.player.z) / d;
+    if (s.chase?.lunge?.phase === 'windup') [dx, dz] = [-dz, dx];
+    s.player.x += dx * Math.min(speed, d); s.player.z += dz * Math.min(speed, d); advance(s, 0.1);
+    if (s.player.detained) break;
+  }
+}
 function play(script) {
   const s = createDay();
   const seen = [];
@@ -278,7 +288,7 @@ assert(r.s.people.kabir.mode !== 'detained');
 // Steal the key in front of the CP constable and lose him in the stage crowd. Spread the DRS rumour. Join a provocateur.
 r = play([
   [at(10, 15), (s) => { pester(s, 'c1', 'career'); assert(act(s, { type: 'film' }).ok); pester(s, 'c1', 'cute'); pester(s, 'c1', 'cute'); assert.equal(s.officers.c1.mood, 'annoyed'); }],
-  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['c2'] }); for (let i = 0; i < 60; i++) { const d = dist(s.player, { x: 0, z: -5.5 }); if (d < 0.5) break; s.player.x += (0 - s.player.x) / d * 0.8; s.player.z += (-5.5 - s.player.z) / d * 0.8; advance(s, 0.1); } advance(s, 4); assert.equal(s.player.chasedBy, null); }],
+  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['c2'] }); runTo(s, { x: 0, z: -5.5 }); advance(s, 4); assert.equal(s.player.chasedBy, null); }],
   [at(12, 5), (s) => whisper(s, 'mira', 'sena')],
   [at(14, 34), (s) => { const p = s.provocateurs[0]; moveTo(s, p); assert(act(s, { type: 'provocateur', id: p.id, how: 'join' }).ok); }],
 ]);

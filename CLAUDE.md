@@ -9,6 +9,8 @@ engine with no DOM, so whole days run in Node. `npm start` serves the game: the 
 2. `npm run verify` reports nothing worse than `verify/baseline.json`. Quote its summary line in the PR.
    If content was cut on purpose and coverage drops, say why and run `npm run verify -- --update`.
 3. For anything visual, `npm run verify:playback -- <witness>` and look at the screenshot.
+4. For anything that changes how the game plays, looks or reads, `npm run eval` and quote the vision score and the
+   pillar it moved. `verify` says the game works; `eval` says whether it is the game the owner wants. See `eval/README.md`.
 
 See `verify/README.md` for what the verifier checks and how to replay a witness trace.
 
