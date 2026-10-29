@@ -90,7 +90,7 @@ export function createLighting(world) {
   scene.getObjectByName('Expansion lamps')?.traverse((o) => { if (o.isMesh && o.material?.emissive) bulbs.push(o.material); });
   // Two real lights over the square and the barricade, so faces catch the orange at dusk.
   const sodium = [new THREE.PointLight('#ff9a48', 0, 26, 1.6), new THREE.PointLight('#ff9a48', 0, 26, 1.6)];
-  sodium[0].position.set(2, 5.5, -8); sodium[1].position.set(34, 5.5, -4);
+  sodium[0].position.set(-49, 5.5, 102); sodium[1].position.set(-50.5, 5.5, 86);
   for (const l of sodium) scene.add(l);
 
   const look = P('#ffffff', 1, [0, 1, 0], '#fff', '#fff', 1, '#fff', 1, 2, 1, 1, 0, '#fff', '#fff', 0);

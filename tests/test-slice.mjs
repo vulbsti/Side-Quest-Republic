@@ -74,7 +74,8 @@ const chaotic = play([
     moveTo(s, SPOTS.keyHook, 0);
     ok(act(s, { type: 'take', object: 'key', witnesses: ['c2'] }), 'take key');
     assert.equal(s.player.chasedBy, 'c2');
-    walkPlayer(s, CROWD_CENTERS.stage, 8); // sprint into the stage crowd
+    walkPlayer(s, { x: 113, z: -200 }, 8); walkPlayer(s, { x: 85, z: -208 }, 8); // away from him, round the circle
+    walkPlayer(s, CROWD_CENTERS.stage, 8); // and down to the stage crowd
     advance(s, 4);
     assert.equal(s.player.chasedBy, null, 'lost him in the crowd');
   }],
@@ -85,7 +86,7 @@ const chaotic = play([
     moveTo(s, p, 1);
     ok(act(s, { type: 'provocateur', id: p.id, how: 'join' }), 'join');
     film(s, 'joined');
-    walkPlayer(s, { x: 60, z: -4 }, 3); // take him to Parliament Street, where the RAF are
+    walkPlayer(s, { x: -58, z: 57 }, 3); // take him to Parliament Street, where the RAF are
   }],
   [at(15, 16), (s) => { walkPlayer(s, CROWD_CENTERS.stage, 8); advance(s, 5); }],
 ]);
@@ -93,7 +94,7 @@ const chaotic = play([
   const { s, card } = chaotic;
   assert(chaotic.links.has('sena-called') || s.groups.sena.mood === 'angry', 'the DRS rumour brings the DRS, angry');
   assert.equal(s.groups.sena.mood !== 'chanting', true);
-  assert(chaotic.cues.has('bus-stalled') && chaotic.cues.has('chase-start') && chaotic.cues.has('chase-lost'));
+  for (const c of ['bus-stalled', 'chase-start', 'chase-lost']) assert(chaotic.cues.has(c), `chaotic day shows ${c}`);
   assert.equal(s.police.stone.by, 'p1', 'the man you joined throws the stone');
   assert(chaotic.links.has('joined-stone'));
 }
@@ -133,7 +134,7 @@ const helpful = play([
   const { s, card } = helpful;
   assert(s.waterOk && !s.heat, 'nobody faints');
   assert(s.provocateurs.every((p) => p.state === 'gone' && p.exposed), 'all three ran for the SUV');
-  assert(!s.police.stone, 'no stone');
+  assert(!s.police.stone, `no stone (${JSON.stringify(s.police.stone)}, sena ${JSON.stringify(s.groups.sena)})`);
   assert(helpful.cues.has('cannon-dance'), 'the morning cannon request turns the cannon into a dance');
   assert(helpful.cues.has('crew-join') && helpful.cues.has('crew-block'));
   assert.equal(card.outcome, 'sitin');
@@ -225,8 +226,8 @@ assert.notEqual(caught.card.role, 'detained', 'a morning detention no longer eat
 
 // Speaker party at CP, the speech flops, biryani and a minister who never comes.
 const party = play([
-  [at(10, 5), (s) => { moveTo(s, s.objects.speaker, 0); act(s, { type: 'take', object: 'speaker', witnesses: [] }); moveTo(s, { x: -6, z: -45 }, 0); act(s, { type: 'drop' }); }],
-  [at(10, 12), (s) => { moveTo(s, s.people.dev); act(s, { type: 'whisper', to: 'dev', rumour: 'minister' }); moveTo(s, { x: -6, z: -45 }, 0); }],
+  [at(10, 5), (s) => { moveTo(s, s.objects.speaker, 0); act(s, { type: 'take', object: 'speaker', witnesses: [] }); moveTo(s, { x: 92, z: -180 }, 0); act(s, { type: 'drop' }); }],
+  [at(10, 12), (s) => { moveTo(s, s.people.dev); act(s, { type: 'whisper', to: 'dev', rumour: 'minister' }); moveTo(s, { x: 92, z: -180 }, 0); }],
   [at(10, 25), (s) => film(s, 'speaker party')],
   [at(12, 1), (s) => { moveTo(s, SPOTS.stageTop, 2); film(s, 'small speech'); }],
   [at(12, 10), (s) => { moveTo(s, s.people.meera); act(s, { type: 'whisper', to: 'meera', rumour: 'biryani' }); }],
@@ -246,7 +247,7 @@ assert(!singalong.s.police.stone);
 
 // Nikhil to Kabir, Kabir gets the mic: the roast.
 const roast = play([
-  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath, 4.5); walkPlayer(s, { x: -3, z: -1 }, 4.5); }],
+  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath, 4.5); walkPlayer(s, { x: -54, z: 109 }, 4.5); }],
   [at(14, 20), (s) => { moveTo(s, s.objects.megaphone, 0); act(s, { type: 'take', object: 'megaphone', witnesses: [] }); moveTo(s, s.people.kabir); ok(act(s, { type: 'give', to: 'kabir' }), 'give kabir'); }],
 ]);
 assert.equal(roast.s.moment, 'roast');
@@ -254,7 +255,7 @@ assert.equal(roast.s.moment, 'roast');
 // Nikhil keeps Kabir all day; the charge drags Kabir onto the detention bus. "Sir mujhe bhi detain kar lo":
 // you tell them to try the back door, and they slip out.
 const detainMe = play([
-  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath, 4.5); walkPlayer(s, { x: -3, z: -1 }, 4.5); }],
+  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath, 4.5); walkPlayer(s, { x: -54, z: 109 }, 4.5); }],
   [at(15, 47), (s) => {
     assert(s.detention.people.includes('kabir'), 'the charge put Kabir on the bus');
     moveTo(s, detentionPos(s));

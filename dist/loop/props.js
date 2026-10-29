@@ -395,15 +395,15 @@ const BUILDERS = { van: buildVan, vajra: buildVajra, suv: buildSUV, bike: buildB
 
 /** Barricade lines per place: positions and the yaw of each unit. Gaps are left where the police stand. */
 export const BARRICADE_LINES = {
-  barricade: { yaw: Math.PI / 2, at: [[35.2, -13.5], [35.2, -10.5], [35.2, -7.5], [35.2, -1.5], [35.2, 1.5], [35.2, 4.5]] },
-  parliament: { yaw: Math.PI / 2, at: [[57.4, -9], [57.4, -6], [57.4, -3], [57.4, 0], [57.4, 3], [57.4, 6]] },
-  stage: { yaw: 0, at: [[-7.5, 0.6], [-4.5, 0.6], [1.5, 0.6], [4.5, 0.6]] },
-  cp: { yaw: 0, at: [[-3, -27.8], [0, -27.8], [3, -27.8], [6, -27.8]] },
+  barricade: { yaw: 0, at: [[-60, 84.8], [-57, 84.8], [-54, 84.8], [-48, 84.8], [-45, 84.8], [-42, 84.8]] },
+  parliament: { yaw: 0, at: [[-63, 59.6], [-60, 59.6], [-57, 59.6], [-54, 59.6], [-51, 59.6], [-48, 59.6]] },
+  stage: { yaw: 0, at: [[-58.5, 110.6], [-55.5, 110.6], [-49.5, 110.6], [-46.5, 110.6]] },
+  cp: { yaw: 0, at: [[101, -184.8], [104, -184.8], [107, -184.8], [110, -184.8]] },
 };
 /** Where vehicles park for each place, and the road they come in on. */
 const PARK = {
-  cp: { x: -24, z: -27, yaw: Math.PI / 2 }, stage: { x: -17, z: 2.6, yaw: Math.PI / 2 },
-  barricade: { x: 28, z: 5.2, yaw: Math.PI / 2 }, parliament: { x: 68, z: 5.2, yaw: -Math.PI / 2 },
+  cp: { x: 80, z: -184, yaw: Math.PI / 2 }, stage: { x: -68, z: 112.6, yaw: Math.PI / 2 },
+  barricade: { x: -41.3, z: 92, yaw: Math.PI }, parliament: { x: -48.8, z: 49, yaw: 0 },
 };
 const placeOf = (PLACES, place) => PLACES[place] || PLACES.stage;
 
@@ -505,8 +505,8 @@ export function createProps(world, { PLACES, playerObstacles = null } = {}) {
   // The lathi charge front, read by main for police and crowd movement.
   const charge = { active: false, place: null, x: 0, z: 0, nx: 1, nz: 0, along: 0, t: 0, ox: 0, oz: 0, speed: 3.8, length: 14 };
   const LINE_FROM = { // where the charge starts at each place and the direction it sweeps
-    stage: { x: 0, z: 1.8, nx: 0, nz: -1 }, cp: { x: 4.5, z: -26.4, nx: 0, nz: -1 },
-    barricade: { x: 37.8, z: -4.5, nx: -1, nz: 0 }, parliament: { x: 55.5, z: -4, nx: 1, nz: 0 },
+    stage: { x: -51, z: 111.8, nx: 0, nz: -1 }, cp: { x: 108.5, z: -183.4, nx: 0, nz: -1 },
+    barricade: { x: -51, z: 82.2, nx: 0, nz: 1 }, parliament: { x: -58, z: 61.5, nx: 0, nz: -1 },
   };
 
   let cannonKey = null, suvShown = false, bikesShown = false, ambKey = null, spray = 0, sprayDir = 0, sprayPitch = 0, dance = false;

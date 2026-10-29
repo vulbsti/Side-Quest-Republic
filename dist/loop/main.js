@@ -266,10 +266,11 @@ function waterModel() {
 }
 function placeProps() {
   world.put('chai-cart', -18, -36, 0.3);
-  world.obstacles.push({ id: 'cp-chai', x: -18, z: -36, w: 3, d: 2, h: 3 });
-  for (const z of [-10.5, -7.5, -1.5, 1.5]) {
-    world.put('barricade', 40, z, Math.PI / 2);
-    world.obstacles.push({ id: 'loop-barricade', x: 40, z, w: 0.7, d: 3, h: 1.3 });
+  world.obstacles.push({ id: 'cp-chai', x: 86, z: -193, w: 3, d: 2, h: 3 });
+  // The standing barricade across Jantar Mantar Road, with a gap in the middle for the marshals.
+  for (const x of [-57, -54, -48, -45]) {
+    world.put('barricade', x, 80, 0);
+    world.obstacles.push({ id: 'loop-barricade', x, z: 80, w: 3, d: 0.7, h: 1.3 });
   }
   for (const [text, x, z, r] of [['PARLIAMENT STREET →', 50, -9, -Math.PI / 2], ['CP SHUTTLE STOP', 4, -38.5, 0], ['JANTAR MANTAR STOP', 4, 5.5, 0]]) {
     const s = sign(text, 3.4, 0.6);
@@ -405,20 +406,20 @@ function dress(b, kind) {
 
 // Where each crowd group stands, and where its people come from.
 const GROUPS = {
-  cpWaiting: { center: { x: 4.5, z: -31 }, r: 3.8, spawn: { x: -4, z: -47 }, face: { x: 7.6, z: -31 } },
-  cpParty: { center: null, r: 3.2, spawn: { x: -8, z: -46 }, face: null },
-  stage: { center: { x: 0, z: -5.5 }, r: 5.5, spawn: { x: 10, z: 4 }, face: { x: 0, z: -14 } },
-  barricade: { center: { x: 32.6, z: -3.2 }, r: 3.4, spawn: { x: 12, z: -6 }, face: { x: 40, z: -3.2 } },
-  parliament: { center: { x: 62, z: -4 }, r: 6, spawn: { x: 40, z: -4.5 }, face: { x: 70, z: -4 } },
+  cpWaiting: { center: { x: 108.5, z: -188 }, r: 3.8, spawn: { x: 100, z: -204 }, face: { x: 111.6, z: -188 } },
+  cpParty: { center: null, r: 3.2, spawn: { x: 96, z: -203 }, face: null },
+  stage: { center: { x: -51, z: 104.5 }, r: 5.5, spawn: { x: -41, z: 114 }, face: { x: -51, z: 96 } },
+  barricade: { center: { x: -49.7, z: 87.4 }, r: 3.4, spawn: { x: -39, z: 104 }, face: { x: -49.7, z: 80 } },
+  parliament: { center: { x: -58, z: 55 }, r: 6, spawn: { x: -51, z: 80 }, face: { x: -58, z: 47 } },
 };
 // Arriving groups stand beside the students at their place, each on its own side.
 const KIND_OFFSET = { party: { x: -7.5, z: 6.5 }, sena: { x: 7, z: 7 }, opp: { x: -8, z: -4 }, students: { x: 0, z: 0 } };
 const KIND_SPAWN = { party: { x: -60, z: 3 }, sena: { x: 80, z: 2 }, opp: { x: -60, z: -3 }, students: { x: -7, z: 34 } };
 const LINE_LAYOUT = {
-  stage: { x: 0, z: 1.8, axis: 'x', yaw: Math.PI },
-  cp: { x: 4.5, z: -26.4, axis: 'x', yaw: Math.PI },
-  barricade: { x: 37.8, z: -4.5, axis: 'z', yaw: -Math.PI / 2 },
-  parliament: { x: 55.5, z: -4, axis: 'z', yaw: Math.PI / 2 },
+  stage: { x: -51, z: 111.8, axis: 'x', yaw: Math.PI },
+  cp: { x: 108.5, z: -183.4, axis: 'x', yaw: Math.PI },
+  barricade: { x: -51, z: 82.2, axis: 'x', yaw: 0 },
+  parliament: { x: -58, z: 61.5, axis: 'x', yaw: Math.PI },
 };
 const placePos = (place) => PLACES[place] || null;
 const CLUSTER_KEYS = Object.keys(GROUPS);
@@ -473,7 +474,7 @@ function updateCrowd(dt) {
           b = crowd.find((x) => !x.cluster && !x.model.visible && x.pool === pool);
           if (!b) break;
           Object.assign(b, cl.spawn);
-          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -14, z: 12 });
+          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -65, z: 122 });
           b.ox = b.oz = 0;
         }
         dress(b, cl.kind);
@@ -489,7 +490,7 @@ function updateCrowd(dt) {
       }
     }
     crowdSnap = false;
-    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: -4, z: -48 }; }
+    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: 100, z: -205 }; }
   }
   const surge = clashSurge();
   const ch = props.charge, gasOn = props.gasAt;
@@ -591,7 +592,7 @@ function planOfficers() {
       const [x, z, y] = CHAIRS[i];
       officerPlan.push({ id: 'c' + i, kind: 'constable', x, z, yaw: y, posture: 'seat', chair: i });
     } else {
-      officerPlan.push({ id: 'c' + i, kind: 'constable', x: 33 + (i % 3) * 1.3, z: -11 + Math.floor(i / 3) * 1.6, yaw: -Math.PI / 2 + (i - 2) * 0.4, posture: 'stand' });
+      officerPlan.push({ id: 'c' + i, kind: 'constable', x: -44 + Math.floor(i / 3) * 1.6, z: 77 - (i % 3) * 1.3, yaw: (i - 2) * 0.4, posture: 'stand' });
     }
   }
   const nRaf = Math.min(RAF_POOL, S.raf(day));

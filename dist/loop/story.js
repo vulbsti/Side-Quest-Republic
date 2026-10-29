@@ -133,7 +133,7 @@ export function createStory(api) {
       case 'follow': if (a === 'nikhil') { s.people.nikhil.mode = 'follow'; } else if (!st.followers.includes(a) && s.people[a]) { st.followers.push(a); s.people[a].mode = 'follow'; } break;
       case 'unfollow': st.followers = st.followers.filter((x) => x !== a); if (s.people[a]?.mode === 'follow') s.people[a].mode = 'story'; break;
       // An officer sent somewhere by the story goes back to his post after a while (rules.js updateOfficers).
-      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = s.officers[a] ? 'away' : p.kind ? 'toPost' : 'story'; if (s.officers[a]) p.backAt = s.t + api.mins(25); api.walkTo(p, to); } break; }
+      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = s.officers[a] ? 'away' : p.kind ? 'toPost' : 'story'; if (s.officers[a]) p.backAt = s.t + api.mins(25); api.walkTo(p, to); p.rush = true; } break; }
       case 'leave': { const p = s.people[a]; if (p && !p.hidden) { p.mode = 'storyLeave'; api.walkTo(p, SPOTS.metro); } break; }
       case 'return': { const p = s.people[a]; if (p && p.hidden && p.mode !== 'detained') { p.hidden = false; Object.assign(p, SPOTS.metro); p.mode = 'story'; api.walkTo(p, PLACES.stage); } break; }
       case 'give': api.giveObject(s, a, b); break;
