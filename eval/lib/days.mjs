@@ -94,13 +94,17 @@ export function timedDay(name, seed = 1) {
 }
 
 /**
- * Chase probe: steal the bus key under an officer's nose at several times of day, then run four ways for up to a
- * minute: stand still, jog straight away, sprint straight away, and jog for the nearest crowd. A chase with no
- * skill in it is one where sprinting straight always works; a chase with depth rewards using the street.
+ * Chase probe: steal the bus key under an officer's nose at several times of day, then run for up to a minute:
+ * stand still, jog straight away, hold sprint straight away, hold sprint for the nearest crowd, and hold sprint
+ * away but cut sideways whenever he winds up a lunge (the telegraph a player sees). Sprint uses the client's
+ * stamina (simulation.js), so holding Shift is not a free 8.1 m/s. A chase with no skill in it is one where running
+ * straight always works; a chase with depth rewards using the street and reading the constable.
  */
+// The client's stamina (dist/simulation.js): sprint while above 2, drain 19/s sprinting, refill 13/s otherwise.
+const STAMINA = { max: 100, min: 2, drain: 19, fill: 13 };
 export function chaseProbe(times = [[10, 20], [10, 50], [11, 20], [11, 50], [12, 20], [12, 50], [13, 20], [13, 50], [14, 20], [14, 50], [15, 20], [15, 50]]) {
   const base = H.newRun('long');
-  const out = { stand: [], jog: [], sprint: [], crowd: [] };
+  const out = { stand: [], jog: [], sprint: [], crowd: [], dodge: [] };
   for (const [h, m] of times) {
     H.waitMinutes(base, Math.max(0, (R.at(h, m) - base.s.t) / R.SECONDS_PER_MINUTE));
     for (const policy of Object.keys(out)) {
@@ -114,9 +118,10 @@ export function chaseProbe(times = [[10, 20], [10, 50], [11, 20], [11, 50], [12,
       Object.assign(cop, { x: pl.x + 6, z: pl.z, path: [] });
       R.act(s, { type: 'take', object: 'key', witnesses: [cop.id] });
       if (!pl.chasedBy) { out[policy].push('no-chase'); continue; }
-      let result = 'timeout';
+      let result = 'timeout', stamina = STAMINA.max;
       for (let t = 0; t < 60 && !s.over; t += STEP) {
         const c = R.officerById(s, pl.chasedBy);
+        let sprinting = false;
         if (c && policy !== 'stand') {
           let tx, tz;
           if (policy === 'crowd') {
@@ -124,9 +129,13 @@ export function chaseProbe(times = [[10, 20], [10, 50], [11, 20], [11, 50], [12,
             const at = place ? R.CROWD_CENTERS[place] : { x: pl.x + (pl.x - c.x), z: pl.z + (pl.z - c.z) };
             tx = at.x - pl.x; tz = at.z - pl.z;
           } else { tx = pl.x - c.x; tz = pl.z - c.z; }
-          const d = Math.hypot(tx, tz) || 1, v = (policy === 'sprint' ? SPRINT : JOG) * STEP;
+          if (policy === 'dodge' && s.chase?.lunge?.phase === 'windup') [tx, tz] = [-tz, tx];
+          const d = Math.hypot(tx, tz) || 1;
+          sprinting = policy !== 'jog' && stamina > STAMINA.min && d > 0.3;
+          const v = (sprinting ? SPRINT : JOG) * STEP;
           if (d > 0.3) { pl.x += (tx / d) * Math.min(v, d); pl.z += (tz / d) * Math.min(v, d); }
         }
+        stamina = Math.max(0, Math.min(STAMINA.max, stamina + (sprinting ? -STAMINA.drain : STAMINA.fill) * STEP));
         pl.unseen = H.SIGHT.lost(s);
         R.tick(s, STEP);
         if (pl.detained) { result = 'caught'; break; }
@@ -138,5 +147,6 @@ export function chaseProbe(times = [[10, 20], [10, 50], [11, 20], [11, 50], [12,
   const rate = (list) => { const real = list.filter((r) => ['caught', 'lost', 'timeout'].includes(r)); return real.length ? real.filter((r) => r === 'lost').length / real.length : null; };
   const rates = Object.fromEntries(Object.entries(out).map(([k2, v]) => [k2, rate(v)]));
   const naive = Math.max(rates.jog ?? 0, rates.sprint ?? 0);
-  return { runs: out, rates, challenge: rates.sprint == null ? null : 1 - rates.sprint, skill: rates.crowd == null ? null : Math.max(0, rates.crowd - naive) };
+  const street = Math.max(rates.crowd ?? 0, rates.dodge ?? 0); // the best a player using the street or reading the lunge does
+  return { runs: out, rates, challenge: rates.sprint == null ? null : 1 - rates.sprint, skill: rates.crowd == null && rates.dodge == null ? null : Math.max(0, street - naive) };
 }

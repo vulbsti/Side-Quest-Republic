@@ -24,8 +24,9 @@ score is marked partial.
 
 - **engine**: bot players (the verifier's personalities) play whole 32-minute days, tick by tick, on the real
   engine. We record where the time goes (skill moment, conversation card, detained, walking), what was on screen,
-  what was within reach. A chase probe steals the bus key in front of an officer twelve times a day and runs four
-  ways (stand, jog straight, sprint straight, run for a crowd) to see whether escaping takes any skill.
+  what was within reach. A chase probe steals the bus key in front of an officer twelve times a day and runs five
+  ways (stand, jog straight, hold sprint straight, hold sprint for a crowd, hold sprint and cut sideways at each
+  lunge), with the client's stamina, to see whether escaping takes any skill.
 - **static**: the source itself. Every quoted line is tested for Hinglish and lectures; the HUD's prompt copy for
   plain instructions. The map is compared with [`delhi.json`](delhi.json): real landmark coordinates, the real
   places and shops that should stand in the world, the invented names that shouldn't.

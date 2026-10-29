@@ -1,12 +1,13 @@
 {"name":"situation nikhil-lost:done","note":"","tempo":"long","expect":{"history":"situation:nikhil-lost:done"},"trace":[
 {"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"situation:nikhil-lost","cmd":{"type":"situation","id":"nikhil-lost"},"at":{"x":-7,"z":36}},
-{"clock":"10:36","wait":45},
-{"clock":"11:21","do":"say:nikhil-lost:mila:3","cmd":{"type":"say","option":3},"at":{"x":-6.351476222879262,"z":31.244158967781246}},
-{"clock":"11:21","do":"whisper:minister:ravi","cmd":{"type":"whisper","to":"ravi","rumour":"minister"},"at":{"x":-19.5,"z":-31.5}},
-{"clock":"11:25","do":"goal:nikhil-lost","cmd":null,"at":{"x":-4.6,"z":-2.4},"hold":1},
-{"clock":"11:29","do":"say:nikhil-lost:reunion:0","cmd":{"type":"say","option":0},"at":{"x":-4.495556165818833,"z":-3.003957823743271}}
+{"clock":"10:20","do":"whisper:biryani:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"biryani"},"at":{"x":-3.0199610515696578,"z":29.680623174885476}},
+{"clock":"10:21","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":40,"z":-4.5}},
+{"clock":"10:25","do":"pester:c2:detainme","cmd":{"type":"pester","to":"c2","how":"detainme"},"at":{"x":2.5,"z":-27}},
+{"clock":"10:28","do":"film:pester-detainme@cp","cmd":{"type":"film"},"at":{"x":2.5,"z":-27}},
+{"clock":"10:29","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":-6.92960814077558,"z":30.456005087984728}},
+{"clock":"10:33","do":"snatch:c2","cmd":{"type":"snatch","to":"c2"},"at":{"x":2.5,"z":-27}},
+{"clock":"10:37","do":"situation:nikhil-lost","cmd":{"type":"situation","id":"nikhil-lost"},"at":{"x":-7,"z":36}},
+{"clock":"10:42","do":"say:nikhil-lost:mila:2","cmd":{"type":"say","option":2},"at":{"x":-6.326099374097002,"z":31.05806207671134}},
+{"clock":"10:43","wait":20},
+{"clock":"11:03","do":"say:nikhil-lost:reunion:2","cmd":{"type":"say","option":2},"at":{"x":-6.326099374097002,"z":31.05806207671134}}
 ]}

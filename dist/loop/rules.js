@@ -109,8 +109,17 @@ export const CROWD_CENTERS = {
 const BUS = { speed: 3.6, dwellCP: 8, dwellJantar: 6, capacity: 14 };
 const ARRIVAL_EVERY = 7;
 const WALK = 3.2;
-const CHASE = 5.2; // a running constable: faster than a jog (4.7), slower than a sprint (8.1)
+const CHASE = 7; // a constable flat out: faster than a jog (4.7), slower than a sprint (8.1), which the stamina bar rations
 const LOSE_AFTER = 3; // seconds out of sight or inside a crowd to lose a chaser
+// The lunge: within range he slows and reaches out (the telegraph), aimed at where you'll be if you keep going,
+// then dives. Keep running straight and he has you; change direction, or burst, during the wind-up and he grabs air.
+const LUNGE = { range: 3, windup: 0.5, slow: 0.5, dash: 0.45, speed: 18, reach: 1.1, near: 2.6, stumble: 1.2, cool: 1.5 };
+const CHASE_TIRES = 22; // seconds of running before a constable gives up, hands on knees
+const WHIFFS_TO_QUIT = 3; // grab air this often and he's done
+const PINNED = 5; // seconds of uthak-baithak when a constable catches you over his topi
+const TOPI_AGAIN = 30; // clock minutes before the same constable lets his guard down again
+/** A constable whose topi you can flick off right now: standing at his post, not busy, not just robbed. */
+const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && o.mode === 'post' && (o.topiAt == null || s.t - o.topiAt >= mins(TOPI_AGAIN));
 const VIRAL = 4000;
 const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const BARRICADE_JAWAN = 'r1'; // the RAF jawan who stands at the barricade beside Sharma from 14:00
@@ -144,7 +153,7 @@ export function createDay(opts = {}) {
     player: {
       x: SPOTS.metro.x, z: SPOTS.metro.z, carrying: null,
       rep: { aura: 0, heat: 0, help: 0, nuisance: 0 },
-      crew: [], detained: false, chasedBy: null, clips: [], stance: null, blocking: null, unseen: false,
+      crew: [], detained: false, chasedBy: null, pinned: null, clips: [], stance: null, blocking: null, unseen: false,
     },
     people: {
       ravi: person('ravi', SPOTS.raviChai, { mode: 'chai' }),
@@ -210,6 +219,7 @@ export function createDay(opts = {}) {
     moment: null, // what happened with the megaphone at 15:30: 'singalong' | 'roast' | null
     roastViral: false,
     clash: null, // { place, live, t, over }
+    chase: null, // the chase in progress: { since, prev, lunge, whiffs, cool }, see updateChase
     timers: { arrival: 0, party: 0, speech: 0, march: 0, calm: 0, chase: 0, push: 0, line: 0, leave: 0, lose: 0, block: 0 },
     fired: {}, // rule latches
     history: {}, // first time each rule fired, each ending: { 'rule:march': t, 'ending:march': t } (read by the verifier)
@@ -837,7 +847,7 @@ function detainPerson(s, id) {
 function detainPlayer(s, why) {
   const pl = s.player;
   if (pl.detained) return;
-  if (pl.chasedBy) { const c = officerById(s, pl.chasedBy); if (c) sendHome(s, c); pl.chasedBy = null; }
+  if (pl.chasedBy) { const c = officerById(s, pl.chasedBy); if (c) sendHome(s, c); pl.chasedBy = null; s.chase = null; }
   if (pl.carrying) {
     const o = s.objects[pl.carrying];
     if (pl.carrying === 'key') { // the police hand the key back to the bus
@@ -891,46 +901,113 @@ const detainees = (s) => s.detention.people.length + s.detention.count;
 
 // --- chases --------------------------------------------------------------
 
-function startChase(s, id, why) {
+function startChase(s, id, why, { startle = 0 } = {}) {
   const pl = s.player, o = officerById(s, id);
   if (!o || pl.detained || pl.chasedBy) return;
   pl.chasedBy = id; o.mode = 'chase'; s.timers.lose = 0;
+  s.chase = { since: s.t, prev: { x: pl.x, z: pl.z }, lunge: null, whiffs: 0, cool: 0, startle, why };
   s.memo.chase = { t: s.t, data: { why } }; // this chase, for the callback if it ends in a catch
   cue(s, 'chase-start', { pos: o, data: { by: id, why } });
-  say(s, id, LINES['chase-start'][0][1], { key: 'chase-start', link: 'chase' });
-  for (const [who, text] of LINES['chase-start'].slice(1)) say(s, who, text, { key: 'chase-start' });
+  const lines = LINES[`chase-start-${why}`] || LINES['chase-start'];
+  say(s, id, lines[0][1], { key: 'chase-start', link: 'chase' });
+  for (const [who, text] of lines.slice(1)) say(s, who, text, { key: 'chase-start' });
   happen(s, 'chase', pl);
 }
 function sendHome(s, o) {
   if (o.id === 'sharma') { o.mode = 'toPost'; walkTo(o, o.post === 'cp' ? SPOTS.cpPost : SPOTS.barricade); return; }
   o.mode = 'toPost'; walkTo(o, o.post);
 }
+function endChase(s, c, how) {
+  const pl = s.player, crowd = how === 'crowd';
+  pl.chasedBy = null; s.chase = null;
+  sendHome(s, c);
+  cue(s, 'chase-lost', { pos: pl, data: { by: c.id, crowd, how } });
+  emit(s, how === 'tired' || how === 'whiffs' ? `chase-lost-${how}` : 'chase-lost', { link: 'chase-lost', pos: pl });
+  addRep(s, { aura: how === 'whiffs' ? 12 : 8 });
+  if (s.memo.chase?.data?.why === 'topi') { addRep(s, { aura: 6 }); emit(s, 'topi-kept', { pos: pl }); happen(s, 'topi', pl); }
+}
+function caught(s, c) {
+  const pl = s.player;
+  s.chase = null;
+  if (s.memo.chase?.data?.why === 'topi') { // no van for a topi: five seconds of uthak-baithak in front of everyone
+    pl.chasedBy = null;
+    pl.pinned = { until: s.t + PINNED, x: pl.x, z: pl.z };
+    c.mode = 'post'; Object.assign(c, { x: pl.x + 1.2, z: pl.z }); c.path = [];
+    cue(s, 'caught', { pos: pl, data: { by: c.id, light: true, seconds: PINNED } });
+    emit(s, 'caught-topi', { pos: pl });
+    cue(s, 'crowd-laugh', { pos: pl, data: { who: 'player' } });
+    addRep(s, { heat: 5, aura: -3 });
+    return;
+  }
+  cue(s, 'caught', { pos: pl, data: { by: c.id } });
+  happen(s, 'caught', pl);
+  callback(s, s.memo.chase.data.why === 'charge' ? 'caught-charge' : 'caught', 'chase');
+  detainPlayer(s, 'caught');
+}
+/** Closest the segment a→b comes to p. */
+function segDist(a, b, p) {
+  const dx = b.x - a.x, dz = b.z - a.z, l2 = dx * dx + dz * dz;
+  const t = l2 ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / l2)) : 0;
+  return Math.hypot(a.x + t * dx - p.x, a.z + t * dz - p.z);
+}
 function updateChase(s, dt) {
   const pl = s.player;
   if (!pl.chasedBy) return;
-  const c = officerById(s, pl.chasedBy);
+  const c = officerById(s, pl.chasedBy), ch = s.chase ?? (s.chase = { since: s.t, prev: { x: pl.x, z: pl.z }, lunge: null, whiffs: 0, cool: 0 });
+  // How the player is moving, from where they were last tick (the client and the bots move the player).
+  const v = { x: (pl.x - ch.prev.x) / dt, z: (pl.z - ch.prev.z) / dt };
+  ch.prev = { x: pl.x, z: pl.z };
+  ch.cool = Math.max(0, ch.cool - dt);
+  if (ch.startle > 0) { ch.startle -= dt; c.path = []; return; } // clutching his bare head
   const crowded = inCrowd(s, pl);
   const crewNear = pl.crew.filter((id) => s.crew[id] && dist(s.crew[id], pl) < 4).length >= 3;
-  const speed = CHASE * (crowded ? 0.45 : 1) * (crewNear ? 0.5 : 1); // the crowd parts slowly; your crew gets in the way
+  const slow = (crowded ? 0.45 : 1) * (crewNear ? 0.5 : 1); // the crowd parts slowly; your crew gets in the way
+  const L = ch.lunge;
+  if (L) {
+    L.t += dt;
+    if (L.phase === 'windup') {
+      c.path = [{ x: pl.x, z: pl.z }];
+      walk(c, dt, CHASE * LUNGE.slow * slow);
+      if (L.t >= LUNGE.windup) {
+        const d = dist(c, L.aim) || 1;
+        Object.assign(L, { phase: 'dash', t: 0, dir: { x: (L.aim.x - c.x) / d, z: (L.aim.z - c.z) / d }, left: Math.min(LUNGE.speed * LUNGE.dash, d + 0.6), closest: Infinity });
+      }
+      return;
+    }
+    if (L.phase === 'dash') {
+      const step = Math.min(LUNGE.speed * dt, L.left), from = { x: c.x, z: c.z };
+      c.x += L.dir.x * step; c.z += L.dir.z * step; c.path = []; L.left -= step;
+      const d = segDist(from, c, pl);
+      L.closest = Math.min(L.closest, d);
+      if (d <= LUNGE.reach) { caught(s, c); return; }
+      if (L.left <= 1e-9) {
+        ch.whiffs++;
+        Object.assign(L, { phase: 'stumble', t: 0 });
+        const near = L.closest <= LUNGE.near;
+        cue(s, 'lunge-miss', { pos: c, data: { by: c.id, near, closest: Math.round(L.closest * 10) / 10, whiffs: ch.whiffs } });
+        if (near) { emit(s, 'near-miss', { pos: pl }); addRep(s, { aura: 3 }); }
+        if (ch.whiffs >= WHIFFS_TO_QUIT) { endChase(s, c, 'whiffs'); return; }
+      }
+      return;
+    }
+    if (L.t < LUNGE.stumble) return; // picking himself up
+    ch.lunge = null; ch.cool = LUNGE.cool;
+  }
+  const tired = s.t - ch.since >= CHASE_TIRES;
+  if (tired) { endChase(s, c, 'tired'); return; }
   c.path = [{ x: pl.x, z: pl.z }];
-  walk(c, dt, speed);
+  walk(c, dt, CHASE * slow);
   const d = dist(c, pl);
-  if (d < 1.2) {
-    cue(s, 'caught', { pos: pl, data: { by: c.id } });
-    happen(s, 'caught', pl);
-    callback(s, s.memo.chase.data.why === 'charge' ? 'caught-charge' : 'caught', 'chase');
-    detainPlayer(s, 'caught');
+  if (d < 1.2) { caught(s, c); return; }
+  if (!crowded && d <= LUNGE.range && !ch.cool) {
+    const ahead = LUNGE.windup + LUNGE.dash; // where you'll be when he lands, if you keep going
+    ch.lunge = { phase: 'windup', t: 0, aim: { x: pl.x + v.x * ahead, z: pl.z + v.z * ahead } };
+    cue(s, 'lunge', { pos: c, data: { by: c.id, aim: ch.lunge.aim } });
     return;
   }
   const cover = pl.unseen || crowded || d > 24;
   s.timers.lose = cover ? s.timers.lose + dt : 0;
-  if (s.timers.lose >= LOSE_AFTER) {
-    pl.chasedBy = null;
-    sendHome(s, c);
-    cue(s, 'chase-lost', { pos: pl, data: { by: c.id, crowd: crowded } });
-    emit(s, 'chase-lost', { link: 'chase-lost', pos: pl });
-    addRep(s, { aura: 8 });
-  }
+  if (s.timers.lose >= LOSE_AFTER) endChase(s, c, crowded ? 'crowd' : 'sight');
 }
 
 // --- crew -------------------------------------------------------------------
@@ -1836,6 +1913,11 @@ export function tick(s, dt) {
   updateCrew(s, dt);
   updateProvocateurs(s, dt);
   updateChase(s, dt);
+  const pin = s.player.pinned;
+  if (pin) {
+    if (s.t < pin.until) Object.assign(s.player, { x: pin.x, z: pin.z });
+    else { s.player.pinned = null; for (const o of Object.values(s.officers)) if (o.mode === 'post' && dist(o, o.post) > 2) sendHome(s, o); }
+  }
   if (s.player.detained) Object.assign(s.player, detentionPos(s));
   updateCrowds(s, cdt);
   spreadRumours(s, dt, cdt);
@@ -2097,6 +2179,7 @@ export function act(s, cmd) {
     return { ok: true };
   }
   if (cmd.type === 'pester') return pester(s, cmd);
+  if (cmd.type === 'snatch') return snatch(s, cmd);
   if (cmd.type === 'rally') return rally(s);
   if (cmd.type === 'stance') {
     if (!['hold', 'scatter', 'block', 'protect'].includes(cmd.stance)) return { ok: false };
@@ -2115,6 +2198,17 @@ export function act(s, cmd) {
 
 // --- verbs -------------------------------------------------------------------
 
+/** Flick a bored constable's topi off and run with it: he chases you. Lose him and the street loves you. */
+function snatch(s, { to }) {
+  const o = officerById(s, to), pl = s.player;
+  if (!o || pl.chasedBy || pl.pinned || pl.carrying || !snatchable(s, o)) return { ok: false };
+  if (dist(o, pl) > REACH) return { ok: false, say: 'too-far' };
+  o.topiAt = s.t; o.mood = 'annoyed'; o.annoyedAt = s.t; o.pestered = [];
+  addRep(s, { heat: 8, nuisance: 3 });
+  cue(s, 'crowd-gasp', { pos: o, data: { who: o.id, how: 'topi' } });
+  startChase(s, o.id, 'topi', { startle: 0.8 });
+  return { ok: true };
+}
 function pester(s, { to, how }) {
   const o = officerById(s, to), pl = s.player;
   if (!o || !['career', 'cute', 'cannon', 'detainme'].includes(how)) return { ok: false };
@@ -2382,6 +2476,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
     const best = o.mood === 'annoyed' ? I('pester-annoyed', { name }) : choices[(o.pestered.length + (o.id === 'sharma' ? 0 : 1)) % 4].text;
     push(`pester:${o.id}`, 'pester', best, o, choices[0].cmd, { choices, mood: o.mood });
   }
+  if (!pl.carrying && !pl.chasedBy && !pl.pinned) for (const o of Object.values(s.officers)) if (snatchable(s, o)) push(`snatch:${o.id}`, 'snatch', I('snatch', { name: OFFICER_NAMES[o.id] }), o, { type: 'snatch', to: o.id });
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) push(`take:${id}`, 'take', I(`take-${id}`), o, { type: 'take', object: id });
   if (pl.carrying) {
     const gives = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] }[pl.carrying];
@@ -2406,7 +2501,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
-  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, provocateur: -5, film: -4, give: -3, plead: -20 };
   const score = (o) => {
     let d = o.d + (URGENT[o.kind] ?? 0);
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
@@ -2470,6 +2565,7 @@ export function affordances(s) {
     if (o.mode === 'chase' || o.mode === 'charge' || o.hidden) continue;
     if (o.id !== 'sharma' && /^(c\d|r1)$/.test(o.id)) add(`talk:${o.id}`, 'talk', { type: 'talk', to: o.id }, o);
     for (const how of ['career', 'cute', 'cannon', 'detainme']) add(`pester:${o.id}:${how}`, 'pester', { type: 'pester', to: o.id, how }, o);
+    if (!pl.carrying && !pl.chasedBy && !pl.pinned && snatchable(s, o)) add(`snatch:${o.id}`, 'snatch', { type: 'snatch', to: o.id }, o);
   }
   for (const place of CROWD_PLACES) {
     if (crowdAt(s, place) < 4) continue;

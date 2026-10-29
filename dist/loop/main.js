@@ -650,7 +650,10 @@ function updatePolice(dt) {
     const o = b.plan;
     let tx = o.x, tz = o.z, speed = 4, posture = o.posture;
     // A chaser runs at the player; the engine moves him, we only make sure he looks like it.
-    if (chasedBy && chasedBy === o.id) { posture = 'chase'; speed = 7; }
+    if (chasedBy && chasedBy === o.id) {
+      const lunge = day.chase?.lunge?.phase; // wind-up: lathi up, the telegraph; dash: he dives at you
+      posture = lunge === 'windup' || lunge === 'dash' ? 'charge' : 'chase'; speed = lunge === 'dash' ? 18 : 7.5;
+    }
     // The lathi charge: the line runs forward with the front, lathis up.
     if (ch.active && ch.along < 16 && (o.kind === 'raf' || posture === 'line') && dist(o, ch) < 26) {
       const lane = (b.idx - (police.length - 1) / 2) * 1.4;
@@ -1091,9 +1094,11 @@ function handleCues() {
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
     if (name === 'crew-block') crewBlock = { x: sim.player.x, z: sim.player.z };
     if (name === 'faint') faintNear(c.pos || PLACES.stage);
-    if (name === 'chase-start') { toast('Run! Break his line of sight, or lose him in a crowd of six or more.', 5); }
-    if (name === 'chase-lost') toast('Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
-    if (name === 'caught') toast('Caught. Into the detention bus you go.', 4);
+    if (name === 'chase-start') { toast('BHAAG! Jab woh haath failaye, side mein kat. Ya bheed mein ghus ja.', 5); }
+    if (name === 'lunge') toast('⚠ WOH JHAPATNE WALA HAI · side mein kat!', 0.9);
+    if (name === 'lunge-miss' && c.data?.near) toast('BACH GAYA!', 1.2);
+    if (name === 'chase-lost') toast(c.data?.how === 'tired' ? 'Uncle thak gaye. Haath ghutno pe, saans Lodhi Garden tak.' : c.data?.how === 'whiffs' ? 'Teen baar hawa pakdi. Woh gave up.' : 'Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
+    if (name === 'caught') toast(c.data?.light ? 'PAKDE GAYE! 50 uthak-baithak, live, 4K mein. Phir chhutti.' : 'Caught. Dilli Police ki free van seva.', 4);
     if (name === 'phase' && c.data) onPhase(c.data.phase ?? c.data);
     const st = STINGS[name];
     if (st && stingsOn && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
@@ -1685,7 +1690,8 @@ function step(dt) {
     if (day.over) { setTimeout(showEnding, day.ending === 'detained' ? 2500 : 600); mode = 'ending'; closeChoices(); return; }
   }
   const detained = S.detained(day);
-  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained;
+  const pinned = day.player?.pinned;
+  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained || !!pinned;
   const forward = frozen ? 0 : (keys.w || keys.arrowup ? 1 : 0) - (keys.s || keys.arrowdown ? 1 : 0);
   const right = frozen ? 0 : (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
@@ -1698,6 +1704,7 @@ function step(dt) {
     sim.player.x = dp.x; sim.player.z = dp.z; sim.player.vx = sim.player.vz = 0;
     if (!detainedShown) { detainedShown = true; closeChoices(); }
   } else if (detainedShown) { detainedShown = false; sim.player.x = day.bus.x - 2.4; sim.player.z = day.bus.z + 3; toast('You\'re off the bus. Walk, don\'t run.', 3); }
+  if (pinned) { sim.player.x = pinned.x; sim.player.z = pinned.z; sim.player.vx = sim.player.vz = 0; }
   playerModel.visible = !detained || playerSeated;
   updateShuttle();
   updateBodies(dt);

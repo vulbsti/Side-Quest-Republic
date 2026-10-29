@@ -1,0 +1,10 @@
+{"name":"ending quiet · block · spectator","note":"","tempo":"long","expect":{"ending":"quiet","outcome":"block","role":"spectator"},"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"whisper:biryani:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"biryani"},"at":{"x":-3.0199610515696578,"z":29.680623174885476}},
+{"clock":"10:21","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"10:23","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-9.5,"z":-9}},
+{"clock":"10:24","do":"leave","cmd":{"type":"leave"},"at":{"x":-7.418960121789178,"z":-8.03664329918183}},
+{"clock":"10:25","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
+{"clock":"10:28","do":"snatch:c3","cmd":{"type":"snatch","to":"c3"},"at":{"x":19,"z":-11}},
+{"clock":"10:31","finish":true}
+]}

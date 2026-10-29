@@ -535,6 +535,12 @@ Object.assign(LINES, {
   'no-heat': [['sana', 'Do baj gaye, dhoop full, aur koi nahi gira. Crate ka shukriya, jisne bhi laaya.']],
   // Chase and detention
   'chase-start': [['street', 'Oye! Ruk! Chabi wapas kar!'], ['chat', 'Meera: BHAI BHAAG 🏃‍♂️ main record kar rahi hoon']],
+  'chase-start-topi': [['street', 'OYE! Meri topi! Ruk ja tu!'], ['chat', 'Meera: BHAI NE TOPI UDA DI 💀 bhaag bhaag']],
+  'caught-topi': [['player', 'Sorry sir, sorry sir... 48, 49, 50.'], ['chat', 'Meera: uthak-baithak ka live stream 😭 4K mein']],
+  'topi-kept': [['player', 'Topi meri. Swag bhi mera.'], ['chat', 'Zoya: topi wala reel daal, abhi ke abhi']],
+  'chase-lost-tired': [['player', 'Uncle ki battery 2% pe hai. Bye uncle 👋'], ['chat', 'Meera: bhai ne constable ko cardio kara diya 😭']],
+  'chase-lost-whiffs': [['player', 'Teen baar hawa pakdi. Hawa bhi detain nahi hoti, sir.'], ['chat', 'Meera: BACH GAYA x3 🔥 reel ready hai']],
+  'near-miss': [['player', 'BACH GAYA!']],
   'chase-lost': [['street', 'The constable stops, hands on knees, scanning the crowd. Twenty identical kids in jeans scan him back.']],
   'detained-caught': [['street', 'A hand on your collar. "Chalo." You\'re walked to the van, very politely, by a very sweaty man.'], ['chat', 'Kabir: bhai ko utha liya 😭 koi screenshot lo']],
   'detained-reported': [['street', 'The constable listens, nods, looks at the man you pointed at, and then at you. "Tum chalo mere saath."'], ['wireless', 'Rao: Jo ladka shikayat kar raha hai, usko baitha do. Over.']],
@@ -604,6 +610,7 @@ export const PROVOCATEUR_TELLS = ['new shoes', 'an earpiece', 'a helmet in a bag
 
 // Short intents for the HUD's objective card and choice lists. {name}, {tell}, {place}, {what} are filled in.
 export const INTENTS = {
+  'snatch': '{name} ki topi uda do',
   'pester-career': 'Ask {name} for career advice',
   'pester-cute': 'Tell {name} he\'s cute',
   'pester-cannon': 'Ask {name} about the water cannon',

@@ -1,9 +1,18 @@
 {"name":"ending heat · riot · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"riot","role":"spectator"},"trace":[
-{"clock":"10:00","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
-{"clock":"10:05","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:06","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:09","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":-7.505395947629511,"z":34.2874857035049}},
-{"clock":"10:12","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:15","wait":10},
-{"clock":"10:25","finish":true}
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"whisper:biryani:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"biryani"},"at":{"x":-3.0199610515696578,"z":29.680623174885476}},
+{"clock":"10:21","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
+{"clock":"10:23","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-9.5,"z":-9}},
+{"clock":"10:24","wait":3},
+{"clock":"10:27","do":"say:sana-m-crate:a:0","cmd":{"type":"say","option":0},"at":{"x":-7.418960121789178,"z":-8.03664329918183}},
+{"clock":"10:28","do":"snatch:c2","cmd":{"type":"snatch","to":"c2"},"at":{"x":2.5,"z":-27}},
+{"clock":"10:30","do":"film:chase@cp","cmd":{"type":"film"},"at":{"x":1.3529098652839462,"z":-27.91767210777284}},
+{"clock":"10:31","do":"whisper:cannon:asha","cmd":{"type":"whisper","to":"asha","rumour":"cannon"},"at":{"x":-18,"z":-34.2}},
+{"clock":"10:33","do":"pester:c5:detainme","cmd":{"type":"pester","to":"c5","how":"detainme"},"at":{"x":57,"z":-1}},
+{"clock":"10:38","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
+{"clock":"10:44","do":"situation:nikhil-lost","cmd":{"type":"situation","id":"nikhil-lost"},"at":{"x":-7,"z":36}},
+{"clock":"10:49","do":"leave","cmd":{"type":"leave"},"at":{"x":-6.363404211764431,"z":31.33163088627248}},
+{"clock":"10:49","do":"whisper:sena:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"sena"},"at":{"x":-7.5,"z":-5.5}},
+{"clock":"10:52","wait":3},
+{"clock":"10:55","finish":true}
 ]}

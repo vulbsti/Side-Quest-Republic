@@ -161,7 +161,7 @@ for (const p of pillars) {
 }
 L.push('', '## Evidence', '');
 L.push(`- **Where the day goes** (active bots, share of 32 minutes): skill moments ${pct(VALUES['action-share'])}%, conversation cards ${pct(VALUES['reading-share'])}%, detained ${pct(mean(active.map((d) => d.shares.detained)))}%, walking about ${pct(mean(active.map((d) => d.shares.free)))}%.`);
-L.push(`- **Low-level games found:** ${[...games].join(', ') || 'none'}. The chase probe (steal the key in front of an officer, then run): standing still escapes ${pct(chase.rates.stand)}%, jogging straight ${pct(chase.rates.jog)}%, sprinting straight ${pct(chase.rates.sprint)}%, jogging for a crowd ${pct(chase.rates.crowd)}%.`);
+L.push(`- **Low-level games found:** ${[...games].join(', ') || 'none'}. The chase probe (steal the key in front of an officer, then run): standing still escapes ${pct(chase.rates.stand)}%, jogging straight ${pct(chase.rates.jog)}%, sprinting straight ${pct(chase.rates.sprint)}%, sprinting for a crowd ${pct(chase.rates.crowd)}%, sprinting and cutting sideways at each lunge ${pct(chase.rates.dodge)}%.`);
 L.push(`- **Set pieces seen within 30 m:** ${[...new Set(active.flatMap((d) => d.spectacle))].join(', ') || 'none'}.`);
 L.push(`- **Map:** ground ${Math.round(place.area.groundM2 ?? 0).toLocaleString('en')} m² (${fmt(place.area.km2)} km², real patch ${DELHI.realExtent.km2} km²), fog at ${place.area.fogEnd} m. ${place.landmarksPlaced} of ${place.landmarksTotal} landmarks placed, at ${fmt(place.scale)}× real distance, layout error ${fmt(place.layoutError)}.`);
 L.push(`- **Real places in the world:** ${place.realInWorld.join(', ') || 'none'}. Only named in dialogue: ${place.realOnlySaid.join(', ') || 'none'}. Invented: ${place.invented.join(', ') || 'none'}.`);
