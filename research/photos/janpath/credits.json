@@ -1,0 +1,66 @@
+{
+  "point": "janpath",
+  "lat": 28.6268,
+  "lon": 77.2195,
+  "radius_m": 150,
+  "geosearch_hits": 4,
+  "skipped": {},
+  "photos": [
+    {
+      "file": "01-Shop1.jpg",
+      "title": "File:Shop1.JPG",
+      "author": "Billaquicksilver",
+      "licence": "CC BY-SA 3.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Shop1.JPG",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Shop1.JPG/1280px-Shop1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 37.1,
+      "lat": 28.6265,
+      "lon": 77.219333333333,
+      "date": "2013-08-21 18:00:41",
+      "bytes": 247765
+    },
+    {
+      "file": "02-Mocis_5.jpg",
+      "title": "File:Mocis 5.jpg",
+      "author": "Gannu03",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Mocis_5.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Mocis_5.jpg/1280px-Mocis_5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 77.5,
+      "lat": 28.626301,
+      "lon": 77.218946,
+      "date": "13 November 2024 (according to Exif data)",
+      "bytes": 128430
+    },
+    {
+      "file": "03-Delhi-tolstoystatue312.jpg",
+      "title": "File:Delhi-tolstoystatue312.jpg",
+      "author": "No machine-readable author provided. Soman assumed (based on copyright claims).",
+      "licence": "CC BY-SA 2.5",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.5",
+      "url": "https://commons.wikimedia.org/wiki/File:Delhi-tolstoystatue312.jpg",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Delhi-tolstoystatue312.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "distance_m": 81.3,
+      "lat": 28.626083333333,
+      "lon": 77.219333333333,
+      "date": "4 June 2006 (original upload date)",
+      "bytes": 541027
+    },
+    {
+      "file": "04-Aadarsh_Ashutosh.jpg",
+      "title": "File:Aadarsh Ashutosh.jpg",
+      "author": "Ashutosh",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Aadarsh_Ashutosh.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Aadarsh_Ashutosh.jpg/1280px-Aadarsh_Ashutosh.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 83.2,
+      "lat": 28.626111,
+      "lon": 77.219167,
+      "date": "2018-11-25 17:06:04",
+      "bytes": 386390
+    }
+  ]
+}
