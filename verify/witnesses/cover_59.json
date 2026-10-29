@@ -1,0 +1,8 @@
+{"name":"cover 59","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
+{"clock":"12:30","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"12:52","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"12:53","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"12:54","wait":45},
+{"clock":"13:39","do":"say:mira-mic:speech:2","cmd":{"type":"say","option":2},"at":{"x":-46.51124293707429,"z":104.59506271735505}}
+]}

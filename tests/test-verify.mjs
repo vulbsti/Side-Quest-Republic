@@ -35,10 +35,10 @@ if (t.s.story.convo) { assert(R.act(t.s, { type: 'leave' }).ok, 'and you can wal
 // Sight lines (sight.js): the same theft is unseen from behind the parked shuttle and seen from the constable's side.
 {
   const k = H.replay([{ wait: 64 }], 'long').s;
-  Object.assign(k.player, { x: 12, z: -31 });
+  Object.assign(k.player, { x: 116, z: -188 });
   assert(R.witnesses(k).includes('c2'), 'without walls Constable Meena is in range');
   assert.deepEqual(R.witnesses(k, H.SIGHT.canSee(k)), [], 'behind the parked shuttle she can\'t see you');
-  Object.assign(k.player, { x: 7.4, z: -31 });
+  Object.assign(k.player, { x: 111.4, z: -188 });
   assert(R.witnesses(k, H.SIGHT.canSee(k)).includes('c2'), 'west of the hook, she sees you');
 }
 

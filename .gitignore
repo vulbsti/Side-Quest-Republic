@@ -7,3 +7,5 @@ research/audio-candidate-*.mp3
 .claude/worktrees/
 verify/out/
 node_modules/
+eval/out/
+tools/out/

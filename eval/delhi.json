@@ -1,0 +1,183 @@
+{
+ "about": "The real places the map should replicate, and where the game puts them. 'osm' coordinates are from OpenStreetMap (research/osm); 'wiki' from the Wikipedia article of the place; 'approx' ones are estimates to replace with OpenStreetMap or a photo walk before they are trusted. A game reference is a PLACES/SPOTS entry of the rules, or map:<name>, a place the city draws from OpenStreetMap (dist/city.js). Shops count once their name is on a board the city draws (dist/map/labels.js) or in the world files.",
+ "landmarks": [
+  {
+   "id": "rajiv-chowk",
+   "name": "Rajiv Chowk metro, gate 6",
+   "lat": 28.631592,
+   "lon": 77.219236,
+   "src": "osm",
+   "game": "PLACES.metro"
+  },
+  {
+   "id": "cp-south",
+   "name": "CP outer circle by Jeevan Bharti (LIC), the shuttle stop",
+   "lat": 28.629818,
+   "lon": 77.218479,
+   "src": "osm",
+   "game": "PLACES.cp"
+  },
+  {
+   "id": "jm-observatory",
+   "name": "Jantar Mantar observatory (Samrat Yantra)",
+   "lat": 28.627315,
+   "lon": 77.216703,
+   "src": "osm",
+   "game": "map:Samrat Yantra"
+  },
+  {
+   "id": "jm-road",
+   "name": "Jantar Mantar Road protest site",
+   "lat": 28.625626,
+   "lon": 77.215836,
+   "src": "osm",
+   "game": "PLACES.stage"
+  },
+  {
+   "id": "sansad-barricade",
+   "name": "Sansad Marg barricade at the Jantar Mantar Road turn",
+   "lat": 28.6262,
+   "lon": 77.216,
+   "src": "approx",
+   "game": "PLACES.barricade"
+  },
+  {
+   "id": "parliament-street",
+   "name": "Parliament Street police station, Sansad Marg",
+   "lat": 28.625421,
+   "lon": 77.214414,
+   "src": "osm",
+   "game": "map:Police Station Parliament Street"
+  },
+  {
+   "id": "palika-bazaar",
+   "name": "Palika Bazaar",
+   "lat": 28.630762,
+   "lon": 77.218917,
+   "src": "osm",
+   "game": "map:Palika Bazaar"
+  },
+  {
+   "id": "hanuman-mandir",
+   "name": "Hanuman Mandir, Baba Kharak Singh Marg",
+   "lat": 28.63035,
+   "lon": 77.215021,
+   "src": "osm",
+   "game": "map:Prachin Hanuman Mandir"
+  },
+  {
+   "id": "regal",
+   "name": "Regal Building (Khadi, Madame Tussauds)",
+   "lat": 28.6298,
+   "lon": 77.2181,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "janpath-market",
+   "name": "Janpath market",
+   "lat": 28.6268,
+   "lon": 77.2195,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "patel-chowk",
+   "name": "Patel Chowk metro",
+   "lat": 28.622954,
+   "lon": 77.214059,
+   "src": "osm",
+   "game": "map:Patel Chowk"
+  },
+  {
+   "id": "bangla-sahib",
+   "name": "Gurudwara Bangla Sahib",
+   "lat": 28.626358,
+   "lon": 77.209097,
+   "src": "osm",
+   "game": "map:Gurudwara Bangla Sahib Sikh Temple"
+  },
+  {
+   "id": "shivaji-stadium",
+   "name": "Shivaji Stadium bus terminal",
+   "lat": 28.6316,
+   "lon": 77.2128,
+   "src": "approx",
+   "game": null
+  },
+  {
+   "id": "parliament-house",
+   "name": "Sansad Bhavan (Parliament House)",
+   "lat": 28.6175,
+   "lon": 77.208,
+   "src": "approx",
+   "game": null
+  }
+ ],
+ "places": [
+  "Wenger's",
+  "Keventers",
+  "Kake Da Hotel",
+  "United Coffee House",
+  "Odeon",
+  "Regal",
+  "Plaza",
+  "Rivoli",
+  "Palika Bazaar",
+  "Janpath",
+  "Hanuman Mandir",
+  "Bangla Sahib",
+  "Khadi",
+  "Mohan Singh Place",
+  "Shivaji Stadium",
+  "Patel Chowk",
+  "Rajiv Chowk",
+  "Sansad Marg",
+  "Parliament Street",
+  "Jantar Mantar Road",
+  "Baba Kharak Singh Marg",
+  "State Emporium",
+  "Barakhamba",
+  "Kasturba Gandhi Marg",
+  "Western Court",
+  "Ashoka Road",
+  "Central Park",
+  "Imperial",
+  "Haldiram",
+  "Starbucks",
+  "Saravana Bhavan",
+  "Hotel Saravana",
+  "A Block",
+  "B Block",
+  "E Block",
+  "N Block",
+  "Gate No"
+ ],
+ "invented": [
+  "People’s Square",
+  "People's Square",
+  "Civic Court",
+  "Seva Camp",
+  "Press Lane",
+  "Assembly Garden",
+  "Service Gali"
+ ],
+ "realExtent": {
+  "about": "The patch the vision covers: CP's outer circle to Sansad Bhavan, Bangla Sahib to Janpath.",
+  "km2": 1.2
+ },
+ "worldFiles": [
+  "dist/world.js",
+  "dist/city.js",
+  "dist/map/labels.js",
+  "dist/environment-detail.js",
+  "dist/loop/props.js"
+ ],
+ "dialogueFiles": [
+  "dist/loop/content.js",
+  "dist/loop/barks.js",
+  "dist/loop/phone.js",
+  "dist/loop/phone-timeline.js",
+  "dist/loop/story"
+ ]
+}

@@ -1,21 +1,8 @@
 {"name":"situation cannon-request:done","note":"","tempo":"long","expect":{"history":"situation:cannon-request:done"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:36","do":"talk:c3","cmd":{"type":"talk","to":"c3"},"at":{"x":19,"z":-11}},
-{"clock":"10:38","wait":45},
-{"clock":"11:23","wait":45},
-{"clock":"12:08","do":"say:tomar-m1:a:2","cmd":{"type":"say","option":2},"at":{"x":17.184753313074808,"z":-12.719707387613344}},
-{"clock":"12:09","do":"pester:c2:cute","cmd":{"type":"pester","to":"c2","how":"cute"},"at":{"x":2.5,"z":-27}},
-{"clock":"12:11","wait":20},
-{"clock":"12:31","do":"drop:barricade","cmd":{"type":"drop","x":34,"z":-6},"at":{"x":34,"z":-6}},
-{"clock":"12:34","wait":45},
-{"clock":"13:19","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"13:22","wait":45},
-{"clock":"14:07","do":"pester:r1:career","cmd":{"type":"pester","to":"r1","how":"career"},"at":{"x":38.5,"z":-6.5}},
-{"clock":"14:09","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":34,"z":-6}},
-{"clock":"14:10","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":38,"z":-4.5}},
-{"clock":"14:11","do":"say:cannon-request:heat:0","cmd":{"type":"say","option":0},"at":{"x":35.18731453996551,"z":-6.60927030351072}}
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
+{"clock":"10:33","wait":1},
+{"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
+{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
+{"clock":"14:01","do":"say:cannon-request:heat:1","cmd":{"type":"say","option":1},"at":{"x":-51.289520556325236,"z":82.7818996224379}}
 ]}

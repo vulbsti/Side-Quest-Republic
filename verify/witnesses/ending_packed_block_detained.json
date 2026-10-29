@@ -1,0 +1,12 @@
+{"name":"ending packed · block · detained","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"detained"},"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"16:33","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
+{"clock":"16:37","wait":20},
+{"clock":"16:57","wait":45},
+{"clock":"17:42","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
+{"clock":"17:46","do":"pester:sharma:cannon","cmd":{"type":"pester","to":"sharma","how":"cannon"},"at":{"x":-51,"z":80}},
+{"clock":"17:48","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"17:50","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":-42.45,"z":107}},
+{"clock":"17:51","wait":20}
+]}

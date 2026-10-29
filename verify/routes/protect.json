@@ -1,0 +1,15 @@
+{
+ "name": "route protect",
+ "note": "Spend the day at the stage, pick up the speaker before the stone, and when Rao's line forms at three take the protect stance: at 15:45 the charge comes and you stand in front of the crowd.",
+ "tempo": "long",
+ "expect": { "history": "seen:charge-protect" },
+ "trace": [
+  { "do": "go:stage", "cmd": null, "at": { "x": -54, "z": 101 }, "hold": 1 },
+  { "wait": 258 },
+  { "do": "take:speaker", "cmd": { "type": "take", "object": "speaker" }, "at": null },
+  { "wait": 13 },
+  { "do": "stance:protect", "cmd": { "type": "stance", "stance": "protect" }, "at": null },
+  { "wait": 50 },
+  { "finish": true }
+ ]
+}

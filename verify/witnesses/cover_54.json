@@ -1,0 +1,10 @@
+{"name":"cover 54","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"16:33","do":"prov:p3:expose","cmd":{"type":"provocateur","id":"p3","how":"expose"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"16:34","do":"stance:block","cmd":{"type":"stance","stance":"block"},"at":{"x":-50.74380785901582,"z":108.55245904528033}},
+{"clock":"16:35","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"16:39","do":"say:detain-me:window:2","cmd":{"type":"say","option":2},"at":{"x":-50.92699303622197,"z":77.44792002558833}},
+{"clock":"16:40","wait":45},
+{"clock":"17:25","do":"say:detain-me:window2:1","cmd":{"type":"say","option":1},"at":{"x":-50.92699303622197,"z":77.44792002558833}}
+]}

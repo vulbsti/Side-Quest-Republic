@@ -1,0 +1,18 @@
+{"name":"ending packed · sitin · peacemaker","note":"","tempo":"long","expect":{"ending":"packed","outcome":"sitin","role":"peacemaker"},"trace":[
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
+{"clock":"10:33","wait":1},
+{"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
+{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
+{"clock":"14:01","wait":1},
+{"clock":"14:02","do":"say:cannon-request:heat:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"14:02","wait":1},
+{"clock":"14:03","do":"go:stage","cmd":null,"at":{"x":-58,"z":101},"hold":1},
+{"clock":"14:05","do":"say:cannon-request:sana:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"14:06","wait":20},
+{"clock":"14:26","wait":20},
+{"clock":"14:46","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"14:52","do":"leave","cmd":{"type":"leave"},"at":{"x":-40.61872191920027,"z":116.3275215747388}},
+{"clock":"14:53","do":"prov:p2:expose","cmd":{"type":"provocateur","id":"p2","how":"expose"},"at":{"x":-49.2,"z":105.7}},
+{"clock":"14:54","finish":true}
+]}

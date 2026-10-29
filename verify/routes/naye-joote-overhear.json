@@ -4,9 +4,9 @@
  "tempo": "long",
  "expect": { "history": "node:situation:naye-joote:overhear" },
  "trace": [
-  { "do": "go:suv", "cmd": null, "at": { "x": 13, "z": 9 }, "hold": 1 },
+  { "do": "go:suv", "cmd": null, "at": { "x": -38, "z": 119 }, "hold": 1 },
   { "wait": 272 },
-  { "do": "situation:naye-joote", "cmd": { "type": "situation", "id": "naye-joote" }, "at": { "x": 15, "z": 8 } },
+  { "do": "situation:naye-joote", "cmd": { "type": "situation", "id": "naye-joote" }, "at": { "x": -36, "z": 118 } },
   { "wait": 1 },
   { "do": "say:naye-joote:suv:0", "cmd": { "type": "say", "option": 0 }, "at": null },
   { "wait": 2 },

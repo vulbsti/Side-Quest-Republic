@@ -6,6 +6,7 @@ import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, 
 import { CAPTIONS } from './phone.js';
 import { PESTER_BY } from './talks.js';
 import { createStory } from './story.js';
+import { streetPath, pathLength } from '../map/route.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -46,67 +47,96 @@ export function phaseAt(t) {
 }
 
 export const SPOTS = {
-  metro: { x: -7, z: 34 },
-  chai: { x: -16, z: -33 },
-  raviChai: { x: -19.5, z: -31.5 },
-  speakerChai: { x: -18, z: -30.8 },
-  asha: { x: -18, z: -34.2 },
-  zoyaCharge: { x: -15.4, z: -34.3 },
-  phoneCart: { x: -16.9, z: -35.6 },
-  devChai: { x: -14.8, z: -32.2 },
-  busCP: { x: 10, z: -34 },
-  busJantar: { x: 10, z: 2 },
-  busDoor: { x: 7.6, z: -31 },
-  keyHook: { x: 8.55, z: -31 },
-  waterCP: { x: 6.2, z: -37.2 },
-  waterJantar: { x: 7.4, z: 4.6 },
-  stageTop: { x: 0, z: -14.5 },
-  stageSpeaker: { x: 3.2, z: -10.4 },
-  megStage: { x: -3.2, z: -10.4 },
-  raviStage: { x: 5.6, z: -9.6 },
-  devStage: { x: 5.2, z: -3.2 },
-  kabirStage: { x: -4.6, z: -2.4 },
-  ashaStage: { x: -7.2, z: -1.4 },
-  sanaTent: { x: -9.5, z: -9 },
-  zoyaStart: { x: -3, z: 30 },
-  meeraStart: { x: -11, z: 30.5 },
-  kabirStart: { x: -6, z: 38 },
-  nikhilStart: { x: -1.5, z: 36.5 },
-  barricade: { x: 40, z: -4.5 },
-  devBarricade: { x: 36.2, z: -4.5 },
-  cpPost: { x: 0, z: -29 },
-  parliament: { x: 62, z: -4 },
-  // Waypoints so walkers go round the observatory instead of through it.
-  midway: { x: 18, z: -14 },
-  metroPath: { x: -4, z: 14 },
+  metro: { x: 150, z: -298 },
+  chai: { x: 88, z: -190 },
+  raviChai: { x: 84.5, z: -188.5 },
+  speakerChai: { x: 86, z: -187.8 },
+  asha: { x: 86, z: -191.2 },
+  zoyaCharge: { x: 88.6, z: -191.3 },
+  phoneCart: { x: 87.1, z: -192.6 },
+  devChai: { x: 89.2, z: -189.2 },
+  busCP: { x: 114, z: -191 },
+  busJantar: { x: -43, z: 40 }, // the real 'Jantar Mantar' bus stop, outside the barricade at the top of the road
+  busDoor: { x: 111.6, z: -188 },
+  keyHook: { x: 112.6, z: -188 },
+  waterCP: { x: 110.2, z: -194.2 },
+  waterJantar: { x: -45.6, z: 42.6 },
+  busDetention: { x: -41, z: 104 }, // the detention bus, parked beside the stage from 14:00
+  stageTop: { x: -51, z: 95.5 },
+  stageSpeaker: { x: -47.8, z: 99.6 },
+  megStage: { x: -54.2, z: 99.6 },
+  raviStage: { x: -45.4, z: 100.4 },
+  devStage: { x: -45.8, z: 106.8 },
+  kabirStage: { x: -55.6, z: 107.6 },
+  ashaStage: { x: -58.2, z: 108.6 },
+  sanaTent: { x: -60.5, z: 101 },
+  zoyaStart: { x: 154, z: -302 },
+  meeraStart: { x: 146, z: -301.5 },
+  kabirStart: { x: 151, z: -294 },
+  nikhilStart: { x: 155.5, z: -295.5 },
+  barricade: { x: -51, z: 80 },
+  devBarricade: { x: -51, z: 83.8 },
+  cpPost: { x: 104, z: -186 },
+  parliament: { x: -58, z: 55 },
+  // Constable posts along the walk: Yadav just out of the metro gate, Tomar just past the stage.
+  midway: { x: -33, z: 96 },
+  metroPath: { x: 147, z: -284 },
+  yadavLate: { x: -46, z: 121 },
   // The slice's new props.
-  van: { x: 22, z: -9 }, // police van: the detention vehicle until the shuttle takes over at 14:00
-  suv: { x: 15, z: 8 }, // where the RUP party's white SUV parks
-  rafReserve: { x: 57, z: -9 }, // RAF stand behind the Parliament Street barricade
-  cannonGarage: { x: 66, z: 6 }, // where the water cannon waits until it rolls
+  van: { x: -55.5, z: 98 }, // police van: the detention vehicle until the shuttle takes over at 14:00
+  suv: { x: -36, z: 118 }, // where the RUP party's white SUV parks
+  rafReserve: { x: -63, z: 60 }, // RAF stand behind the Parliament Street barricade
+  cannonGarage: { x: -48, z: 51 }, // where the water cannon waits until it rolls
 };
 
 export const PLACES = {
-  metro: { x: -7, z: 36, r: 14, name: 'Rajiv Chowk exit' },
-  cp: { x: -4, z: -33, r: 15.5, name: 'CP shuttle stop' },
-  stage: { x: 2, z: -5, r: 14, name: 'Jantar Mantar stage' },
-  barricade: { x: 38, z: -4.5, r: 7, name: 'Barricade' },
-  parliament: { x: 62, z: -4, r: 12, name: 'Parliament Street' },
+  metro: { x: 150, z: -296, r: 14, name: 'Rajiv Chowk exit' },
+  cp: { x: 100, z: -190, r: 15.5, name: 'CP shuttle stop' },
+  stage: { x: -49, z: 105, r: 14, name: 'Jantar Mantar stage' },
+  barricade: { x: -51, z: 82, r: 7, name: 'Barricade' },
+  parliament: { x: -58, z: 55, r: 12, name: 'Parliament Street' },
 };
 // Where Zoya and Meera stand to film each crowd.
 const FILM_SPOTS = {
-  stage: { x: -7.5, z: -5.5 }, cp: { x: -1.5, z: -33.5 }, barricade: { x: 34, z: -8 }, parliament: { x: 57, z: -9 },
+  stage: { x: -58.5, z: 104.5 }, cp: { x: 102.5, z: -190.5 }, barricade: { x: -57, z: 85 }, parliament: { x: -63, z: 60 },
 };
 // Where the front of a police line stands, for anyone who walks up to it.
 export const LINE_FRONT = {
-  stage: { x: 0, z: 0.5 }, cp: { x: 4, z: -27.2 }, barricade: { x: 36.5, z: -4.5 }, parliament: { x: 55, z: -4 },
+  stage: { x: -51, z: 110.5 }, cp: { x: 108, z: -184.2 }, barricade: { x: -51, z: 83.5 }, parliament: { x: -58, z: 62 },
 };
 // Where each crowd stands (the client draws the crowd round these). Standing inside one hides you.
 export const CROWD_CENTERS = {
-  stage: { x: 0, z: -5.5, r: 5.5 }, cp: { x: 4.5, z: -31, r: 3.8 }, barricade: { x: 32.6, z: -3.2, r: 3.4 }, parliament: { x: 62, z: -4, r: 6 },
+  stage: { x: -51, z: 104.5, r: 5.5 }, cp: { x: 108.5, z: -188, r: 3.8 }, barricade: { x: -49.7, z: 87.4, r: 3.4 }, parliament: { x: -58, z: 55, r: 6 },
 };
 
-const BUS = { speed: 3.6, dwellCP: 8, dwellJantar: 6, capacity: 14 };
+const BUS = { speed: 7, dwellCP: 8, dwellJantar: 6, capacity: 14 };
+// The shuttle's run, CP stop to Jantar Mantar stop along the real roads. bus.s is how far along it the bus is.
+// From 14:00 the detention bus drives on through the barricade gap and parks beside the stage (busDetention).
+const RUN = [{ x: SPOTS.busCP.x, z: SPOTS.busCP.z }, ...streetPath(SPOTS.busCP, SPOTS.busJantar, { car: true })];
+export const BUS_ROUTE = [...RUN, { x: -45, z: 52 }, { x: -51, z: 66 }, { x: -51, z: 92 }, SPOTS.busDetention];
+const BUS_AT = BUS_ROUTE.reduce((acc, q, i) => { acc.push(i ? acc[i - 1] + Math.hypot(q.x - BUS_ROUTE[i - 1].x, q.z - BUS_ROUTE[i - 1].z) : 0); return acc; }, []);
+/** The run's length, CP to the Jantar Mantar stop; BUS_PARK is where the detention bus stops. */
+export const BUS_LENGTH = BUS_AT[RUN.length - 1];
+const BUS_PARK = BUS_AT[BUS_AT.length - 1];
+/** The point s metres along the run, and the run's direction there (towards Jantar Mantar). */
+export function busPoint(sAlong) {
+  const t = Math.max(0, Math.min(BUS_PARK, sAlong));
+  let i = 1;
+  while (i < BUS_ROUTE.length - 1 && BUS_AT[i] < t) i++;
+  const a = BUS_ROUTE[i - 1], b = BUS_ROUTE[i], L = BUS_AT[i] - BUS_AT[i - 1] || 1, k = (t - BUS_AT[i - 1]) / L;
+  return { x: a.x + (b.x - a.x) * k, z: a.z + (b.z - a.z) * k, dx: (b.x - a.x) / L, dz: (b.z - a.z) / L };
+}
+/** Where a point is along the run: s, and how far it is from the road. */
+export function alongBus(p) {
+  let best = { s: 0, off: Infinity };
+  for (let i = 1; i < BUS_ROUTE.length; i++) {
+    const a = BUS_ROUTE[i - 1], b = BUS_ROUTE[i], dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz || 1;
+    const k = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / L2));
+    const off = Math.hypot(p.x - (a.x + dx * k), p.z - (a.z + dz * k));
+    if (off < best.off) best = { s: BUS_AT[i - 1] + k * Math.sqrt(L2), off };
+  }
+  return best;
+}
 const ARRIVAL_EVERY = 7;
 const WALK = 3.2;
 const CHASE = 5.2; // a running constable: faster than a jog (4.7), slower than a sprint (8.1)
@@ -161,11 +191,11 @@ export function createDay(opts = {}) {
     },
     // Generic constables spread along the walk so there is always an officer to pester; RAF join at 14:00.
     officers: {
-      c1: officer('c1', 'constable', { x: -4, z: 16 }),
-      c2: officer('c2', 'constable', { x: 2.5, z: -27 }),
-      c3: officer('c3', 'constable', { x: 19, z: -11 }),
-      c4: officer('c4', 'constable', { x: 7, z: 1 }),
-      c5: officer('c5', 'constable', { x: 57, z: -1 }), // Parliament Street, before the RAF arrive
+      c1: officer('c1', 'constable', SPOTS.metroPath),
+      c2: officer('c2', 'constable', { x: 106.5, z: -184 }),
+      c3: officer('c3', 'constable', { x: -32, z: 99 }),
+      c4: officer('c4', 'constable', { x: -44, z: 111 }),
+      c5: officer('c5', 'constable', { x: -55, z: 60 }), // Parliament Street, before the RAF arrive
     },
     objects: {
       speaker: { holder: null, x: SPOTS.speakerChai.x, z: SPOTS.speakerChai.z, on: false },
@@ -174,7 +204,7 @@ export function createDay(opts = {}) {
       phone: { holder: 'zoya', x: SPOTS.zoyaStart.x, z: SPOTS.zoyaStart.z },
       water: { holder: null, x: SPOTS.waterCP.x, z: SPOTS.waterCP.z },
     },
-    bus: { x: SPOTS.busCP.x, z: SPOTS.busCP.z, phase: 'cp', timer: BUS.dwellCP, load: 0, breakPending: false, stuck: false, detention: false, stalled: false, crewBlocked: false },
+    bus: { x: SPOTS.busCP.x, z: SPOTS.busCP.z, s: 0, dx: 0, dz: 1, phase: 'cp', timer: BUS.dwellCP, load: 0, breakPending: false, stuck: false, detention: false, stalled: false, crewBlocked: false },
     crowd: { cpWaiting: 2, cpParty: 0, stage: 6, parliament: 0, barricade: 0 },
     groups: {
       students: { kind: 'students', place: 'stage', size: 8, mood: 'chill' },
@@ -261,9 +291,15 @@ function callback(s, key, causeKey = null, data = {}) {
   s.callbacks.push({ key, t: cause ? cause.t : s.t, at: s.t, data: { ...(cause?.data || {}), ...data } });
 }
 
+// Walks follow the real streets (dist/map/route.js) between places; inside one place they go straight.
 function goTo(p, ...points) {
-  p.path = points.map((q) => ({ x: q.x, z: q.z }));
+  const path = [];
+  let from = p;
+  for (const q of points) { path.push(...route(from, q)); from = q; }
+  p.path = path.map((q) => ({ x: q.x, z: q.z }));
+  p.trip = pathLength(p, p.path) > FAR;
 }
+const FAR = 60;
 const arrived = (p) => p.path.length === 0;
 
 function objectPos(s, id) {
@@ -322,18 +358,12 @@ export function detentionPos(s) {
 }
 const ppos = (s) => (s.player.detained ? detentionPos(s) : s.player);
 
-// Routes between named areas. Walkers go via the CP post between CP and the stage, and via midway to the barricade.
+/** The way from one point to another: straight inside a place, along the streets between places. */
 export function route(from, to) {
-  const a = placeAt(from), pts = [];
-  const toPlace = placeAt(to);
-  if (a === 'metro' && toPlace !== 'metro') pts.push(SPOTS.metroPath);
-  if ((a === 'cp') !== (toPlace === 'cp') && (a === 'cp' || toPlace === 'cp')) pts.push(SPOTS.cpPost);
-  if ((a === 'barricade' || a === 'parliament') !== (toPlace === 'barricade' || toPlace === 'parliament')) pts.push(SPOTS.midway);
-  if (toPlace === 'metro' && a !== 'metro') pts.push(SPOTS.metroPath);
-  pts.push(to);
-  return pts.filter((q, i) => i === pts.length - 1 || dist(from, q) > 1.5); // standing on a waypoint: go on from it
+  const a = placeAt(from);
+  return a && a === placeAt(to) ? [{ x: to.x, z: to.z }] : streetPath(from, to);
 }
-function walkTo(p, to) { goTo(p, ...route(p, to)); }
+function walkTo(p, to) { goTo(p, to); }
 function offset(p, dx = 0, dz = 0) { return { x: p.x + dx, z: p.z + dz }; }
 
 // --- happenings and clips --------------------------------------------------
@@ -420,15 +450,16 @@ export const SCHEDULE = [
       goTo(r, SPOTS.cpPost, SPOTS.raviStage);
     } else startRaviSearch(s);
   }],
+  // Ravi's 11:15 chai at CP: Sansad Marg to CP is a twenty-minute walk, so he leaves the stage well before.
+  [10, 56, (s) => {
+    const r = s.people.ravi;
+    if (r.mode === 'stage') { r.mode = 'toChai'; goTo(r, SPOTS.cpPost, SPOTS.raviChai); }
+  }],
   [11, 0, (s) => {
     s.bus.breakPending = true;
     const k = s.people.kabir;
     k.hidden = false; Object.assign(k, SPOTS.kabirStart); k.mode = 'toStage'; walkTo(k, SPOTS.kabirStage);
     const m = s.people.meera; m.target = 'cp'; walkTo(m, FILM_SPOTS.cp);
-  }],
-  [11, 15, (s) => {
-    const r = s.people.ravi;
-    if (r.mode === 'stage') { r.mode = 'toChai'; goTo(r, SPOTS.cpPost, SPOTS.raviChai); }
   }],
   [11, 30, (s) => endIqbalBreak(s)],
   [11, 40, (s) => {
@@ -462,7 +493,7 @@ export const SCHEDULE = [
   [13, 40, (s) => { // Mummy calls. Kabir walks to the quiet end by the barricade to pick up.
     const k = s.people.kabir;
     if (k.hidden || s.nikhilFound || !['stage', 'toStage'].includes(k.mode) ) return;
-    k.mode = 'onCall'; walkTo(k, { x: 33, z: -1.5 });
+    k.mode = 'onCall'; walkTo(k, { x: -48, z: 87 });
     emit(s, 'kabir-phone-rings', { pos: k });
   }],
   [13, 40, (s) => oppLeaves(s)],
@@ -499,6 +530,10 @@ export const SCHEDULE = [
     k.mode = 'leaving'; walkTo(k, SPOTS.kabirStart); emit(s, 'kabir-curfew');
   }],
   [16, 30, (s) => { if (!s.snap) takeSnapshot(s); }],
+  [16, 45, (s) => { // After the charge Rao keeps Yadav at Jantar Mantar instead of the metro gate.
+    const y = s.officers.c1; y.post = { ...SPOTS.yadavLate };
+    if (y.mode === 'post') { y.mode = 'toPost'; walkTo(y, y.post); }
+  }],
   [17, 0, (s) => aftermath(s)],
   [17, 30, (s) => releaseEveryone(s)],
 ];
@@ -526,7 +561,8 @@ function startSpeech(s) {
   emit(s, big ? 'big-speech' : 'small-speech', { link: big ? 'big-speech' : 'small-speech', place: 'stage', pos: SPOTS.stageTop });
   happen(s, big ? 'big-speech' : 'small-speech', SPOTS.stageTop, 'stage');
   if (big) callback(s, s.memo['speaker-returned'] ? 'speaker-speech' : 'world-speech', s.memo['speaker-returned'] ? 'speaker-returned' : null);
-  else callback(s, 'speaker-flop', 'speaker');
+  else if (s.memo.speaker) callback(s, 'speaker-flop', 'speaker');
+  else callback(s, 'world-small-speech');
 }
 
 function startIqbalBreak(s) {
@@ -544,8 +580,8 @@ function endIqbalBreak(s) {
   if (q.mode === 'chai' || q.mode === 'toChai') { q.mode = 'toBus'; goTo(q, SPOTS.busDoor); }
   else if (s.bus.breakPending) s.bus.breakPending = false; // never got to CP in time; skip this break
 }
-const IQBAL_SEARCH = [SPOTS.busDoor, SPOTS.cpPost, SPOTS.chai, { x: 12, z: -41 }, SPOTS.busDoor];
-const ZOYA_SEARCH = [SPOTS.zoyaCharge, SPOTS.cpPost, { x: -10, z: -26 }, SPOTS.chai];
+const IQBAL_SEARCH = [SPOTS.busDoor, SPOTS.cpPost, SPOTS.chai, { x: 116, z: -198 }, SPOTS.busDoor];
+const ZOYA_SEARCH = [SPOTS.zoyaCharge, SPOTS.cpPost, { x: 94, z: -183 }, SPOTS.chai];
 
 function iqbalResume(s) {
   const q = s.people.iqbal, k = s.objects.key;
@@ -573,6 +609,7 @@ function formPoliceLine(s) {
   s.police.line = place;
   emit(s, `line-${place}`, { link: s.police.watch ? 'line-follows-camera' : 'police-line', place, pos: LINE_FRONT[place] });
   if (s.police.watch) callback(s, 'world-viral-line', null, { place });
+  else callback(s, 'world-line', null, { place });
   const sh = s.people.sharma;
   if (place === 'cp' && sh.post === 'cp') { sh.post = 'barricade'; sh.mode = 'toPost'; walkTo(sh, SPOTS.barricade); }
 }
@@ -946,7 +983,8 @@ function blockSpot(s, p) {
   const fronts = new Set(['barricade', ...s.police.barricades]);
   if (s.police.line) fronts.add(s.police.line);
   for (const pl of fronts) if (dist(p, LINE_FRONT[pl]) < 6) return pl;
-  if (Math.abs(p.x - SPOTS.busJantar.x) < 2.5 && p.z > SPOTS.busCP.z + 3 && p.z < SPOTS.busJantar.z - 3) return 'road';
+  const on = alongBus(p);
+  if (on.off < 2.5 && on.s > 3 && on.s < BUS_LENGTH - 3) return 'road';
   return null;
 }
 function updateCrew(s, dt) {
@@ -974,13 +1012,20 @@ function updateCrew(s, dt) {
     m.mode = pl.blocking ? 'block' : 'follow';
     const want = { x: pl.x + Math.cos(a) * r, z: pl.z + Math.sin(a) * r };
     if (dist(m, want) > 0.6) goTo(m, want); else m.path = [];
-    walk(m, dt, WALK * 1.6);
+    walk(m, dt, WALK * 1.6, s);
   });
 }
 
 // --- movement ------------------------------------------------------------
 
-function walk(p, dt, speed = WALK) {
+// The map is real-sized, so a walk between places takes minutes. On a trip between places (a path over FAR
+// metres, marked by goTo) people keep to the clock, so the short slice runs the same day as the full one, and out
+// of the player's sight (over FAR metres away) they cover ground three times as fast, the way open-world games
+// keep their day on time. Walks inside a place, and chases, go at their own speed.
+const hurry = (who, s) => ((dist(who, s.player) > FAR ? 3 : 1) * TEMPO.long) / SECONDS_PER_MINUTE;
+function walk(p, dt, speed = WALK, s = null) {
+  if (!p.path.length) p.trip = p.rush = false;
+  else if (s && p.trip) speed *= hurry(p, s) * (p.rush ? 2.5 : 1); // rush: called over in a story, they hurry
   let step = speed * dt;
   while (step > 0 && p.path.length) {
     const q = p.path[0], d = dist(p, q);
@@ -991,7 +1036,7 @@ function walk(p, dt, speed = WALK) {
 
 function updatePeople(s, dt) {
   const P = s.people;
-  for (const p of Object.values(P)) if (!p.hidden && !(p.id === 'sharma' && p.mode === 'chase')) walk(p, dt, p.mode === 'follow' ? WALK * 1.25 : WALK);
+  for (const p of Object.values(P)) if (!p.hidden && !(p.id === 'sharma' && p.mode === 'chase')) walk(p, dt, p.mode === 'follow' ? WALK * 1.6 : p.id === 'zoya' && p.mode === 'chase' ? WALK * 0.4 : WALK, s); // Zoya walks slowly, streaming
   if (s.timers.speech > 0) { s.timers.speech -= dt; if (s.timers.speech <= 0 && P.mira.mode === 'speech') P.mira.mode = 'stage'; }
   updateRavi(s);
   updateIqbal(s);
@@ -1013,7 +1058,7 @@ function updatePeople(s, dt) {
 function updateOfficers(s, dt) {
   for (const o of Object.values(s.officers)) {
     if (o.mode === 'chase') continue;
-    walk(o, dt, o.mode === 'charge' ? WALK * 1.5 : WALK);
+    walk(o, dt, o.mode === 'charge' ? WALK * 1.5 : WALK, s);
     if (o.mode === 'toPost' && arrived(o)) o.mode = 'post';
     if (o.mode === 'away' && s.t >= (o.backAt ?? 0)) { o.mode = 'toPost'; walkTo(o, o.post); }
   }
@@ -1026,7 +1071,7 @@ function updateProvocateurs(s, dt) {
   for (const p of s.provocateurs) {
     if (p.state === 'gone') continue;
     if (p.state === 'joined') { const d = dist(p, pl); goTo(p, d > 2 ? { x: pl.x + (p.x - pl.x) * (1.6 / d), z: pl.z + (p.z - pl.z) * (1.6 / d) } : p); if (d <= 2) p.path = []; }
-    walk(p, dt, p.state === 'exposed' || p.state === 'reported' ? WALK * 1.7 : WALK);
+    walk(p, dt, p.state === 'exposed' || p.state === 'reported' ? WALK * 1.7 : WALK, s);
     if ((p.state === 'exposed' || p.state === 'reported') && arrived(p)) p.state = 'gone';
     if ((p.state === 'hidden' || p.state === 'acting') && !pl.detained && dist(p, pl) < 4) memo(s, 'saw-provocateur', { tell: p.tell });
   }
@@ -1048,8 +1093,8 @@ function updateRavi(s) {
     } else if (onGround(sp) && dist(r, sp) < 4) {
       sp.holder = 'ravi'; r.carrying = 'speaker'; sp.on = false;
       emit(s, 'ravi-finds');
-      r.mode = 'toStage'; goTo(r, sp.x < -5 ? SPOTS.cpPost : SPOTS.midway, SPOTS.raviStage);
-    } else if (onGround(sp) && sp.on && dist(r, sp) < 10 && !r.following) {
+      r.mode = 'toStage'; goTo(r, SPOTS.raviStage);
+    } else if (onGround(sp) && sp.on && dist(r, sp) < 7 && !r.following) {
       r.following = true; goTo(r, sp); // he hears it
     } else if (arrived(r)) {
       r.following = false;
@@ -1184,7 +1229,7 @@ function updateKabirNikhil(s) {
   if (n.mode === 'lost' && dist(n, s.player) < 4) n.path = []; // stands still while you're near enough to talk
   else if (n.mode === 'lost' && arrived(n)) {
     n.wander = (n.wander + 1) % 3;
-    goTo(n, [SPOTS.nikhilStart, { x: -11, z: 33 }, { x: -3, z: 28 }][n.wander]);
+    goTo(n, [SPOTS.nikhilStart, { x: 146, z: -299 }, { x: 154, z: -304 }][n.wander]);
   }
   if (n.mode === 'follow') {
     const p = s.player, d = dist(n, p);
@@ -1248,14 +1293,19 @@ function placeSpeakerOnStage(s) {
 /** The player standing in the lane 4–8 m ahead of a moving shuttle: Iqbal stops and honks. */
 export function playerBlocksBus(s) {
   const b = s.bus, p = s.player;
-  const moving = b.phase === 'toJantar' || b.phase === 'toCP';
-  const dir = b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z);
-  const ahead = (p.z - b.z) * dir;
-  return moving && Math.abs(p.x - b.x) < 2 && ahead > 4 && ahead < 8 && !p.detained;
+  const moving = b.phase === 'toJantar' || b.phase === 'toCP' || b.phase === 'toDetention';
+  const dir = b.phase === 'toCP' ? -1 : 1, dx = b.dx * dir, dz = b.dz * dir;
+  const ahead = (p.x - b.x) * dx + (p.z - b.z) * dz, side = Math.abs((p.x - b.x) * dz - (p.z - b.z) * dx);
+  return moving && side < 2 && ahead > 4 && ahead < 8 && !p.detained;
 }
 
+function placeBus(b) {
+  const q = busPoint(b.s);
+  b.x = q.x; b.z = q.z; b.dx = q.dx; b.dz = q.dz;
+}
 function updateBus(s, dt) {
   const b = s.bus, w = s.objects.water;
+  if (b.phase !== 'detention') placeBus(b); // heading from where it stands on the route
   b.blocked = playerBlocksBus(s);
   if (b.phase === 'parked' || b.phase === 'detention') return;
   b.timer -= dt;
@@ -1270,19 +1320,25 @@ function updateBus(s, dt) {
       b.phase = 'toJantar';
     }
   } else if (b.phase === 'jantar') {
-    if (b.timer <= 0) { if (b.detention) startDetentionBus(s); else b.phase = 'toCP'; }
+    if (b.breakPending && !b.detention) b.timer = 0;
+    if (b.timer <= 0) b.phase = b.detention ? 'toDetention' : 'toCP';
+  } else if (b.phase === 'toDetention') {
+    const step = b.blocked || b.crewBlocked ? 0 : BUS.speed * 0.5 * dt; // at walking pace through the crowd
+    if (BUS_PARK - b.s <= step) { b.s = BUS_PARK; placeBus(b); startDetentionBus(s); } else { b.s += step; placeBus(b); }
   } else {
-    const target = b.phase === 'toJantar' ? SPOTS.busJantar : SPOTS.busCP;
+    // Iqbal's break is due: he turns round for CP rather than drive the whole run first.
+    if (b.phase === 'toJantar' && b.breakPending && !b.load) b.phase = 'toCP';
+    const goal = b.phase === 'toJantar' ? BUS_LENGTH : 0;
     // blocked: the player stands in the lane ahead; crewBlocked: your crew sitting on the road.
-    const d = target.z - b.z, step = b.blocked || b.crewBlocked ? 0 : BUS.speed * dt;
+    const d = goal - b.s, step = b.blocked || b.crewBlocked ? 0 : BUS.speed * hurry(b, s) * dt;
     if (Math.abs(d) <= step) {
-      b.z = target.z;
+      b.s = goal; placeBus(b);
       if (b.phase === 'toJantar') {
         const joining = s.police.line === 'stage' || s.scared ? 0 : b.load;
         s.crowd.stage += joining; b.unloaded = b.load; b.load = 0; b.phase = 'jantar'; b.timer = BUS.dwellJantar;
         if (w.holder === 'bus') { w.holder = null; Object.assign(w, SPOTS.waterJantar); emit(s, 'water-arrives', { pos: SPOTS.waterJantar }); }
       } else { b.phase = 'cp'; b.timer = BUS.dwellCP; }
-    } else b.z += Math.sign(d) * step;
+    } else { b.s += Math.sign(d) * step; placeBus(b); }
   }
   if (s.people.iqbal.hidden) Object.assign(s.people.iqbal, { x: b.x, z: b.z });
 }
@@ -1470,7 +1526,7 @@ export const RULES = [
     then: (s) => {
       const sh = s.people.sharma;
       sh.post = 'cp'; sh.mode = 'toPost';
-      goTo(sh, SPOTS.midway, SPOTS.cpPost);
+      goTo(sh, SPOTS.cpPost);
       emit(s, 'rao-sends-sharma', { link: 'rao-sends-sharma' });
     },
   },
@@ -1492,7 +1548,7 @@ export const RULES = [
     then: (s) => {
       const sh = s.people.sharma;
       sh.post = 'barricade'; sh.mode = 'toPost';
-      goTo(sh, SPOTS.midway, SPOTS.barricade);
+      goTo(sh, SPOTS.barricade);
       emit(s, 'rao-recalls', { link: 'rao-recalls' });
     },
   },
@@ -1684,7 +1740,7 @@ export const RULES = [
   {
     id: 'sena-called',
     says: 'sena-called',
-    when: (s) => s.rumours.sena.places.stage && !s.flags.senaCalled,
+    when: (s) => s.rumours.sena.places.stage && !s.flags.senaCalled && s.t < at(17, 30), // too late after that to bring the bikes
     then: (s) => {
       s.flags.senaCalled = true;
       const sena = s.groups.sena;
@@ -1785,7 +1841,8 @@ function stoneThrower(s) {
   const p = s.provocateurs.find((x) => x.state === 'acting' || x.state === 'hidden' || x.state === 'joined');
   if (p) return p;
   const sena = s.groups.sena;
-  if (sena.mood === 'angry' && sena.place === s.director.hotspot) return { id: 'sena', kind: 'sena', state: 'sena', tell: 'saffron scarf' };
+  // An angry DRS crowd starts it only while Rao can still order a charge for it.
+  if (sena.mood === 'angry' && sena.place === s.director.hotspot && s.t < at(17, 0)) return { id: 'sena', kind: 'sena', state: 'sena', tell: 'saffron scarf' };
   return null;
 }
 /** A friend who can make a scene outside the detention bus so you can slip out. */
@@ -1986,6 +2043,7 @@ export function act(s, cmd) {
     if (!o || pl.carrying || !isFree(o)) return { ok: false };
     const fromDetentionBus = cmd.object === 'key' && s.bus.phase === 'detention' && o.holder === 'hook';
     o.holder = 'player'; pl.carrying = cmd.object;
+    o.givenTo = null;
     if (cmd.object === 'speaker') o.on = false;
     const seen = new Set(cmd.witnesses ?? witnesses(s));
     const police = [...seen].filter((id) => isOfficer(s, id) && officerById(s, id).mode !== 'chase');
@@ -2044,6 +2102,7 @@ export function act(s, cmd) {
       addRep(s, { help: 10 });
       if (q.mode === 'search') { k.holder = 'iqbal'; emit(s, 'key-returned', { link: 'key-returned' }); q.mode = 'toBusWithKey'; goTo(q, SPOTS.busDoor); }
       else { k.holder = 'hook'; Object.assign(k, s.bus.phase === 'detention' ? { x: s.bus.x - 1.45, z: s.bus.z + 3 } : SPOTS.keyHook); }
+      k.givenTo = 'iqbal'; // he may hang it straight back on the hook, but you did hand it to him
       return { ok: true };
     }
     if (id === 'speaker' && cmd.to === 'ravi') {
@@ -2431,8 +2490,8 @@ export function opportunities(s, pos = s.player, radius = 10) {
 // --- the whole action space ------------------------------------------------------
 
 const DROP_SPOTS = {
-  here: null, sanaTent: SPOTS.sanaTent, stageSpeaker: SPOTS.stageSpeaker, cp: { x: -4, z: -33 },
-  metro: SPOTS.metro, barricade: { x: 34, z: -6 },
+  here: null, sanaTent: SPOTS.sanaTent, stageSpeaker: SPOTS.stageSpeaker, cp: { x: 92, z: -180 }, // the pavement corner out of Ravi's hearing on his search
+  metro: SPOTS.metro, barricade: { x: -52.5, z: 86 },
 };
 /**
  * Every command the player could try right now, and where to stand to try it: [{ id, kind, cmd, at }].
@@ -2490,10 +2549,10 @@ export function affordances(s) {
   if (pl.crew.length >= 3 && !pl.blocking) {
     const fronts = new Set(['barricade', ...s.police.barricades, ...(s.police.line ? [s.police.line] : [])]);
     for (const f of fronts) add(`block:${f}`, 'go', null, LINE_FRONT[f]);
-    add('block:road', 'go', null, { x: SPOTS.busJantar.x, z: (SPOTS.busCP.z + SPOTS.busJantar.z) / 2 });
+    { const q = busPoint(BUS_LENGTH / 2); add('block:road', 'go', null, { x: q.x, z: q.z }); }
   }
   const b = s.bus;
-  if (b.phase === 'toJantar' || b.phase === 'toCP') add('lane', 'go', null, { x: b.x, z: b.z + 6 * (b.phase === 'toJantar' ? Math.sign(SPOTS.busJantar.z - b.z) : Math.sign(SPOTS.busCP.z - b.z)) });
+  if (b.phase === 'toJantar' || b.phase === 'toCP') { const q = busPoint(b.s + (b.phase === 'toJantar' ? 6 : -6)); add('lane', 'go', null, { x: q.x, z: q.z }); }
   return out;
 }
 

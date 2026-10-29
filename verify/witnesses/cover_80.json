@@ -1,0 +1,17 @@
+{"name":"cover 80","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":20},
+{"clock":"10:20","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":153.39811141832968,"z":-296.2743800037734}},
+{"clock":"10:20","wait":10},
+{"clock":"10:30","do":"say:nikhil-lost:mila:1","cmd":{"type":"say","option":1},"at":{"x":151.25718667485498,"z":-297.36157877183854}},
+{"clock":"10:31","do":"whisper:minister:meera","cmd":{"type":"whisper","to":"meera","rumour":"minister"},"at":{"x":146,"z":-301.5}},
+{"clock":"10:32","wait":20},
+{"clock":"10:52","wait":45},
+{"clock":"11:37","wait":45},
+{"clock":"12:22","do":"pester:c3:cannon","cmd":{"type":"pester","to":"c3","how":"cannon"},"at":{"x":-32,"z":99}},
+{"clock":"12:54","do":"pester:c3:detainme","cmd":{"type":"pester","to":"c3","how":"detainme"},"at":{"x":-32,"z":99}},
+{"clock":"12:54","do":"situation:mira-mic","cmd":{"type":"situation","id":"mira-mic"},"at":{"x":-49,"z":105}},
+{"clock":"12:56","wait":10},
+{"clock":"13:06","wait":10},
+{"clock":"13:16","do":"say:mira-mic:speech:0","cmd":{"type":"say","option":0},"at":{"x":-44.443491841173476,"z":104.00391425694684}},
+{"clock":"13:17","do":"say:mira-mic:neta:1","cmd":{"type":"say","option":1},"at":{"x":-44.443491841173476,"z":104.00391425694684}}
+]}

@@ -2,48 +2,14 @@
  "name": "route dhuan-nikhil",
  "note": "In the tear gas at four, follow Nikhil's texts and get him to stand still and shout 'Update!' so you can find him in the smoke.",
  "tempo": "long",
- "expect": {
-  "history": "choice:dhuan:nikhil:1"
- },
+ "expect": { "history": "choice:dhuan:nikhil:1" },
  "trace": [
-  {
-   "wait": 365
-  },
-  {
-   "do": "situation:dhuan",
-   "cmd": {
-    "type": "situation",
-    "id": "dhuan"
-   },
-   "at": {
-    "x": -5.3,
-    "z": -5.5
-   }
-  },
-  {
-   "wait": 1
-  },
-  {
-   "do": "say:dhuan:smoke:0",
-   "cmd": {
-    "type": "say",
-    "option": 0
-   },
-   "at": null
-  },
-  {
-   "wait": 1
-  },
-  {
-   "do": "say:dhuan:nikhil:1",
-   "cmd": {
-    "type": "say",
-    "option": 1
-   },
-   "at": null
-  },
-  {
-   "finish": true
-  }
+  { "wait": 365 },
+  { "do": "situation:dhuan", "cmd": { "type": "situation", "id": "dhuan" }, "at": { "x": -56.3, "z": 104.5 } },
+  { "wait": 1 },
+  { "do": "say:dhuan:smoke:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:dhuan:nikhil:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "finish": true }
  ]
 }

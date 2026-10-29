@@ -1,0 +1,12 @@
+{"name":"cover 76","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
+{"clock":"10:12","do":"situation:speaker-run","cmd":{"type":"situation","id":"speaker-run"},"at":{"x":84.5,"z":-188.5}},
+{"clock":"10:12","wait":1},
+{"clock":"10:13","do":"say:speaker-run:intro:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"10:14","wait":1},
+{"clock":"10:15","wait":45},
+{"clock":"11:00","do":"drop:here","cmd":{"type":"drop"},"at":{"x":88.86862000844857,"z":-190.15296298332507}},
+{"clock":"11:01","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-191.2}},
+{"clock":"11:02","wait":3},
+{"clock":"11:05","do":"say:chabi:intro:1","cmd":{"type":"say","option":1},"at":{"x":88.86862000844857,"z":-190.15296298332507}}
+]}

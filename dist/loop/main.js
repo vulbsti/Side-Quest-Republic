@@ -3,10 +3,9 @@
 // Every engine field beyond the original loop is read defensively through S (below), so this
 // client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
 import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
-import { expandWorld } from '../world-expansion.js?v=27';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
-import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
+import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
 import * as R from './rules.js?v=9';
 import { SPEAKERS } from './talks.js?v=1';
@@ -265,13 +264,14 @@ function waterModel() {
   return g;
 }
 function placeProps() {
-  world.put('chai-cart', -18, -36, 0.3);
-  world.obstacles.push({ id: 'cp-chai', x: -18, z: -36, w: 3, d: 2, h: 3 });
-  for (const z of [-10.5, -7.5, -1.5, 1.5]) {
-    world.put('barricade', 40, z, Math.PI / 2);
-    world.obstacles.push({ id: 'loop-barricade', x: 40, z, w: 0.7, d: 3, h: 1.3 });
+  world.put('chai-cart', 86, -193, 0.3);
+  world.obstacles.push({ id: 'cp-chai', x: 86, z: -193, w: 3, d: 2, h: 3 });
+  // The standing barricade across Jantar Mantar Road, with a gap in the middle for the marshals.
+  for (const x of [-57, -54, -48, -45]) {
+    world.put('barricade', x, 80, 0);
+    world.obstacles.push({ id: 'loop-barricade', x, z: 80, w: 3, d: 0.7, h: 1.3 });
   }
-  for (const [text, x, z, r] of [['PARLIAMENT STREET →', 50, -9, -Math.PI / 2], ['CP SHUTTLE STOP', 4, -38.5, 0], ['JANTAR MANTAR STOP', 4, 5.5, 0]]) {
+  for (const [text, x, z, r] of [['PARLIAMENT STREET ↑', -49, 62, 0], ['CP SHUTTLE STOP', SPOTS.busCP.x + 3.5, SPOTS.busCP.z + 2, 0], ['JANTAR MANTAR STOP', SPOTS.busJantar.x + 3, SPOTS.busJantar.z, Math.PI / 2]]) {
     const s = sign(text, 3.4, 0.6);
     s.position.set(x, 2.6, z); s.rotation.y = r;
     world.scene.add(s);
@@ -405,20 +405,21 @@ function dress(b, kind) {
 
 // Where each crowd group stands, and where its people come from.
 const GROUPS = {
-  cpWaiting: { center: { x: 4.5, z: -31 }, r: 3.8, spawn: { x: -4, z: -47 }, face: { x: 7.6, z: -31 } },
-  cpParty: { center: null, r: 3.2, spawn: { x: -8, z: -46 }, face: null },
-  stage: { center: { x: 0, z: -5.5 }, r: 5.5, spawn: { x: 10, z: 4 }, face: { x: 0, z: -14 } },
-  barricade: { center: { x: 32.6, z: -3.2 }, r: 3.4, spawn: { x: 12, z: -6 }, face: { x: 40, z: -3.2 } },
-  parliament: { center: { x: 62, z: -4 }, r: 6, spawn: { x: 40, z: -4.5 }, face: { x: 70, z: -4 } },
+  cpWaiting: { center: { x: 108.5, z: -188 }, r: 3.8, spawn: { x: 100, z: -204 }, face: { x: 111.6, z: -188 } },
+  cpParty: { center: null, r: 3.2, spawn: { x: 96, z: -203 }, face: null },
+  stage: { center: { x: -51, z: 104.5 }, r: 5.5, spawn: { x: -41, z: 114 }, face: { x: -51, z: 96 } },
+  barricade: { center: { x: -49.7, z: 87.4 }, r: 3.4, spawn: { x: -39, z: 104 }, face: { x: -49.7, z: 80 } },
+  parliament: { center: { x: -58, z: 55 }, r: 6, spawn: { x: -51, z: 80 }, face: { x: -58, z: 47 } },
 };
 // Arriving groups stand beside the students at their place, each on its own side.
 const KIND_OFFSET = { party: { x: -7.5, z: 6.5 }, sena: { x: 7, z: 7 }, opp: { x: -8, z: -4 }, students: { x: 0, z: 0 } };
-const KIND_SPAWN = { party: { x: -60, z: 3 }, sena: { x: 80, z: 2 }, opp: { x: -60, z: -3 }, students: { x: -7, z: 34 } };
+// Where each kind of group walks in from: the party from its SUV, the DRS bikes off Sansad Marg, students up Jantar Mantar Road.
+const KIND_SPAWN = { party: { x: -36, z: 118 }, sena: { x: -30, z: 60 }, opp: { x: -62, z: 122 }, students: { x: -40, z: 132 } };
 const LINE_LAYOUT = {
-  stage: { x: 0, z: 1.8, axis: 'x', yaw: Math.PI },
-  cp: { x: 4.5, z: -26.4, axis: 'x', yaw: Math.PI },
-  barricade: { x: 37.8, z: -4.5, axis: 'z', yaw: -Math.PI / 2 },
-  parliament: { x: 55.5, z: -4, axis: 'z', yaw: Math.PI / 2 },
+  stage: { x: -51, z: 111.8, axis: 'x', yaw: Math.PI },
+  cp: { x: 108.5, z: -183.4, axis: 'x', yaw: Math.PI },
+  barricade: { x: -51, z: 82.2, axis: 'x', yaw: 0 },
+  parliament: { x: -58, z: 61.5, axis: 'x', yaw: Math.PI },
 };
 const placePos = (place) => PLACES[place] || null;
 const CLUSTER_KEYS = Object.keys(GROUPS);
@@ -473,7 +474,7 @@ function updateCrowd(dt) {
           b = crowd.find((x) => !x.cluster && !x.model.visible && x.pool === pool);
           if (!b) break;
           Object.assign(b, cl.spawn);
-          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -14, z: 12 });
+          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -65, z: 122 });
           b.ox = b.oz = 0;
         }
         dress(b, cl.kind);
@@ -489,7 +490,7 @@ function updateCrowd(dt) {
       }
     }
     crowdSnap = false;
-    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: -4, z: -48 }; }
+    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: 100, z: -205 }; }
   }
   const surge = clashSurge();
   const ch = props.charge, gasOn = props.gasAt;
@@ -591,7 +592,7 @@ function planOfficers() {
       const [x, z, y] = CHAIRS[i];
       officerPlan.push({ id: 'c' + i, kind: 'constable', x, z, yaw: y, posture: 'seat', chair: i });
     } else {
-      officerPlan.push({ id: 'c' + i, kind: 'constable', x: 33 + (i % 3) * 1.3, z: -11 + Math.floor(i / 3) * 1.6, yaw: -Math.PI / 2 + (i - 2) * 0.4, posture: 'stand' });
+      officerPlan.push({ id: 'c' + i, kind: 'constable', x: -44 + Math.floor(i / 3) * 1.6, z: 77 - (i % 3) * 1.3, yaw: (i - 2) * 0.4, posture: 'stand' });
     }
   }
   const nRaf = Math.min(RAF_POOL, S.raf(day));
@@ -709,7 +710,7 @@ function updateProvs(dt) {
     const place = placePos(pv.place) || PLACES.stage;
     let tx = pv.x ?? place.x + Math.cos(i * 2.1) * 3, tz = pv.z ?? place.z + Math.sin(i * 2.1) * 3;
     let speed = 3.2;
-    if (pv.state === 'exposed') { const s = props.suvPos || { x: -60, z: 3 }; tx = s.x; tz = s.z; speed = 6.5; }
+    if (pv.state === 'exposed') { const s = props.suvPos || SPOTS.suv; tx = s.x; tz = s.z; speed = 6.5; }
     if (pv.state === 'reported') { b.goneT = (b.goneT || 0) + dt; const s = bodies.sharma; tx = s.x + 1; tz = s.z + 1; }
     if (!b.model.visible) { b.model.visible = true; b.x = tx; b.z = tz; b.goneT = 0; }
     const ox = b.x, oz = b.z;
@@ -748,7 +749,7 @@ function updateBodies(dt) {
       else if (looks.has(id)) { const l = looks.get(id); b.yaw = Math.atan2(l.x - b.x, l.z - b.z); }
       else if (id === 'sharma' && s.post === 'barricade') b.yaw = -Math.PI / 2;
       else if (id === 'dev' && s.mode === 'waiting') b.yaw = Math.PI / 2;
-      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(-b.x, -14 - b.z);
+      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(SPOTS.stageTop.x - b.x, SPOTS.stageTop.z - b.z);
       else if (id === 'asha' && s.mode === 'stall') b.yaw = 0.3;
     }
   }
@@ -1412,7 +1413,7 @@ function startLoop() {
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
   realReels(phaseNow);
-  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, south of here. The stage is in between. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
+  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, just south of here. The stage is down Sansad Marg, on Jantar Mantar Road. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
 const WHERE_NAME = { stage: 'the stage', cp: 'the CP shuttle stop', barricade: 'the barricade', parliament: 'Parliament Street' };
@@ -1860,7 +1861,7 @@ function camera(dt) {
   }
   camTarget.set(p.x, 1.55 + p.y * 0.7, p.z);
   camDesired.set(camTarget.x + Math.sin(yaw) * zoom, camTarget.y + zoom * pitch, camTarget.z + Math.cos(yaw) * zoom);
-  for (const o of world.obstacles) {
+  for (const o of nearObstacles(world.obstacles, Math.min(camTarget.x, camDesired.x) - 2, Math.min(camTarget.z, camDesired.z) - 2, Math.max(camTarget.x, camDesired.x) + 2, Math.max(camTarget.z, camDesired.z) + 2)) {
     if (o.h < 2) continue;
     if (o.h < 3.5) {
       if (Math.abs(camDesired.x - o.x) < o.w / 2 + 1 && Math.abs(camDesired.z - o.z) < o.d / 2 + 1) camDesired.y = Math.max(camDesired.y, o.h + 1.2);
@@ -2116,7 +2117,6 @@ function setupInput() {
   try {
     world = await buildWorld($('#scene'), (name) => ($('#loadtext').textContent = 'Preparing ' + name.replaceAll('-', ' ') + '…'));
     await enhanceEnvironment(THREE, world);
-    expandWorld(world, { bodies: () => (sim ? [sim.player] : []) });
     await loadCharacters((name) => ($('#loadtext').textContent = 'Preparing ' + name + ' characters…'));
     placeProps();
     const box = new THREE.Box3(), size = new THREE.Vector3();

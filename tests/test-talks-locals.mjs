@@ -94,7 +94,7 @@ for (const who of WHO) {
   ok(!['sana-d-countdown', 'sana-d-out'].includes(r2.talk), `no "paani khatam" after the crate (${r2.talk})`);
 }
 { // Sana without water at 13:10 says it has run out (the crate never made the shuttle: someone moved it).
-  const s = day('13:10', (d) => Object.assign(d.objects.water, { holder: null, x: -30, z: 20 }));
+  const s = day('13:10', (d) => Object.assign(d.objects.water, { holder: null, x: 127, z: -312 }));
   ok(!s.waterOk, 'no water at the tent');
   stand(s, 'sana');
   ok(talk(s, 'sana').talk === 'sana-d-out', 'Sana is out of water after 13:00');

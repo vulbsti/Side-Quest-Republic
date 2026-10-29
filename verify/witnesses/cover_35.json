@@ -1,18 +1,9 @@
-{"name":"cover 35","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":3.2,"z":-10.4}},
-{"clock":"10:34","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
-{"clock":"10:35","do":"whisper:minister:meera","cmd":{"type":"whisper","to":"meera","rumour":"minister"},"at":{"x":-11,"z":30.5}},
-{"clock":"10:38","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:41","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:42","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":38,"z":-4.5}},
-{"clock":"10:44","wait":45},
-{"clock":"11:29","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":33.604565793641946,"z":-6.587831248020073}},
-{"clock":"11:30","do":"pester:c5:career","cmd":{"type":"pester","to":"c5","how":"career"},"at":{"x":57,"z":-1}},
-{"clock":"11:32","do":"pester:sharma:career","cmd":{"type":"pester","to":"sharma","how":"career"},"at":{"x":40,"z":-4.5}},
-{"clock":"11:33","do":"lane","cmd":null,"at":{"x":10,"z":-9.28000000000003},"hold":4},
-{"clock":"11:39","finish":true}
+{"name":"cover 35","note":"2 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","wait":1},
+{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"15:05","do":"say:naye-joote:overhear:3","cmd":{"type":"say","option":3},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:05","do":"say:naye-joote:joined:0","cmd":{"type":"say","option":0},"at":{"x":-37.985814335698116,"z":118.29662747836474}}
 ]}

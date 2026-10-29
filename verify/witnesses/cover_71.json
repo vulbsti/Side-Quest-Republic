@@ -1,0 +1,14 @@
+{"name":"cover 71","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
+{"clock":"10:33","wait":1},
+{"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
+{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
+{"clock":"14:01","wait":1},
+{"clock":"14:02","do":"say:cannon-request:heat:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"14:02","do":"whisper:minister:dev","cmd":{"type":"whisper","to":"dev","rumour":"minister"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"14:04","wait":10},
+{"clock":"14:14","do":"pester:r5:cannon","cmd":{"type":"pester","to":"r5","how":"cannon"},"at":{"x":-63,"z":65.6}},
+{"clock":"14:18","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
+{"clock":"14:20","do":"say:cannon-request:sana:2","cmd":{"type":"say","option":2},"at":{"x":-53.40914857601557,"z":77.96250069699232}}
+]}

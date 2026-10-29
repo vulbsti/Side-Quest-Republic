@@ -1,0 +1,21 @@
+{"name":"cover 61","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","wait":1},
+{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"15:05","do":"say:naye-joote:overhear:2","cmd":{"type":"say","option":2},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:05","wait":20},
+{"clock":"15:25","do":"prov:p1:join","cmd":{"type":"provocateur","id":"p1","how":"join"},"at":{"x":-51.4,"z":111.6}},
+{"clock":"15:26","wait":20},
+{"clock":"15:46","do":"film:charge@stage","cmd":{"type":"film"},"at":{"x":-51,"z":110.5}},
+{"clock":"15:47","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"15:48","wait":20},
+{"clock":"16:08","do":"leave","cmd":{"type":"leave"},"at":{"x":-58.73104118549016,"z":102.56379622025631}},
+{"clock":"16:09","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:10","wait":20},
+{"clock":"16:30","wait":45},
+{"clock":"17:15","wait":20},
+{"clock":"17:35","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":{"x":-58.73104118549016,"z":102.56379622025631}},
+{"clock":"17:36","do":"say:dhuan:meera:3","cmd":{"type":"say","option":3},"at":{"x":-58.73104118549016,"z":102.56379622025631}}
+]}

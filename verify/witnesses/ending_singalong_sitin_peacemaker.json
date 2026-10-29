@@ -1,0 +1,8 @@
+{"name":"ending singalong · sitin · peacemaker","note":"","tempo":"long","expect":{"ending":"singalong","outcome":"sitin","role":"peacemaker"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","do":"give:mira","cmd":{"type":"give","to":"mira"},"at":{"x":-51,"z":95.5}},
+{"clock":"14:48","do":"prov:p1:expose","cmd":{"type":"provocateur","id":"p1","how":"expose"},"at":{"x":-53,"z":106}},
+{"clock":"14:49","finish":true}
+]}

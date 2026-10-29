@@ -1,10 +1,11 @@
 {"name":"ending noshow · block · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
-{"clock":"10:05","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:06","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:09","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":-7.505395947629511,"z":34.2874857035049}},
-{"clock":"10:12","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":{"x":-9.5,"z":-9}},
-{"clock":"10:15","wait":10},
-{"clock":"10:25","wait":3},
-{"clock":"10:28","finish":true}
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
+{"clock":"17:00","do":"leave","cmd":{"type":"leave"},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:01","do":"whisper:biryani:asha","cmd":{"type":"whisper","to":"asha","rumour":"biryani"},"at":{"x":86,"z":-191.2}},
+{"clock":"17:11","do":"whisper:minister:mira","cmd":{"type":"whisper","to":"mira","rumour":"minister"},"at":{"x":-51,"z":95.5}},
+{"clock":"17:33","do":"pester:r2:cute","cmd":{"type":"pester","to":"r2","how":"cute"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"17:37","do":"pester:r2:career","cmd":{"type":"pester","to":"r2","how":"career"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"17:37","do":"film:minister-noshow@barricade","cmd":{"type":"film"},"at":{"x":-51,"z":83.8}},
+{"clock":"17:39","wait":45}
 ]}

@@ -1,0 +1,96 @@
+{
+  "point": "rajiv-chowk",
+  "lat": 28.6328,
+  "lon": 77.2197,
+  "radius_m": 150,
+  "geosearch_hits": 50,
+  "skipped": {
+    "licence": 1
+  },
+  "photos": [
+    {
+      "file": "01-Water_Fight.jpg",
+      "title": "File:Water Fight.jpg",
+      "author": "L Mahammad",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Water_Fight.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Water_Fight.jpg/1280px-Water_Fight.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 0,
+      "lat": 28.6328,
+      "lon": 77.2197,
+      "date": "2015-04-18 07:47:21",
+      "bytes": 488233
+    },
+    {
+      "file": "02-Armymoustacheman_177511751_.jpeg",
+      "title": "File:Armymoustacheman (177511751).jpeg",
+      "author": "Kamlesh Isal",
+      "licence": "CC BY-SA 3.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Armymoustacheman_(177511751).jpeg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Armymoustacheman_%28177511751%29.jpeg/1280px-Armymoustacheman_%28177511751%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 14.5,
+      "lat": 28.632851561057,
+      "lon": 77.219563722611,
+      "date": "16 September 2016, 05:58:17 (UTC)",
+      "bytes": 247335
+    },
+    {
+      "file": "03-Indian_Flag_14672847146_.jpg",
+      "title": "File:Indian Flag (14672847146).jpg",
+      "author": "DARSHAN SIMHA from Peoria, United States",
+      "licence": "CC BY 2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Indian_Flag_(14672847146).jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Indian_Flag_%2814672847146%29.jpg/1280px-Indian_Flag_%2814672847146%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 22,
+      "lat": 28.632926,
+      "lon": 77.219526,
+      "date": "2014-07-04 21:00",
+      "bytes": 322885
+    },
+    {
+      "file": "04-Human_Rights_Festival_New_Delhi_organised_by_National_Human_Rights_Com.jpg",
+      "title": "File:Human Rights Festival New Delhi organised by National Human Rights Commission India.jpg",
+      "author": "Pulakit Singh",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Human_Rights_Festival_New_Delhi_organised_by_National_Human_Rights_Commission_India.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Human_Rights_Festival_New_Delhi_organised_by_National_Human_Rights_Commission_India.jpg/1280px-Human_Rights_Festival_New_Delhi_organised_by_National_Human_Rights_Commission_India.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 46.1,
+      "lat": 28.632917,
+      "lon": 77.219247,
+      "date": "2018-10-13 19:48:57",
+      "bytes": 254224
+    },
+    {
+      "file": "05-One_Billion_Rising_New_Delhi_Central_Park.jpg",
+      "title": "File:One Billion Rising New Delhi Central Park.jpg",
+      "author": "Pulakit Singh",
+      "licence": "CC0",
+      "licence_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "url": "https://commons.wikimedia.org/wiki/File:One_Billion_Rising_New_Delhi_Central_Park.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/One_Billion_Rising_New_Delhi_Central_Park.jpg/1280px-One_Billion_Rising_New_Delhi_Central_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 52.5,
+      "lat": 28.632861,
+      "lon": 77.219167,
+      "date": "2018-02-11 15:45:50",
+      "bytes": 399719
+    },
+    {
+      "file": "06-Rajiv_Chowk_Metro_Station-Delhi-entry_turnstiles.jpg",
+      "title": "File:Rajiv Chowk Metro Station-Delhi-entry turnstiles.jpg",
+      "author": "Immanuelle",
+      "licence": "CC BY 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Rajiv_Chowk_Metro_Station-Delhi-entry_turnstiles.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Rajiv_Chowk_Metro_Station-Delhi-entry_turnstiles.jpg/1280px-Rajiv_Chowk_Metro_Station-Delhi-entry_turnstiles.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 54.5,
+      "lat": 28.632867,
+      "lon": 77.219147,
+      "date": "2024-10-12 19:56:23",
+      "bytes": 292323
+    }
+  ]
+}

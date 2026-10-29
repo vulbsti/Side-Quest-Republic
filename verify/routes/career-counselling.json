@@ -1,0 +1,18 @@
+{
+ "name": "route career-counselling",
+ "note": "Walk down Sansad Marg to the barricade by half past ten, ask Sharma what to do with your life, wait for Yadav and Meena to join the panel, roast Yadav's SSC attempts and give Tomar a fake name.",
+ "tempo": "long",
+ "expect": { "history": "choice:career-counselling:tomar:0" },
+ "trace": [
+  { "do": "go:barricade", "cmd": null, "at": { "x": -51, "z": 82 }, "hold": 1 },
+  { "do": "situation:career-counselling", "cmd": { "type": "situation", "id": "career-counselling" }, "at": { "x": -51, "z": 82 } },
+  { "wait": 1 },
+  { "do": "say:career-counselling:intro:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 15 },
+  { "do": "say:career-counselling:panel:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:career-counselling:tomar:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 2 },
+  { "finish": true }
+ ]
+}

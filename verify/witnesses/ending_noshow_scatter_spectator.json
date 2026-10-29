@@ -1,0 +1,12 @@
+{"name":"ending noshow · scatter · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"scatter","role":"spectator"},"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"whisper:minister:sana","cmd":{"type":"whisper","to":"sana","rumour":"minister"},"at":{"x":-60.5,"z":101}},
+{"clock":"14:48","do":"pester:r4:career","cmd":{"type":"pester","to":"r4","how":"career"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"14:52","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"14:53","wait":45},
+{"clock":"15:38","finish":true}
+]}

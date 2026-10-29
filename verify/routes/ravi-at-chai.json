@@ -1,0 +1,11 @@
+{
+ "name": "route ravi-at-chai",
+ "note": "Hang around Asha's stall at CP from ten: at 11:15 Ravi walks up from the stage for his chai while Iqbal is on his break, and you hear them.",
+ "tempo": "long",
+ "expect": { "history": "seen:ravi-at-chai" },
+ "trace": [
+  { "do": "go:chai", "cmd": null, "at": { "x": 90, "z": -192 }, "hold": 95 },
+  { "wait": 2 },
+  { "finish": true }
+ ]
+}

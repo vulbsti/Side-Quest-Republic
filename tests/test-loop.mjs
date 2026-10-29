@@ -6,10 +6,18 @@ import { LINKS, LINES, ENDINGS, HINTS, TALK, AGAIN, RUMOURS, PEOPLE, AMBIENT } f
 setTempo('slice'); // these chains were tuned on the 10-minute slice; verify/ checks the full day
 const runUntil = (s, t) => advance(s, t - s.t);
 const moveTo = (s, spot) => Object.assign(s.player, { x: spot.x, z: spot.z });
+// On the real-sized map the shuttle may still be on its way back to CP for Iqbal's break: wait for the key on its hook.
+// ...and Zoya may still be walking her phone over to the charger.
+function waitForCharger(s) { for (let i = 0; i < 300 && s.objects.phone.holder !== 'cart'; i++) advance(s, 0.1); }
+function waitForBreak(s) { if (s.t > at(11, 30)) return; for (let i = 0; i < 400 && s.objects.key.holder !== 'hook'; i++) advance(s, 0.1); }
 const links = (events) => new Set(events.map((e) => e.link).filter(Boolean));
 const whisper = (s, to, rumour) => { moveTo(s, s.people[to]); return act(s, { type: 'whisper', to, rumour }); };
 const take = (s, object, witnesses = []) => { moveTo(s, s.objects[object]); return act(s, { type: 'take', object, witnesses }); };
 const give = (s, to) => { moveTo(s, s.people[to]); return act(s, { type: 'give', to }); };
+// Sprint the player through some points (away from the constable round CP's circle, then into a crowd).
+function sprint(s, ...points) {
+  for (const to of points) for (let d = dist(s.player, to); d > 0.5 && s.player.chasedBy; d = dist(s.player, to)) { const k = Math.min(d, 0.8) / d; s.player.x += (to.x - s.player.x) * k; s.player.z += (to.z - s.player.z) * k; advance(s, 0.1); }
+}
 // Walk the player somewhere at running pace, letting the world run, so followers can keep up.
 function walkPlayer(s, to) {
   while (dist(s.player, to) > 0.5) {
@@ -50,7 +58,7 @@ assert(r.links.has('small-speech'));
 
 // Pocket the key on the first chai break and keep it: CP fills, Sharma leaves, the fired-up crowd marches.
 r = play([
-  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); assert.equal(s.objects.key.holder, 'hook'); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
+  [at(11, 10), (s) => { waitForBreak(s); moveTo(s, SPOTS.keyHook); assert.equal(s.objects.key.holder, 'hook'); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
 ]);
 for (const l of ['key-missing', 'cp-piles-up', 'rao-sends-sharma', 'march']) assert(r.links.has(l), `key chain fires ${l}`);
 assert.equal(r.s.ending, 'march');
@@ -58,13 +66,13 @@ assert.equal(r.s.ending, 'march');
 // Key and speaker both gone: no speech to fire people up, so it ends as a CP jam instead.
 r = play([
   [at(10, 5), (s) => { moveTo(s, SPOTS.speakerChai); act(s, { type: 'take', object: 'speaker', witnesses: [] }); moveTo(s, SPOTS.metro); act(s, { type: 'drop' }); }],
-  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
+  [at(11, 10), (s) => { waitForBreak(s); moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
 ]);
 assert.equal(r.s.ending, 'cpjam');
 
 // Return the key: the shuttle runs again and Sharma goes back.
 r = play([
-  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
+  [at(11, 10), (s) => { waitForBreak(s); moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: [] }); moveTo(s, SPOTS.metro); }],
   [at(12, 30), (s) => { const q = s.people.iqbal; moveTo(s, q); act(s, { type: 'give', to: 'iqbal' }); moveTo(s, SPOTS.metro); }],
 ]);
 assert(r.links.has('key-returned') && r.links.has('rao-recalls'));
@@ -75,7 +83,7 @@ assert.notEqual(r.s.ending, 'march', 'a returned key stops the chain before the 
 {
   const s = createDay();
   runUntil(s, at(11, 10));
-  moveTo(s, SPOTS.keyHook);
+  waitForBreak(s); moveTo(s, SPOTS.keyHook);
   act(s, { type: 'take', object: 'key', witnesses: ['c2'] });
   assert.equal(s.player.chasedBy, 'c2', 'a constable who sees you take the key runs at you');
   advance(s, 10);
@@ -95,7 +103,7 @@ assert.notEqual(r.s.ending, 'march', 'a returned key stops the chain before the 
 
 // Speaker party at CP: Sharma comes, switches it off, then goes back.
 r = play([
-  [at(10, 5), (s) => { moveTo(s, SPOTS.speakerChai); act(s, { type: 'take', object: 'speaker', witnesses: [] }); moveTo(s, { x: -6, z: -45 }); act(s, { type: 'drop' }); moveTo(s, SPOTS.metro); }],
+  [at(10, 5), (s) => { moveTo(s, SPOTS.speakerChai); act(s, { type: 'take', object: 'speaker', witnesses: [] }); moveTo(s, { x: 92, z: -180 }); act(s, { type: 'drop' }); moveTo(s, SPOTS.metro); }],
 ]);
 for (const l of ['cp-party', 'rao-sends-sharma', 'sharma-kills-party', 'rao-recalls']) assert(r.links.has(l), `party chain fires ${l}`);
 
@@ -112,7 +120,7 @@ assert.equal(r.s.ending, 'packed');
 
 // After Kabir leaves at 14:00, with Zoya's phone stolen so she can't check it, the same rumour empties the stage.
 r = play([
-  [at(13, 12), (s) => { assert(take(s, 'phone').ok); moveTo(s, SPOTS.metro); }],
+  [at(13, 12), (s) => { waitForCharger(s); assert(take(s, 'phone').ok); moveTo(s, SPOTS.metro); }],
   [at(14, 20), (s) => whisper(s, 'mira', 'cannon')],
 ]);
 for (const l of ['phone-missing', 'cannon-scare']) assert(r.links.has(l), `scare chain fires ${l}`);
@@ -126,7 +134,7 @@ assert.notEqual(r.s.ending, 'ghost');
 
 // Return Zoya's phone and she is back on air.
 r = play([
-  [at(13, 12), (s) => { take(s, 'phone'); moveTo(s, SPOTS.metro); }],
+  [at(13, 12), (s) => { waitForCharger(s); take(s, 'phone'); moveTo(s, SPOTS.metro); }],
   [at(13, 40), (s) => give(s, 'zoya')],
 ]);
 assert(r.links.has('phone-returned'));
@@ -178,7 +186,7 @@ assert.equal(r.s.ending, 'viral');
 // Same, but with Zoya's phone gone nobody films it.
 r = play([
   [at(10, 10), (s) => whisper(s, 'dev', 'minister')],
-  [at(13, 12), (s) => { take(s, 'phone'); moveTo(s, SPOTS.metro); }],
+  [at(13, 12), (s) => { waitForCharger(s); take(s, 'phone'); moveTo(s, SPOTS.metro); }],
 ]);
 assert(r.links.has('dev-provokes'));
 assert.equal(r.s.ending, 'scuffle');
@@ -196,7 +204,7 @@ assert.equal(r.s.ending, 'noshow');
 r = play([
   [at(10, 5), (s) => { take(s, 'speaker'); moveTo(s, SPOTS.metro); }],
   [at(10, 10), (s) => whisper(s, 'dev', 'minister')],
-  [at(15, 5), (s) => { moveTo(s, { x: -6, z: -45 }); act(s, { type: 'drop' }); moveTo(s, SPOTS.metro); }],
+  [at(15, 5), (s) => { moveTo(s, { x: 92, z: -180 }); act(s, { type: 'drop' }); moveTo(s, SPOTS.metro); }],
 ]);
 assert(r.links.has('barricade-push'), `barricade push (got ${[...r.links]})`);
 assert.equal(r.s.ending, 'march');
@@ -217,7 +225,7 @@ assert(r.links.has('water-delivered') && !r.links.has('heat'));
 
 // Bring Nikhil to Kabir, then give Kabir the megaphone: he stays and roasts Rao live.
 r = play([
-  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath); walkPlayer(s, { x: -3, z: -1 }); }],
+  [at(10, 5), (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath); walkPlayer(s, { x: -54, z: 109 }); }],
   [at(14, 20), (s) => { assert(take(s, 'megaphone').ok); assert(give(s, 'kabir').ok, 'Kabir is still here to take it'); moveTo(s, SPOTS.metro); }],
 ]);
 for (const l of ['nikhil-finds-kabir', 'kabir-roast']) assert(r.links.has(l), `roast chain fires ${l}`);
@@ -228,10 +236,10 @@ assert.equal(r.s.ending, 'roast');
 {
   const s = createDay();
   while (s.bus.phase !== 'toJantar') advance(s, 0.1);
-  const z = s.bus.z; Object.assign(s.player, { x: s.bus.x, z: s.bus.z + 6 }); advance(s, 3);
-  assert.equal(s.bus.z, z, 'a blocked shuttle stays put');
+  const { x, z } = s.bus; Object.assign(s.player, { x: x + s.bus.dx * 6, z: z + s.bus.dz * 6 }); advance(s, 3);
+  assert.deepEqual([s.bus.x, s.bus.z], [x, z], 'a blocked shuttle stays put');
   Object.assign(s.player, SPOTS.metro); advance(s, 1);
-  assert.notEqual(s.bus.z, z);
+  assert.notEqual(dist(s.bus, { x, z }), 0);
 }
 
 // Lost Nikhil stands still while the player is close enough to talk to him.
@@ -250,7 +258,7 @@ assert.equal(r.s.police.line, 'barricade');
 
 // --- the protest-day slice: pester, chase, crew, provocateurs -------------------------
 
-const nikhilToKabir = (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath); walkPlayer(s, { x: -3, z: -1 }); };
+const nikhilToKabir = (s) => { moveTo(s, s.people.nikhil); act(s, { type: 'talk', to: 'nikhil' }); walkPlayer(s, SPOTS.metroPath); walkPlayer(s, { x: -54, z: 109 }); };
 const pester = (s, to, how) => { moveTo(s, s.officers[to] || s.people[to]); const r = act(s, { type: 'pester', to, how }); assert(r.ok, `pester ${to}`); return r; };
 
 // The cannon rumour told to Asha at 11:35 reaches CP during Iqbal's break; nobody boards for Jantar.
@@ -278,7 +286,7 @@ assert(r.s.people.kabir.mode !== 'detained');
 // Steal the key in front of the CP constable and lose him in the stage crowd. Spread the DRS rumour. Join a provocateur.
 r = play([
   [at(10, 15), (s) => { pester(s, 'c1', 'career'); assert(act(s, { type: 'film' }).ok); pester(s, 'c1', 'cute'); pester(s, 'c1', 'cute'); assert.equal(s.officers.c1.mood, 'annoyed'); }],
-  [at(11, 10), (s) => { moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['c2'] }); for (let i = 0; i < 60; i++) { const d = dist(s.player, { x: 0, z: -5.5 }); if (d < 0.5) break; s.player.x += (0 - s.player.x) / d * 0.8; s.player.z += (-5.5 - s.player.z) / d * 0.8; advance(s, 0.1); } advance(s, 4); assert.equal(s.player.chasedBy, null); }],
+  [at(11, 10), (s) => { waitForBreak(s); moveTo(s, SPOTS.keyHook); act(s, { type: 'take', object: 'key', witnesses: ['c2'] }); sprint(s, { x: 113, z: -200 }, { x: 85, z: -208 }, { x: -51, z: 104.5 }); advance(s, 4); assert.equal(s.player.chasedBy, null); }],
   [at(12, 5), (s) => whisper(s, 'mira', 'sena')],
   [at(14, 34), (s) => { const p = s.provocateurs[0]; moveTo(s, p); assert(act(s, { type: 'provocateur', id: p.id, how: 'join' }).ok); }],
 ]);
@@ -290,9 +298,9 @@ r = play([
   [at(14, 34), (s) => {
     const p = s.provocateurs[0]; moveTo(s, p);
     assert(act(s, { type: 'provocateur', id: p.id, how: 'expose' }).ok);
-    moveTo(s, { x: 0, z: -5.5 }, 0);
+    moveTo(s, { x: -51, z: 104.5 }, 0);
     assert(act(s, { type: 'rally' }).ok);
-    walkPlayer(s, { x: 36.5, z: -4.5 }); advance(s, 4);
+    walkPlayer(s, { x: -51, z: 83.5 }); advance(s, 4);
   }],
 ]);
 for (const l of ['provocateur-exposed', 'crew-join', 'crew-block', 'sitin']) assert(r.links.has(l), `crew chain fires ${l}`);

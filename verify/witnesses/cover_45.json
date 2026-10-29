@@ -1,0 +1,8 @@
+{"name":"cover 45","note":"2 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:30","wait":10},
+{"clock":"16:40","wait":45},
+{"clock":"17:25","do":"say:detain-me:window:3","cmd":{"type":"say","option":3},"at":{"x":-43.71664254440478,"z":35.39748505976821}},
+{"clock":"17:25","do":"say:detain-me:too-late:1","cmd":{"type":"say","option":1},"at":{"x":-43.71664254440478,"z":35.39748505976821}}
+]}

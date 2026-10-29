@@ -1,0 +1,11 @@
+{"name":"cover 67","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","wait":20},
+{"clock":"17:20","wait":10},
+{"clock":"17:30","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
+{"clock":"17:30","do":"say:ghar-jaana-hai:gate:1","cmd":{"type":"say","option":1},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:31","do":"say:ghar-jaana-hai:repost:1","cmd":{"type":"say","option":1},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:32","do":"say:ghar-jaana-hai:gate:2","cmd":{"type":"say","option":2},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:33","wait":20},
+{"clock":"17:53","do":"say:ghar-jaana-hai:mummy:3","cmd":{"type":"say","option":3},"at":{"x":150,"z":-296.5899999999999}}
+]}

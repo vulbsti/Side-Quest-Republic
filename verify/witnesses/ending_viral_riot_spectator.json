@@ -1,0 +1,19 @@
+{"name":"ending viral · riot · spectator","note":"","tempo":"long","expect":{"ending":"viral","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","wait":1},
+{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"15:05","do":"say:naye-joote:overhear:3","cmd":{"type":"say","option":3},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:05","do":"say:naye-joote:joined:0","cmd":{"type":"say","option":0},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:06","do":"whisper:cannon:mira","cmd":{"type":"whisper","to":"mira","rumour":"cannon"},"at":{"x":-51,"z":95.5}},
+{"clock":"15:09","do":"whisper:biryani:ravi","cmd":{"type":"whisper","to":"ravi","rumour":"biryani"},"at":{"x":-45.4,"z":100.4}},
+{"clock":"15:10","do":"whisper:minister:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"minister"},"at":{"x":-58.5,"z":104.5}},
+{"clock":"15:11","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"15:12","do":"hide:cp","cmd":null,"at":{"x":108.5,"z":-188},"hold":1},
+{"clock":"15:36","wait":20},
+{"clock":"15:56","do":"hide:barricade","cmd":null,"at":{"x":-49.7,"z":87.4},"hold":1},
+{"clock":"16:19","do":"talk:ravi","cmd":{"type":"talk","to":"ravi"},"at":{"x":-45.4,"z":100.4}},
+{"clock":"16:20","do":"leave","cmd":{"type":"leave"},"at":{"x":-46.098574355277634,"z":97.89914441025252}},
+{"clock":"16:21","finish":true}
+]}

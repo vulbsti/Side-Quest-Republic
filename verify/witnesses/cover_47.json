@@ -1,0 +1,8 @@
+{"name":"cover 47","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
+{"clock":"10:33","wait":1},
+{"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
+{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
+{"clock":"14:01","do":"say:cannon-request:heat:1","cmd":{"type":"say","option":1},"at":{"x":-51.289520556325236,"z":82.7818996224379}}
+]}
