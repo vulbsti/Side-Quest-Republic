@@ -7,9 +7,9 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=9';
-import { SPEAKERS } from './talks.js?v=1';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=9';
+import * as R from './rules.js?v=10';
+import { SPEAKERS } from './talks.js?v=2';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=10';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -18,9 +18,10 @@ import {
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 import { routeEvent } from './present.js?v=2';
-import { createDriver } from './drive.js?v=3';
+import { createDriver } from './drive.js?v=4';
 import { canSee, lostSight } from './sight.js?v=1';
 import { createRecorder, setInputs } from './trace.js?v=1';
+import { createStreetLife } from './street-life.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -185,7 +186,7 @@ const police = []; // constables and RAF jawans
 const crew = [], provs = [], kids = [];
 const bubbles = [];
 const items = {};
-let shuttle, shuttleObstacle, shuttleSigns;
+let shuttle, shuttleBoxes, shuttleSigns, shuttleYaw = null, shuttleLast = null;
 const occluders = [];
 const overhead = [];
 const ray = new THREE.Raycaster();
@@ -290,8 +291,9 @@ function placeProps() {
   shuttle = world.bus;
   const i = world.obstacles.findIndex((o) => o.id === 'legacy-bus');
   if (i >= 0) world.obstacles.splice(i, 1);
-  shuttleObstacle = { id: 'shuttle', x: SPOTS.busCP.x, z: SPOTS.busCP.z, w: 2.8, d: 10, h: 3.4 };
-  world.obstacles.push(shuttleObstacle);
+  // The bus's walls: four boxes along it, turned with it (rules.js busBoxes), so sight and collisions fit its shape.
+  shuttleBoxes = R.busBoxes({ x: SPOTS.busCP.x, z: SPOTS.busCP.z, dx: 0, dz: 1 });
+  world.obstacles.push(...shuttleBoxes);
   shuttle.rotation.y = 0;
   shuttleSigns = new THREE.Group();
   // Banners above the windows (not across them), so you can see who is inside.
@@ -562,7 +564,7 @@ function clashSurge() {
 // --- police: posture from the phase, numbers and positions from the state ---------------
 
 /** Where each officer should be when the engine doesn't say: constables lounging, then standing, then a line. */
-const CHAIRS = [[33, -12.5, 0.6], [34.2, -13.4, 0.2], [32.4, -14.6, 1.4], [35.4, -12.2, -0.4], [-11, -1.6, 2.2], [-12.2, -2.6, 1.8]];
+const CHAIRS = [[33, -12.5, 0.6], [34.2, -13.4, 0.2], [32.4, -14.6, 1.4], [35.4, -12.2, -0.4], [-11, -1.6, 2.2], [-12.2, -2.6, 1.8], [30, -10, 0.4], [31, -11, 0.8]]; // one per constable c1-c8
 const officerPlan = [];
 function planOfficers() {
   officerPlan.length = 0;
@@ -777,7 +779,7 @@ function unstick(b, tx, tz, dt) {
 }
 
 // The detention bus fills up: you, named friends and other detainees sit inside, visible through the glass.
-let playerSeated = false;
+let playerSeated = false, street = null, rideSeat = null;
 const seatedIds = new Set(), _seat = new THREE.Vector3();
 function updateDetainees() {
   const b = day.bus, holds = !!busSeats && b.detention && (b.phase === 'detention' || b.phase === 'parked');
@@ -854,11 +856,18 @@ function busWaits() {
 function updateShuttle() {
   const b = day.bus;
   shuttle.position.set(b.x, 0, b.z);
-  shuttleSigns.position.set(b.x, 0, b.z);
+  // Face the way it drives: turn smoothly onto the road's heading (and round, at the end of a run).
+  const back = b.phase === 'toCP', want = Math.atan2(b.dx, b.dz) + (back ? Math.PI : 0);
+  const jumped = !shuttleLast || Math.hypot(b.x - shuttleLast.x, b.z - shuttleLast.z) > 6; // a time jump or a new day
+  shuttleLast = { x: b.x, z: b.z };
+  if (shuttleYaw === null || jumped) shuttleYaw = want;
+  else { const d = Math.atan2(Math.sin(want - shuttleYaw), Math.cos(want - shuttleYaw)); shuttleYaw += d * Math.min(1, STEP * 2); }
+  shuttle.rotation.y = shuttleYaw;
+  shuttleSigns.position.set(b.x, 0, b.z); shuttleSigns.rotation.y = shuttleYaw;
   shuttleSigns.visible = phaseNow === 'tense' || phaseNow === 'showdown' || phaseNow === 'aftermath' || b.phase === 'detention';
-  shuttleObstacle.x = b.x; shuttleObstacle.z = b.z;
-  const p = sim.player, hw = 1.4 + p.radius, hd = 5 + p.radius;
-  if (!S.detained(day) && Math.abs(p.x - b.x) < hw && Math.abs(p.z - b.z) < hd) p.x = b.x + Math.sign(p.x - b.x || -1) * (hw + 0.05);
+  walls();
+  const p = sim.player;
+  if (!S.detained(day)) pushOutOfBus(p, p.radius);
 }
 
 // --- feedback: toast, bubbles, phone, radio -------------------------------------------------
@@ -1169,7 +1178,13 @@ function realReels(ph) {
 // Who sees you: the engine's ranges and positions, the world's walls (sight.js). The verifier and ?replay= use
 // the same rule, so a theft that is witnessed here is witnessed there.
 /** The live walls, with the shuttle where the engine has the bus right now. */
-function walls() { shuttleObstacle.x = day.bus.x; shuttleObstacle.z = day.bus.z; return world.obstacles; }
+function walls() { R.busBoxes(day.bus).forEach((o, i) => Object.assign(shuttleBoxes[i], o)); return world.obstacles; }
+/** Nobody stands inside the bus: step out sideways, to the nearer side, in the bus's own frame. */
+function pushOutOfBus(e, r = 0.4) {
+  const b = day.bus, l = R.busLocal(b, e), hw = R.BUS_SIZE.w / 2 + r, hd = R.BUS_SIZE.d / 2 + r;
+  if (Math.abs(l.along) >= hd || Math.abs(l.side) >= hw) return;
+  Object.assign(e, R.busSide(b, l.along, Math.sign(l.side || 1) * (hw + 0.05)));
+}
 const SIGHT = { canSee: (s) => canSee(s, walls()), lost: (s) => lostSight(s, walls()) };
 function witnesses() { return R.witnesses(day, SIGHT.canSee(day)); }
 const PICKUP = { speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone', phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate' };
@@ -1244,6 +1259,9 @@ const SAY = {
   'spotted': 'Jawan ne dekh liya. Pane band.',
   'grabbed': 'Pair pakda gaya. Wapas andar.',
   'slow': 'Bahut der laga di. Pane band.',
+  'riding': 'You\'re on a moving e-rickshaw. Get off first (E).',
+  'ride-chased': 'Not with a constable on your heels.',
+  'far': 'Walk up to the e-rickshaw stand first.',
 };
 const words = (code) => (code ? SAY[code] ?? (/^[a-z]+(-[a-z]+)*$/.test(code) ? 'Not now.' : code) : null);
 function runCmd(cmd) {
@@ -1721,7 +1739,8 @@ function step(dt) {
   }
   const detained = S.detained(day);
   const pinned = day.player?.pinned;
-  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained || !!pinned;
+  const riding = !!day.player?.riding;
+  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained || !!pinned || riding;
   const forward = frozen ? 0 : (keys.w || keys.arrowup ? 1 : 0) - (keys.s || keys.arrowdown ? 1 : 0);
   const right = frozen ? 0 : (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
@@ -1733,8 +1752,9 @@ function step(dt) {
     const dp = R.detentionPos ? R.detentionPos(day) : { x: day.bus.x - 0.6, z: day.bus.z + 2 };
     sim.player.x = dp.x; sim.player.z = dp.z; sim.player.vx = sim.player.vz = 0;
     if (!detainedShown) { detainedShown = true; closeChoices(); }
-  } else if (detainedShown) { detainedShown = false; sim.player.x = day.bus.x - 2.4; sim.player.z = day.bus.z + 3; toast('You\'re off the bus. Walk, don\'t run.', 3); }
+  } else if (detainedShown) { detainedShown = false; Object.assign(sim.player, R.busSide(day.bus, 3, 2.4)); toast('You\'re off the bus. Walk, don\'t run.', 3); }
   if (pinned) { sim.player.x = pinned.x; sim.player.z = pinned.z; sim.player.vx = sim.player.vz = 0; }
+  if (riding) { sim.player.x = day.player.x; sim.player.z = day.player.z; sim.player.vx = sim.player.vz = 0; } // the e-rickshaw drives
   playerModel.visible = !detained || playerSeated;
   updateShuttle();
   updateBodies(dt);
@@ -1757,8 +1777,7 @@ function step(dt) {
   for (const arr of [crowd, police, crew, provs]) for (const b of arr) if (b.model.visible && !b.fainted && b.posture !== 'seat') sepList.push(b);
   separateBodies(sepList, world.obstacles);
   // Nobody stands inside the bus: when it parks on a crowd, they step out to the nearer side.
-  { const o = shuttleObstacle, hw = o.w / 2 + 0.4, hd = o.d / 2 + 0.4;
-    for (const b of sepList) if (b !== sim.player && Math.abs(b.x - o.x) < hw && Math.abs(b.z - o.z) < hd) b.x = o.x + Math.sign(b.x - o.x || 1) * (hw + 0.05); }
+  for (const b of sepList) if (b !== sim.player) pushOutOfBus(b, 0.4);
   for (const b of Object.values(bodies)) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   for (const arr of [crowd, police, crew, provs, kids]) for (const b of arr) if (b.model.visible) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   playerModel.position.set(sim.player.x, sim.player.y, sim.player.z);
@@ -1791,7 +1810,7 @@ function step(dt) {
 function animate(t) {
   const p = sim.player;
   const carryPose = (c) => (c ? POSE[c] : false);
-  if (playerSeated) animateCharacter(playerModel, 0, t, { seated: true, important: true });
+  if (playerSeated || rideSeat) animateCharacter(playerModel, 0, t, { seated: true, important: true });
   else animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: carryPose(day.player.carrying), airborne: !p.grounded, vy: p.vy, important: true, gesture: recT > 0 ? 'phone' : '' });
   for (const [id, b] of Object.entries(bodies)) {
     if (!b.model.visible) continue;
@@ -2071,6 +2090,8 @@ function frame(now) {
   const t = now / 1000;
   if (mode === 'play') step(dt);
   if (day && mode !== 'loading') {
+    rideSeat = street ? street.update(dt, t, sim.player, day) : null;
+    if (rideSeat) { playerModel.position.set(rideSeat.x, rideSeat.y, rideSeat.z); playerModel.rotation.y = rideSeat.yaw; }
     animate(t);
     updateItems(t);
     updateHUD(dt);
@@ -2155,6 +2176,8 @@ function setupInput() {
     await enhanceEnvironment(THREE, world);
     await loadCharacters((name) => ($('#loadtext').textContent = 'Preparing ' + name + ' characters…'));
     placeProps();
+    street = createStreetLife({ THREE, scene: world.scene, obstacles: world.obstacles, put: world.put, makeCharacter, animateCharacter, SPOTS,
+      closed: ['stage', 'barricade', 'parliament'].map((k) => ({ x: PLACES[k].x, z: PLACES[k].z, r: 45 })) });
     const box = new THREE.Box3(), size = new THREE.Vector3();
     world.scene.traverse((o) => {
       if (!o.isMesh || o.isSkinnedMesh || o.isInstancedMesh) return;
@@ -2211,7 +2234,7 @@ function setupInput() {
         officers: Object.values(day.officers).filter((o) => !o.hidden).map((o) => { const b = officerById.get(o.id); return { id: o.id, ex: o.x, ez: o.z, rx: b?.x, rz: b?.z, shown: !!b && isShown(b.model) }; }),
       }),
       obstacles: () => world.obstacles.filter((o) => o.id !== 'shuttle').map((o) => ({ id: o.id ?? null, x: +o.x.toFixed(3), z: +o.z.toFixed(3), w: +o.w.toFixed(3), d: +o.d.toFixed(3), h: +(o.h ?? 0).toFixed(3), base: +(o.base ?? 0).toFixed(3), walkable: o.walkable ?? null })),
-      shuttle: () => ({ w: shuttleObstacle.w, d: shuttleObstacle.d, h: shuttleObstacle.h }),
+      shuttle: () => ({ ...R.BUS_SIZE }),
     };
   } catch (e) {
     console.error(e);

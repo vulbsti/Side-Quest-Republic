@@ -3,12 +3,8 @@
 {"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
 {"clock":"16:33","wait":1},
 {"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"16:35","wait":1},
-{"clock":"16:36","do":"say:dhuan:nikhil:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:37","do":"pester:r2:career","cmd":{"type":"pester","to":"r2","how":"career"},"at":{"x":-64.6,"z":61.4}},
-{"clock":"16:40","do":"stance:scatter","cmd":{"type":"stance","stance":"scatter"},"at":{"x":-64.02612272986002,"z":63.4944523936328}},
-{"clock":"16:41","do":"film:pester-career@parliament","cmd":{"type":"film"},"at":{"x":-64.6,"z":61.4}},
-{"clock":"16:42","wait":45},
-{"clock":"17:27","do":"say:dhuan:nikhil-gone:0","cmd":{"type":"say","option":0},"at":{"x":-64.02612272986002,"z":63.4944523936328}},
-{"clock":"17:28","do":"say:dhuan:hub:3","cmd":{"type":"say","option":3},"at":{"x":-64.02612272986002,"z":63.4944523936328}}
+{"clock":"16:35","wait":20},
+{"clock":"16:55","wait":10},
+{"clock":"17:05","do":"say:dhuan:nikhil:2","cmd":{"type":"say","option":2},"at":{"x":-53.81589416719956,"z":100.62874114885429}},
+{"clock":"17:06","do":"say:dhuan:hub:3","cmd":{"type":"say","option":3},"at":{"x":-53.81589416719956,"z":100.62874114885429}}
 ]}

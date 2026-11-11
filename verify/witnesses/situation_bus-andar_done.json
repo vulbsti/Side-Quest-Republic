@@ -1,9 +1,5 @@
 {"name":"situation bus-andar:done","note":"","tempo":"long","expect":{"history":"situation:bus-andar:done"},"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
-{"clock":"15:03","wait":1},
-{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"15:05","do":"say:naye-joote:overhear:2","cmd":{"type":"say","option":2},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
-{"clock":"15:05","wait":20}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":-41,"z":111}},
+{"clock":"10:30","finish":true}
 ]}

@@ -1,10 +1,5 @@
 {"name":"situation ghar-jaana-hai:done","note":"","tempo":"long","expect":{"history":"situation:ghar-jaana-hai:done"},"trace":[
 {"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
 {"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
-{"clock":"17:00","do":"leave","cmd":{"type":"leave"},"at":{"x":150,"z":-296.5899999999999}},
-{"clock":"17:01","do":"whisper:biryani:asha","cmd":{"type":"whisper","to":"asha","rumour":"biryani"},"at":{"x":86,"z":-191.2}},
-{"clock":"17:11","do":"pester:c2:detainme","cmd":{"type":"pester","to":"c2","how":"detainme"},"at":{"x":106.5,"z":-184}},
-{"clock":"17:13","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
-{"clock":"17:23","wait":10},
-{"clock":"17:33","do":"say:ghar-jaana-hai:gate:3","cmd":{"type":"say","option":3},"at":{"x":147.07239385658548,"z":-292.4288997267322}}
+{"clock":"17:00","do":"say:ghar-jaana-hai:gate:3","cmd":{"type":"say","option":3},"at":{"x":150,"z":-296.5899999999999}}
 ]}

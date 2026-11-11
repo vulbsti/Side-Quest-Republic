@@ -1,11 +1,10 @@
 {"name":"ending packed · riot · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"spectator"},"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
-{"clock":"12:30","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":-45.8,"z":106.8}},
-{"clock":"12:52","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"12:53","wait":10},
-{"clock":"13:03","wait":3},
-{"clock":"13:06","wait":20},
-{"clock":"13:26","wait":20},
-{"clock":"13:46","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
-{"clock":"13:50","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","wait":30},
+{"clock":"15:17","do":"pester:c3:cannon","cmd":{"type":"pester","to":"c3","how":"cannon"},"at":{"x":-32,"z":99}},
+{"clock":"15:19","do":"whisper:sena:mira","cmd":{"type":"whisper","to":"mira","rumour":"sena"},"at":{"x":-51,"z":95.5}},
+{"clock":"15:21","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-49.675629105308836,"z":95.78194004600681}},
+{"clock":"15:21","finish":true}
 ]}

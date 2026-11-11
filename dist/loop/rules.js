@@ -57,10 +57,12 @@ export const SPOTS = {
   devChai: { x: 89.2, z: -189.2 },
   busCP: { x: 114, z: -191 },
   busJantar: { x: -43, z: 40 }, // the real 'Jantar Mantar' bus stop, outside the barricade at the top of the road
-  busDoor: { x: 111.6, z: -188 },
-  keyHook: { x: 112.6, z: -188 },
+  busDoor: { x: 116.2, z: -187.9 }, // = busSide(BUS_BAY at busCP, 3, 2.4): the door, on the pavement side
+  keyHook: { x: 116.3, z: -188.2 }, // = busSide(..., 3, 2): the key hangs just outside the door, not inside the bus
   waterCP: { x: 110.2, z: -194.2 },
   waterJantar: { x: -45.6, z: 42.6 },
+  rickCP: { x: 91, z: -202 }, // the e-rickshaw stand on the Outer Circle, by the CP shuttle stop
+  rickJantar: { x: -38, z: 44 }, // and its other end, by the Jantar Mantar bus stop
   busDetention: { x: -41, z: 104 }, // the detention bus, parked beside the stage from 14:00
   stageTop: { x: -51, z: 95.5 },
   stageSpeaker: { x: -47.8, z: 99.6 },
@@ -110,6 +112,26 @@ export const CROWD_CENTERS = {
 };
 
 const BUS = { speed: 7, dwellCP: 8, dwellJantar: 6, capacity: 14 };
+/** The bus's footprint (the DTC model is 10 m long; 2.8 m across its body). */
+export const BUS_SIZE = { w: 2.8, d: 10, h: 3.4 };
+// At the CP stop the shuttle stands in its bay alongside the Outer Circle, nose east, door to the pavement.
+export const BUS_BAY = { dx: 0.959, dz: 0.282 };
+/** A point beside the bus: `along` metres forward of its middle, `out` metres out on the door side. */
+export function busSide(b, along, out) {
+  const l = Math.hypot(b.dx, b.dz) || 1, ux = b.dx / l, uz = b.dz / l;
+  return { x: b.x + ux * along - uz * out, z: b.z + uz * along + ux * out };
+}
+/** Where p is in the bus's frame: { along, side } (side > 0 is the door side). */
+export function busLocal(b, p) {
+  const l = Math.hypot(b.dx, b.dz) || 1, ux = b.dx / l, uz = b.dz / l, x = p.x - b.x, z = p.z - b.z;
+  return { along: x * ux + z * uz, side: -x * uz + z * ux };
+}
+/** The bus as four boxes along its length, turned with it: the walls sight, collisions and the camera use. */
+export function busBoxes(b) {
+  const l = Math.hypot(b.dx, b.dz) || 1, ux = b.dx / l, uz = b.dz / l, seg = BUS_SIZE.d / 4;
+  const w = Math.abs(ux) * seg + Math.abs(uz) * BUS_SIZE.w, d = Math.abs(uz) * seg + Math.abs(ux) * BUS_SIZE.w;
+  return [-1.5, -0.5, 0.5, 1.5].map((k) => ({ id: 'shuttle', x: b.x + ux * k * seg, z: b.z + uz * k * seg, w, d, h: BUS_SIZE.h }));
+}
 // The shuttle's run, CP stop to Jantar Mantar stop along the real roads. bus.s is how far along it the bus is.
 // From 14:00 the detention bus drives on through the barricade gap and parks beside the stage (busDetention).
 const RUN = [{ x: SPOTS.busCP.x, z: SPOTS.busCP.z }, ...streetPath(SPOTS.busCP, SPOTS.busJantar, { car: true })];
@@ -136,6 +158,41 @@ export function alongBus(p) {
     if (off < best.off) best = { s: BUS_AT[i - 1] + k * Math.sqrt(L2), off };
   }
   return best;
+}
+// The e-rickshaw: hop on at either stand and ride the real streets to the other end (CP <-> Jantar Mantar),
+// faster than a jog and with the driver's opinions. Not while a constable is chasing you.
+const RICK = { speed: 9, reach: 3 };
+const RICK_STANDS = { cp: 'rickCP', jantar: 'rickJantar' };
+const RICK_PATHS = {
+  jantar: [...streetPath(SPOTS.rickCP, SPOTS.rickJantar, { car: true })],
+  cp: [...streetPath(SPOTS.rickJantar, SPOTS.rickCP, { car: true })],
+};
+/** Which stand the player is at (within reach), or null. */
+export function rickStandAt(p) {
+  for (const [id, k] of Object.entries(RICK_STANDS)) if (dist(p, SPOTS[k]) <= RICK.reach) return id;
+  return null;
+}
+const rickOther = (id) => (id === 'cp' ? 'jantar' : 'cp');
+const canRide = (s) => { const pl = s.player; return !pl.detained && !pl.riding && !pl.chasedBy && !pl.pinned && !s.raid && !s.story.convo; };
+function startRide(s, to) {
+  const pl = s.player;
+  pl.riding = { to, x: pl.x, z: pl.z, path: RICK_PATHS[to].map((q) => ({ x: q.x, z: q.z })), since: s.t, mid: false, dx: 0, dz: 1 };
+  emit(s, to === 'jantar' ? 'ride-start' : 'ride-start-cp', { pos: pl });
+}
+function updateRide(s, dt) {
+  const pl = s.player, r = pl.riding;
+  if (!r) return;
+  if (pl.detained || pl.chasedBy) { pl.riding = null; return; }
+  let step = RICK.speed * dt; // the ride, not the client's input, says where you are
+  while (step > 0 && r.path.length) {
+    const q = r.path[0], d = dist(r, q);
+    if (d > 1e-6) { r.dx = (q.x - r.x) / d; r.dz = (q.z - r.z) / d; }
+    if (d <= step) { r.x = q.x; r.z = q.z; r.path.shift(); step -= d; }
+    else { r.x += r.dx * step; r.z += r.dz * step; step = 0; }
+  }
+  pl.x = r.x; pl.z = r.z;
+  if (!r.mid && r.path.length && r.path.length <= Math.ceil(RICK_PATHS[r.to].length / 2)) { r.mid = true; emit(s, 'ride-mid', { pos: pl }); }
+  if (!r.path.length) { pl.riding = null; memo(s, 'ride'); emit(s, 'ride-arrive', { pos: pl }); }
 }
 const ARRIVAL_EVERY = 7;
 const WALK = 3.2;
@@ -189,7 +246,7 @@ export function createDay(opts = {}) {
     player: {
       x: SPOTS.metro.x, z: SPOTS.metro.z, carrying: null,
       rep: { aura: 0, heat: 0, help: 0, nuisance: 0 },
-      crew: [], detained: false, chasedBy: null, pinned: null, clips: [], stance: null, blocking: null, unseen: false,
+      crew: [], detained: false, chasedBy: null, pinned: null, riding: null, clips: [], stance: null, blocking: null, unseen: false,
     },
     people: {
       ravi: person('ravi', SPOTS.raviChai, { mode: 'chai' }),
@@ -211,6 +268,9 @@ export function createDay(opts = {}) {
       c3: officer('c3', 'constable', { x: -32, z: 99 }),
       c4: officer('c4', 'constable', { x: -44, z: 111 }),
       c5: officer('c5', 'constable', { x: -55, z: 60 }), // Parliament Street, before the RAF arrive
+      // On the walk down Sansad Marg: a constable at the Patel Chowk crossing, and one at the Ashoka Road naka.
+      c6: officer('c6', 'constable', { x: 28.6, z: -131.1 }),
+      c7: officer('c7', 'constable', { x: -22.2, z: -56.4 }),
     },
     objects: {
       speaker: { holder: null, x: SPOTS.speakerChai.x, z: SPOTS.speakerChai.z, on: false },
@@ -219,7 +279,7 @@ export function createDay(opts = {}) {
       phone: { holder: 'zoya', x: SPOTS.zoyaStart.x, z: SPOTS.zoyaStart.z },
       water: { holder: null, x: SPOTS.waterCP.x, z: SPOTS.waterCP.z },
     },
-    bus: { x: SPOTS.busCP.x, z: SPOTS.busCP.z, s: 0, dx: 0, dz: 1, phase: 'cp', timer: BUS.dwellCP, load: 0, breakPending: false, stuck: false, detention: false, stalled: false, crewBlocked: false },
+    bus: { x: SPOTS.busCP.x, z: SPOTS.busCP.z, s: 0, dx: BUS_BAY.dx, dz: BUS_BAY.dz, phase: 'cp', timer: BUS.dwellCP, load: 0, breakPending: false, stuck: false, detention: false, stalled: false, crewBlocked: false },
     crowd: { cpWaiting: 2, cpParty: 0, stage: 6, parliament: 0, barricade: 0 },
     groups: {
       students: { kind: 'students', place: 'stage', size: 8, mood: 'chill' },
@@ -378,7 +438,7 @@ const isOfficer = (s, id) => !!officerById(s, id);
 /** Where the detention vehicle's door is: the police van until the shuttle becomes the detention bus. */
 export function detentionPos(s) {
   const b = s.bus;
-  if (b.detention && (b.phase === 'detention' || b.phase === 'parked')) return { x: b.x - 2.4, z: b.z + 3 };
+  if (b.detention && (b.phase === 'detention' || b.phase === 'parked')) return busSide(b, 3, 2.4);
   return { x: SPOTS.van.x, z: SPOTS.van.z };
 }
 const ppos = (s) => (s.player.detained ? detentionPos(s) : s.player);
@@ -622,9 +682,9 @@ function iqbalResume(s) {
 function startDetentionBus(s) {
   const b = s.bus, q = s.people.iqbal, k = s.objects.key;
   b.phase = 'detention';
-  k.holder = 'hook'; Object.assign(k, { x: b.x - 1.45, z: b.z + 3 });
-  q.hidden = false; Object.assign(q, { x: b.x - 2.4, z: b.z + 3 }); q.mode = 'offDuty'; walkTo(q, SPOTS.chai);
-  const g = s.officers.c4; g.post = { x: b.x - 3.2, z: b.z + 4.2 }; if (g.mode === 'post') { g.mode = 'toPost'; goTo(g, g.post); }
+  k.holder = 'hook'; Object.assign(k, busSide(b, 3, 2));
+  q.hidden = false; Object.assign(q, busSide(b, 3, 2.4)); q.mode = 'offDuty'; walkTo(q, SPOTS.chai);
+  const g = s.officers.c4; g.post = busSide(b, 4.2, 3.2); if (g.mode === 'post') { g.mode = 'toPost'; goTo(g, g.post); }
   emit(s, 'detention-bus', { place: 'stage', pos: b });
 }
 
@@ -904,7 +964,7 @@ function detainPlayer(s, why) {
     const o = s.objects[pl.carrying];
     if (pl.carrying === 'key') { // the police hand the key back to the bus
       o.holder = 'hook';
-      Object.assign(o, s.bus.detention && s.bus.phase === 'detention' ? { x: s.bus.x - 1.45, z: s.bus.z + 3 } : SPOTS.keyHook);
+      Object.assign(o, s.bus.detention && s.bus.phase === 'detention' ? busSide(s.bus, 3, 2) : SPOTS.keyHook);
       if (s.people.iqbal.mode === 'search') { o.holder = 'iqbal'; s.people.iqbal.mode = 'toBusWithKey'; goTo(s.people.iqbal, SPOTS.busDoor); }
     } else { o.holder = null; Object.assign(o, detentionPos(s)); }
     pl.carrying = null;
@@ -1562,6 +1622,7 @@ export function playerBlocksBus(s) {
 function placeBus(b) {
   const q = busPoint(b.s);
   b.x = q.x; b.z = q.z; b.dx = q.dx; b.dz = q.dz;
+  if (b.s <= 0) { b.dx = BUS_BAY.dx; b.dz = BUS_BAY.dz; } // standing in its bay
 }
 function updateBus(s, dt) {
   const b = s.bus, w = s.objects.water;
@@ -2157,6 +2218,7 @@ export function tick(s, dt) {
   updateChase(s, dt);
   updateRaid(s, dt);
   updateGame(s);
+  updateRide(s, dt);
   const pin = s.player.pinned;
   if (pin) {
     if (s.t < pin.until) Object.assign(s.player, { x: pin.x, z: pin.z });
@@ -2290,7 +2352,7 @@ export function witnesses(s, canSee = () => true) {
   for (const o of Object.values(s.officers)) if (!o.hidden && dist(o, pl) < WITNESS_RANGE.officer && canSee(o.id, o)) out.push(o.id);
   return out;
 }
-export const OFFICER_NAMES = { sharma: 'Sharma', c1: 'Constable Yadav', c2: 'Constable Meena', c3: 'Constable Tomar', c4: 'Constable Rawat', c5: 'Constable Gill', r1: 'Jawan Pandey' };
+export const OFFICER_NAMES = { sharma: 'Sharma', c1: 'Constable Yadav', c2: 'Constable Meena', c3: 'Constable Tomar', c4: 'Constable Rawat', c5: 'Constable Gill', c6: 'Constable Bisht', c7: 'Constable Negi', r1: 'Jawan Pandey' };
 const REACH = 5; // how close you must be to an officer, a provocateur or a crowd to act on them
 const MOODS = ['bored', 'amused', 'soft'];
 
@@ -2304,6 +2366,16 @@ export function act(s, cmd) {
   const pl = s.player;
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
+  if (pl.riding && !(cmd.type === 'ride' || cmd.type === 'film')) return { ok: false, say: 'riding' };
+  if (cmd.type === 'ride') {
+    if (cmd.to === 'off') { if (!pl.riding) return { ok: false }; pl.riding = null; emit(s, 'ride-off', { pos: pl }); return { ok: true }; }
+    const from = rickStandAt(pl);
+    if (!from || cmd.to !== rickOther(from)) return { ok: false, say: 'far' };
+    if (pl.chasedBy) { emit(s, 'ride-refused', { pos: pl }); return { ok: false, say: 'ride-chased' }; }
+    if (!canRide(s)) return { ok: false };
+    startRide(s, cmd.to);
+    return { ok: true };
+  }
   if (cmd.type === 'say') return STORY.say(s, cmd.option);
   if (cmd.type === 'leave') return STORY.leave(s);
   if (cmd.type === 'situation') return STORY.startSituation(s, cmd.id);
@@ -2370,7 +2442,7 @@ export function act(s, cmd) {
       const q = p, k = s.objects.key;
       addRep(s, { help: 10 });
       if (q.mode === 'search') { k.holder = 'iqbal'; emit(s, 'key-returned', { link: 'key-returned' }); q.mode = 'toBusWithKey'; goTo(q, SPOTS.busDoor); }
-      else { k.holder = 'hook'; Object.assign(k, s.bus.phase === 'detention' ? { x: s.bus.x - 1.45, z: s.bus.z + 3 } : SPOTS.keyHook); }
+      else { k.holder = 'hook'; Object.assign(k, s.bus.phase === 'detention' ? busSide(s.bus, 3, 2) : SPOTS.keyHook); }
       k.givenTo = 'iqbal'; // he may hang it straight back on the hook, but you did hand it to him
       return { ok: true };
     }
@@ -2702,6 +2774,8 @@ export function opportunities(s, pos = s.player, radius = 10) {
     else if (!c) push('plead', 'plead', I('plead'), d, { type: 'plead' });
     return out;
   }
+  if (pl.riding) { push('ride:off', 'ride', I('ride-off'), pl, { type: 'ride', to: 'off' }); return out; }
+  if (canRide(s)) for (const [id, k] of Object.entries(RICK_STANDS)) push(`ride:${rickOther(id)}`, 'ride', I(`ride-${rickOther(id)}`), SPOTS[k], { type: 'ride', to: rickOther(id) });
   for (const a of STORY.affordances(s)) {
     if (a.kind === 'goal') push(a.id, 'goal', a.text, a.at, null);
     else if (a.kind === 'situation') push(a.id, 'situation', a.text, a.at, a.cmd);
@@ -2805,7 +2879,9 @@ export function affordances(s) {
     for (const id of s.detention.people) add(`talk:${id}`, 'talk', { type: 'talk', to: id }, null);
     return out;
   }
+  if (pl.riding) { add('ride:off', 'ride', { type: 'ride', to: 'off' }, null); return out; }
   for (const a of STORY.affordances(s)) add(a.id, a.kind === 'goal' ? 'go' : a.kind, a.cmd, a.at);
+  if (canRide(s)) for (const [id, k] of Object.entries(RICK_STANDS)) add(`ride:${rickOther(id)}`, 'ride', { type: 'ride', to: rickOther(id) }, SPOTS[k]);
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) add(`take:${id}`, 'take', { type: 'take', object: id }, o);
   if (pl.carrying) {
     const gives = { key: ['iqbal'], speaker: ['ravi'], megaphone: ['dev', 'mira', 'kabir'], phone: ['zoya'], water: ['sana'] }[pl.carrying];

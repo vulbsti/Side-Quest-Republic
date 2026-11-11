@@ -1,7 +1,20 @@
 {"name":"ending ghost · block · spectator","note":"","tempo":"long","expect":{"ending":"ghost","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
-{"clock":"10:51","do":"whisper:cannon:mira","cmd":{"type":"whisper","to":"mira","rumour":"cannon"},"at":{"x":-51,"z":95.5}},
-{"clock":"11:12","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
-{"clock":"11:14","do":"leave","cmd":{"type":"leave"},"at":{"x":-50.57675026584363,"z":86.75876726838982}},
-{"clock":"11:14","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
+{"clock":"16:01","wait":1},
+{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:03","wait":1},
+{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:05","wait":20},
+{"clock":"16:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:26","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
+{"clock":"16:28","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"16:29","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
+{"clock":"16:36","do":"whisper:sena:mira","cmd":{"type":"whisper","to":"mira","rumour":"sena"},"at":{"x":-51,"z":95.5}},
+{"clock":"16:37","do":"film:pester-cute@parliament","cmd":{"type":"film"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"16:40","wait":45},
+{"clock":"17:25","do":"stance:scatter","cmd":{"type":"stance","stance":"scatter"},"at":{"x":-54.95755038378521,"z":66.34078139567559}},
+{"clock":"17:26","do":"whisper:biryani:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"biryani"},"at":{"x":-42.42317787204026,"z":109.34110639798688}},
+{"clock":"17:31","do":"whisper:cannon:mira","cmd":{"type":"whisper","to":"mira","rumour":"cannon"},"at":{"x":-51,"z":95.5}},
+{"clock":"17:32","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}}
 ]}

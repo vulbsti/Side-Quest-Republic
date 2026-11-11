@@ -1,5 +1,9 @@
 {"name":"situation career-counselling:fail","note":"","tempo":"long","expect":{"history":"situation:career-counselling:fail"},"trace":[
-{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
-{"clock":"10:28","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":-51.43281252159288,"z":81.50666432988982}}
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
+{"clock":"10:12","do":"snatch:c4","cmd":{"type":"snatch","to":"c4"},"at":{"x":-44,"z":111}},
+{"clock":"10:35","do":"whisper:cannon:sana","cmd":{"type":"whisper","to":"sana","rumour":"cannon"},"at":{"x":-60.5,"z":101}},
+{"clock":"10:38","do":"snatch:c3","cmd":{"type":"snatch","to":"c3"},"at":{"x":-32,"z":99}},
+{"clock":"10:46","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
+{"clock":"10:51","wait":3},
+{"clock":"10:54","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":-48.09628721241072,"z":86.038398936794}}
 ]}

@@ -1,0 +1,19 @@
+{"name":"ending noshow · block · peacemaker","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"block","role":"peacemaker"},"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","wait":1},
+{"clock":"16:36","do":"say:dhuan:nikhil:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:37","do":"whisper:minister:sana","cmd":{"type":"whisper","to":"sana","rumour":"minister"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:38","wait":20},
+{"clock":"16:58","do":"say:dhuan:nikhil-gone:0","cmd":{"type":"say","option":0},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","do":"say:dhuan:hub:1","cmd":{"type":"say","option":1},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","wait":45},
+{"clock":"17:44","do":"leave","cmd":{"type":"leave"},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"17:45","do":"prov:p2:expose","cmd":{"type":"provocateur","id":"p2","how":"expose"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:47","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":{"x":-51.93755901070849,"z":109.97853608865746}},
+{"clock":"17:47","do":"snatch:c1","cmd":{"type":"snatch","to":"c1"},"at":{"x":-46,"z":121}},
+{"clock":"17:49","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"17:51","wait":10}
+]}

@@ -3,10 +3,9 @@
 {"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
 {"clock":"16:01","wait":1},
 {"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:03","wait":1},
-{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"16:05","wait":20},
-{"clock":"16:25","wait":45},
-{"clock":"17:10","wait":20},
-{"clock":"17:30","do":"say:dhuan:meera-saved:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
+{"clock":"16:03","wait":45},
+{"clock":"16:48","wait":20},
+{"clock":"17:08","do":"say:dhuan:meera:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"17:09","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"17:10","do":"say:dhuan:meera-caught:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
 ]}

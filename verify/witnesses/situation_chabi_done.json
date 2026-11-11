@@ -7,7 +7,5 @@
 {"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":null},
 {"clock":"11:14","wait":1},
 {"clock":"11:15","do":"take:key","cmd":{"type":"take","object":"key"},"at":null},
-{"clock":"11:17","wait":20},
-{"clock":"11:37","wait":10},
-{"clock":"11:47","do":"say:chabi:decide:0","cmd":{"type":"say","option":0},"at":{"x":111.13355477690023,"z":-188.29212740307497}}
+{"clock":"11:18","do":"say:chabi:decide:2","cmd":{"type":"say","option":2},"at":{"x":116.7378032613433,"z":-189.29888618597164}}
 ]}

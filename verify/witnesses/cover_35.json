@@ -1,9 +1,14 @@
 {"name":"cover 35","note":"2 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
-{"clock":"15:03","wait":1},
-{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"15:05","do":"say:naye-joote:overhear:3","cmd":{"type":"say","option":3},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
-{"clock":"15:05","do":"say:naye-joote:joined:0","cmd":{"type":"say","option":0},"at":{"x":-37.985814335698116,"z":118.29662747836474}}
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","wait":1},
+{"clock":"16:36","do":"say:dhuan:nikhil:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:37","do":"whisper:minister:sana","cmd":{"type":"whisper","to":"sana","rumour":"minister"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:38","wait":20},
+{"clock":"16:58","do":"say:dhuan:nikhil-gone:0","cmd":{"type":"say","option":0},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","do":"say:dhuan:hub:1","cmd":{"type":"say","option":1},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","wait":45},
+{"clock":"17:44","finish":true}
 ]}

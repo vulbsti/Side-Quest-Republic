@@ -1,9 +1,6 @@
 {"name":"cover 51","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
-{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
-{"clock":"10:51","wait":1},
-{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"10:53","wait":10},
-{"clock":"11:03","do":"pester:c1:cannon","cmd":{"type":"pester","to":"c1","how":"cannon"},"at":{"x":147,"z":-284}},
-{"clock":"11:13","do":"say:chabi:rishta:3","cmd":{"type":"say","option":3},"at":{"x":145.57586733573544,"z":-285.7899900480774}}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","wait":30}
 ]}

@@ -1,14 +1,14 @@
-{"name":"cover 12","note":"9 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
-{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
-{"clock":"17:00","wait":1},
-{"clock":"17:01","do":"say:ghar-jaana-hai:gate:2","cmd":{"type":"say","option":2},"at":null},
-{"clock":"17:02","wait":1},
-{"clock":"17:03","do":"say:ghar-jaana-hai:mummy:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"17:04","wait":1},
-{"clock":"17:05","do":"say:ghar-jaana-hai:gate:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"17:06","wait":1},
-{"clock":"17:07","do":"say:ghar-jaana-hai:count:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"17:07","wait":45},
-{"clock":"17:52","do":"say:ghar-jaana-hai:nikhil-text:0","cmd":{"type":"say","option":0},"at":{"x":150,"z":-296.5899999999999}}
+{"name":"cover 12","note":"10 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
+{"clock":"15:01","wait":50},
+{"clock":"15:51","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
+{"clock":"15:52","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":-40.615889360201315,"z":107.58503263812108}},
+{"clock":"15:53","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"15:58","wait":3},
+{"clock":"16:01","do":"say:detain-me:window:2","cmd":{"type":"say","option":2},"at":{"x":-42.50761270366422,"z":44.80831192823518}},
+{"clock":"16:02","finish":true}
 ]}

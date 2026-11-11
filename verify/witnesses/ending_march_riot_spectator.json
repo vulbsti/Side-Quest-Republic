@@ -1,0 +1,9 @@
+{"name":"ending march · riot · spectator","note":"","tempo":"long","expect":{"ending":"march","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
+{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
+{"clock":"12:30","wait":20},
+{"clock":"12:50","wait":10},
+{"clock":"13:00","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":{"x":89.46923367715117,"z":-192.60783027595392}},
+{"clock":"13:01","do":"whisper:sena:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"sena"},"at":{"x":-41.16556790388216,"z":55.2544984778902}},
+{"clock":"13:09","finish":true}
+]}

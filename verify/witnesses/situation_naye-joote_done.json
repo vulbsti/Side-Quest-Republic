@@ -1,7 +1,10 @@
 {"name":"situation naye-joote:done","note":"","tempo":"long","expect":{"history":"situation:naye-joote:done"},"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
-{"clock":"10:29","wait":258},
-{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
-{"clock":"14:47","do":"give:mira","cmd":{"type":"give","to":"mira"},"at":{"x":-51,"z":95.5}},
-{"clock":"14:48","do":"prov:p1:expose","cmd":{"type":"provocateur","id":"p1","how":"expose"},"at":{"x":-53,"z":106}}
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","wait":1},
+{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"15:05","do":"leave","cmd":{"type":"leave"},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"15:07","do":"prov:p3:expose","cmd":{"type":"provocateur","id":"p3","how":"expose"},"at":{"x":-50.94,"z":110.9}}
 ]}

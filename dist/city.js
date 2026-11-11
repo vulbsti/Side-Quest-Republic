@@ -4,7 +4,7 @@
 // renderer culls what is behind the camera; walls are collision boxes from the importer (MAP.solids).
 import { MAP } from './map/delhi-map.js?v=1';
 import { labels } from './map/labels.js?v=1';
-import { PLACES, SPOTS } from './loop/rules.js?v=9';
+import { PLACES, SPOTS, BUS_BAY, BUS_ROUTE, busSide } from './loop/rules.js?v=10';
 
 const TILE = 96;
 const CP = { x: 177, z: -385 }; // Rajiv Chowk Central Park, the middle of Connaught Place
@@ -94,6 +94,23 @@ export function buildCity(THREE, scene, obstacles) {
     });
   }
 
+  // The CP shuttle stop: a paved forecourt, and a bus bay cut from the Outer Circle's kerb to the stand.
+  {
+    const c = PLACES.cp, B = { ...SPOTS.busCP, ...BUS_BAY }, P = (a, o) => { const q = busSide(B, a, o); return [q.x, q.z]; };
+    flat('paving', Array.from({ length: 28 }, (_, i) => [c.x + Math.cos((i / 28) * Math.PI * 2) * (c.r + 2), c.z + Math.sin((i / 28) * Math.PI * 2) * (c.r + 2)]), 0.03, 4);
+    ribbon('kerb', [P(-8, 0), P(8, 0)], 3.4, 0.035);
+    ribbon('asphalt', [P(-7, 0), P(7, 0)], 2.4, 0.045, 6);
+    ribbon('asphalt', [[BUS_ROUTE[0].x, BUS_ROUTE[0].z], [BUS_ROUTE[1].x, BUS_ROUTE[1].z]], 2.6, 0.045, 6);
+    // A DTC bus shelter on the pavement by the door.
+    const yaw = Math.atan2(B.dx, B.dz), at = busSide(B, -0.5, 4.6), g = new THREE.Group();
+    const steel = new THREE.MeshStandardMaterial({ color: '#7d8a8f', roughness: 0.4, metalness: 0.6 });
+    const roof = new THREE.MeshStandardMaterial({ color: '#c8102e', roughness: 0.6 });
+    for (const a of [-2.6, 2.6]) for (const o of [-0.7, 0.7]) { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2.5, 6), steel); m.position.set(o, 1.25, a); g.add(m); }
+    const top = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.12, 6.2), roof); top.position.y = 2.55; top.castShadow = true; g.add(top);
+    const bench = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.08, 4.6), steel); bench.position.set(0.35, 0.48, 0); g.add(bench);
+    g.position.set(at.x, 0, at.z); g.rotation.y = yaw; g.name = 'CP bus shelter'; scene.add(g);
+  }
+
   // Buildings: walls with a facade for their kind of block, flat roofs, and Connaught Place's white colonnade.
   const columns = [];
   for (const bl of MAP.buildings) {
@@ -154,7 +171,11 @@ export function buildCity(THREE, scene, obstacles) {
 
   // Street lamps along the big roads, every 30 m on one side.
   const lamps = [];
-  for (const r of MAP.roads) if (r.car && r.w >= 6) walk(r.pts, 30, (x, z, ux, uz) => lamps.push({ x: x - uz * (r.w / 2 + 0.9), z: z + ux * (r.w / 2 + 0.9) }));
+  // A lamp stands on its own road's kerb, never on the asphalt or path of a road that meets or runs beside it.
+  for (const r of MAP.roads) if (r.car && r.w >= 6) walk(r.pts, 30, (x, z, ux, uz) => {
+    const lx = x - uz * (r.w / 2 + 0.9), lz = z + ux * (r.w / 2 + 0.9);
+    if (!onPavement(lx, lz, 0.3, true) && !inSolid(lx, lz, 0.3)) lamps.push({ x: lx, z: lz });
+  });
   instanced(THREE, scene, new THREE.CylinderGeometry(0.06, 0.1, 6, 6).translate(0, 3, 0), M.pole, lamps.map((p) => ({ ...p, y: 0, sx: 1, sy: 1, sz: 1 })), 'Street lamp poles');
   instanced(THREE, scene, new THREE.BoxGeometry(0.9, 0.12, 0.3).translate(0.35, 6, 0), M.lamp, lamps.map((p) => ({ ...p, y: 0, sx: 1, sy: 1, sz: 1 })), 'Street lamp heads');
 
@@ -188,24 +209,49 @@ function styleOf(b, c) {
   return ['plaster', 'sandstone', 'brick', 'plaster'][Math.floor(hash(b.id % 100000) * 4)];
 }
 
+// Every drawn road surface (asphalt + kerb for car roads, the path for the rest), in a 16 m grid of segments.
+const SEG_CELL = 16;
+let segGrid = null;
+function roadSegments() {
+  if (segGrid) return segGrid;
+  segGrid = new Map();
+  for (const r of MAP.roads) {
+    const half = r.car ? r.w / 2 + 1.7 : Math.max(0.7, r.w / 2), lane = r.car ? r.w / 2 : half;
+    for (let i = 1; i < r.pts.length; i++) {
+      const a = r.pts[i - 1], b = r.pts[i], seg = { a, b, half, lane };
+      const x0 = Math.floor((Math.min(a[0], b[0]) - half) / SEG_CELL), x1 = Math.floor((Math.max(a[0], b[0]) + half) / SEG_CELL);
+      const z0 = Math.floor((Math.min(a[1], b[1]) - half) / SEG_CELL), z1 = Math.floor((Math.max(a[1], b[1]) + half) / SEG_CELL);
+      for (let gx = x0; gx <= x1; gx++) for (let gz = z0; gz <= z1; gz++) { const k = gx + ',' + gz; if (!segGrid.has(k)) segGrid.set(k, []); segGrid.get(k).push(seg); }
+    }
+  }
+  return segGrid;
+}
+/** Is (x, z) within `pad` metres of a drawn road surface (a car road's asphalt and kerb, or a footpath)? lanesOnly: asphalt and paths, not kerbs. */
+export function onPavement(x, z, pad = 0, lanesOnly = false) {
+  const g = roadSegments(), cx = Math.floor(x / SEG_CELL), cz = Math.floor(z / SEG_CELL);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const s of g.get((cx + i) + ',' + (cz + j)) || []) if (segDist(x, z, s.a, s.b) < (lanesOnly ? s.lane : s.half) + pad) return true;
+  return false;
+}
+function inSolid(x, z, pad = 0) { return MAP.solids.some((o) => Math.abs(x - o.x) < o.w / 2 + pad && Math.abs(z - o.z) < o.d / 2 + pad); }
+
 function treeSpots() {
-  const out = [], occupied = (x, z) => MAP.solids.some((o) => Math.abs(x - o.x) < o.w / 2 + 1.2 && Math.abs(z - o.z) < o.d / 2 + 1.2);
+  const out = [], occupied = (x, z) => inSolid(x, z, 1.2);
   const grid = new Map(), key = (x, z) => `${Math.floor(x / 4)},${Math.floor(z / 4)}`;
   const near = (x, z) => { for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const t of grid.get(`${Math.floor(x / 4) + i},${Math.floor(z / 4) + j}`) || []) if (Math.hypot(t.x - x, t.z - z) < 4) return true; return false; };
   const add = (x, z) => {
     if (near(x, z)) return;
     if (KEEP_CLEAR.some((p) => Math.hypot(x - p.x, z - p.z) < p.r)) return;
+    if (onPavement(x, z, 0.8)) return; // OSM's tree points included: never on a carriageway, its kerb, or a footpath
     const t = { x, z, h: 4 + hash(x * 3 + z) * 2, s: 0.75 + hash(x + z * 5) * 0.4 };
     out.push(t); const k = key(x, z); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(t);
   };
   for (const [x, z] of MAP.trees) add(x, z);
-  const onRoad = (x, z) => MAP.roads.some((r) => r.car && r.pts.some((p, i) => i && segDist(x, z, r.pts[i - 1], p) < r.w / 2 + 0.6));
   for (const r of MAP.roads) {
     if (!r.car || !['secondary', 'tertiary', 'residential'].includes(r.kind)) continue;
     walk(r.pts, 13, (x, z, ux, uz) => {
       for (const side of [-1, 1]) {
-        const off = r.w / 2 + 2.4, px = x - uz * off * side, pz = z + ux * off * side;
-        if (!occupied(px, pz) && !onRoad(px, pz)) add(px, pz);
+        const off = r.w / 2 + 2.8, px = x - uz * off * side, pz = z + ux * off * side;
+        if (!occupied(px, pz)) add(px, pz);
       }
     });
   }
@@ -214,7 +260,7 @@ function treeSpots() {
     const xs = a.poly.map((p) => p[0]), zs = a.poly.map((p) => p[1]);
     for (let x = Math.min(...xs) + 6; x < Math.max(...xs); x += 15) for (let z = Math.min(...zs) + 6; z < Math.max(...zs); z += 15) {
       const jx = x + (hash(x * 13 + z) - 0.5) * 5, jz = z + (hash(x + z * 17) - 0.5) * 5;
-      if (inside(jx, jz, a.poly) && !occupied(jx, jz) && !onRoad(jx, jz) && Math.hypot(jx - CP.x, jz - CP.z) > 30) add(jx, jz);
+      if (inside(jx, jz, a.poly) && !occupied(jx, jz) && Math.hypot(jx - CP.x, jz - CP.z) > 30) add(jx, jz);
     }
   }
   return out;

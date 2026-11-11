@@ -1,10 +1,8 @@
 {"name":"cover 34","note":"2 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
-{"clock":"10:28","do":"leave","cmd":{"type":"leave"},"at":{"x":-51.43281252159288,"z":81.50666432988982}},
-{"clock":"10:29","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
-{"clock":"10:30","wait":45},
-{"clock":"11:15","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
-{"clock":"11:16","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
-{"clock":"11:18","wait":45}
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","wait":20},
+{"clock":"16:55","do":"say:dhuan:nikhil:0","cmd":{"type":"say","option":0},"at":{"x":-53.81589416719956,"z":100.62874114885429}}
 ]}

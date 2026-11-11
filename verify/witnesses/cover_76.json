@@ -1,12 +1,11 @@
 {"name":"cover 76","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
-{"clock":"10:12","do":"situation:speaker-run","cmd":{"type":"situation","id":"speaker-run"},"at":{"x":84.5,"z":-188.5}},
-{"clock":"10:12","wait":1},
-{"clock":"10:13","do":"say:speaker-run:intro:2","cmd":{"type":"say","option":2},"at":null},
-{"clock":"10:14","wait":1},
-{"clock":"10:15","wait":45},
-{"clock":"11:00","do":"drop:here","cmd":{"type":"drop"},"at":{"x":88.86862000844857,"z":-190.15296298332507}},
-{"clock":"11:01","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-191.2}},
-{"clock":"11:02","wait":3},
-{"clock":"11:05","do":"say:chabi:intro:1","cmd":{"type":"say","option":1},"at":{"x":88.86862000844857,"z":-190.15296298332507}}
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","wait":1},
+{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"15:05","wait":45},
+{"clock":"15:50","do":"say:naye-joote:overhear:3","cmd":{"type":"say","option":3},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:50","wait":45},
+{"clock":"16:35","do":"say:naye-joote:joined:1","cmd":{"type":"say","option":1},"at":{"x":-37.985814335698116,"z":118.29662747836474}}
 ]}

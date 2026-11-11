@@ -35,11 +35,11 @@ if (t.s.story.convo) { assert(R.act(t.s, { type: 'leave' }).ok, 'and you can wal
 // Sight lines (sight.js): the same theft is unseen from behind the parked shuttle and seen from the constable's side.
 {
   const k = H.replay([{ wait: 64 }], 'long').s;
-  Object.assign(k.player, { x: 116, z: -188 });
+  Object.assign(k.player, R.busSide(k.bus, -3.5, -2.2)); // the road side of the bus, out of Meena's sight
   assert(R.witnesses(k).includes('c2'), 'without walls Constable Meena is in range');
   assert.deepEqual(R.witnesses(k, H.SIGHT.canSee(k)), [], 'behind the parked shuttle she can\'t see you');
-  Object.assign(k.player, { x: 111.4, z: -188 });
-  assert(R.witnesses(k, H.SIGHT.canSee(k)).includes('c2'), 'west of the hook, she sees you');
+  Object.assign(k.player, R.SPOTS.keyHook);
+  assert(R.witnesses(k, H.SIGHT.canSee(k)).includes('c2'), 'at the hook, on the pavement side, she sees you');
 }
 
 // act() uses its own day's tempo even when another day (another tempo) was ticked last.

@@ -1,6 +1,5 @@
 {"name":"situation ghar-jaana-hai:fail","note":"","tempo":"long","expect":{"history":"situation:ghar-jaana-hai:fail"},"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"whisper:biryani:sana","cmd":{"type":"whisper","to":"sana","rumour":"biryani"},"at":{"x":-60.5,"z":101}},
-{"clock":"15:09","finish":true}
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"pester:c6:career","cmd":{"type":"pester","to":"c6","how":"career"},"at":{"x":28.6,"z":-131.1}},
+{"clock":"10:58","finish":true}
 ]}

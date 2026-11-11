@@ -1,13 +1,20 @@
-{"name":"cover 20","note":"4 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
-{"clock":"10:29","wait":258},
-{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
-{"clock":"14:48","wait":13},
-{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
-{"clock":"15:01","wait":50},
-{"clock":"15:51","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":-45.8,"z":106.8}},
-{"clock":"15:52","wait":45},
-{"clock":"16:37","do":"leave","cmd":{"type":"leave"},"at":{"x":-46.7084125118345,"z":104.83849130377595}},
-{"clock":"16:38","do":"talk:mira","cmd":{"type":"talk","to":"mira"},"at":{"x":-51,"z":95.5}},
-{"clock":"16:39","finish":true}
+{"name":"cover 20","note":"5 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
+{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
+{"clock":"12:30","wait":1},
+{"clock":"12:31","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":null},
+{"clock":"12:32","wait":1},
+{"clock":"12:33","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
+{"clock":"12:55","do":"say:afwaah:bikes:3","cmd":{"type":"say","option":3},"at":null},
+{"clock":"12:55","wait":1},
+{"clock":"12:56","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":1},
+{"clock":"12:59","do":"say:afwaah:rawat:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"12:59","do":"snatch:c4","cmd":{"type":"snatch","to":"c4"},"at":{"x":-44,"z":111}},
+{"clock":"13:00","wait":20},
+{"clock":"13:20","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"13:22","wait":10},
+{"clock":"13:32","do":"whisper:minister:kabir","cmd":{"type":"whisper","to":"kabir","rumour":"minister"},"at":{"x":-55.6,"z":107.6}},
+{"clock":"13:33","do":"pester:sharma:cute","cmd":{"type":"pester","to":"sharma","how":"cute"},"at":{"x":-51,"z":80}},
+{"clock":"13:35","wait":10},
+{"clock":"13:45","finish":true}
 ]}

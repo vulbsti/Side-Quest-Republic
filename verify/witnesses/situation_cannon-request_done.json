@@ -1,8 +1,13 @@
 {"name":"situation cannon-request:done","note":"","tempo":"long","expect":{"history":"situation:cannon-request:done"},"trace":[
-{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
-{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
-{"clock":"10:33","wait":1},
-{"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
-{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
-{"clock":"14:01","do":"say:cannon-request:heat:1","cmd":{"type":"say","option":1},"at":{"x":-51.289520556325236,"z":82.7818996224379}}
+{"clock":"10:00","do":"go:chai","cmd":null,"at":{"x":90,"z":-192},"hold":95},
+{"clock":"11:44","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":110.2,"z":-194.2}},
+{"clock":"11:45","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"12:08","wait":45},
+{"clock":"12:53","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"12:57","wait":45},
+{"clock":"13:42","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"14:04","wait":3},
+{"clock":"14:07","do":"talk:r1","cmd":{"type":"talk","to":"r1"},"at":{"x":-52.5,"z":78}},
+{"clock":"14:09","wait":45},
+{"clock":"14:54","do":"say:cannon-request:heat:0","cmd":{"type":"say","option":0},"at":{"x":-53.036904812823316,"z":80.27033259696297}}
 ]}
