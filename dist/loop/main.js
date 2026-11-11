@@ -1721,6 +1721,8 @@ function step(dt) {
       sim.player.x = day.player.x; sim.player.z = day.player.z;
       if (cmd) replayAct(cmd);
       if (replayer.pauseAt != null && (replayer.index > replayer.pauseAt || replayer.drive.done)) { replayer.paused = true; accumulator = 0; break; }
+      // The trace is over: hold the day there, so the browser's day is Node's day (not 40 minutes further on).
+      if (replayer.drive.done && !day.over) { replayer.paused = true; accumulator = 0; break; }
       if (replayer.pauseClock != null && clockMinutes(day.t) >= replayer.pauseClock) { replayer.pauseClock = null; replayer.paused = true; accumulator = 0; break; }
     } else {
       // The only per-tick inputs the engine takes from the client; recordings store exactly these.
