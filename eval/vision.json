@@ -22,7 +22,7 @@
         { "id": "first-action", "how": "engine", "text": "Real seconds from 10:00 until the first skill moment, for the explorer bot", "floor": 600, "target": 45, "better": "low", "weight": 2 },
         { "id": "action-beats", "how": "engine", "text": "Skill moments started per 10 real minutes", "floor": 0, "target": 6, "better": "high", "weight": 2 },
         { "id": "chase-challenge", "how": "engine", "text": "Chases a player loses by just holding sprint and running straight (want some: escaping should need the street, not one key)", "floor": 0, "target": 0.35, "better": "high", "weight": 2 },
-        { "id": "chase-skill", "how": "engine", "text": "How much better a player who uses the street (crowds, cover) does than one who runs straight", "floor": 0, "target": 0.3, "better": "high", "weight": 2 },
+        { "id": "chase-skill", "how": "engine", "text": "How much better a player who uses the street (crowds, cover) or reads the constable (cuts away from a lunge) does than one who runs straight", "floor": 0, "target": 0.3, "better": "high", "weight": 2 },
         { "id": "low-games", "how": "engine", "text": "Distinct low-level games the player can start (each emits action:<game>:start)", "floor": 1, "target": 6, "better": "high", "weight": 2 },
         { "id": "reading-share", "how": "engine", "text": "Share of the day spent with a conversation card open", "floor": 0.5, "target": 0.15, "better": "low", "weight": 2 },
         { "id": "words-per-minute", "how": "engine", "text": "Words on screen and phone per real minute (Subway Surfers is ~0, a comedy game ~30)", "floor": 120, "target": 35, "better": "low", "weight": 1 },

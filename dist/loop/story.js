@@ -143,6 +143,7 @@ export function createStory(api) {
       case 'release': if (a === 'player') { if (s.player.detained) api.releasePlayer(s, 'released-story'); } else api.releasePerson(s, a); break;
       case 'chase': if (!s.player.chasedBy) api.startChase(s, a, ctx.id || 'story'); break;
       case 'calm': { const o = api.officerById(s, a); if (o) { o.mood = 'bored'; if (s.player.chasedBy === a) { s.player.chasedBy = null; api.sendHome(s, o); } } break; }
+      case 'game': api.startGame(s, a); break; // a low-level game: game:window
       case 'cue': api.cue(s, a, { pos: s.player }); break;
       case 'clip': api.happen(s, a, s.player); break;
       case 'chat': chatLines(s, CHAT[a], 'chat:' + a); break;

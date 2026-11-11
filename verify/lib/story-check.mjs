@@ -35,7 +35,7 @@ const DO = {
   rumour: ['rumour', 'rumourWhere'], learn: ['rumour', 'person'], provocateurs: [['expose', 'report', 'join', 'gone']], crowd: ['crowdPlace', 'int'], intensity: ['int'], hotspot: ['crowdPlace'],
   target: [['player', 'crew', 'stream', 'mira', 'none']], stance: [['hold', 'scatter', 'block', 'protect']],
   situation: ['situation', ['start', 'done', 'fail']], nikhil: [['found', 'lost']],
-  friend: [FRIENDS, ['ok', 'hurt', 'detained', 'missing']], flag: ['flag'],
+  friend: [FRIENDS, ['ok', 'hurt', 'detained', 'missing']], flag: ['flag'], game: [['window']],
 };
 const PRED = {
   near: ['bodyOrObjectOrPlayer', 'bodyOrObjectOrPlayer'], friend: [FRIENDS, ['ok', 'hurt', 'detained', 'missing']], here: ['body'], prov: [['live', 'exposed', 'reported', 'joined', 'gone']], at: ['bodyOrObjectOrPlayer', 'place'], with: ['person'], holding: ['object'],

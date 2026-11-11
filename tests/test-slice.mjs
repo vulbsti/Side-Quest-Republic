@@ -32,8 +32,11 @@ const runUntil = (s, t) => advance(s, Math.max(0, t - s.t));
 function walkPlayer(s, to, speed = 3) {
   while (dist(s.player, to) > 0.4 && !s.over) {
     const d = dist(s.player, to), step = Math.min(d, speed * 0.1);
-    s.player.x += ((to.x - s.player.x) / d) * step; s.player.z += ((to.z - s.player.z) / d) * step;
+    let dx = (to.x - s.player.x) / d, dz = (to.z - s.player.z) / d;
+    if (s.chase?.lunge?.phase === 'windup') [dx, dz] = [-dz, dx]; // a constable winds up a lunge: cut sideways
+    s.player.x += dx * step; s.player.z += dz * step;
     advance(s, 0.1);
+    if (s.player.detained) break;
   }
 }
 const ok = (r, why) => { assert(r.ok, `${why}: ${JSON.stringify(r)}`); return r; };

@@ -73,6 +73,17 @@ export default {
             ],
             end: 'fail',
           },
+          {
+            // Last, so saved days that pick the options above by number still pick the same ones.
+            intent: 'Eye the open pane above the bars',
+            requires: { notFlags: ['pane-shut', 'player-stays-detained'] },
+            beats: [
+              { who: 'player', line: '(dheere se) Upar wala pane khula hai. Main patla hoon. Bas itna bol raha hoon.' },
+              { who: 'student', line: 'Bhai tu pagal hai. ...Main record kar raha hoon.', react: 'laugh' },
+            ],
+            do: ['game:window'],
+            end: 'fail',
+          },
         ],
       },
       pandey: {
