@@ -1,0 +1,14 @@
+{"name":"ending singalong · sitin · peacemaker","note":"","tempo":"long","expect":{"ending":"singalong","outcome":"sitin","role":"peacemaker"},"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:48","do":"give:mira","cmd":{"type":"give","to":"mira"},"at":{"x":-51,"z":95.5}},
+{"clock":"14:49","do":"whisper:minister:meera","cmd":{"type":"whisper","to":"meera","rumour":"minister"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"14:50","do":"snatch:c2","cmd":{"type":"snatch","to":"c2"},"at":{"x":106.5,"z":-184}},
+{"clock":"15:13","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":107.01936200063763,"z":-185.3035986216004}},
+{"clock":"15:14","do":"film:chase@cp","cmd":{"type":"film"},"at":{"x":107.01936200063763,"z":-185.3035986216004}},
+{"clock":"15:15","finish":true}
+]}

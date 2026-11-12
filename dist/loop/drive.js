@@ -16,7 +16,7 @@ export const WALK_LIMIT = 150; // give up walking after this many seconds
 export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1 };
 export const reachOf = (cmd) => (cmd ? REACH[cmd.type] ?? 1.5 : REACH.go);
 // Commands that work wherever you are, so they are tried even if the walk didn't get there.
-const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave'].includes(cmd.type);
+const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave'].includes(cmd.type) || (cmd.type === 'ride' && cmd.to === 'off');
 
 /** How many STEP ticks `for (t = 0; t < seconds; t += STEP)` runs (floating point included). */
 export function ticksFor(seconds) {
@@ -74,6 +74,7 @@ export function createDriver(R, trace, hooks = {}, { sight = null } = {}) {
         }
         if (mode === 'walk') {
           const pl = s.player;
+          if (pl.riding && !(cur.cmd?.type === 'ride' && cur.cmd.to === 'off')) return null; // on the e-rickshaw: the ride moves you
           const target = targetOf(R, s, cur.cmd, cur.at);
           const reached = !!target && R.dist(pl, target) <= reachOf(cur.cmd);
           const stuck = pl.detained || walked >= WALK_LIMIT - 1e-9 || !target;

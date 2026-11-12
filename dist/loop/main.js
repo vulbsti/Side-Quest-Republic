@@ -3,14 +3,13 @@
 // Every engine field beyond the original loop is read defensively through S (below), so this
 // client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
 import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
-import { expandWorld } from '../world-expansion.js?v=27';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
-import { Simulation, clamp, dist, steer, visible, separateBodies } from '../simulation.js?v=27';
+import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=9';
-import { SPEAKERS } from './talks.js?v=1';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=9';
+import * as R from './rules.js?v=10';
+import { SPEAKERS } from './talks.js?v=2';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=10';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -19,9 +18,10 @@ import {
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 import { routeEvent } from './present.js?v=2';
-import { createDriver } from './drive.js?v=3';
+import { createDriver } from './drive.js?v=4';
 import { canSee, lostSight } from './sight.js?v=1';
 import { createRecorder, setInputs } from './trace.js?v=1';
+import { createStreetLife } from './street-life.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -186,7 +186,7 @@ const police = []; // constables and RAF jawans
 const crew = [], provs = [], kids = [];
 const bubbles = [];
 const items = {};
-let shuttle, shuttleObstacle, shuttleSigns;
+let shuttle, shuttleBoxes, shuttleSigns, shuttleYaw = null, shuttleLast = null;
 const occluders = [];
 const overhead = [];
 const ray = new THREE.Raycaster();
@@ -265,13 +265,14 @@ function waterModel() {
   return g;
 }
 function placeProps() {
-  world.put('chai-cart', -18, -36, 0.3);
-  world.obstacles.push({ id: 'cp-chai', x: -18, z: -36, w: 3, d: 2, h: 3 });
-  for (const z of [-10.5, -7.5, -1.5, 1.5]) {
-    world.put('barricade', 40, z, Math.PI / 2);
-    world.obstacles.push({ id: 'loop-barricade', x: 40, z, w: 0.7, d: 3, h: 1.3 });
+  world.put('chai-cart', 86, -193, 0.3);
+  world.obstacles.push({ id: 'cp-chai', x: 86, z: -193, w: 3, d: 2, h: 3 });
+  // The standing barricade across Jantar Mantar Road, with a gap in the middle for the marshals.
+  for (const x of [-57, -54, -48, -45]) {
+    world.put('barricade', x, 80, 0);
+    world.obstacles.push({ id: 'loop-barricade', x, z: 80, w: 3, d: 0.7, h: 1.3 });
   }
-  for (const [text, x, z, r] of [['PARLIAMENT STREET →', 50, -9, -Math.PI / 2], ['CP SHUTTLE STOP', 4, -38.5, 0], ['JANTAR MANTAR STOP', 4, 5.5, 0]]) {
+  for (const [text, x, z, r] of [['PARLIAMENT STREET ↑', -49, 62, 0], ['CP SHUTTLE STOP', SPOTS.busCP.x + 3.5, SPOTS.busCP.z + 2, 0], ['JANTAR MANTAR STOP', SPOTS.busJantar.x + 3, SPOTS.busJantar.z, Math.PI / 2]]) {
     const s = sign(text, 3.4, 0.6);
     s.position.set(x, 2.6, z); s.rotation.y = r;
     world.scene.add(s);
@@ -290,8 +291,9 @@ function placeProps() {
   shuttle = world.bus;
   const i = world.obstacles.findIndex((o) => o.id === 'legacy-bus');
   if (i >= 0) world.obstacles.splice(i, 1);
-  shuttleObstacle = { id: 'shuttle', x: SPOTS.busCP.x, z: SPOTS.busCP.z, w: 2.8, d: 10, h: 3.4 };
-  world.obstacles.push(shuttleObstacle);
+  // The bus's walls: four boxes along it, turned with it (rules.js busBoxes), so sight and collisions fit its shape.
+  shuttleBoxes = R.busBoxes({ x: SPOTS.busCP.x, z: SPOTS.busCP.z, dx: 0, dz: 1 });
+  world.obstacles.push(...shuttleBoxes);
   shuttle.rotation.y = 0;
   shuttleSigns = new THREE.Group();
   // Banners above the windows (not across them), so you can see who is inside.
@@ -405,20 +407,21 @@ function dress(b, kind) {
 
 // Where each crowd group stands, and where its people come from.
 const GROUPS = {
-  cpWaiting: { center: { x: 4.5, z: -31 }, r: 3.8, spawn: { x: -4, z: -47 }, face: { x: 7.6, z: -31 } },
-  cpParty: { center: null, r: 3.2, spawn: { x: -8, z: -46 }, face: null },
-  stage: { center: { x: 0, z: -5.5 }, r: 5.5, spawn: { x: 10, z: 4 }, face: { x: 0, z: -14 } },
-  barricade: { center: { x: 32.6, z: -3.2 }, r: 3.4, spawn: { x: 12, z: -6 }, face: { x: 40, z: -3.2 } },
-  parliament: { center: { x: 62, z: -4 }, r: 6, spawn: { x: 40, z: -4.5 }, face: { x: 70, z: -4 } },
+  cpWaiting: { center: { x: 108.5, z: -188 }, r: 3.8, spawn: { x: 100, z: -204 }, face: { x: 111.6, z: -188 } },
+  cpParty: { center: null, r: 3.2, spawn: { x: 96, z: -203 }, face: null },
+  stage: { center: { x: -51, z: 104.5 }, r: 5.5, spawn: { x: -41, z: 114 }, face: { x: -51, z: 96 } },
+  barricade: { center: { x: -49.7, z: 87.4 }, r: 3.4, spawn: { x: -39, z: 104 }, face: { x: -49.7, z: 80 } },
+  parliament: { center: { x: -58, z: 55 }, r: 6, spawn: { x: -51, z: 80 }, face: { x: -58, z: 47 } },
 };
 // Arriving groups stand beside the students at their place, each on its own side.
 const KIND_OFFSET = { party: { x: -7.5, z: 6.5 }, sena: { x: 7, z: 7 }, opp: { x: -8, z: -4 }, students: { x: 0, z: 0 } };
-const KIND_SPAWN = { party: { x: -60, z: 3 }, sena: { x: 80, z: 2 }, opp: { x: -60, z: -3 }, students: { x: -7, z: 34 } };
+// Where each kind of group walks in from: the party from its SUV, the DRS bikes off Sansad Marg, students up Jantar Mantar Road.
+const KIND_SPAWN = { party: { x: -36, z: 118 }, sena: { x: -30, z: 60 }, opp: { x: -62, z: 122 }, students: { x: -40, z: 132 } };
 const LINE_LAYOUT = {
-  stage: { x: 0, z: 1.8, axis: 'x', yaw: Math.PI },
-  cp: { x: 4.5, z: -26.4, axis: 'x', yaw: Math.PI },
-  barricade: { x: 37.8, z: -4.5, axis: 'z', yaw: -Math.PI / 2 },
-  parliament: { x: 55.5, z: -4, axis: 'z', yaw: Math.PI / 2 },
+  stage: { x: -51, z: 111.8, axis: 'x', yaw: Math.PI },
+  cp: { x: 108.5, z: -183.4, axis: 'x', yaw: Math.PI },
+  barricade: { x: -51, z: 82.2, axis: 'x', yaw: 0 },
+  parliament: { x: -58, z: 61.5, axis: 'x', yaw: Math.PI },
 };
 const placePos = (place) => PLACES[place] || null;
 const CLUSTER_KEYS = Object.keys(GROUPS);
@@ -473,7 +476,7 @@ function updateCrowd(dt) {
           b = crowd.find((x) => !x.cluster && !x.model.visible && x.pool === pool);
           if (!b) break;
           Object.assign(b, cl.spawn);
-          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -14, z: 12 });
+          if (cl.key === 'stage' && day.bus.phase !== 'jantar') Object.assign(b, { x: -65, z: 122 });
           b.ox = b.oz = 0;
         }
         dress(b, cl.kind);
@@ -489,7 +492,7 @@ function updateCrowd(dt) {
       }
     }
     crowdSnap = false;
-    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: -4, z: -48 }; }
+    for (const b of freeList) { b.clusterRef = null; b.target = day.bus.phase === 'toJantar' || day.bus.phase === 'cp' ? SPOTS.busDoor : { x: 100, z: -205 }; }
   }
   const surge = clashSurge();
   const ch = props.charge, gasOn = props.gasAt;
@@ -561,7 +564,7 @@ function clashSurge() {
 // --- police: posture from the phase, numbers and positions from the state ---------------
 
 /** Where each officer should be when the engine doesn't say: constables lounging, then standing, then a line. */
-const CHAIRS = [[33, -12.5, 0.6], [34.2, -13.4, 0.2], [32.4, -14.6, 1.4], [35.4, -12.2, -0.4], [-11, -1.6, 2.2], [-12.2, -2.6, 1.8]];
+const CHAIRS = [[33, -12.5, 0.6], [34.2, -13.4, 0.2], [32.4, -14.6, 1.4], [35.4, -12.2, -0.4], [-11, -1.6, 2.2], [-12.2, -2.6, 1.8], [30, -10, 0.4], [31, -11, 0.8]]; // one per constable c1-c8
 const officerPlan = [];
 function planOfficers() {
   officerPlan.length = 0;
@@ -591,7 +594,7 @@ function planOfficers() {
       const [x, z, y] = CHAIRS[i];
       officerPlan.push({ id: 'c' + i, kind: 'constable', x, z, yaw: y, posture: 'seat', chair: i });
     } else {
-      officerPlan.push({ id: 'c' + i, kind: 'constable', x: 33 + (i % 3) * 1.3, z: -11 + Math.floor(i / 3) * 1.6, yaw: -Math.PI / 2 + (i - 2) * 0.4, posture: 'stand' });
+      officerPlan.push({ id: 'c' + i, kind: 'constable', x: -44 + Math.floor(i / 3) * 1.6, z: 77 - (i % 3) * 1.3, yaw: (i - 2) * 0.4, posture: 'stand' });
     }
   }
   const nRaf = Math.min(RAF_POOL, S.raf(day));
@@ -650,7 +653,15 @@ function updatePolice(dt) {
     const o = b.plan;
     let tx = o.x, tz = o.z, speed = 4, posture = o.posture;
     // A chaser runs at the player; the engine moves him, we only make sure he looks like it.
-    if (chasedBy && chasedBy === o.id) { posture = 'chase'; speed = 7; }
+    const raid = day.raid;
+    if (raid?.ring.includes(o.id)) { // the ring: crouched and mirroring you; the one lunging dives
+      const l = raid.lunge?.by === o.id ? raid.lunge.phase : null;
+      posture = l ? 'charge' : 'chase'; speed = l === 'dash' ? 18 : 6.5;
+    }
+    if (chasedBy && chasedBy === o.id) {
+      const lunge = day.chase?.lunge?.phase; // wind-up: lathi up, the telegraph; dash: he dives at you
+      posture = lunge === 'windup' || lunge === 'dash' ? 'charge' : 'chase'; speed = lunge === 'dash' ? 18 : 7.5;
+    }
     // The lathi charge: the line runs forward with the front, lathis up.
     if (ch.active && ch.along < 16 && (o.kind === 'raf' || posture === 'line') && dist(o, ch) < 26) {
       const lane = (b.idx - (police.length - 1) / 2) * 1.4;
@@ -709,7 +720,7 @@ function updateProvs(dt) {
     const place = placePos(pv.place) || PLACES.stage;
     let tx = pv.x ?? place.x + Math.cos(i * 2.1) * 3, tz = pv.z ?? place.z + Math.sin(i * 2.1) * 3;
     let speed = 3.2;
-    if (pv.state === 'exposed') { const s = props.suvPos || { x: -60, z: 3 }; tx = s.x; tz = s.z; speed = 6.5; }
+    if (pv.state === 'exposed') { const s = props.suvPos || SPOTS.suv; tx = s.x; tz = s.z; speed = 6.5; }
     if (pv.state === 'reported') { b.goneT = (b.goneT || 0) + dt; const s = bodies.sharma; tx = s.x + 1; tz = s.z + 1; }
     if (!b.model.visible) { b.model.visible = true; b.x = tx; b.z = tz; b.goneT = 0; }
     const ox = b.x, oz = b.z;
@@ -748,7 +759,7 @@ function updateBodies(dt) {
       else if (looks.has(id)) { const l = looks.get(id); b.yaw = Math.atan2(l.x - b.x, l.z - b.z); }
       else if (id === 'sharma' && s.post === 'barricade') b.yaw = -Math.PI / 2;
       else if (id === 'dev' && s.mode === 'waiting') b.yaw = Math.PI / 2;
-      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(-b.x, -14 - b.z);
+      else if (['ravi', 'kabir', 'dev', 'nikhil', 'sana'].includes(id) && placeAt(s) === 'stage') b.yaw = Math.atan2(SPOTS.stageTop.x - b.x, SPOTS.stageTop.z - b.z);
       else if (id === 'asha' && s.mode === 'stall') b.yaw = 0.3;
     }
   }
@@ -768,7 +779,7 @@ function unstick(b, tx, tz, dt) {
 }
 
 // The detention bus fills up: you, named friends and other detainees sit inside, visible through the glass.
-let playerSeated = false;
+let playerSeated = false, street = null, rideSeat = null;
 const seatedIds = new Set(), _seat = new THREE.Vector3();
 function updateDetainees() {
   const b = day.bus, holds = !!busSeats && b.detention && (b.phase === 'detention' || b.phase === 'parked');
@@ -779,8 +790,16 @@ function updateDetainees() {
     shuttle.updateMatrixWorld(); _seat.copy(st.position); shuttle.localToWorld(_seat);
     m.position.copy(_seat); m.rotation.y = shuttle.rotation.y + st.yaw; m.visible = true;
   };
-  playerSeated = holds && S.detained(day);
+  const edging = day.action?.game === 'window' && day.action.phase === 'edge';
+  playerSeated = holds && S.detained(day) && !edging;
   if (playerSeated) { seatAt(playerModel); playerModel.visible = true; }
+  if (edging && !holds) { // the morning van: along its side from the door
+    const dp = R.detentionPos(day), n = day.action.steps || 0;
+    playerModel.position.set(dp.x + 0.2, 1.1, dp.z - 1 - n * 1.1); playerModel.rotation.y = Math.PI / 2; playerModel.visible = true;
+  } else if (edging) { // out of the pane, flat against the outside of the bus, a step further towards the rear each time
+    shuttle.updateMatrixWorld(); _seat.copy(busSeats?.[0]?.position ?? _seat.set(0, 0, 0)); _seat.x += Math.sign(_seat.x || 1) * 0.9; _seat.y += 0.9; _seat.z -= (day.action.steps || 0) * 1.4;
+    shuttle.localToWorld(_seat); playerModel.position.copy(_seat); playerModel.rotation.y = shuttle.rotation.y + Math.PI / 2; playerModel.visible = true;
+  }
   seatedIds.clear();
   for (const id of day.detention?.people || []) if (holds && bodies[id]) { seatAt(bodies[id].model); seatedIds.add(id); }
   const n = holds ? Math.min(DETAINEES, day.detention?.count || 0) : 0;
@@ -837,11 +856,18 @@ function busWaits() {
 function updateShuttle() {
   const b = day.bus;
   shuttle.position.set(b.x, 0, b.z);
-  shuttleSigns.position.set(b.x, 0, b.z);
+  // Face the way it drives: turn smoothly onto the road's heading (and round, at the end of a run).
+  const back = b.phase === 'toCP', want = Math.atan2(b.dx, b.dz) + (back ? Math.PI : 0);
+  const jumped = !shuttleLast || Math.hypot(b.x - shuttleLast.x, b.z - shuttleLast.z) > 6; // a time jump or a new day
+  shuttleLast = { x: b.x, z: b.z };
+  if (shuttleYaw === null || jumped) shuttleYaw = want;
+  else { const d = Math.atan2(Math.sin(want - shuttleYaw), Math.cos(want - shuttleYaw)); shuttleYaw += d * Math.min(1, STEP * 2); }
+  shuttle.rotation.y = shuttleYaw;
+  shuttleSigns.position.set(b.x, 0, b.z); shuttleSigns.rotation.y = shuttleYaw;
   shuttleSigns.visible = phaseNow === 'tense' || phaseNow === 'showdown' || phaseNow === 'aftermath' || b.phase === 'detention';
-  shuttleObstacle.x = b.x; shuttleObstacle.z = b.z;
-  const p = sim.player, hw = 1.4 + p.radius, hd = 5 + p.radius;
-  if (!S.detained(day) && Math.abs(p.x - b.x) < hw && Math.abs(p.z - b.z) < hd) p.x = b.x + Math.sign(p.x - b.x || -1) * (hw + 0.05);
+  walls();
+  const p = sim.player;
+  if (!S.detained(day)) pushOutOfBus(p, p.radius);
 }
 
 // --- feedback: toast, bubbles, phone, radio -------------------------------------------------
@@ -1091,9 +1117,23 @@ function handleCues() {
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
     if (name === 'crew-block') crewBlock = { x: sim.player.x, z: sim.player.z };
     if (name === 'faint') faintNear(c.pos || PLACES.stage);
-    if (name === 'chase-start') { toast('Run! Break his line of sight, or lose him in a crowd of six or more.', 5); }
-    if (name === 'chase-lost') toast('Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
-    if (name === 'caught') toast('Caught. Into the detention bus you go.', 4);
+    if (name === 'chase-start') { toast('BHAAG! Jab woh haath failaye, side mein kat. Ya bheed mein ghus ja.', 5); }
+    if (name === 'crowd-chant') toast(c.data?.chant === 'india' ? '"INDIA! INDIA!"' : '"KABADDI! KABADDI!"', 1.5);
+    if (name === 'raid-miss' && !c.data?.dodged) toast('Hawa pakdi!', 0.8);
+    if (name === 'action:kabaddi:start') toast('KABADDI KABADDI! Ek saans. Jab koi jhapte, E se jhuk. Bheed tak pahunch.', 4);
+    if (name === 'raid-lunge') toast('⚠ JHUK! (E)', 0.8);
+    if (name === 'raid-dodge') toast('BACH GAYA!', 1);
+    if (name === 'action:kabaddi:win') toast('GHAR! Raid successful. PKL wale call kar rahe hain.', 4);
+    if (name === 'action:kabaddi:fail') toast('Raid khatam. Bheed: "INDIA! INDIA!"', 3);
+    if (name === 'action:window:start') toast('Pane khula hai. Jab jawan phone dekhe, E: bahar nikal.', 4);
+    if (name === 'window-climb') toast('Bahar! Jab neeche ke haath neeche hon, E se sarak.', 3);
+    if (name === 'window-step') toast(`${c.data?.steps}/${c.data?.of}`, 0.8);
+    if (name === 'action:window:win') toast('1 MINUTE LATER. Kood ke bhaag!', 3);
+    if (name === 'action:window:fail') toast(c.data?.why === 'grabbed' ? 'Pair pakda gaya. Wapas andar.' : 'Pakde gaye. Pane band. Ab jawan paas baithega.', 3);
+    if (name === 'lunge') toast('⚠ WOH JHAPATNE WALA HAI · side mein kat!', 0.9);
+    if (name === 'lunge-miss' && c.data?.near) toast('BACH GAYA!', 1.2);
+    if (name === 'chase-lost') toast(c.data?.how === 'tired' ? 'Uncle thak gaye. Haath ghutno pe, saans Lodhi Garden tak.' : c.data?.how === 'whiffs' ? 'Teen baar hawa pakdi. Woh gave up.' : 'Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
+    if (name === 'caught') toast(c.data?.light ? 'PAKDE GAYE! 50 uthak-baithak, live, 4K mein. Phir chhutti.' : 'Caught. Dilli Police ki free van seva.', 4);
     if (name === 'phase' && c.data) onPhase(c.data.phase ?? c.data);
     const st = STINGS[name];
     if (st && stingsOn && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
@@ -1138,7 +1178,13 @@ function realReels(ph) {
 // Who sees you: the engine's ranges and positions, the world's walls (sight.js). The verifier and ?replay= use
 // the same rule, so a theft that is witnessed here is witnessed there.
 /** The live walls, with the shuttle where the engine has the bus right now. */
-function walls() { shuttleObstacle.x = day.bus.x; shuttleObstacle.z = day.bus.z; return world.obstacles; }
+function walls() { R.busBoxes(day.bus).forEach((o, i) => Object.assign(shuttleBoxes[i], o)); return world.obstacles; }
+/** Nobody stands inside the bus: step out sideways, to the nearer side, in the bus's own frame. */
+function pushOutOfBus(e, r = 0.4) {
+  const b = day.bus, l = R.busLocal(b, e), hw = R.BUS_SIZE.w / 2 + r, hd = R.BUS_SIZE.d / 2 + r;
+  if (Math.abs(l.along) >= hd || Math.abs(l.side) >= hw) return;
+  Object.assign(e, R.busSide(b, l.along, Math.sign(l.side || 1) * (hw + 0.05)));
+}
 const SIGHT = { canSee: (s) => canSee(s, walls()), lost: (s) => lostSight(s, walls()) };
 function witnesses() { return R.witnesses(day, SIGHT.canSee(day)); }
 const PICKUP = { speaker: 'Pick up Ravi\'s speaker', key: 'Pocket the bus key', megaphone: 'Take Dev\'s megaphone', phone: 'Take Zoya\'s charging phone', water: 'Lift Sana\'s water crate' };
@@ -1209,6 +1255,13 @@ const SAY = {
   'protected': 'He is protected. You are not.',
   'no-camera': 'You need a camera on him: put down what you carry, or get Zoya live nearby.',
   'never-reached': 'You could not get there.',
+  'early': 'Jhuk toh gaye, par koi jhapta hi nahi. Saans gayi.',
+  'spotted': 'Jawan ne dekh liya. Pane band.',
+  'grabbed': 'Pair pakda gaya. Wapas andar.',
+  'slow': 'Bahut der laga di. Pane band.',
+  'riding': 'You\'re on a moving e-rickshaw. Get off first (E).',
+  'ride-chased': 'Not with a constable on your heels.',
+  'far': 'Walk up to the e-rickshaw stand first.',
 };
 const words = (code) => (code ? SAY[code] ?? (/^[a-z]+(-[a-z]+)*$/.test(code) ? 'Not now.' : code) : null);
 function runCmd(cmd) {
@@ -1412,7 +1465,7 @@ function startLoop() {
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
   realReels(phaseNow);
-  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, south of here. The stage is in between. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
+  toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, just south of here. The stage is down Sansad Marg, on Jantar Mantar Road. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
 const WHERE_NAME = { stage: 'the stage', cp: 'the CP shuttle stop', barricade: 'the barricade', parliament: 'Parliament Street' };
@@ -1668,6 +1721,8 @@ function step(dt) {
       sim.player.x = day.player.x; sim.player.z = day.player.z;
       if (cmd) replayAct(cmd);
       if (replayer.pauseAt != null && (replayer.index > replayer.pauseAt || replayer.drive.done)) { replayer.paused = true; accumulator = 0; break; }
+      // The trace is over: hold the day there, so the browser's day is Node's day (not 40 minutes further on).
+      if (replayer.drive.done && !day.over) { replayer.paused = true; accumulator = 0; break; }
       if (replayer.pauseClock != null && clockMinutes(day.t) >= replayer.pauseClock) { replayer.pauseClock = null; replayer.paused = true; accumulator = 0; break; }
     } else {
       // The only per-tick inputs the engine takes from the client; recordings store exactly these.
@@ -1685,7 +1740,9 @@ function step(dt) {
     if (day.over) { setTimeout(showEnding, day.ending === 'detained' ? 2500 : 600); mode = 'ending'; closeChoices(); return; }
   }
   const detained = S.detained(day);
-  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained;
+  const pinned = day.player?.pinned;
+  const riding = !!day.player?.riding;
+  const frozen = cine.mode === 'scene' || cine.mode === 'sting' || detained || !!pinned || riding;
   const forward = frozen ? 0 : (keys.w || keys.arrowup ? 1 : 0) - (keys.s || keys.arrowdown ? 1 : 0);
   const right = frozen ? 0 : (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
@@ -1697,7 +1754,9 @@ function step(dt) {
     const dp = R.detentionPos ? R.detentionPos(day) : { x: day.bus.x - 0.6, z: day.bus.z + 2 };
     sim.player.x = dp.x; sim.player.z = dp.z; sim.player.vx = sim.player.vz = 0;
     if (!detainedShown) { detainedShown = true; closeChoices(); }
-  } else if (detainedShown) { detainedShown = false; sim.player.x = day.bus.x - 2.4; sim.player.z = day.bus.z + 3; toast('You\'re off the bus. Walk, don\'t run.', 3); }
+  } else if (detainedShown) { detainedShown = false; Object.assign(sim.player, R.busSide(day.bus, 3, 2.4)); toast('You\'re off the bus. Walk, don\'t run.', 3); }
+  if (pinned) { sim.player.x = pinned.x; sim.player.z = pinned.z; sim.player.vx = sim.player.vz = 0; }
+  if (riding) { sim.player.x = day.player.x; sim.player.z = day.player.z; sim.player.vx = sim.player.vz = 0; } // the e-rickshaw drives
   playerModel.visible = !detained || playerSeated;
   updateShuttle();
   updateBodies(dt);
@@ -1720,8 +1779,7 @@ function step(dt) {
   for (const arr of [crowd, police, crew, provs]) for (const b of arr) if (b.model.visible && !b.fainted && b.posture !== 'seat') sepList.push(b);
   separateBodies(sepList, world.obstacles);
   // Nobody stands inside the bus: when it parks on a crowd, they step out to the nearer side.
-  { const o = shuttleObstacle, hw = o.w / 2 + 0.4, hd = o.d / 2 + 0.4;
-    for (const b of sepList) if (b !== sim.player && Math.abs(b.x - o.x) < hw && Math.abs(b.z - o.z) < hd) b.x = o.x + Math.sign(b.x - o.x || 1) * (hw + 0.05); }
+  for (const b of sepList) if (b !== sim.player) pushOutOfBus(b, 0.4);
   for (const b of Object.values(bodies)) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   for (const arr of [crowd, police, crew, provs, kids]) for (const b of arr) if (b.model.visible) { b.model.position.set(b.x, b.y || 0, b.z); b.model.rotation.y = b.yaw; }
   playerModel.position.set(sim.player.x, sim.player.y, sim.player.z);
@@ -1754,7 +1812,7 @@ function step(dt) {
 function animate(t) {
   const p = sim.player;
   const carryPose = (c) => (c ? POSE[c] : false);
-  if (playerSeated) animateCharacter(playerModel, 0, t, { seated: true, important: true });
+  if (playerSeated || rideSeat) animateCharacter(playerModel, 0, t, { seated: true, important: true });
   else animateCharacter(playerModel, Math.hypot(p.vx, p.vz), t, { carry: carryPose(day.player.carrying), airborne: !p.grounded, vy: p.vy, important: true, gesture: recT > 0 ? 'phone' : '' });
   for (const [id, b] of Object.entries(bodies)) {
     if (!b.model.visible) continue;
@@ -1860,7 +1918,7 @@ function camera(dt) {
   }
   camTarget.set(p.x, 1.55 + p.y * 0.7, p.z);
   camDesired.set(camTarget.x + Math.sin(yaw) * zoom, camTarget.y + zoom * pitch, camTarget.z + Math.cos(yaw) * zoom);
-  for (const o of world.obstacles) {
+  for (const o of nearObstacles(world.obstacles, Math.min(camTarget.x, camDesired.x) - 2, Math.min(camTarget.z, camDesired.z) - 2, Math.max(camTarget.x, camDesired.x) + 2, Math.max(camTarget.z, camDesired.z) + 2)) {
     if (o.h < 2) continue;
     if (o.h < 3.5) {
       if (Math.abs(camDesired.x - o.x) < o.w / 2 + 1 && Math.abs(camDesired.z - o.z) < o.d / 2 + 1) camDesired.y = Math.max(camDesired.y, o.h + 1.2);
@@ -2034,6 +2092,8 @@ function frame(now) {
   const t = now / 1000;
   if (mode === 'play') step(dt);
   if (day && mode !== 'loading') {
+    rideSeat = street ? street.update(dt, t, sim.player, day) : null;
+    if (rideSeat) { playerModel.position.set(rideSeat.x, rideSeat.y, rideSeat.z); playerModel.rotation.y = rideSeat.yaw; }
     animate(t);
     updateItems(t);
     updateHUD(dt);
@@ -2116,9 +2176,10 @@ function setupInput() {
   try {
     world = await buildWorld($('#scene'), (name) => ($('#loadtext').textContent = 'Preparing ' + name.replaceAll('-', ' ') + '…'));
     await enhanceEnvironment(THREE, world);
-    expandWorld(world, { bodies: () => (sim ? [sim.player] : []) });
     await loadCharacters((name) => ($('#loadtext').textContent = 'Preparing ' + name + ' characters…'));
     placeProps();
+    street = createStreetLife({ THREE, scene: world.scene, obstacles: world.obstacles, put: world.put, makeCharacter, animateCharacter, SPOTS,
+      closed: ['stage', 'barricade', 'parliament'].map((k) => ({ x: PLACES[k].x, z: PLACES[k].z, r: 45 })) });
     const box = new THREE.Box3(), size = new THREE.Vector3();
     world.scene.traverse((o) => {
       if (!o.isMesh || o.isSkinnedMesh || o.isInstancedMesh) return;
@@ -2175,7 +2236,7 @@ function setupInput() {
         officers: Object.values(day.officers).filter((o) => !o.hidden).map((o) => { const b = officerById.get(o.id); return { id: o.id, ex: o.x, ez: o.z, rx: b?.x, rz: b?.z, shown: !!b && isShown(b.model) }; }),
       }),
       obstacles: () => world.obstacles.filter((o) => o.id !== 'shuttle').map((o) => ({ id: o.id ?? null, x: +o.x.toFixed(3), z: +o.z.toFixed(3), w: +o.w.toFixed(3), d: +o.d.toFixed(3), h: +(o.h ?? 0).toFixed(3), base: +(o.base ?? 0).toFixed(3), walkable: o.walkable ?? null })),
-      shuttle: () => ({ w: shuttleObstacle.w, d: shuttleObstacle.d, h: shuttleObstacle.h }),
+      shuttle: () => ({ ...R.BUS_SIZE }),
     };
   } catch (e) {
     console.error(e);

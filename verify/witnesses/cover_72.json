@@ -1,0 +1,10 @@
+{"name":"cover 72","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
+{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
+{"clock":"10:28","do":"leave","cmd":{"type":"leave"},"at":{"x":-51.43281252159288,"z":81.50666432988982}},
+{"clock":"10:29","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
+{"clock":"10:30","wait":45},
+{"clock":"11:15","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"11:16","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"11:18","wait":45}
+]}

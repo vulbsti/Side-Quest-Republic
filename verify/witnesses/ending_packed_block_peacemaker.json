@@ -1,0 +1,23 @@
+{"name":"ending packed · block · peacemaker","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"peacemaker"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
+{"clock":"16:01","wait":1},
+{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:03","wait":1},
+{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:05","wait":20},
+{"clock":"16:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:26","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
+{"clock":"16:28","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"16:29","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
+{"clock":"16:36","do":"film:pester-detainme@barricade","cmd":{"type":"film"},"at":{"x":-51,"z":80}},
+{"clock":"16:38","do":"raid:c3","cmd":{"type":"raid","move":"start"},"at":{"x":-29,"z":99}},
+{"clock":"16:40","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":-40.92317787204026,"z":107.84110639798688}},
+{"clock":"16:41","wait":45},
+{"clock":"17:26","do":"snatch:c3","cmd":{"type":"snatch","to":"c3"},"at":{"x":-32,"z":99}},
+{"clock":"17:27","do":"whisper:sena:meera","cmd":{"type":"whisper","to":"meera","rumour":"sena"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"17:30","do":"film:chase@null","cmd":{"type":"film"},"at":{"x":-33.025200784230776,"z":99.97057015030094}},
+{"clock":"17:31","do":"prov:p2:expose","cmd":{"type":"provocateur","id":"p2","how":"expose"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:32","wait":3},
+{"clock":"17:35","finish":true}
+]}

@@ -9,9 +9,11 @@
     "verify:replay": "node verify/replay.mjs",
     "verify:playback": "node verify/playback.mjs",
     "story:check": "node verify/story-check.mjs",
-    "verify:smoke": "node verify/smoke.mjs"
+    "verify:smoke": "node verify/smoke.mjs",
+    "eval": "node eval/run.mjs"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
     "playwright-core": "1.56.1"
   }
 }

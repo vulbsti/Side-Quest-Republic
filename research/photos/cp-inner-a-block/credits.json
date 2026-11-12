@@ -1,0 +1,96 @@
+{
+  "point": "cp-inner-a-block",
+  "lat": 28.6318,
+  "lon": 77.218,
+  "radius_m": 150,
+  "geosearch_hits": 100,
+  "skipped": {
+    "official-meeting-photo": 60
+  },
+  "photos": [
+    {
+      "file": "01-Indian_Flag_at_Connaught_Place_Delhi.jpg",
+      "title": "File:Indian Flag at Connaught Place, Delhi.jpg",
+      "author": "Slyronit",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Indian_Flag_at_Connaught_Place,_Delhi.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Indian_Flag_at_Connaught_Place%2C_Delhi.jpg/1280px-Indian_Flag_at_Connaught_Place%2C_Delhi.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 54.4,
+      "lat": 28.632275,
+      "lon": 77.217867,
+      "date": "2014-03-05 13:38:12",
+      "bytes": 373065
+    },
+    {
+      "file": "02-TRICOLOUR.jpg",
+      "title": "File:TRICOLOUR.jpg",
+      "author": "Kritika Singh77",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:TRICOLOUR.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/TRICOLOUR.jpg/1280px-TRICOLOUR.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 67.3,
+      "lat": 28.632311,
+      "lon": 77.218369,
+      "date": "2019-02-07 05:10:29",
+      "bytes": 462100
+    },
+    {
+      "file": "03-Palika_Bazar_Connaught_Place_New_Delhi_Delhi_110001_India_-_panoramio.jpg",
+      "title": "File:Palika Bazar, Connaught Place, New Delhi, Delhi 110001, India - panoramio.jpg",
+      "author": "Blue cab",
+      "licence": "CC BY 3.0",
+      "licence_url": "https://creativecommons.org/licenses/by/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Palika_Bazar,_Connaught_Place,_New_Delhi,_Delhi_110001,_India_-_panoramio.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Palika_Bazar%2C_Connaught_Place%2C_New_Delhi%2C_Delhi_110001%2C_India_-_panoramio.jpg/1280px-Palika_Bazar%2C_Connaught_Place%2C_New_Delhi%2C_Delhi_110001%2C_India_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 67.7,
+      "lat": 28.632186,
+      "lon": 77.218536,
+      "date": "23 August 2011 (original upload date)",
+      "bytes": 253833
+    },
+    {
+      "file": "04-Indian_flag_at_Connaught_Place_Delhi.jpg",
+      "title": "File:Indian flag at Connaught Place, Delhi.jpg",
+      "author": "Slyronit",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Indian_flag_at_Connaught_Place,_Delhi.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Indian_flag_at_Connaught_Place%2C_Delhi.jpg/1280px-Indian_flag_at_Connaught_Place%2C_Delhi.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 80.1,
+      "lat": 28.632022,
+      "lon": 77.218781,
+      "date": "2015-10-03 17:21:14",
+      "bytes": 173401
+    },
+    {
+      "file": "05-Charkha_Museum.jpg",
+      "title": "File:Charkha Museum.jpg",
+      "author": "कृष्ण कान्त शर्मा",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Charkha_Museum.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Charkha_Museum.jpg/1280px-Charkha_Museum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 82.8,
+      "lat": 28.631101583333,
+      "lon": 77.21770475,
+      "date": "24 September 2024 (according to Exif data)",
+      "bytes": 839779
+    },
+    {
+      "file": "06-Charkha_Museum_4.jpg",
+      "title": "File:Charkha Museum 4.jpg",
+      "author": "कृष्ण कान्त शर्मा",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Charkha_Museum_4.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Charkha_Museum_4.jpg/1280px-Charkha_Museum_4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 82.8,
+      "lat": 28.631101583333,
+      "lon": 77.21770475,
+      "date": "24 September 2024 (according to Exif data)",
+      "bytes": 838477
+    }
+  ]
+}

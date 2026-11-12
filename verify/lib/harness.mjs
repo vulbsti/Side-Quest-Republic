@@ -17,7 +17,7 @@ export { R };
 // The world's walls, snapshotted from the live game (npm run verify:playback -- --snapshot-world refreshes it,
 // and every playback run checks it is still current), plus the shuttle where the engine has the bus.
 const WORLD = JSON.parse(readFileSync(new URL('../world-obstacles.json', import.meta.url), 'utf8'));
-const wallsAt = (s) => [...WORLD.obstacles, { id: 'shuttle', x: s.bus.x, z: s.bus.z, ...WORLD.shuttle }];
+const wallsAt = (s) => [...WORLD.obstacles, ...R.busBoxes(s.bus)];
 export const SIGHT = { canSee: (s) => canSee(s, wallsAt(s)), lost: (s) => !!s.player.chasedBy && lostSight(s, wallsAt(s)) };
 export { STEP, JOG };
 const targetOf = (s, cmd, at) => driveTarget(R, s, cmd, at);

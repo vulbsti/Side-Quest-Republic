@@ -1,0 +1,24 @@
+{
+ "name": "route sana-short-one",
+ "note": "Carry Sana's water crate to her tent in the morning; at two, offer to fetch Sharma a cold bottle, swipe it from her crate while she counts, and be back at her tent after three when she finds she is one short.",
+ "tempo": "long",
+ "expect": { "history": "seen:sana-short-one" },
+ "trace": [
+  { "do": "take:water", "cmd": { "type": "take", "object": "water" }, "at": null },
+  { "do": "give:sana", "cmd": { "type": "give", "to": "sana" }, "at": null },
+  { "wait": 1 },
+  { "do": "go:barricade", "cmd": null, "at": { "x": -51, "z": 82 }, "hold": 205 },
+  { "do": "situation:cannon-request", "cmd": { "type": "situation", "id": "cannon-request" }, "at": { "x": -51, "z": 82 } },
+  { "wait": 1 },
+  { "do": "say:cannon-request:heat:2", "cmd": { "type": "say", "option": 2 }, "at": null },
+  { "wait": 1 },
+  { "do": "go:stage", "cmd": null, "at": { "x": -58, "z": 101 }, "hold": 1 },
+  { "do": "say:cannon-request:sana:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "go:barricade", "cmd": null, "at": { "x": -51, "z": 82 }, "hold": 1 },
+  { "do": "say:cannon-request:bottle:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "wait": 1 },
+  { "do": "go:tent", "cmd": null, "at": { "x": -56, "z": 100 }, "hold": 60 },
+  { "finish": true }
+ ]
+}

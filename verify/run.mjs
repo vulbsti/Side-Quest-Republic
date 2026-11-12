@@ -49,7 +49,7 @@ const edges = causeGraph(map);
 
 // --- 2. the explorer -------------------------------------------------------------------
 say(`2/5 explore (${STEPS} decisions)`);
-const ex = explore({ steps: STEPS, tempo: 'long', log: say });
+const ex = explore({ steps: STEPS, tempo: 'long', seeds: routes.filter((r) => (r.tempo || 'long') === 'long').map((r) => r.trace), log: say });
 say(`  ${ex.cells} situations, ${ex.days} finished days, ${ex.hits.size} distinct things, ${Math.round(ex.seconds)}s`);
 
 // --- 3. bot players and the constable probe ---------------------------------------------

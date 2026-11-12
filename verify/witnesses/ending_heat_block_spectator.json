@@ -1,11 +1,14 @@
 {"name":"ending heat · block · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":5.2,"z":-3.2}},
-{"clock":"10:22","wait":10},
-{"clock":"10:32","do":"say:dev-m-groups:a:1","cmd":{"type":"say","option":1},"at":{"x":3.973871604285897,"z":-0.9076729993171118}},
-{"clock":"10:33","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:36","do":"pester:c2:detainme","cmd":{"type":"pester","to":"c2","how":"detainme"},"at":{"x":2.5,"z":-27}},
-{"clock":"10:37","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:39","do":"pester:c4:detainme","cmd":{"type":"pester","to":"c4","how":"detainme"},"at":{"x":7,"z":1}},
-{"clock":"10:40","finish":true}
+{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
+{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
+{"clock":"10:28","wait":1},
+{"clock":"10:29","do":"say:career-counselling:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:30","wait":15},
+{"clock":"10:45","do":"say:career-counselling:panel:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:46","wait":1},
+{"clock":"10:47","do":"say:career-counselling:tomar:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:48","do":"snatch:c7","cmd":{"type":"snatch","to":"c7"},"at":{"x":-22.2,"z":-56.4}},
+{"clock":"10:57","do":"film:chase@null","cmd":{"type":"film"},"at":{"x":-23.206065262568384,"z":-57.073997970021296}},
+{"clock":"10:58","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":110.2,"z":-194.2}},
+{"clock":"11:19","finish":true}
 ]}

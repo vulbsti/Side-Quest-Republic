@@ -1,0 +1,24 @@
+{
+ "name": "route chabi",
+ "note": "Join Asha's plan at CP at 10:50, let her corner Iqbal with rishta gossip, lure Constable Meena off with chai, lift the bus key, then own up and hand it back to Iqbal at his chai.",
+ "tempo": "long",
+ "expect": { "history": "situation:chabi:done" },
+ "trace": [
+  { "do": "go:cp", "cmd": null, "at": { "x": 90, "z": -192 }, "hold": 42 },
+  { "do": "situation:chabi", "cmd": { "type": "situation", "id": "chabi" }, "at": { "x": 86, "z": -193 } },
+  { "wait": 1 },
+  { "do": "say:chabi:intro:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 20 },
+  { "do": "say:chabi:rishta:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "wait": 1 },
+  { "do": "take:key", "cmd": { "type": "take", "object": "key" }, "at": null },
+  { "wait": 1 },
+  { "do": "say:chabi:decide:3", "cmd": { "type": "say", "option": 3 }, "at": null },
+  { "wait": 1 },
+  { "do": "give:iqbal", "cmd": { "type": "give", "to": "iqbal" }, "at": null },
+  { "wait": 1 },
+  { "do": "say:chabi:returned:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 2 },
+  { "finish": true }
+ ]
+}

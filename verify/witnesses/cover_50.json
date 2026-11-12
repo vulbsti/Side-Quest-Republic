@@ -1,0 +1,15 @@
+{"name":"cover 50","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
+{"clock":"10:51","wait":1},
+{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:53","wait":20},
+{"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"11:14","wait":1},
+{"clock":"11:15","do":"take:key","cmd":{"type":"take","object":"key"},"at":null},
+{"clock":"11:18","wait":1},
+{"clock":"11:19","do":"say:chabi:decide:3","cmd":{"type":"say","option":3},"at":null},
+{"clock":"11:20","wait":1},
+{"clock":"11:21","do":"give:iqbal","cmd":{"type":"give","to":"iqbal"},"at":null},
+{"clock":"11:24","do":"say:chabi:returned:0","cmd":{"type":"say","option":0},"at":{"x":89.30108658202128,"z":-192.1689378581573}}
+]}

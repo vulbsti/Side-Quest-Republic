@@ -1,0 +1,18 @@
+{"name":"cover 89","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","wait":1},
+{"clock":"16:36","do":"say:dhuan:nikhil:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:37","do":"pester:r2:career","cmd":{"type":"pester","to":"r2","how":"career"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"16:40","do":"stance:scatter","cmd":{"type":"stance","stance":"scatter"},"at":{"x":-64.02612272986002,"z":63.4944523936328}},
+{"clock":"16:41","do":"film:pester-career@parliament","cmd":{"type":"film"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"16:42","do":"pester:r2:career","cmd":{"type":"pester","to":"r2","how":"career"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"16:43","do":"pester:r3:cannon","cmd":{"type":"pester","to":"r3","how":"cannon"},"at":{"x":-63,"z":62.8}},
+{"clock":"16:43","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:46","do":"say:detain-me:window:3","cmd":{"type":"say","option":3},"at":{"x":-42.522780676402846,"z":44.69024770799942}},
+{"clock":"16:47","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"16:51","do":"say:detain-me:ask:2","cmd":{"type":"say","option":2},"at":{"x":-50.938492800118595,"z":108.50099148480832}},
+{"clock":"16:52","do":"say:detain-me:naam:1","cmd":{"type":"say","option":1},"at":{"x":-50.938492800118595,"z":108.50099148480832}}
+]}

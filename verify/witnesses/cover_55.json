@@ -1,0 +1,11 @@
+{"name":"cover 55","note":"1 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
+{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
+{"clock":"12:30","wait":20},
+{"clock":"12:50","wait":10},
+{"clock":"13:00","wait":45},
+{"clock":"13:45","do":"say:afwaah:forward:2","cmd":{"type":"say","option":2},"at":{"x":89.46923367715117,"z":-192.60783027595392}},
+{"clock":"13:46","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":116.3,"z":-188.2}},
+{"clock":"13:49","do":"rally:cp","cmd":{"type":"rally"},"at":{"x":108.5,"z":-188}},
+{"clock":"13:51","finish":true}
+]}

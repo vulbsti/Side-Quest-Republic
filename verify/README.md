@@ -19,7 +19,10 @@ It takes about a minute and writes [`report.md`](report.md).
 3. **The explorer** (`lib/explore.mjs`). Go-Explore over the player's decisions. It keeps an archive of
    distinct situations, returns to them (a day clones exactly, so it never replays from 10:00), and
    branches on what the player can do (`affordances(s)` in the engine), not on clock ticks. The first
-   time anything happens it keeps the shortest trace that got there: the witness.
+   time anything happens it keeps the shortest trace that got there: the witness. The map is real-sized
+   (CP to the stage is a 20-minute walk), so a situation includes where the player stands, the search
+   mostly picks what is near, and it also branches from every situation the designed routes
+   (`verify/routes/`) walk through: a route that gets to a story is how the search reaches its choices.
 4. **Properties** (`lib/properties.mjs`). Invariants checked in every situation (one holder per object,
    the day only moves forward, a detained player sits in the vehicle...), and checks on whole days: the
    engine never throws, every day ends with a true ending card, every accepted command shows the player

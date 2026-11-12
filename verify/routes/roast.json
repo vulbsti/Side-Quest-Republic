@@ -5,13 +5,13 @@
  "expect": { "history": "ending:roast" },
  "trace": [
   { "wait": 5 },
-  { "do": "talk:nikhil", "cmd": { "type": "talk", "to": "nikhil" }, "at": { "x": -1.5, "z": 36.5 } },
+  { "do": "talk:nikhil", "cmd": { "type": "talk", "to": "nikhil" }, "at": { "x": 155.5, "z": -295.5 } },
   { "do": "leave", "cmd": { "type": "leave" }, "at": null },
-  { "do": "go:stage", "cmd": null, "at": { "x": -3, "z": -1 }, "hold": 4 },
+  { "do": "go:stage", "cmd": null, "at": { "x": -54, "z": 109 }, "hold": 4 },
   { "wait": 248 },
   { "do": "take:megaphone", "cmd": { "type": "take", "object": "megaphone" }, "at": null },
   { "do": "give:kabir", "cmd": { "type": "give", "to": "kabir" }, "at": null },
-  { "do": "go:metro", "cmd": null, "at": { "x": -7, "z": 34 }, "hold": 1 },
+  { "do": "go:metro", "cmd": null, "at": { "x": 150, "z": -298 }, "hold": 1 },
   { "finish": true }
  ]
 }

@@ -77,7 +77,7 @@ export function createStory(api) {
       case 'at': { const x = a === 'player' ? s.player : visibleBody(s, a) || s.objects[a]; return !!x && placeAt(x) === b; }
       case 'with': return story(s).followers.includes(a) || (a === 'nikhil' && ['follow', 'waitStage'].includes(s.people.nikhil.mode));
       case 'holding': return s.player.carrying === a;
-      case 'given': return holderOf(s, a) === b;
+      case 'given': return holderOf(s, a) === b || s.objects[a]?.givenTo === b; // or handed over and put away since
       case 'flag': return !!s.flags[a];
       case '!flag': return !s.flags[a];
       case 'time': return s.t >= clock(`${a}:${b ?? '00'}`) - 1e-9;
@@ -133,7 +133,7 @@ export function createStory(api) {
       case 'follow': if (a === 'nikhil') { s.people.nikhil.mode = 'follow'; } else if (!st.followers.includes(a) && s.people[a]) { st.followers.push(a); s.people[a].mode = 'follow'; } break;
       case 'unfollow': st.followers = st.followers.filter((x) => x !== a); if (s.people[a]?.mode === 'follow') s.people[a].mode = 'story'; break;
       // An officer sent somewhere by the story goes back to his post after a while (rules.js updateOfficers).
-      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = s.officers[a] ? 'away' : p.kind ? 'toPost' : 'story'; if (s.officers[a]) p.backAt = s.t + api.mins(25); api.walkTo(p, to); } break; }
+      case 'move': { const p = s.people[a] || api.officerById(s, a), to = placePos(s, b); if (p && to) { p.mode = s.officers[a] ? 'away' : p.kind ? 'toPost' : 'story'; if (s.officers[a]) p.backAt = s.t + api.mins(25); api.walkTo(p, to); p.rush = true; } break; }
       case 'leave': { const p = s.people[a]; if (p && !p.hidden) { p.mode = 'storyLeave'; api.walkTo(p, SPOTS.metro); } break; }
       case 'return': { const p = s.people[a]; if (p && p.hidden && p.mode !== 'detained') { p.hidden = false; Object.assign(p, SPOTS.metro); p.mode = 'story'; api.walkTo(p, PLACES.stage); } break; }
       case 'give': api.giveObject(s, a, b); break;
@@ -143,6 +143,7 @@ export function createStory(api) {
       case 'release': if (a === 'player') { if (s.player.detained) api.releasePlayer(s, 'released-story'); } else api.releasePerson(s, a); break;
       case 'chase': if (!s.player.chasedBy) api.startChase(s, a, ctx.id || 'story'); break;
       case 'calm': { const o = api.officerById(s, a); if (o) { o.mood = 'bored'; if (s.player.chasedBy === a) { s.player.chasedBy = null; api.sendHome(s, o); } } break; }
+      case 'game': api.startGame(s, a); break; // a low-level game: game:window
       case 'cue': api.cue(s, a, { pos: s.player }); break;
       case 'clip': api.happen(s, a, s.player); break;
       case 'chat': chatLines(s, CHAT[a], 'chat:' + a); break;

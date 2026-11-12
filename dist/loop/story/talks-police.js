@@ -1477,6 +1477,18 @@ const BRUSHOFF = {
     'Ek trending audio batao, phir baat karenge.', 'Veere, abhi strict waala mode hai. Baad mein.',
     'Landscape ya portrait? Soch ke aana.', 'Oye hoye. Nahi. Matlab, nahi. Jao.',
   ],
+  c6: [
+    'Seeti sun rahe ho? Woh tumhare liye nahi thi. Ye wali hai. *phweet*', 'Zebra crossing pe khade hoke baat? Nahi.',
+    'Signal laal hai. Baat bhi laal hai. Ruko.', 'Patel Chowk pe main hi signal hoon. Hato.',
+    'Haath dekho mera. Ye "jao" wala haath hai.', 'Gaadi wale sunte nahi, tum kyun sun rahe ho? Jao.',
+    'Abhi peak hour hai. Mera bhi.', 'Ek minute. *phweeet* Haan, ab bhi nahi.', 'Tumhara challan banta hai. Bas form khatam hai.',
+  ],
+  c7: [
+    'Hmm? Haan. Nahi. Kya?', 'Naka hai, nashta nahi. Jao.', 'Main gaadiyan gin raha hoon. Tumne kitni bigaad di.',
+    'Transfer ki file upar gayi hai. Main bhi upar jaana chahta hoon. Pahaad pe.', 'Aankh band nahi thi. Soch raha tha.',
+    'Barrier utha doon? Nahi. Mann nahi hai.', 'Baad mein aana. Chai thandi ho rahi hai.', 'Almora mein aise log nahi milte.',
+    'Mujhe mat jagao. Main duty pe hoon.',
+  ],
   r1: [
     'Peeche.', 'Line mein raho.', 'Nahi.', 'Baad mein. Abhi duty hai.', 'Hum baat nahi kar sakte. Line mein hain.',
     'Dhoop mein mat khade raho.', 'Paani piyo. Phir aana.', 'Hum yahan nahi hain. Hum Muzaffarpur mein hain. Mann se.',
@@ -1662,6 +1674,64 @@ const PESTER_BY = {
       soft: ['Ghar jao veere. Tumhari agli reel ka wait hai mujhe.', 'Nahi. Tum bahar rahoge toh content milega.', 'Detain nahi. Follow kar lunga. Fake account se.'],
     },
     annoyed: ['Bas veere. Ab strict mode. Sach mein.', 'Unfollow. Haan, abhi. Fake account se bhi.', 'Ab tumhari reel report karunga. Galti se nahi.'],
+  },
+  c6: { // Bisht, the traffic constable at the Patel Chowk crossing: a whistle and opinions about lanes
+    say: {
+      career: 'Bisht ji, career advice? Traffic police ya kuch aur?',
+      cute: 'Bisht ji, seeti bajate hue aap bahut cute lagte ho.',
+      cannon: 'Bisht ji, water cannon aaya toh traffic kaun sambhalega?',
+      detainme: 'Bisht ji, mujhe detain kar lo. Main signal tod dunga.',
+    },
+    career: {
+      bored: ['Lane mein raho. Career mein bhi. Bas.', 'Traffic. Kyunki yahan sab ruk jaata hai, sirf main chalta hoon.', 'Indicator do, phir mudo. Zindagi mein bhi.'],
+      amused: ['Career? Seeti seekho. Teen tarah ki hoti hai. *phweet* *phweeet* *phwt*', 'Main ne MBA socha tha. Phir Patel Chowk mila. Dono same hain.', 'Ambition rakho, par speed limit mein.'],
+      soft: ['Jo bhi karo, kisi ko raasta de dena. Wahi kaam aata hai.', 'Mere bete ko bhi yahi bola: red light pe ruk jaana, zindagi mein bhi.', 'Kuch bhi bano. Bas jab koi gire, gaadi rok dena.'],
+    },
+    cute: {
+      bored: ['Cute? Gaadi side mein lagao.', 'Main traffic hoon. Mujhe koi cute nahi bolta. Sirf horn.', '*phweet* Ye jawab tha.'],
+      amused: ['Cute? Ye topi ki wajah se hai. Dhoop mein sab cute lagte hain.', 'Teen saal mein pehli baar kisi ne horn ke alawa kuch bola.', '(seeti munh se nikaal ke) Sach mein?'],
+      soft: ['Thank you beta. Ghar pe koi nahi bolta. Wahan bhi traffic hai.', 'Aaj ka challan maaf. Kisi ka bhi. Khush hoon.', 'Achha laga. Ab chalo, signal hara hai.'],
+    },
+    cannon: {
+      bored: ['Cannon aaya toh diversion lagega. Main board laga dunga.', 'Paani se gaadiyan nahi rukti. Seeti se rukti hain.', 'Mera kaam lane hai, cannon nahi.'],
+      amused: ['Cannon? Usse bhi lane mein chalaunga. Left se.', 'Paani pe challan ka form nahi hai. Dukh hai.', 'Gaadi dhul jaayegi. Free car wash. Main kuch nahi bola.'],
+      soft: ['Udhar mat jaana jab cannon aaye. Idhar aa jaana, footpath pe.', 'Paani se bachna. Gilay kapde mein gaadi nahi dikhti.', 'Cannon wale bhi traffic mein phanse the. Sab phanste hain.'],
+    },
+    detainme: {
+      bored: ['Signal todoge toh challan. Detention nahi. Form alag hai.', 'Detain? Tum gaadi ho kya?', 'Nahi. Mera kaam rokna hai, bithaana nahi.'],
+      amused: ['Detain karun? Pehle zebra crossing pe khade ho jao. Sahi se.', 'Bus mein jagah nahi. Rickshaw lo. Dus rupaye.', '*phweet* Ye detention wali seeti thi. Ho gaya.'],
+      soft: ['Ghar jao. Seedha. Aur gali mein mat kaatna.', 'Detain nahi karunga. Bas side mein khade raho jab tak signal na badle.', 'Tum jaise bachche mujhe apna beta yaad dilaate ho. Woh bhi signal todta hai.'],
+    },
+    annoyed: ['Bas. Ab naam bolo. Poora. Gaadi number bhi.', '*PHWEEEET* Samjhe? Nahi? Phir se?', 'Ek aur baar aur tumhe divert kar dunga. Ghar.'],
+  },
+  c7: { // Negi, half asleep at the Ashoka Road naka: wants a transfer to the hills
+    say: {
+      career: 'Negi ji, career advice? Kya karun life mein?',
+      cute: 'Negi ji, aap sote hue bahut cute lagte ho.',
+      cannon: 'Negi ji, water cannon aayega toh aap jaagoge?',
+      detainme: 'Negi ji, mujhe detain kar lo. Aapko kuch kaam milega.',
+    },
+    career: {
+      bored: ['Pahaad. Wahan jao. Yahan kuch nahi hai.', 'Transfer lo. Har cheez se. Mujhse bhi.', 'Career? Main gaadiyan ginta hoon. Aaj teen sau baara. Yahi career hai.'],
+      amused: ['Almora mein dukaan kholo. Maggi, chai, wifi. Main aa jaaunga.', 'Sarkari naukri lo, phir transfer maango. Poori zindagi ka plan.', 'Kuch bhi karo jismein barrier na ho. Maine galti ki.'],
+      soft: ['Jo karna hai, jaldi karo. Phir neend nahi aati.', 'Mere gaon mein ek ladka tha, tum jaisa. Ab woh pilot hai. Main naka pe hoon. Tum socho.', 'Apne log ke paas raho. Dilli mein sab door hain.'],
+    },
+    cute: {
+      bored: ['Hmm? Haan. Theek hai. So jaun?', 'Cute? Neend mein sab cute hote hain.', 'Bolo jo bolna hai. Aankh band hai, kaan khule hain.'],
+      amused: ['Sach mein? Mummy bhi yahi bolti thi. Pahaad pe.', '(aankh kholta hai) Kisne bola? Tumne? Achha.', 'Cute hoon toh transfer kar do. Tumhare paas power hai?'],
+      soft: ['Shukriya. Aaj ki pehli achhi baat. Duty ke saat ghante baad.', 'Jaao, aur kisi ko bhi bolo. Sab thake hain yahan.', 'Mujhe ghar yaad aa gaya. Achha hai, ya bura. Pata nahi.'],
+    },
+    cannon: {
+      bored: ['Cannon aaye toh jagaa dena.', 'Paani? Garmi mein? Main khud khada ho jaaunga saamne.', 'Cannon naka tak nahi aata. Naka bahut boring hai.'],
+      amused: ['Cannon se nahaa lunga. Teen din se socha nahi tha.', 'Pahaad pe baarish aisi hi hoti hai. Bas thandi.', 'Cannon wala mera batchmate hai. Usko bhi neend aati hai.'],
+      soft: ['Paani se door rehna. Dilli ka paani bhi gussa hai.', 'Cannon aaye toh peeche hat jaana. Hero mat banna.', 'Usko bhi order mila hai. Sabko order milta hai.'],
+    },
+    detainme: {
+      bored: ['Detain karne ke liye uthna padega. Nahi.', 'Register mein likhna padega. Pen nahi hai.', 'Kal aana. Aaj naka band hai. Mere liye.'],
+      amused: ['Detain kar dun? Phir tum bhi baith ke gaadiyan ginoge. Teen sau terah.', 'Bus aayegi toh bol dena. Main tab tak... (jamhaai)', 'Tum detain ho jao, main transfer ho jaaun. Deal?'],
+      soft: ['Nahi. Jao. Kisi ko toh ghar jaana chahiye.', 'Mat karo aisa. Mummy ko phone karna padega. Tumhari ko.', 'Main tumhe nahi dekh raha. Main so raha hoon. Jao.'],
+    },
+    annoyed: ['Ab jaag gaya hoon. Tumhari wajah se. Naam bolo.', 'Neend kharab kar di. Ab tumhara din kharab hoga.', 'Barrier gira dunga. Tumhare liye. Sirf tumhare liye.'],
   },
   raf: {
     say: {

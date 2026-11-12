@@ -1,0 +1,10 @@
+{
+  "by": "utkarsh",
+  "date": "2026-10-29",
+  "commit": "the commit you played (git rev-parse --short HEAD)",
+  "minutes": 32,
+  "scores": { "fun": 0, "again": 0, "delhi-feel": 0, "laughed": 0 },
+  "best": "the moment you liked most",
+  "worst": "the moment you were bored or annoyed",
+  "notes": ""
+}

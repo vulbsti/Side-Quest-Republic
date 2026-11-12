@@ -1,0 +1,18 @@
+{
+ "name": "route dhuan-meera",
+ "note": "In the tear gas at the stage at four, go for Meera before the cop takes her phone: snatch it, run, lose him in the smoke and give it back.",
+ "tempo": "long",
+ "expect": { "history": "choice:dhuan:meera-saved:1" },
+ "trace": [
+  { "do": "go:stage", "cmd": null, "at": { "x": -49, "z": 105 }, "hold": 333 },
+  { "do": "situation:dhuan", "cmd": { "type": "situation", "id": "dhuan" }, "at": { "x": -49, "z": 105 } },
+  { "wait": 1 },
+  { "do": "say:dhuan:smoke:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:dhuan:meera:0", "cmd": { "type": "say", "option": 0 }, "at": null },
+  { "wait": 1 },
+  { "do": "say:dhuan:meera-saved:1", "cmd": { "type": "say", "option": 1 }, "at": null },
+  { "wait": 1 },
+  { "finish": true }
+ ]
+}

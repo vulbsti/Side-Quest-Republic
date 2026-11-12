@@ -195,7 +195,7 @@ test('speaker-run: push-cart path reaches the stage too', () => {
 // --- nobody comes ----------------------------------------------------------------------------------
 test('idle day: every Act 1 auto runs and the world moves', () => {
   const s = dayAt('10:00');
-  Object.assign(s.player, { x: 60, z: 30 }); // far from everyone
+  Object.assign(s.player, { x: 300, z: 300 }); // far from everyone
   runTo(s, '11:50');
   assert.equal(stateOf(s, 'nikhil-lost'), 'fail');
   assert.ok(s.flags['nikhil-left']);

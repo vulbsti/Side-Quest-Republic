@@ -1,10 +1,14 @@
 {"name":"ending noshow · block · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-18,"z":-30.8}},
-{"clock":"10:05","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:06","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}},
-{"clock":"10:09","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":-7.505395947629511,"z":34.2874857035049}},
-{"clock":"10:12","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":{"x":-9.5,"z":-9}},
-{"clock":"10:15","wait":10},
-{"clock":"10:25","wait":3},
-{"clock":"10:28","finish":true}
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","wait":1},
+{"clock":"16:36","do":"say:dhuan:nikhil:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:37","do":"whisper:minister:sana","cmd":{"type":"whisper","to":"sana","rumour":"minister"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:38","wait":20},
+{"clock":"16:58","do":"say:dhuan:nikhil-gone:0","cmd":{"type":"say","option":0},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","do":"say:dhuan:hub:1","cmd":{"type":"say","option":1},"at":{"x":-59.44721430865226,"z":100.94152456348695}},
+{"clock":"16:59","wait":45},
+{"clock":"17:44","finish":true}
 ]}

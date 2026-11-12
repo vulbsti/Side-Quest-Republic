@@ -1,23 +1,9 @@
-{"name":"cover 33","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","wait":20},
-{"clock":"10:20","do":"pester:c4:cannon","cmd":{"type":"pester","to":"c4","how":"cannon"},"at":{"x":7,"z":1}},
-{"clock":"10:22","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:27","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:31","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":1},
-{"clock":"10:32","do":"pester:c3:detainme","cmd":{"type":"pester","to":"c3","how":"detainme"},"at":{"x":19,"z":-11}},
-{"clock":"10:33","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":3.2,"z":-10.4}},
-{"clock":"10:35","do":"talk:c4","cmd":{"type":"talk","to":"c4"},"at":{"x":7,"z":1}},
-{"clock":"10:36","do":"say:rawat-m1:a:0","cmd":{"type":"say","option":0},"at":{"x":6.471169394593114,"z":-1.2444645240438104}},
-{"clock":"10:37","do":"film:cannon-scare@stage","cmd":{"type":"film"},"at":{"x":2,"z":-5}},
-{"clock":"10:37","do":"lane","cmd":null,"at":{"x":10,"z":-6.040000000000035},"hold":4},
-{"clock":"10:42","do":"whisper:biryani:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"biryani"},"at":{"x":-7.5,"z":-5.5}},
-{"clock":"10:43","do":"hide:stage","cmd":null,"at":{"x":0,"z":-5.5},"hold":4},
-{"clock":"10:48","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":6.2,"z":-37.2}},
-{"clock":"10:50","do":"talk:c1","cmd":{"type":"talk","to":"c1"},"at":{"x":-4,"z":16}},
-{"clock":"10:54","wait":20},
-{"clock":"11:14","do":"say:yadav-m1:a:0","cmd":{"type":"say","option":0},"at":{"x":-3.788128068957985,"z":13.616440775777342}},
-{"clock":"11:14","do":"talk:c5","cmd":{"type":"talk","to":"c5"},"at":{"x":57,"z":-1}},
-{"clock":"11:19","wait":45},
-{"clock":"12:04","do":"say:gill-m3:a:1","cmd":{"type":"say","option":1},"at":{"x":54.63192624963365,"z":-1.7893579167887912}},
-{"clock":"12:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":0,"z":-5.5}}
+{"name":"cover 33","note":"2 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
+{"clock":"10:12","do":"situation:speaker-run","cmd":{"type":"situation","id":"speaker-run"},"at":{"x":84.5,"z":-188.5}},
+{"clock":"10:12","wait":1},
+{"clock":"10:13","do":"say:speaker-run:intro:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"10:14","wait":1},
+{"clock":"10:15","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":1},
+{"clock":"10:38","do":"say:speaker-run:setup:2","cmd":{"type":"say","option":2},"at":null}
 ]}

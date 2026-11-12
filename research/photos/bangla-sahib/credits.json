@@ -1,0 +1,96 @@
+{
+  "point": "bangla-sahib",
+  "lat": 28.6264,
+  "lon": 77.2091,
+  "radius_m": 150,
+  "geosearch_hits": 38,
+  "skipped": {
+    "licence": 2
+  },
+  "photos": [
+    {
+      "file": "01-Nov_Dill_Gurudwara_Bangla_Sahib_buben_ci.jpg",
+      "title": "File:Nové Dillí, Gurudwara Bangla Sahib, bubeníci.jpg",
+      "author": "I would appreciate being notified if you use my work outside Wikimedia.\nMore of my work can be found in my personal gallery.",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Nov%C3%A9_Dill%C3%AD,_Gurudwara_Bangla_Sahib,_buben%C3%ADci.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib%2C_buben%C3%ADci.jpg/1280px-Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib%2C_buben%C3%ADci.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 5.7,
+      "lat": 28.626358333333,
+      "lon": 77.209133333333,
+      "date": "2016-08-05 16:49:29",
+      "bytes": 221269
+    },
+    {
+      "file": "02-Nov_Dill_Gurudwara_Bangla_Sahib.jpg",
+      "title": "File:Nové Dillí, Gurudwara Bangla Sahib.jpg",
+      "author": "I would appreciate being notified if you use my work outside Wikimedia.\nMore of my work can be found in my personal gallery.",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Nov%C3%A9_Dill%C3%AD,_Gurudwara_Bangla_Sahib.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib.jpg/1280px-Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 7.6,
+      "lat": 28.626408333333,
+      "lon": 77.209022222222,
+      "date": "2016-08-05 16:49:18",
+      "bytes": 386488
+    },
+    {
+      "file": "03-Nov_Dill_Gurudwara_Bangla_Sahib_j_delna.jpg",
+      "title": "File:Nové Dillí, Gurudwara Bangla Sahib, jídelna.jpg",
+      "author": "I would appreciate being notified if you use my work outside Wikimedia.\nMore of my work can be found in my personal gallery.",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Nov%C3%A9_Dill%C3%AD,_Gurudwara_Bangla_Sahib,_j%C3%ADdelna.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib%2C_j%C3%ADdelna.jpg/1280px-Nov%C3%A9_Dill%C3%AD%2C_Gurudwara_Bangla_Sahib%2C_j%C3%ADdelna.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 19.8,
+      "lat": 28.626516666667,
+      "lon": 77.209252777778,
+      "date": "2016-08-05 17:25:17",
+      "bytes": 204929
+    },
+    {
+      "file": "04-Templo_sij_5.jpg",
+      "title": "File:Templo sij 5.jpg",
+      "author": "Especandel",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Templo_sij_5.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Templo_sij_5.jpg/1280px-Templo_sij_5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 24.3,
+      "lat": 28.626606,
+      "lon": 77.209183,
+      "date": "2023-12-30 18:18:23",
+      "bytes": 380774
+    },
+    {
+      "file": "05-Templo_sij_2.jpg",
+      "title": "File:Templo sij 2.jpg",
+      "author": "Especandel",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Templo_sij_2.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Templo_sij_2.jpg/1280px-Templo_sij_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 33.7,
+      "lat": 28.626647,
+      "lon": 77.2089,
+      "date": "2023-12-30 17:43:27",
+      "bytes": 241491
+    },
+    {
+      "file": "06-Templo_sij.jpg",
+      "title": "File:Templo sij.jpg",
+      "author": "Especandel",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Templo_sij.jpg",
+      "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Templo_sij.jpg/1280px-Templo_sij.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "distance_m": 33.7,
+      "lat": 28.626647,
+      "lon": 77.2089,
+      "date": "2023-12-30 17:40:34",
+      "bytes": 170022
+    }
+  ]
+}
