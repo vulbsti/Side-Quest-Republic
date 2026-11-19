@@ -44,7 +44,7 @@ export function routeEvent(e, v) {
   if (kind === 'slice') return { kind, channel: 'slice', seen: !!e.text, learn };
   if (v.slice && (onPhone || kind === 'wireless' || e.who === 'street')) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
   // ...and the player only says the slice's own lines: the reel's caption already says how a chase went.
-  if (v.slice && e.who === 'player' && !String(e.key).startsWith('slice-')) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
+  if (v.slice && e.who === 'player' && !/^(slice-|travel)/.test(String(e.key))) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
   const inView = (b) => !!b && b.visible !== false && dist(p, b) <= BUBBLE_RANGE;
   // A conversation's beats are on screen while you're in it (the options card, the reel frame, bubbles).
   if (kind === 'beat') return { kind, channel: 'convo', seen: !!e.text, learn: !!e.link };

@@ -2158,7 +2158,7 @@ function press(k) {
   if (k === 'f') film();
   if (k === 'r') rally();
   if (k === 'c') openStance();
-  if (k === 'm') travel?.toggle(); // fast travel (travel-ui.js)
+  if (k === 'm' && !day?.slice) travel?.toggle(); // fast travel (travel-ui.js)
 }
 function setupInput() {
   addEventListener('keydown', (e) => {

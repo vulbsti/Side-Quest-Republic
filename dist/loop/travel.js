@@ -175,7 +175,7 @@ export function createTravel(E) {
 
   function act(s, cmd) {
     const no = why(s, cmd.to);
-    if (no) { say(s, 'player', NO[no]); return { ok: false }; }
+    if (no) { say(s, 'player', NO[no], { key: 'travel-no' }); return { ok: false }; }
     const pl = s.player, d = DESTINATIONS[cmd.to], from = nearest(pl), land = landing(s, cmd.to);
     const tr = (s.travel ??= { hops: 0, last: null, been: {} });
     const dx = land.x - pl.x, dz = land.z - pl.z;
