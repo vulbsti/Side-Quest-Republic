@@ -3,7 +3,8 @@
 // in verify/recordings/ are replayed by every `npm run verify` and must not break an invariant or crash.
 // The client records every loop; with ?dev, K saves it.
 //
-// Format v1: { v: 1, tempo, step: 0.1, ticks, steps: [{ k, cmds?: [cmd], in?: { x, z, unseen } }], meta }
+// Format v1: { v: 1, tempo, opts?, step: 0.1, ticks, steps: [{ k, cmds?: [cmd], in?: { x, z, unseen } }], meta }
+// opts: createDay's options for a day that isn't a plain one ({ mischief: { loop } } for the 10-minute day, { slice: true }).
 // Within tick k the order is fixed: commands issued since the last tick, then inputs, then tick().
 // That is the browser's order too (input handlers fire between frames; step() sets inputs, then ticks).
 // Pure module: callers pass the engine.
@@ -30,7 +31,8 @@ export function createRecorder(day, meta = {}) {
     },
     tick() { k++; },
     recording(extra = {}) {
-      return { v: RECORDING_VERSION, tempo: day.tempo, step: STEP, ticks: k, steps: steps.slice(), meta: { ...meta, ...extra } };
+      const opts = day.mischief ? { mischief: { loop: day.mischief.loop } } : day.slice ? { slice: true } : undefined;
+      return { v: RECORDING_VERSION, tempo: day.tempo, ...(opts ? { opts } : {}), step: STEP, ticks: k, steps: steps.slice(), meta: { ...meta, ...extra } };
     },
   };
 }
@@ -49,7 +51,7 @@ export function setInputs(s, { x, z, unseen } = {}) {
 export function replayRecording(rec, R, { onTick = null, onAct = null } = {}) {
   if (rec.v !== RECORDING_VERSION) throw new Error(`recording v${rec.v} unsupported`);
   R.setTempo(rec.tempo || 'long');
-  const s = R.createDay();
+  const s = R.createDay(rec.opts ? { ...rec.opts } : undefined);
   const byK = new Map(rec.steps.map((st) => [st.k, st]));
   for (let k = 0; k < rec.ticks && !s.over; k++) {
     const st = byK.get(k), results = [];

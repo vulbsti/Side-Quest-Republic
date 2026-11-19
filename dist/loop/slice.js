@@ -2,6 +2,8 @@
 // A cold open mid-chase, three dares on screen, followers as the score, every dare answered on screen within
 // three seconds, and a reel at exactly 180 real seconds. Pure engine code like rules.js (no DOM): the state lives
 // in the day (s.slice), rules.js hands in its helpers (createSlice(api)), and a default day never touches it.
+// Followers, moments, cutaways and the end reel's pick are reel.js, shared with the 10-minute day (dares.js).
+import { createReel, PER_AURA } from './reel.js';
 
 export const SLICE = {
   length: 180, // real seconds
@@ -13,7 +15,7 @@ export const SLICE = {
   partyEvery: 1.1, // seconds per dancer while the speaker plays at the stop
   partyMax: 16,
   keySpot: 5, // carrying the key this close to a constable at his post, he spots it
-  perAura: 120, // followers per point of aura
+  perAura: PER_AURA, // followers per point of aura (reel.js)
   meera: 15, // metres: inside this, Meera's reel doubles what you earn
   crowd: { from: 4, every: 4, max: 10 }, // the waiting crowd at the stop fills in over the first seconds
 };
@@ -58,6 +60,7 @@ const COMMENTS = [
 
 export function createSlice(api) {
   const { dist, SPOTS, CROWD_CENTERS, cue, say, addRep, startChase, startIqbalBreak, endIqbalBreak, crowdAt } = api;
+  const REEL = createReel({ cue }); // followers, moments, cutaways and the end reel, shared with the 10-minute day (reel.js)
   const stop = CROWD_CENTERS.cp;
   const officers = (s) => [s.people.sharma, ...Object.values(s.officers)];
 
@@ -96,31 +99,13 @@ export function createSlice(api) {
     say(s, 'coach', COACH[key], { key: `slice-${key}`, kind: 'slice', pos: s.player });
   }
   function bark(s, who, text, key) { say(s, who, text, { key: `slice-${key}` }); }
-  function cutaway(s, data) { cue(s, 'slice:cutaway', { pos: data.pos ?? null, data }); }
-  function pay(s, n, why) {
-    const sl = s.slice, x2 = sl.multiplier > 1;
-    const got = Math.round(n * sl.multiplier);
-    if (got <= 0) return 0;
-    sl.followers += got;
-    cue(s, 'slice:followers', { pos: s.player, data: { n: got, total: sl.followers, why, x2 } });
-    return got;
-  }
-  const views = (followers) => Math.max(300, Math.round(followers * 11 / 100) * 100);
-  function moment(s, kind, did, caused, followers) {
-    s.slice.moments.push({ t: Math.round(s.t * 10) / 10, kind, did, caused, followers, views: views(followers) });
-  }
+  const cutaway = (s, data) => REEL.cutaway(s, data);
+  const pay = (s, n, why) => REEL.pay(s, s.slice, n, why);
+  const moment = (s, kind, did, caused, followers) => REEL.moment(s, s.slice, kind, did, caused, followers);
   // The reel: dares first, then what they caused, one catch (the funniest bit), at most two bonus topis.
   const WEIGHT = { dare: 4, party: 3, shuttle: 3, caught: 2, bonus: 1 };
   const CAP = { caught: 1, bonus: 2 };
-  function reel(moments) {
-    const n = {}, out = [];
-    for (const m of moments.slice().sort((a, b) => WEIGHT[b.kind] * b.views - WEIGHT[a.kind] * a.views || a.t - b.t)) {
-      if ((n[m.kind] = (n[m.kind] ?? 0) + 1) > (CAP[m.kind] ?? 9)) continue;
-      out.push(m);
-      if (out.length === 5) break;
-    }
-    return out.sort((a, b) => a.t - b.t);
-  }
+  const reel = (moments) => REEL.pick(moments, WEIGHT, CAP, 5);
   /** Aura you earn the usual ways (a dodge, an escape, a dare) turns into followers, labelled by what earned it. */
   function convertAura(s, why) {
     const sl = s.slice, r = s.player.rep;
@@ -214,7 +199,7 @@ export function createSlice(api) {
       if (bonus) addRep(s, { aura: 6 });
       const got = convertAura(s, first ? 'dare' : bonus ? 'bonus' : 'escape');
       cutaway(s, { who: by, title: `${nameOf(by)} bina topi`, sub: first ? '"Meri topi! Sarkari property hai!"' : `Topi #${sl.topis}`, followers: got });
-      if (first) { cue(s, 'slice:dare', { pos: pl, data: { id: 'topi', followers: got } }); moment(s, 'dare', 'Meena ji ki topi udayi', 'Meena ji sar pakad ke khadi', got); }
+      if (first) { REEL.stamp(s, 'topi', got, pl); moment(s, 'dare', 'Meena ji ki topi udayi', 'Meena ji sar pakad ke khadi', got); }
       else moment(s, 'bonus', `${nameOf(by)} ki topi udayi`, near ? `${near} baar hawa pakdi` : `Topi #${sl.topis}`, got);
       if (first) sl.next = 'speaker';
       return;
@@ -225,7 +210,7 @@ export function createSlice(api) {
       dareDone(s, 'chabi');
       const got = convertAura(s, 'dare');
       cutaway(s, { who: 'iqbal', title: 'Chabi gayab', sub: 'Iqbal pocket pe pocket patak raha.', followers: got });
-      cue(s, 'slice:dare', { pos: pl, data: { id: 'chabi', followers: got } });
+      REEL.stamp(s, 'chabi', got, pl);
       moment(s, 'dare', 'Iqbal ki chabi gayab ki', `${nameOf(by)} haath ghutno pe`, got);
       endIqbalBreak(s);
       sl.iqbalBack = true;
@@ -309,7 +294,7 @@ export function createSlice(api) {
     if (atStop(sp) && dareDone(s, 'speaker')) {
       const got = convertAura(s, 'dare');
       cutaway(s, { pos: { x: sp.x, z: sp.z }, title: 'CP stop pe DJ', sub: 'Ravi ka speaker. Bus stop naach raha.', followers: got });
-      cue(s, 'slice:dare', { pos: sp, data: { id: 'speaker', followers: got } });
+      REEL.stamp(s, 'speaker', got, sp);
       moment(s, 'dare', 'Ravi ka speaker bus stop pe bajaya', 'Poora stop naachne laga', got);
       if (!sl.dares.find((d) => d.id === 'chabi').done) coach(s, 'chabi');
     }
@@ -353,8 +338,7 @@ export function createSlice(api) {
     sl.ended = true;
     s.player.chasedBy = null; s.chase = null;
     const o = { dares: sl.dares.filter((d) => d.done).length, caught: sl.caught, topis: sl.topis, party: sl.party, chabi: sl.dares[2].done, nearMisses: sl.nearMisses, followers: sl.followers, raviCaught: sl.raviCaught };
-    const picked = COMMENTS.filter(([when]) => when(o)).map(([, text]) => text);
-    sl.comments = picked.slice(0, 3);
+    sl.comments = REEL.comments(COMMENTS, o, 3);
     // The reel: the five biggest moments, in the order they happened.
     const top = reel(sl.moments);
     s.over = true;

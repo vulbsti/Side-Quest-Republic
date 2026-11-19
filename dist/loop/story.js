@@ -405,7 +405,7 @@ export function createStory(api) {
     // Chatter: people near you talking to each other.
     st.chatterT -= dt;
     if (st.chatterT <= 0 && !st.queue.length && !st.convo) {
-      st.chatterT = 6;
+      st.chatterT = s.mischief ? 18 : 6; // the 10-minute day reads less: banter comes round a third as often (dares.js)
       const phase = phaseAt(now);
       // The exchange whose people are nearest you, so the pair beside you talks, not one across the square.
       const near = (x) => Math.min(...(x.cast || []).map((id) => { const b = visibleBody(s, id); return b ? dist(b, s.player) : 1e9; }));

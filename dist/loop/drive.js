@@ -14,7 +14,7 @@ export const STEP = 0.1; // the client's fixed step
 export const JOG = 4.7; // the player's jog, m/s
 export const FEEDBACK_SECONDS = 3; // after a command, watch this long for an answer
 export const WALK_LIMIT = 150; // give up walking after this many seconds
-export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1, travel: Infinity };
+export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1, travel: Infinity, incident: 1.6 };
 export const reachOf = (cmd) => (cmd ? REACH[cmd.type] ?? 1.5 : REACH.go);
 // Commands that work wherever you are, so they are tried even if the walk didn't get there.
 const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave', 'travel'].includes(cmd.type) || (cmd.type === 'ride' && cmd.to === 'off');
@@ -31,6 +31,7 @@ export function targetOf(R, s, cmd, at) {
   if (!cmd) return at;
   if (cmd.type === 'provocateur') { const p = s.provocateurs.find((x) => x.id === cmd.id); if (p) return cmd.how === 'report' ? at : p; }
   if (cmd.type === 'take') return s.objects[cmd.object];
+  if (cmd.type === 'incident') return R.incidentTarget?.(s, cmd) || at; // a rolling cart, a running Nikhil (director.js)
   if (cmd.type === 'pester') return R.officerById(s, cmd.to) || at;
   if (cmd.type === 'talk' || cmd.type === 'give' || cmd.type === 'whisper') return s.people[cmd.to] || R.officerById(s, cmd.to) || at;
   return at;
@@ -53,6 +54,8 @@ export function createDriver(R, trace, hooks = {}, { sight = null } = {}) {
     get done() { return mode === 'done'; },
     /** Push more steps (the verifier decides as it goes). */
     push(...more) { steps.push(...more); if (mode === 'done') mode = 'next'; },
+    /** Stop waiting or walking now and go on to the next step (a bot reacting to trouble; not used in replays). */
+    cut() { if (mode === 'wait' || mode === 'hold' || mode === 'walk') mode = steps.length > i + 1 ? 'next' : 'done'; },
     before(s) {
       if (sight && !s.over) s.player.unseen = sight.lost(s);
       for (let guard = 0; guard < 4; guard++) {

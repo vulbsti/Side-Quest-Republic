@@ -3,6 +3,7 @@
 // do, how long nothing new happened, how busy the phone was, and how different their days turned out.
 import * as H from './harness.mjs';
 import { rng } from './explore.mjs';
+import { daresServed } from '../../dist/loop/dares.js';
 
 const { R } = H;
 const STORY = new Set(['situation', 'say', 'go', 'take', 'give', 'film', 'provocateur', 'rally', 'plead', 'stance']);
@@ -31,6 +32,16 @@ export const PERSONAS = {
   explorer: { about: 'Tries whatever it has not tried yet', wait: 0.2, weight: (a, s, tried) => 1 / (1 + 3 * (tried.get(a.id) || 0)) },
 };
 
+/**
+ * On the 10-minute day (dares.js) anyone reacts to trouble that comes to them, and leans towards what is on the
+ * mischief list: an incident's command weighs 8, and an affordance that serves an open dare counts four times.
+ */
+export function dayWeight(a, s, w) {
+  if (!s.mischief) return w;
+  if (a.kind === 'incident' || a.id === 'incident:mark') return Math.max(w, 8);
+  return daresServed(s, a) ? Math.max(w, 0.5) * 4 : w;
+}
+
 /** Fast travel is one choice, whichever place it goes to: the hops share one affordance's weight between them. */
 export function travelOnce(affs, w) {
   const n = affs.filter((a) => a.kind === 'travel').length;
@@ -39,7 +50,7 @@ export function travelOnce(affs, w) {
 
 function choose(persona, run, rand, tried) {
   const affs = R.affordances(run.s);
-  const w = travelOnce(affs, affs.map((a) => Math.max(0, persona.weight(a, run.s, tried))));
+  const w = travelOnce(affs, affs.map((a) => dayWeight(a, run.s, Math.max(0, persona.weight(a, run.s, tried)))));
   const total = w.reduce((n, v) => n + v, 0) + persona.wait * (affs.length ? Math.max(1, w.reduce((n, v) => n + v, 0) / 3) : 1);
   let x = rand() * total;
   for (let i = 0; i < affs.length; i++) { x -= w[i]; if (x <= 0) { const a = affs[i]; tried.set(a.id, (tried.get(a.id) || 0) + 1); return a.cmd ? { do: a.id, cmd: a.cmd, at: a.at } : { do: a.id, cmd: null, at: a.at, hold: 3 }; } }
@@ -57,9 +68,9 @@ export function withHop(s, step) {
 }
 
 /** One bot day. Returns the run and what was measured. */
-export function playDay(name, { seed = 1, tempo = 'long' } = {}) {
+export function playDay(name, { seed = 1, tempo = 'long', opts = undefined } = {}) {
   const persona = PERSONAS[name], rand = rng(seed * 7919 + name.length), tried = new Map();
-  const run = H.newRun(tempo);
+  const run = H.newRun(tempo, opts);
   const acts = [], affSeen = new Map();
   while (!run.s.over) {
     for (const a of R.affordances(run.s)) if (STORY.has(a.kind) && !affSeen.has(a.id)) affSeen.set(a.id, run.s.t);
@@ -71,7 +82,7 @@ export function playDay(name, { seed = 1, tempo = 'long' } = {}) {
     }
     if (run.crashed) break;
   }
-  return { name, seed, tempo, run, acts, affSeen, crash: run.crashed ?? null, metrics: run.crashed ? null : measure(run, acts, affSeen) };
+  return { name, seed, tempo, opts, run, acts, affSeen, crash: run.crashed ?? null, metrics: run.crashed ? null : measure(run, acts, affSeen) };
 }
 
 export function measure(run, acts, affSeen) {

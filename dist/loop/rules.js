@@ -9,7 +9,9 @@ import { createStory } from './story.js';
 import { createSlice } from './slice.js';
 import { streetPath, pathLength } from '../map/route.js';
 import { createTravel } from './travel.js';
+import { createMischief } from './dares.js'; // the 10-minute day: mischief list, followers, trouble director, end reel
 export { DESTINATIONS, TRAVEL_MINUTES, HOP_FROM, MODES } from './travel.js';
+import { DESTINATIONS as TRAVEL_DESTINATIONS } from './travel.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -216,7 +218,7 @@ const RAID = { breath: 12, ring: 3, reach: 25, near: 10, home: 35, approach: 6, 
 const PINNED = 5; // seconds of uthak-baithak when a constable catches you over his topi
 const TOPI_AGAIN = 30; // clock minutes before the same constable lets his guard down again
 /** A constable whose topi you can flick off right now: standing at his post, not busy, not just robbed. */
-const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && o.mode === 'post' && (o.topiAt == null || s.t - o.topiAt >= mins(s.slice ? SLICE.topiAgain : TOPI_AGAIN));
+const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && (o.mode === 'post' || o.mode === 'loose') && (o.topiAt == null || s.t - o.topiAt >= mins(s.slice ? SLICE.topiAgain : TOPI_AGAIN));
 const VIRAL = 4000;
 const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const BARRICADE_JAWAN = 'r1'; // the RAF jawan who stands at the barricade beside Sharma from 14:00
@@ -239,6 +241,7 @@ function officer(id, kind, post, extra = {}) {
 
 export function createDay(opts = {}) {
   if (opts.slice && !opts.tempo) opts = { ...opts, tempo: 'slice' }; // the three-minute slice (slice.js)
+  if (opts.mischief && !opts.tempo) opts = { ...opts, tempo: 'slice' }; // the 10-minute day (dares.js)
   if (opts.tempo) setTempo(opts.tempo);
   const rumour = () => ({ people: {}, places: {}, dead: false, exposure: {}, meeraT: 0, zoyaT: 0 });
   const day = {
@@ -334,6 +337,7 @@ export function createDay(opts = {}) {
   };
   day.story = STORY.init();
   if (opts.slice) SLICE.setup(day);
+  else if (opts.mischief) MISCHIEF.setup(day, opts.mischief === true ? {} : opts.mischief);
   return day;
 }
 
@@ -368,6 +372,7 @@ const rep = (s) => s.player.rep;
 function addRep(s, d = {}) {
   const r = rep(s);
   for (const k of ['aura', 'heat', 'help', 'nuisance']) if (d[k]) r[k] = clamp(r[k] + d[k]);
+  if (s.mischief && d.aura > 0) s.mischief.auraIn += d.aura; // the 10-minute day pays followers for aura (dares.js)
 }
 /** Remember the first time the player did something a later rule can call back to. */
 function memo(s, key, data = null) {
@@ -1047,6 +1052,7 @@ function endChase(s, c, how) {
 }
 function caught(s, c) {
   if (s.slice && SLICE.caught(s, c)) return; // in the slice every catch is the light one
+  if (s.mischief && MISCHIEF.caught(s, c)) return; // a trouble incident's catch is the light one (director.js)
   const pl = s.player;
   s.chase = null;
   if (s.memo.chase?.data?.why === 'topi') { // no van for a topi: five seconds of uthak-baithak in front of everyone
@@ -2241,6 +2247,7 @@ export function tick(s, dt) {
   runRules(s, cdt);
   storyFlags(s);
   if (s.slice) SLICE.tick(s, dt); else STORY.tick(s, dt);
+  if (s.mischief) MISCHIEF.tick(s, dt); // the 10-minute day: dares, followers, the trouble director
   if (!s.over && !s.slice && s.t >= at(18, 0)) finish(s);
   return s;
 }
@@ -2265,6 +2272,7 @@ export function finish(s, ending = null) {
   s.over = true;
   s.ending = ending ?? chooseEnding(s);
   s.outcome = endingCard(s);
+  if (s.mischief) MISCHIEF.end(s); // the reel, with the card's headline and role (dares.js)
   if (s.history) Object.assign(s.history, { ['ending:' + s.ending]: s.t, ['outcome:' + s.outcome.outcome]: s.t, ['role:' + s.outcome.role]: s.t });
   return s;
 }
@@ -2374,6 +2382,7 @@ export function act(s, cmd) {
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
   if (cmd.type === 'travel') return TRAVEL.act(s, cmd); // fast travel: refuses with its own line (travel.js)
+  if (cmd.type === 'incident') return s.mischief ? MISCHIEF.act(s, cmd) : { ok: false }; // a trouble incident (director.js)
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
   if (pl.riding && !(cmd.type === 'ride' || cmd.type === 'film')) return { ok: false, say: 'riding' };
@@ -2770,6 +2779,16 @@ export const storyCallbackText = (key) => STORY.callbackText(key);
 
 // --- fast travel (travel.js) ------------------------------------------------------
 const TRAVEL = createTravel({ dist, mins, say, cue, advance, crowdAt, allOfficers });
+
+// --- the 10-minute day (dares.js, director.js, reel.js) ------------------------------------
+const MISCHIEF = createMischief({
+  dist, mins, at, phaseAt, PHASES, PLACES, SPOTS, CROWD_CENTERS, DESTINATIONS: TRAVEL_DESTINATIONS, streetPath, cue, say, addRep,
+  startChase, sendHome, officerById, allOfficers, inCrowd, nearby: (s, p, r) => opportunities(s, p, r), giveObject, walkTo,
+});
+/** The 10-minute day's HUD: { followers, multiplier, dares, incident }, or null on a day without a mischief list. */
+export const mischiefView = (s) => MISCHIEF.view(s);
+/** Where a trouble incident's command points now (a rolling cart, a running Nikhil), for drive.js. */
+export const incidentTarget = (s, cmd) => MISCHIEF.target(s, cmd);
 /** The travel panel: [{ id, name, mode, d, ok, why, text, heat, ... }] for every destination. */
 export const travelBoard = (s) => TRAVEL.board(s);
 /** The best hop towards a far point, or null: { to, name, d }. */
@@ -2851,12 +2870,13 @@ export function opportunities(s, pos = s.player, radius = 10) {
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
-  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, raid: -25, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, raid: -25, provocateur: -5, film: -4, give: -3, plead: -20, incident: -22 };
   const score = (o) => {
     let d = o.d + (URGENT[o.kind] ?? 0);
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
     return d;
   };
+  if (s.mischief) for (const o of MISCHIEF.opportunities(s)) push(o.id, o.kind, o.text, o.at, o.cmd); // trouble incidents (director.js)
   if (s.slice) SLICE.trim(s, out); // the slice's E prompt offers only its own verbs
   for (const o of out) o.rank = score(o);
   out.sort((a, b) => a.rank - b.rank);
@@ -2949,6 +2969,7 @@ export function affordances(s) {
   const b = s.bus;
   if (b.phase === 'toJantar' || b.phase === 'toCP') { const q = busPoint(b.s + (b.phase === 'toJantar' ? 6 : -6)); add('lane', 'go', null, { x: q.x, z: q.z }); }
   if (s.slice) for (const a of SLICE.affordances(s)) add(a.id, a.kind, a.cmd, a.at);
+  if (s.mischief) for (const a of MISCHIEF.affordances(s)) add(a.id, a.kind, a.cmd, a.at); // trouble incidents (director.js)
   return out;
 }
 
