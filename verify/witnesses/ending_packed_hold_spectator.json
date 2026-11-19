@@ -1,0 +1,12 @@
+{"name":"ending packed · hold · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"hold","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"14:53","wait":20},
+{"clock":"15:13","do":"say:naye-joote:suv:2","cmd":{"type":"say","option":2},"at":{"x":-40.59493884463267,"z":116.32800123338554}},
+{"clock":"15:14","wait":10},
+{"clock":"15:24","wait":10},
+{"clock":"15:34","wait":20},
+{"clock":"15:54","finish":true}
+]}

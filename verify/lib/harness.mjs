@@ -8,7 +8,7 @@
 //   log    what the player saw or heard: [{ t, clock, kind, channel, who, key, text, seen }]
 import { readFileSync } from 'node:fs';
 import * as R from '../../dist/loop/rules.js';
-import { routeEvent, engineView, chatFor, tickerFor, reelsFor } from '../../dist/loop/present.js';
+import { routeEvent, engineView, chatFor, tickerFor, reelsFor, routePhone } from '../../dist/loop/present.js';
 import { createDriver, targetOf as driveTarget, ticksFor, STEP, JOG, FEEDBACK_SECONDS } from '../../dist/loop/drive.js';
 import { canSee, lostSight } from '../../dist/loop/sight.js';
 
@@ -22,15 +22,16 @@ export const SIGHT = { canSee: (s) => canSee(s, wallsAt(s)), lost: (s) => !!s.pl
 export { STEP, JOG };
 const targetOf = (s, cmd, at) => driveTarget(R, s, cmd, at);
 
-export function newRun(tempo = 'long') {
+/** A new day. opts: createDay's options beyond the tempo, e.g. { mischief: { loop } } for the 10-minute day (dares.js). */
+export function newRun(tempo = 'long', opts = undefined) {
   R.setTempo(tempo);
-  const s = R.createDay({ tempo });
-  return { s, trace: [], log: [], tempo };
+  const s = R.createDay({ ...(opts || {}), tempo });
+  return { s, trace: [], log: [], tempo, opts, screen: {} };
 }
 /** A deep copy that continues exactly as the original would. */
 export function cloneRun(run, { keepLog = false } = {}) {
   R.drainEvents(run.s); R.drainCues(run.s);
-  return { s: structuredClone(run.s), trace: run.trace.slice(), log: keepLog ? run.log.slice() : [], tempo: run.tempo, act: run.act };
+  return { s: structuredClone(run.s), trace: run.trace.slice(), log: keepLog ? run.log.slice() : [], tempo: run.tempo, opts: run.opts, screen: { ...(run.screen || {}) }, act: run.act };
 }
 export const clock = (s) => R.clockText(s.t);
 const mark = (s, key) => { if (!(key in s.history)) s.history[key] = s.t; };
@@ -40,35 +41,42 @@ const mark = (s, key) => { if (!(key in s.history)) s.history[key] = s.t; };
 /** Drain what the engine just said and did, and record what the player could notice of it. */
 export function observe(run) {
   const s = run.s, log = run.log;
+  // Is the player on the move? (present.js holds long bystander lines back from a player who is running past.)
+  const was = run._at, moving = !!was && Math.hypot(s.player.x - was.x, s.player.z - was.z) > 0.05;
+  run._at = { x: s.player.x, z: s.player.z };
+  run._still = moving ? 0 : (run._still ?? 0) + (s.t - (run._seenT ?? s.t));
+  run._seenT = s.t;
   const nf = Object.keys(s.flags).length, nm = Object.keys(s.memo).length;
   const quiet = !s.events.length && !s.cues.length && s.callbacks.length === run._cb && nf === run._nf && nm === run._nm && !s.story.convo && !s.story.queue.length;
   if (quiet) return;
   run._cb = s.callbacks.length; run._nf = nf; run._nm = nm;
-  const v = engineView(s, R.placeAt);
+  const v = engineView(s, R.placeAt, { moving, still: run._still, screen: (run.screen ??= {}) });
   const put = (item) => log.push({ t: s.t, clock: clock(s), ...item });
+  // A phone post the client adds on its own (chat for a cue, the ticker, real reels): present.js decides if its text shows.
+  const phone = (channel, who, key, text) => { const r = routePhone({ t: s.t, text }, v); put({ kind: 'phone', channel: r.channel === 'buzz' ? 'buzz' : channel, who, key, text: r.text ?? text, seen: r.seen }); };
   for (const e of R.drainEvents(s)) {
     const r = routeEvent(e, v);
     if (e.key) mark(s, 'said:' + e.key);
     if (e.key && r.seen) mark(s, 'seen:' + e.key);
     if (e.link) mark(s, 'link-said:' + e.link);
     if (r.learn) mark(s, 'link:' + e.link);
-    put({ kind: 'line', channel: r.channel, who: e.who, key: e.key, text: e.text, seen: r.seen, why: r.why });
+    put({ kind: 'line', channel: r.channel, who: e.who, key: e.key, text: r.text ?? e.text, seen: r.seen, why: r.why });
   }
   for (const c of R.drainCues(s)) {
     mark(s, 'cue:' + c.cue);
-    for (const [who, text] of chatFor(c.cue)) put({ kind: 'phone', channel: 'chat', who, key: 'chat:' + c.cue, text, seen: true });
+    for (const [who, text] of chatFor(c.cue)) phone('chat', who, 'chat:' + c.cue, text);
     if (c.cue === 'phase') {
       const ph = c.data?.phase ?? c.data;
-      for (const text of tickerFor(ph)) put({ kind: 'phone', channel: 'ticker', who: 'ticker', key: 'ticker:' + ph, text, seen: true });
-      for (const r of reelsFor(ph)) put({ kind: 'phone', channel: 'feed', who: r.page || 'reel', key: 'reel:' + r.id, text: r.caption, seen: true });
-      for (const [who, text] of chatFor('phase:' + ph)) put({ kind: 'phone', channel: 'chat', who, key: 'chat:phase:' + ph, text, seen: true });
+      for (const text of tickerFor(ph)) phone('ticker', 'ticker', 'ticker:' + ph, text);
+      for (const r of reelsFor(ph)) phone('feed', r.page || 'reel', 'reel:' + r.id, r.caption);
+      for (const [who, text] of chatFor('phase:' + ph)) phone('chat', who, 'chat:phase:' + ph, text);
     }
     put({ kind: 'cue', channel: 'cue', who: null, key: c.cue, text: null, seen: true });
   }
   for (const f of Object.keys(s.flags)) {
     if (!s.flags[f] || ('flag:' + f) in s.history) continue;
     mark(s, 'flag:' + f);
-    for (const [who, text] of chatFor('flag:' + f)) put({ kind: 'phone', channel: 'chat', who, key: 'chat:flag:' + f, text, seen: true });
+    for (const [who, text] of chatFor('flag:' + f)) phone('chat', who, 'chat:flag:' + f, text);
   }
   for (const c of s.callbacks) mark(s, 'callback:' + c.key);
   for (const k of Object.keys(s.memo)) mark(s, 'memo:' + k);
@@ -110,6 +118,7 @@ export function clientFeedback(cmd, r, before, s) {
     case 'pester': case 'provocateur': return { shown: !r?.ok, raw };
     case 'whisper': return { shown: !r?.ok || r?.say === 'already-dead', raw }; // main.js toasts a dead rumour
     case 'leave': return { shown: true, raw: null }; // the card closes
+    case 'travel': return { shown: true, raw: null }; // the transition card, or the player's line saying why not (travel-ui.js)
     case 'say': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
 
     default: return { shown: false, raw };
@@ -117,7 +126,7 @@ export function clientFeedback(cmd, r, before, s) {
 }
 // Answers to a command show up where the player is looking: a bubble, a toast, the wireless. A chat line on a
 // closed phone is not an answer to "talk your way off the bus".
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo', 'place']);
 const seenTexts = (log, from, to = log.length) => new Set(log.slice(from, to).filter((i) => i.seen && ON_SCREEN.has(i.channel)).map((i) => `${i.channel}|${i.who}|${i.text}`));
 
 /**
@@ -174,8 +183,8 @@ export function perform(run, step) {
 export const waitMinutes = (run, m) => perform(run, { wait: m });
 
 /** Replay a trace from 10:00. Deterministic: the same trace always gives the same day. */
-export function replay(trace, tempo = 'long') {
-  const run = newRun(tempo);
+export function replay(trace, tempo = 'long', opts = undefined) {
+  const run = newRun(tempo, opts);
   for (const step of trace) { if (run.s.over) break; const { clock: _c, reached: _r, ...rest } = step; perform(run, rest); }
   return run;
 }

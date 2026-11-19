@@ -1,0 +1,18 @@
+{"name":"fails prompt-works","note":"\"Regroup at the Rajiv Chowk Metro exit\" (situation) is accepted but shows nothing","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"14:51","wait":20},
+{"clock":"15:11","do":"place:langar","cmd":{"type":"place","id":"langar","move":"start"},"at":{"x":-410,"z":61.2}},
+{"clock":"15:49","do":"travel:rivoli","cmd":{"type":"travel","to":"rivoli"},"at":{"x":-416.832662140606,"z":56.66116014945469}},
+{"clock":"15:52","do":"situation:nikhil-lost","cmd":{"type":"situation","id":"nikhil-lost"},"at":{"x":150,"z":-296}},
+{"clock":"16:07","wait":3},
+{"clock":"16:10","wait":10},
+{"clock":"16:20","wait":45},
+{"clock":"17:05","wait":20},
+{"clock":"17:25","do":"say:nikhil-lost:mila:1","cmd":{"type":"say","option":1},"at":{"x":147.02106504672346,"z":-292.25951465418757}},
+{"clock":"17:25","do":"prompt:situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}}
+]}

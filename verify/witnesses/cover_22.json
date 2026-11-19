@@ -1,4 +1,4 @@
-{"name":"cover 22","note":"5 covered keys","tempo":"long","expect":null,"trace":[
+{"name":"cover 22","note":"3 covered keys","tempo":"long","expect":null,"trace":[
 {"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
 {"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
 {"clock":"10:33","wait":1},
@@ -12,15 +12,12 @@
 {"clock":"14:06","wait":1},
 {"clock":"14:07","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
 {"clock":"14:09","do":"say:cannon-request:bottle:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"14:10","wait":1},
-{"clock":"14:11","do":"go:tent","cmd":null,"at":{"x":-56,"z":100},"hold":60},
-{"clock":"15:12","do":"pester:c3:career","cmd":{"type":"pester","to":"c3","how":"career"},"at":{"x":-32,"z":99}},
-{"clock":"15:14","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
-{"clock":"15:16","do":"pester:r5:cute","cmd":{"type":"pester","to":"r5","how":"cute"},"at":{"x":-63,"z":65.6}},
-{"clock":"15:19","wait":20},
-{"clock":"15:39","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"15:43","do":"prov:p1:expose","cmd":{"type":"provocateur","id":"p1","how":"expose"},"at":{"x":-51.4,"z":111.6}},
-{"clock":"15:44","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":-42.45,"z":107}},
-{"clock":"15:45","wait":20},
-{"clock":"16:05","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}}
+{"clock":"14:10","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"14:12","wait":20},
+{"clock":"14:32","do":"pester:r3:career","cmd":{"type":"pester","to":"r3","how":"career"},"at":{"x":-63,"z":62.8}},
+{"clock":"14:35","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"14:40","do":"say:naye-joote:suv:1","cmd":{"type":"say","option":1},"at":{"x":-40.41534249601143,"z":116.33162334461824}},
+{"clock":"14:41","do":"snatch:c5","cmd":{"type":"snatch","to":"c5"},"at":{"x":-55,"z":60}},
+{"clock":"14:46","wait":45},
+{"clock":"15:31","do":"say:naye-joote:swept:1","cmd":{"type":"say","option":1},"at":{"x":-53.55604314824876,"z":59.78931590419288}}
 ]}

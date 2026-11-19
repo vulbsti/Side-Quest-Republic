@@ -1,6 +1,8 @@
 {"name":"cover 51","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
-{"clock":"10:29","wait":258},
-{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
-{"clock":"14:47","wait":30}
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"place:kurta","cmd":{"type":"place","id":"kurta","move":"start"},"at":{"x":168.5,"z":17}},
+{"clock":"17:19","do":"prov:p2:join","cmd":{"type":"provocateur","id":"p2","how":"join"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:35","do":"talk:c4","cmd":{"type":"talk","to":"c4"},"at":{"x":-40.76953361612079,"z":109.27511945323532}},
+{"clock":"17:37","do":"say:rawat-a1:a:1","cmd":{"type":"say","option":1},"at":{"x":-43.078836552775414,"z":109.32872022197306}},
+{"clock":"17:37","do":"take:phone","cmd":{"type":"take","object":"phone"},"at":{"x":-58.5,"z":104.5}}
 ]}

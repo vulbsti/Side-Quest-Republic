@@ -2,26 +2,31 @@
 // The rules (rules.js) decide what happens; this file only shows it and turns keys into actions.
 // Every engine field beyond the original loop is read defensively through S (below), so this
 // client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
-import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
+import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=28';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=10';
+import * as R from './rules.js?v=13';
 import { SPEAKERS } from './talks.js?v=2';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=10';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=11';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
   equipCap, equipProvocateur, BARRICADE_LINES,
 } from './props.js?v=2';
 import { createCinematic } from './cinematic.js?v=3';
-import { createPhone } from './phone-ui.js?v=1';
-import { routeEvent } from './present.js?v=2';
-import { createDriver } from './drive.js?v=4';
+import { createPhone } from './phone-ui.js?v=2';
+import { routeEvent, routePhone, allowBubble } from './present.js?v=4';
+import { createDriver } from './drive.js?v=6';
 import { canSee, lostSight } from './sight.js?v=1';
-import { createRecorder, setInputs } from './trace.js?v=1';
+import { createRecorder, setInputs } from './trace.js?v=2';
 import { createStreetLife } from './street-life.js?v=1';
+import { createTravelUI } from './travel-ui.js?v=1';
+import { createSliceUI } from './slice-ui.js?v=3';
+import { createDayUI } from './day-ui.js?v=1'; // the 10-minute day's props, riding, and end reel
+import { tempoFor, dayOptions, TITLE } from './modes.js?v=1'; // which day the page starts
+import { createPlacesUI } from './places-ui.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -38,7 +43,11 @@ function saveRecording() {
   toast('Day saved. Put it in verify/recordings/ and npm run verify replays it.', 3);
 }
 const QS = new URLSearchParams(location.search);
-const LONG = !QS.has('short'), DEV = QS.has('dev');
+const LONG = tempoFor(QS) === 'long', DEV = QS.has('dev'); // ?long: the 32-minute day (modes.js)
+let dayUI = null, replayData = null, phoneNote; // the 10-minute day (day-ui.js); a replay's own day; the phone's next pill line
+// The three-minute slice (slice.js, slice-ui.js): ?slice, or the title screen's "3-minute run".
+let sliceMode = QS.has('slice'), sliceUI = null;
+let placesUI = null; // the place dares' props, people and panel (places-ui.js)
 const STEP = 0.1;
 // ?replay or ?drawlog: every line routed to the screen is logged here, for the verifier's playback check.
 const DRAWN = QS.has('replay') || QS.has('drawlog') ? (window.__drawn = []) : null;
@@ -63,7 +72,7 @@ const PHASE_LINE = {
 const clockMinutes = R.clockMinutes ?? ((t) => 600 + t / 1.25);
 const phaseFromClock = (m) => (m < 720 ? 'morning' : m < 840 ? 'midday' : m < 960 ? 'tense' : m < 1020 ? 'showdown' : 'aftermath');
 
-// The full day (4 s a game minute, 32 real minutes) is the default; ?short plays the 10-minute slice.
+// The 10-minute day (1.25 s a game minute, with the mischief list) is the default; ?long plays the 32-minute day.
 R.setTempo(LONG ? 'long' : 'slice');
 
 // --- optional content and integrations (the writing, audio and asset workstreams) ---------
@@ -826,7 +835,7 @@ function updateItems(t) {
   for (const id of OBJECTS) {
     const o = day.objects[id], it = items[id];
     const holderModel = o.holder === 'player' ? playerModel : bodies[o.holder]?.model;
-    it.visible = o.holder !== 'iqbal' && o.holder !== 'bus' && !(holderModel && !holderModel.visible);
+    it.visible = o.holder !== 'iqbal' && o.holder !== 'bus' && o.holder !== 'gayab' && !(holderModel && !holderModel.visible);
     if (id === 'phone' && o.holder === 'zoya') it.visible = false;
     if (holderModel) { attach(it, holderModel, POSE[id]); continue; }
     if (it.parent !== world.scene) world.scene.add(it);
@@ -873,6 +882,7 @@ function updateShuttle() {
 // --- feedback: toast, bubbles, phone, radio -------------------------------------------------
 
 function toast(text, time = 4, isLink = false) {
+  if (day?.slice) return; // the slice draws its own short barks (slice-ui.js)
   const el = $('#toast');
   el.textContent = text;
   el.classList.toggle('linked', isLink);
@@ -937,6 +947,8 @@ const clientView = {
   get now() { return day.t; },
   get player() { return { x: sim.player.x, z: sim.player.z, visible: playerModel?.visible !== false }; },
   get place() { return placeAt(sim.player); },
+  get slice() { return !!day?.slice; },
+  get day() { return !!day?.mischief; }, get moving() { return !!dayUI?.moving; }, get still() { return dayUI?.still ?? Infinity; }, get screen() { return dayUI?.screen; },
   body: (id) => (bodies[id] ? { x: bodies[id].x, z: bodies[id].z, visible: bodies[id].model.visible } : null),
   officer: (id) => { const b = officerById.get(id); return b ? { x: b.x, z: b.z, visible: b.model.visible } : null; },
   policeNear: (r) => (bodies.sharma && dist(sim.player, bodies.sharma) < r) || police.some((b) => b.model.visible && dist(b, sim.player) < r),
@@ -946,6 +958,8 @@ function handleEvents() {
     // present.js decides where each line goes (and whether you can notice it); this only draws it.
     const r = routeEvent(e, clientView);
     if (DRAWN) DRAWN.push({ t: day.t, at: e.t, key: e.key, who: e.who, text: e.text, channel: r.channel, seen: r.seen });
+    // The 10-minute day's phone: present.js said whether the pill shows a line or only buzzes; the post still lands.
+    if (r.channel === 'buzz' || r.text !== undefined) { phoneNote = r.channel === 'buzz' ? null : r.text; if (r.channel === 'buzz') r.channel = r.kind; }
     if (r.channel === 'convo') showBeat(e);
     else if (r.channel === 'radio') radio(e.text);
     else if (r.channel === 'feed') phone.feed({ caption: e.text.replace(/^[^:]{0,40}: /, ''), by: e.by || 'jantar.updates', kind: e.key || 'forward', place: e.place && PLACES[e.place]?.name });
@@ -957,12 +971,15 @@ function handleEvents() {
     else if (r.channel === 'bubble') say(e.who, e.text, 6);
     else if (r.channel === 'officer') { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
     else if (r.channel === 'toast') toast(e.text, 5);
+    else if (r.channel === 'slice') sliceUI.line(e);
+    else if (r.channel === 'place') placesUI?.line(e); // a place dare (places-ui.js)
     if (r.learn) learnLink(e.link);
+    phoneNote = undefined;
   }
 }
 
 const MAX_BUBBLES = () => (innerWidth < 600 ? 2 : 3);
-const HUD_BLOCKERS = ['#clock', '#rep', '#place', '#objective', '#chase', '#radio', '#phaseBanner', '#choices', '#prompt', '#carrying', '#toast', '#phonePill', '#phone', '#keys', '#touch .pad', '#touch .acts', '#dev', '#recFlash', '#detained'];
+const HUD_BLOCKERS = ['#clock', '#rep', '#place', '#objective', '#chase', '#radio', '#phaseBanner', '#choices', '#prompt', '#carrying', '#toast', '#phonePill', '#phone', '#keys', '#touch .pad', '#touch .acts', '#dev', '#recFlash', '#detained', '#slice .sl-dares', '#slice .sl-inc', '#slice .sl-fol'];
 let blockerEls = null;
 const rects = [], placed = [], shown = [];
 const _v = new THREE.Vector3();
@@ -1037,7 +1054,7 @@ function ambient(dt) {
   const lines = AMBIENT.filter((a) => near.includes(a.who) && (m.has(a.when) || a.when === 'default'));
   lines.sort((a, b) => (b.when !== 'default') - (a.when !== 'default'));
   const p = lines[ambientTurn++ % Math.max(1, Math.min(lines.length, 3))];
-  if (p) say(p.who, p.line, 5);
+  if (p && allowBubble(p.line, clientView)) say(p.who, p.line, 5); // the 10-minute day: long lines only when you stop
 }
 
 // Barks: the crowd and the police talk among themselves, drawn from a shuffled bag per phase and speaker type.
@@ -1080,7 +1097,7 @@ function barks(dt) {
   let type = BARK_TYPE[b.kind] || 'student';
   if (type === 'student' && b.idx % 9 === 0) type = b.idx % 2 ? 'uncle' : 'aunty';
   const line = nextBark(type);
-  if (line) bubble('bark:' + b.kind + b.idx, b, (b.label || KIND_NAME[b.kind] || type).toUpperCase(), line, 4.5);
+  if (line && allowBubble(line, clientView)) bubble('bark:' + b.kind + b.idx, b, (b.label || KIND_NAME[b.kind] || type).toUpperCase(), line, 4.5);
 }
 function barkAt(type, text, pos) {
   let best = null, bd = 1e9;
@@ -1112,6 +1129,8 @@ function handleCues() {
     if (!c || !c.cue) continue;
     props.cue(c);
     audio.cue(c.cue, { pos: c.pos, data: c.data });
+    sliceUI.cue(c);
+    placesUI?.cue(c);
     chatTrigger(c.cue);
     const name = c.cue;
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
@@ -1135,6 +1154,7 @@ function handleCues() {
     if (name === 'chase-lost') toast(c.data?.how === 'tired' ? 'Uncle thak gaye. Haath ghutno pe, saans Lodhi Garden tak.' : c.data?.how === 'whiffs' ? 'Teen baar hawa pakdi. Woh gave up.' : 'Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
     if (name === 'caught') toast(c.data?.light ? 'PAKDE GAYE! 50 uthak-baithak, live, 4K mein. Phir chhutti.' : 'Caught. Dilli Police ki free van seva.', 4);
     if (name === 'phase' && c.data) onPhase(c.data.phase ?? c.data);
+    if (name === 'travel') travelArrived();
     const st = STINGS[name];
     if (st && stingsOn && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
       stung.add(name);
@@ -1204,7 +1224,8 @@ function findPrompt() {
       if (!isFree(o) || dist(p, o) >= 2) continue;
       const watching = witnesses().filter((w) => w === OWNER[id] || (id === 'key' && (w === 'sharma' || officerById.has(w))));
       const warn = watching.length ? ` (${watching.map((w) => PEOPLE[w]?.name || 'a constable').join(' and ')} can see you)` : '';
-      options.push({ d: dist(p, o) - 1.5, text: PICKUP[id] + warn, warn: !!warn, run: () => take(id) });
+      if (day.slice && !sliceUI.pickup(id)) continue; // only what the slice's dares need
+      options.push({ d: dist(p, o) - 1.5, text: day.slice ? sliceUI.pickup(id) : PICKUP[id] + warn, warn: !!warn, run: () => take(id) });
     }
   }
   for (const id of Object.keys(bodies)) {
@@ -1226,7 +1247,8 @@ function findPrompt() {
   // (Talk, take, give, pester and provocateur have their own richer prompts above.)
   const o = nearestOpportunity(true, true);
   // Scenes trigger from a few metres away (you walk up to a conversation, not into a person).
-  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : o.kind === 'place' ? 4.8 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  if (day.slice) for (let i = options.length - 1; i >= 0; i--) if (/^(Talk to|Pester|Give) /.test(options[i].text)) options.splice(i, 1); // the slice is all hands
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
 }
@@ -1395,7 +1417,7 @@ function nearestOpportunity(fresh = false, nearest = false) {
       if (!o) continue;
       const x = o.x ?? o.pos?.x, z = o.z ?? o.pos?.z;
       const d = x === undefined ? (o.d ?? o.dist ?? 0) : Math.hypot(x - _oppPos.x, z - _oppPos.z);
-      const item = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null };
+      const item = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null, hop: o.hop ?? null };
       best ??= item;
       if ((item.cmd || item.choices) && !LOCAL_KINDS.has(item.kind) && d < bd) { bd = d; near = item; }
     }
@@ -1417,11 +1439,13 @@ function localOpportunity() {
 // --- loop, screens, board ----------------------------------------------------
 
 function resetDay() {
-  day = createDay();
+  if (!sliceMode && day?.slice) R.setTempo(LONG ? 'long' : 'slice'); // back from a slice run to the full day's tempo
+  day = createDay(dayOptions(QS, { loop: memory.loops, slice: sliceMode, replay: replayData })); // modes.js
+  dayUI?.begin();
   rec = replayer ? null : createRecorder(day, { loop: memory.loops });
   loopLinks = new Set();
-  sim.player.x = SPOTS.metro.x; sim.player.z = SPOTS.metro.z; sim.player.y = 0;
-  sim.player.vx = sim.player.vz = 0;
+  sim.player.x = day.player.x; sim.player.z = day.player.z; sim.player.y = 0; // the Metro exit, or beside Meena in the slice
+  sim.player.vx = sim.player.vz = 0; sim.player.stamina = 100;
   sim.player.yaw = Math.PI;
   yaw = 0;
   for (const [id, b] of Object.entries(bodies)) Object.assign(b, { x: day.people[id].x, z: day.people[id].z });
@@ -1447,24 +1471,29 @@ function showTitle() {
     <h1>Same day.<em>Again.</em></h1>
     <p>It's 10:00 at the Rajiv Chowk exit. By evening something will have happened at Jantar Mantar: groups arrive, barricades go up, the water cannon rolls in. You can't stop it. You can bend it: how bad it gets, where it breaks out, who they go after.</p>
     <p>Pester the police, steal a bus key, rally a crew, film everything. When the day ends, it starts again. You keep everything you learned.</p>
-    <div class="buttons"><button class="primary" id="go">${memory.loops > 1 ? `Start loop ${memory.loops}` : 'Start the day'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
-    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD move · Space jump · drag to look · E act · F film · R rally · C crew orders · P phone · Tab chaos board · hold T to let time pass. On a phone, use the on-screen buttons.${LONG ? '' : ' · Short day (?short).'}</p></div>`;
+    <div class="buttons"><button id="goSlice">${TITLE.slice}</button><button class="primary" id="go">${LONG ? TITLE.long : TITLE.day}${memory.loops > 1 ? ` · loop ${memory.loops}` : ''}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
+    <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD move · Space jump · drag to look · E act · F film · R rally · C crew orders · P phone · M travel · Tab chaos board · hold T to let time pass. On a phone, use the on-screen buttons.${LONG ? ' · <a href="?">The day (10 min)</a>' : ' · <a href="?long">The long day (32 min)</a>'}</p></div>`;
   $('#screen').classList.remove('hidden');
   $('#hud').classList.add('hidden');
-  $('#go').onclick = () => startLoop();
+  $('#go').onclick = () => startLoop(false);
+  $('#goSlice').onclick = () => startLoop(true);
   $('#wipe')?.addEventListener('click', () => { memory = { loops: 1, links: [], hints: [], endings: [], showdowns: [] }; saveMemory(); showTitle(); });
 }
 
-function startLoop() {
+function startLoop(slice = sliceMode) {
+  sliceMode = !!slice;
   resetDay();
+  blockerEls = null; // the slice and the 10-minute day add HUD panels that bubbles keep clear of
   mode = 'play';
   $('#screen').classList.add('hidden');
   $('#hud').classList.remove('hidden');
   onPhase(S.phase(day));
+  if (sliceUI.begin(day)) return; // the slice opens mid-chase: no toast, no phone
   phone.chat('Pinky', '⚠️ Forwarded many times: "water cannon aa raha hai Jantar pe??" Kisi ko pata hai?');
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
   realReels(phaseNow);
+  if (day.mischief) { toast(memory.loops === 1 ? 'Dus minute. Sharaarat ki list. Shuru kar.' : 'Phir se 10:00. Nayi list.', 4); return; } // the 10-minute day reads less
   toast(memory.loops === 1 ? 'Ravi\'s speaker and Asha\'s chai stall are at CP, just south of here. The stage is down Sansad Marg, on Jantar Mantar Road. Talk to people.' : 'Back at the Metro exit. 10:00. Again.', 6);
 }
 
@@ -1493,6 +1522,7 @@ function showEnding() {
   mode = 'end';
   closeChoices();
   phone.close();
+  if (day.slice) { sliceUI.showEnd(day, () => startLoop(true), () => startLoop(false)); return; } // the reel
   const e = S.ending(day);
   const flavourId = e ? (e.flavour ?? e.headlineId ?? e.legacy ?? null) : day.ending;
   const flavour = ENDINGS[flavourId] || null;
@@ -1549,6 +1579,7 @@ function showEnding() {
   $('#hud').classList.add('hidden');
   $('#again').onclick = () => startLoop();
   $('#seeBoard').onclick = () => openBoard();
+  if (day.mischief) dayUI.ending({ again: () => startLoop(false), board: () => openBoard() }); // the reel first; this card is one button away
 }
 
 let boardPrior = 'play';
@@ -1747,7 +1778,7 @@ function step(dt) {
   const right = frozen ? 0 : (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
   const iz = -Math.sin(yaw) * right - Math.cos(yaw) * forward;
-  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '] && !frozen, heavy: HEAVY.includes(day.player.carrying) });
+  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '] && !frozen, heavy: HEAVY.includes(day.player.carrying) || R.placeHeavy(day) });
   keys[' '] = false;
   if (detained) {
     // On the detention bus: you sit inside, by the door.
@@ -1757,6 +1788,7 @@ function step(dt) {
   } else if (detainedShown) { detainedShown = false; Object.assign(sim.player, R.busSide(day.bus, 3, 2.4)); toast('You\'re off the bus. Walk, don\'t run.', 3); }
   if (pinned) { sim.player.x = pinned.x; sim.player.z = pinned.z; sim.player.vx = sim.player.vz = 0; }
   if (riding) { sim.player.x = day.player.x; sim.player.z = day.player.z; sim.player.vx = sim.player.vz = 0; } // the e-rickshaw drives
+  dayUI.update(dt); // the 10-minute day: the thela you ride, Meera's mark, whether you are moving (day-ui.js)
   playerModel.visible = !detained || playerSeated;
   updateShuttle();
   updateBodies(dt);
@@ -1789,8 +1821,7 @@ function step(dt) {
   playerModel.rotation.y += turn * Math.min(1, dt * 14);
   updateDetainees();
   updateRiders();
-  ambient(dt);
-  barks(dt);
+  if (!day.slice) { ambient(dt); barks(dt); }
   updateFlags();
   updateConvo(dt);
   updateAudio(dt);
@@ -2031,12 +2062,15 @@ function updateHUD(dt) {
     }
     $('#objArrow').classList.toggle('hidden', !far);
   }
+  travel?.hint(o); // far away: "M: seedha wahan"
+  travel?.update(dt);
   // Toasts, radio, phase banner, REC flash.
   if (radioT > 0 && (radioT -= dt) <= 0) $('#radio').classList.add('hidden');
   if (phaseBannerT > 0 && (phaseBannerT -= dt) <= 0) { $('#phaseBanner').classList.remove('on'); $('#phaseBanner').classList.add('hidden'); }
   if (recT > 0 && (recT -= dt) <= 0) $('#recFlash').classList.add('hidden');
   phone.update(dt);
   if (day.stream.live) phone.live({ on: true, viewers: day.stream.viewers });
+  sliceUI.update(dt);
 }
 
 let devT = 0, fpsN = 0, fpsT = 0, fps = 0;
@@ -2068,6 +2102,7 @@ function replayAct(cmd) {
 async function startReplay() {
   const data = await (await fetch(REPLAY)).json();
   R.setTempo(data.tempo || 'long');
+  replayData = data; // the day it was found in: its tempo and options (modes.js)
   startLoop();
   stingsOn = false;
   replayer = { data, speed: Number(QS.get('speed') || 1), paused: false, index: -1, pauseAt: null, acts: [] };
@@ -2084,6 +2119,26 @@ async function startReplay() {
   };
 }
 
+// --- fast travel (travel.js, travel-ui.js) ------------------------------------------------
+let travel = null, travelDone = { day: null, hops: 0 };
+/**
+ * After a hop (once per hop: the panel calls it right after act, a replay through the travel cue): the body goes
+ * where the engine put the player, facing the place, the camera cuts in behind, people snap to where they are.
+ */
+function travelArrived() {
+  const hops = day.travel?.hops ?? 0;
+  if (!hops || (travelDone.day === day && travelDone.hops === hops)) return;
+  travelDone = { day, hops };
+  const pl = day.player, p = sim.player, look = R.DESTINATIONS[day.travel.last?.to]?.look;
+  Object.assign(p, { x: pl.x, z: pl.z, y: 0, vx: 0, vz: 0 });
+  if (look) p.yaw = Math.atan2(look.x - p.x, look.z - p.z);
+  yaw = p.yaw + Math.PI;
+  playerModel.position.set(p.x, 0, p.z); playerModel.rotation.y = p.yaw;
+  world.camera.position.set(p.x + Math.sin(yaw) * zoom, 1.55 + zoom * pitch, p.z + Math.cos(yaw) * zoom);
+  world.camera.lookAt(p.x, 1.55, p.z);
+  crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; oppT = 0;
+}
+
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.1, last ? (now - last) / 1000 : 1 / 60);
@@ -2093,6 +2148,7 @@ function frame(now) {
   if (mode === 'play') step(dt);
   if (day && mode !== 'loading') {
     rideSeat = street ? street.update(dt, t, sim.player, day) : null;
+    placesUI?.update(dt, t);
     if (rideSeat) { playerModel.position.set(rideSeat.x, rideSeat.y, rideSeat.z); playerModel.rotation.y = rideSeat.yaw; }
     animate(t);
     updateItems(t);
@@ -2105,6 +2161,7 @@ function frame(now) {
   updateBubbles(dt);
   if (toastTime > 0 && (toastTime -= dt) <= 0) { $('#toast').style.opacity = 0; $('#hud').classList.remove('toasting'); }
   world.renderer.render(world.scene, world.camera);
+  if (mode === 'play') sliceUI?.render(dt);
 }
 
 function press(k) {
@@ -2114,15 +2171,20 @@ function press(k) {
   if (cine.mode === 'scene') { if (k === ' ' || k === 'enter' || k === 'e') cine.next(); return; }
   if (k === 'e' && prompt) prompt.run();
   if (k === 'q' && day.player.carrying) drop();
+  if (day.slice) return; // the slice is move, E and Q
   if (k === 'p') phone.toggle();
   if (k === 'f') film();
   if (k === 'r') rally();
   if (k === 'c') openStance();
+  if (k === 'm' && !day?.slice) travel?.toggle(); // fast travel (travel-ui.js)
 }
 function setupInput() {
   addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
     if ([' ', 'tab', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
+    if (mode === 'end' && day?.slice && (k === 'enter' || k === 'r') && !e.repeat) { startLoop(true); return; } // Dobara
+    if (mode === 'end' && day?.mischief && k === 'enter' && !e.repeat) { startLoop(false); return; } // Dobara (the 10-minute day)
+    if (k === 'tab' && day?.slice) return;
     if (k === 'tab') { if (mode === 'board') closeBoard(); else if (mode === 'play' || mode === 'end') openBoard(); return; }
     if (k === 'escape') {
       if (mode === 'board') { closeBoard(); return; }
@@ -2197,7 +2259,9 @@ function setupInput() {
     props = createProps(world, { PLACES, playerObstacles });
     playerModel = makeCharacter({ variant: 'student-tee', backpack: true });
     world.scene.add(playerModel);
-    phone = createPhone($('#phone'), $('#phonePill'), { clock: () => (day ? clockText(day.t) : ''), nameOf: (id) => PEOPLE[id]?.name ?? id });
+    phone = createPhone($('#phone'), $('#phonePill'), { clock: () => (day ? clockText(day.t) : ''), nameOf: (id) => PEOPLE[id]?.name ?? id,
+      // The 10-minute day: present.js says if the pill shows this post (one line) or only buzzes.
+      preview: (text) => { if (phoneNote !== undefined) return phoneNote; const r = routePhone({ text }, clientView); return r.seen ? r.text ?? text : null; } });
     cine = createCinematic({
       camera: world.camera, dom: $('#cine'), actor: actorOf, nameOf, clear: shotClear,
       onReact: (kind, beat) => {
@@ -2207,20 +2271,33 @@ function setupInput() {
         if (kind === 'silence') { react('awkward-silence', at); audio.silence(1.9); }
       },
     });
+    sliceUI = createSliceUI({
+      THREE, world, audio: { cue: (...a) => audio.cue(...a) }, equipCap, sliceView: R.sliceView, dayView: R.mischiefView,
+      getDay: () => day, getSim: () => sim, getPlayer: () => playerModel,
+      bodyOf: (id) => (id === 'player' ? { x: sim.player.x, z: sim.player.z, y: sim.player.y } : bodies[id] || officerById.get(id) || null),
+    });
+    dayUI = createDayUI({ THREE, world, getDay: () => day, getSim: () => sim, sliceUI, dayView: R.mischiefView,
+      bodyOf: (id) => bodies[id] || officerById.get(id) || null });
+    placesUI = createPlacesUI({ THREE, world, R, makeCharacter, animateCharacter, cube, cylinder, ball, sign, getDay: () => day, getPlayer: () => playerModel, bubble, audio: { cue: (...a) => audio.cue(...a) } });
     day = createDay();
     await loadOptional(); // before the people, so their flags and placards are the real models
     makePeople();
     resetDay();
     setupInput();
+    travel = createTravelUI({
+      R, day: () => day, player: () => sim.player, act: (cmd) => act(day, cmd), toast: (t) => toast(t, 3),
+      pause: (on) => { if (on && mode === 'play') mode = 'travel'; else if (!on && mode === 'travel') mode = 'play'; },
+      arrive: () => travelArrived(),
+    });
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
     $('#loading').classList.add('hidden');
     if (DEV) $('#dev').classList.remove('hidden');
-    if (REPLAY) await startReplay(); else showTitle();
+    if (REPLAY) await startReplay(); else if (sliceMode) startLoop(true); else showTitle();
     requestAnimationFrame(frame);
     // For debugging and automated browser checks.
     window.__loop = {
       get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; },
-      startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
+      startLoop, startSlice: () => startLoop(true), get sliceUI() { return sliceUI; }, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
       // After a time jump: people snap to where they now are, and lines said an hour ago stop hanging in the air.
       snap: () => { crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; for (const b of bubbles) b.ttl = 0; },
       playScene: devPlayScene, setAudio, stings: (on) => { stingsOn = !!on; },

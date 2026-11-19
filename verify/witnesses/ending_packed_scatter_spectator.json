@@ -1,0 +1,12 @@
+{"name":"ending packed · scatter · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"scatter","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","do":"talk:c5","cmd":{"type":"talk","to":"c5"},"at":{"x":-55,"z":60}},
+{"clock":"14:50","wait":20},
+{"clock":"15:10","wait":10},
+{"clock":"15:20","wait":3},
+{"clock":"15:23","wait":3},
+{"clock":"15:26","wait":3},
+{"clock":"15:29","finish":true}
+]}

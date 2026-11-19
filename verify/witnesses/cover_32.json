@@ -1,9 +1,16 @@
-{"name":"cover 32","note":"3 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
-{"clock":"10:33","do":"say:career-counselling:intro:2","cmd":{"type":"say","option":2},"at":{"x":-48.05141707500568,"z":85.68378010891549}},
-{"clock":"10:34","wait":20},
-{"clock":"10:54","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"10:56","do":"whisper:cannon:meera","cmd":{"type":"whisper","to":"meera","rumour":"cannon"},"at":{"x":146,"z":-301.5}},
-{"clock":"11:31","wait":10}
+{"name":"cover 32","note":"2 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:48","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"14:51","wait":20},
+{"clock":"15:11","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"15:15","do":"drop:stageSpeaker","cmd":{"type":"drop","x":-47.8,"z":99.6},"at":{"x":-47.8,"z":99.6}},
+{"clock":"15:16","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"15:20","do":"ride:off","cmd":{"type":"ride","to":"off"},"at":{"x":-48.11937528097367,"z":22.25232989734011}},
+{"clock":"15:21","do":"pester:c1:cute","cmd":{"type":"pester","to":"c1","how":"cute"},"at":{"x":147,"z":-284}},
+{"clock":"15:35","finish":true}
 ]}

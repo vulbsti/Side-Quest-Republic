@@ -1,22 +1,8 @@
 {"name":"cover 38","note":"2 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
-{"clock":"16:01","wait":1},
-{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:03","wait":1},
-{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"16:05","wait":20},
-{"clock":"16:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
-{"clock":"16:26","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
-{"clock":"16:28","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
-{"clock":"16:29","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
-{"clock":"16:36","do":"whisper:sena:mira","cmd":{"type":"whisper","to":"mira","rumour":"sena"},"at":{"x":-51,"z":95.5}},
-{"clock":"16:37","do":"film:pester-cute@parliament","cmd":{"type":"film"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:30","wait":10},
 {"clock":"16:40","wait":45},
-{"clock":"17:25","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
-{"clock":"17:28","do":"leave","cmd":{"type":"leave"},"at":{"x":-53.81742440406066,"z":100.64101991692048}},
-{"clock":"17:29","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
-{"clock":"17:30","do":"take:phone","cmd":{"type":"take","object":"phone"},"at":{"x":-58.5,"z":104.5}},
-{"clock":"17:31","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
-{"clock":"17:32","do":"give:zoya","cmd":{"type":"give","to":"zoya"},"at":{"x":-56.41063901626901,"z":105.04715784872184}}
+{"clock":"17:25","do":"say:detain-me:window:3","cmd":{"type":"say","option":3},"at":{"x":-43.71664254440478,"z":35.39748505976821}},
+{"clock":"17:25","do":"say:detain-me:too-late:1","cmd":{"type":"say","option":1},"at":{"x":-43.71664254440478,"z":35.39748505976821}}
 ]}

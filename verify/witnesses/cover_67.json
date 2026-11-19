@@ -1,16 +1,12 @@
 {"name":"cover 67","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
-{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
-{"clock":"12:30","wait":1},
-{"clock":"12:31","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":null},
-{"clock":"12:32","wait":1},
-{"clock":"12:33","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"12:55","do":"say:afwaah:bikes:3","cmd":{"type":"say","option":3},"at":null},
-{"clock":"12:55","wait":1},
-{"clock":"12:56","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":1},
-{"clock":"12:59","wait":45},
-{"clock":"13:44","wait":45},
-{"clock":"14:29","do":"pester:c3:cannon","cmd":{"type":"pester","to":"c3","how":"cannon"},"at":{"x":-32,"z":99}},
-{"clock":"14:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-191.2}},
-{"clock":"14:53","do":"say:afwaah:rawat:2","cmd":{"type":"say","option":2},"at":{"x":90.01400400438979,"z":-194.02977316400057}}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"16:02","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
+{"clock":"16:03","do":"travel:metro","cmd":{"type":"travel","to":"metro"},"at":{"x":-58.08238491141063,"z":101.5187938128769}},
+{"clock":"16:06","do":"travel:bangla","cmd":{"type":"travel","to":"bangla"},"at":{"x":147.9,"z":-291.5}},
+{"clock":"16:08","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"16:36","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"16:38","do":"say:detain-me:window:3","cmd":{"type":"say","option":3},"at":{"x":-50.93604258608893,"z":82.50158819286598}},
+{"clock":"16:39","wait":45},
+{"clock":"17:24","do":"say:detain-me:ask:1","cmd":{"type":"say","option":1},"at":{"x":-50.93604258608893,"z":82.50158819286598}}
 ]}

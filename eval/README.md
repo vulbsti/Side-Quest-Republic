@@ -24,7 +24,8 @@ score is marked partial.
 
 - **engine**: bot players (the verifier's personalities) play whole 32-minute days, tick by tick, on the real
   engine. We record where the time goes (skill moment, conversation card, detained, walking), what was on screen,
-  what was within reach. A chase probe steals the bus key in front of an officer twelve times a day and runs five
+  what was within reach. Bots hop by fast travel to anything over 80 m away, as a player with the M panel
+  would; a hop is never counted as "something physical to do". A chase probe steals the bus key in front of an officer twelve times a day and runs five
   ways (stand, jog straight, hold sprint straight, hold sprint for a crowd, hold sprint and cut sideways at each
   lunge), with the client's stamina, to see whether escaping takes any skill.
 - **static**: the source itself. Every quoted line is tested for Hinglish and lectures; the HUD's prompt copy for

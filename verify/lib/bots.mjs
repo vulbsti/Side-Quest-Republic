@@ -3,6 +3,7 @@
 // do, how long nothing new happened, how busy the phone was, and how different their days turned out.
 import * as H from './harness.mjs';
 import { rng } from './explore.mjs';
+import { daresServed } from '../../dist/loop/dares.js';
 
 const { R } = H;
 const STORY = new Set(['situation', 'say', 'go', 'take', 'give', 'film', 'provocateur', 'rally', 'plead', 'stance']);
@@ -16,12 +17,12 @@ export const PERSONAS = {
   helpful: {
     about: 'Returns things, finds Nikhil, brings water, exposes provocateurs, picks kind choices',
     wait: 0.4,
-    weight: (a, s) => ({ give: 6, say: 4, situation: 5, leave: 0.2, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0 }[a.kind] ?? 0.2),
+    weight: (a, s) => ({ give: 6, say: 4, situation: 5, leave: 0.2, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0, place: a.id === 'place:langar' ? 2 : 0.3 }[a.kind] ?? 0.2),
   },
   chaotic: {
     about: 'Steals keys and speakers, spreads rumours, pesters police, joins provocateurs, blocks roads',
     wait: 0.3,
-    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, situation: 2, say: 2, leave: 0.5, film: 1, talk: 0.3, give: 0.1 }[a.kind] ?? 0.3),
+    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, situation: 2, say: 2, leave: 0.5, film: 1, talk: 0.3, give: 0.1, place: 1 }[a.kind] ?? 0.3),
   },
   filmer: {
     about: 'Films whatever happens and follows the crowd',
@@ -31,28 +32,59 @@ export const PERSONAS = {
   explorer: { about: 'Tries whatever it has not tried yet', wait: 0.2, weight: (a, s, tried) => 1 / (1 + 3 * (tried.get(a.id) || 0)) },
 };
 
+/**
+ * On the 10-minute day (dares.js) anyone reacts to trouble that comes to them, and leans towards what is on the
+ * mischief list: an incident's command weighs 8, and an affordance that serves an open dare counts four times.
+ */
+export function dayWeight(a, s, w) {
+  if (!s.mischief) return w;
+  if (a.kind === 'incident' || a.id === 'incident:mark') return Math.max(w, 8);
+  return daresServed(s, a) ? Math.max(w, 0.5) * 4 : w;
+}
+
+/** Fast travel is one choice, whichever place it goes to: the hops share one affordance's weight between them. */
+export function travelOnce(affs, w) {
+  const n = affs.filter((a) => a.kind === 'travel').length;
+  return n > 1 ? w.map((x, i) => (affs[i].kind === 'travel' ? x / n : x)) : w;
+}
+
 function choose(persona, run, rand, tried) {
+  // In the middle of a place dare (places.js), a bot plays it the way the engine says a good player would.
+  if (run.s.action?.place && persona !== PERSONAS.idle) { const h = R.placeHint(run.s); if (h) return h; }
   const affs = R.affordances(run.s);
-  const w = affs.map((a) => Math.max(0, persona.weight(a, run.s, tried)));
+  const w = travelOnce(affs, affs.map((a) => dayWeight(a, run.s, Math.max(0, persona.weight(a, run.s, tried)))));
   const total = w.reduce((n, v) => n + v, 0) + persona.wait * (affs.length ? Math.max(1, w.reduce((n, v) => n + v, 0) / 3) : 1);
   let x = rand() * total;
   for (let i = 0; i < affs.length; i++) { x -= w[i]; if (x <= 0) { const a = affs[i]; tried.set(a.id, (tried.get(a.id) || 0) + 1); return a.cmd ? { do: a.id, cmd: a.cmd, at: a.at } : { do: a.id, cmd: null, at: a.at, hold: 3 }; } }
   return { wait: persona === PERSONAS.idle ? 30 : 4 + Math.floor(rand() * 12) };
 }
 
+/**
+ * Like a player, a bot hops (fast travel, rules.js travelHop) when what it chose is more than 80 m away, then walks
+ * the rest. Returns the steps to run: [hop, step] or [step]. The hop is a step of its own, so the trace replays it.
+ */
+export function withHop(s, step) {
+  if (!step.at || step.cmd?.type === 'travel') return [step];
+  const h = R.travelHop(s, step.at);
+  return h ? [{ do: `travel:${h.to}`, cmd: { type: 'travel', to: h.to }, at: { x: s.player.x, z: s.player.z } }, step] : [step];
+}
+
 /** One bot day. Returns the run and what was measured. */
-export function playDay(name, { seed = 1, tempo = 'long' } = {}) {
+export function playDay(name, { seed = 1, tempo = 'long', opts = undefined } = {}) {
   const persona = PERSONAS[name], rand = rng(seed * 7919 + name.length), tried = new Map();
-  const run = H.newRun(tempo);
+  const run = H.newRun(tempo, opts);
   const acts = [], affSeen = new Map();
   while (!run.s.over) {
     for (const a of R.affordances(run.s)) if (STORY.has(a.kind) && !affSeen.has(a.id)) affSeen.set(a.id, run.s.t);
-    const step = choose(persona, run, rand, tried);
-    const out = H.perform(run, step);
-    if (out.crash) break;
-    if (step.cmd) acts.push({ t: run.s.t, clock: H.clock(run.s), cmd: step.cmd, ok: !!out.r?.ok, silent: !!out.silent, raw: out.raw, line: out.r?.line ?? null, repeat: !!out.r?.repeat });
+    for (const step of withHop(run.s, choose(persona, run, rand, tried))) {
+      const out = H.perform(run, step);
+      if (out.crash) break;
+      if (step.cmd) acts.push({ t: run.s.t, clock: H.clock(run.s), cmd: step.cmd, ok: !!out.r?.ok, silent: !!out.silent, raw: out.raw, line: out.r?.line ?? null, repeat: !!out.r?.repeat });
+      if (run.s.over) break;
+    }
+    if (run.crashed) break;
   }
-  return { name, seed, tempo, run, acts, affSeen, crash: run.crashed ?? null, metrics: run.crashed ? null : measure(run, acts, affSeen) };
+  return { name, seed, tempo, opts, run, acts, affSeen, crash: run.crashed ?? null, metrics: run.crashed ? null : measure(run, acts, affSeen) };
 }
 
 export function measure(run, acts, affSeen) {

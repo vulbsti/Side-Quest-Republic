@@ -1,13 +1,13 @@
 {"name":"cover 70","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
-{"clock":"16:01","wait":1},
-{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:03","wait":1},
-{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"16:05","wait":1},
-{"clock":"16:06","do":"say:dhuan:meera-saved:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:07","wait":10},
-{"clock":"16:17","do":"say:dhuan:hub:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
-{"clock":"16:17","do":"say:dhuan:kabir:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
+{"clock":"14:48","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"14:54","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":{"x":-40.575767157203884,"z":116.32838788926645}},
+{"clock":"14:55","wait":10},
+{"clock":"15:05","wait":3},
+{"clock":"15:08","do":"say:naye-joote:overhear:0","cmd":{"type":"say","option":0},"at":{"x":-40.575767157203884,"z":116.32838788926645}},
+{"clock":"15:08","wait":20},
+{"clock":"15:28","wait":10},
+{"clock":"15:38","do":"say:naye-joote:kept:0","cmd":{"type":"say","option":0},"at":{"x":-42.92317787204026,"z":109.34110639798688}}
 ]}

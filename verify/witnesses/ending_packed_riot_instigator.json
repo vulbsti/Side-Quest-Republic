@@ -1,9 +1,10 @@
 {"name":"ending packed · riot · instigator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"instigator"},"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"prov:p2:join","cmd":{"type":"provocateur","id":"p2","how":"join"},"at":{"x":-50.64,"z":111.54}},
-{"clock":"15:03","do":"film:provocateur-joined@stage","cmd":{"type":"film"},"at":{"x":-50.64,"z":111.54}},
-{"clock":"15:04","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"15:05","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-50.77893428795777,"z":105.29548742804579}},
-{"clock":"15:06","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","wait":45},
+{"clock":"15:32","do":"whisper:sena:meera","cmd":{"type":"whisper","to":"meera","rumour":"sena"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"15:33","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"15:34","do":"film:stone-thrown@stage","cmd":{"type":"film"},"at":{"x":-51,"z":110.5}},
+{"clock":"15:35","finish":true}
 ]}

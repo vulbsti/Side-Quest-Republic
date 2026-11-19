@@ -1,7 +1,7 @@
 // Bot days played tick by tick so we can say how the time was spent: in a skill moment, reading a card, sitting
 // in the bus, walking about. Uses the verifier's personalities and the same driver as the client and the replays.
 import * as H from '../../verify/lib/harness.mjs';
-import { PERSONAS } from '../../verify/lib/bots.mjs';
+import { PERSONAS, withHop, travelOnce, dayWeight } from '../../verify/lib/bots.mjs';
 import { rng } from '../../verify/lib/explore.mjs';
 import { createDriver, STEP, JOG } from '../../dist/loop/drive.js';
 
@@ -14,12 +14,16 @@ export const gameOf = (c) => (c === 'chase-start' ? 'chase' : c.split(':')[1]);
 const SPECTACLE = new Set(['arrival-wave', 'raf-arrive', 'barricades-up', 'cannon-roll', 'cannon-spray', 'cannon-dance', 'gas-fired', 'charge-start', 'stone-thrown', 'sena-bikes', 'party-suv', 'ambulance', 'bus-stalled', 'detainees-escape', 'faint']);
 // What uses the body: everything on offer except talking, whispering, pestering and answering cards.
 const TALKY = new Set(['talk', 'whisper', 'pester', 'say', 'leave', 'situation', 'plead', 'stance', 'provocateur']);
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
+// A fast-travel hop is on offer everywhere and uses no body: it never counts as something physical to do.
+const NOT_BODY = new Set([...TALKY, 'travel']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo', 'place']);
 const PHONE = new Set(['feed', 'chat', 'ticker', 'stream']);
 
 function choose(persona, s, rand, tried) {
+  // In the middle of a place dare (places.js), play it the way the engine says a good player would.
+  if (s.action?.place && persona !== PERSONAS.idle) { const h = R.placeHint(s); if (h) return h; }
   const affs = R.affordances(s);
-  const w = affs.map((a) => Math.max(0, persona.weight(a, s, tried)));
+  const w = travelOnce(affs, affs.map((a) => dayWeight(a, s, Math.max(0, persona.weight(a, s, tried)))));
   const sum = w.reduce((n, v) => n + v, 0);
   let x = rand() * (sum + persona.wait * (affs.length ? Math.max(1, sum / 3) : 1));
   for (let i = 0; i < affs.length; i++) {
@@ -29,19 +33,27 @@ function choose(persona, s, rand, tried) {
   return { wait: persona === PERSONAS.idle ? 30 : 4 + Math.floor(rand() * 12) };
 }
 
+// The day the eval plays: the 10-minute day with its mischief list and trouble director (dares.js), the loop
+// varied by seed so each set of dares is played. { tempo: 'long' } plays the old 32-minute day instead.
+export const DAY = { tempo: 'slice', opts: (seed) => ({ mischief: { loop: seed } }) };
+
 /** One bot day, sampled every tick. */
-export function timedDay(name, seed = 1) {
+export function timedDay(name, seed = 1, day = DAY) {
   const persona = PERSONAS[name], rand = rng(seed * 7919 + name.length), tried = new Map();
-  const run = H.newRun('long'), s = run.s;
+  const run = H.newRun(day.tempo, day.opts?.(seed)), s = run.s;
   const drv = createDriver(R, [], {}, { sight: H.SIGHT });
   const time = { action: 0, reading: 0, detained: 0, free: 0 };
   const beats = [], games = new Set(), spectacle = new Set(), caughtAt = [], freedAfter = [];
-  let near = 0, nearPhysical = 0, offered = 0, offeredPhysical = 0, k = 0;
+  let near = 0, nearPhysical = 0, offered = 0, offeredPhysical = 0, k = 0, hops = 0;
   let wasDetained = false, detainedSince = 0;
+  let reacted = null;
   while (!s.over) {
-    if (drv.done || drv.index < 0) drv.push(choose(persona, s, rand, tried));
+    // Trouble came (director.js): stop waiting about and react, as a player would.
+    const live = s.trouble?.live;
+    if (live && live !== reacted && ['wait', 'hold', 'walk'].includes(drv.mode) && !drv.step?.do?.startsWith('incident')) { reacted = live; drv.cut(); }
+    if (drv.done || drv.index < 0) drv.push(...withHop(s, choose(persona, s, rand, tried))); // a far choice goes by fast travel first
     const cmd = drv.before(s);
-    if (cmd) { try { R.act(s, cmd); } catch (e) { run.crashed = e.message; break; } }
+    if (cmd) { try { if (R.act(s, cmd)?.ok && cmd.type === 'travel') hops++; } catch (e) { run.crashed = e.message; break; } }
     // Cues are drained by observe(); look at them first.
     for (const c of s.cues) {
       if (ACTION_START(c.cue)) { beats.push(s.t); games.add(gameOf(c.cue)); }
@@ -60,9 +72,9 @@ export function timedDay(name, seed = 1) {
     if (++k % 50 === 0 && mode === 'free') {
       const opp = R.opportunities(s, pl, 10).filter((o) => o.d <= 10 && o.kind !== 'go');
       near++;
-      if (opp.some((o) => !TALKY.has(o.kind))) nearPhysical++;
+      if (opp.some((o) => !NOT_BODY.has(o.kind))) nearPhysical++;
       const affs = R.affordances(s);
-      offered += affs.length; offeredPhysical += affs.filter((a) => !TALKY.has(a.kind)).length;
+      offered += affs.length; offeredPhysical += affs.filter((a) => !NOT_BODY.has(a.kind)).length;
     }
   }
   H.finishDay(run);
@@ -77,12 +89,17 @@ export function timedDay(name, seed = 1) {
     const last = scenes.at(-1);
     if (last && i.t - last.t < 20) { last.lines.push(`${i.who}: ${i.text}`); last.t = i.t; } else scenes.push({ t: i.t, lines: [`${i.who}: ${i.text}`] });
   }
+  const m = s.mischief;
   return {
     name, seed, crashed: run.crashed ?? null,
+    dares: m ? m.dares.filter((d) => d.done).length : null, followers: m?.followers ?? null,
+    incidents: s.trouble?.fired?.length ?? 0, incidentKinds: [...new Set((s.trouble?.fired ?? []).map((x) => x.kind))],
     seconds: total, time, shares: Object.fromEntries(Object.entries(time).map(([k2, v]) => [k2, v / total])),
+    hops, // fast-travel hops taken (each skips TRAVEL_MINUTES of clock: the day is that much shorter in real time)
     firstAction: beats.length ? beats[0] : null, beats: beats.length, games: [...games],
     spectacle: [...spectacle], caught: caughtAt.length, freedAfter,
     wordsPerMinute: seen.reduce((n, i) => n + i.text.split(/\s+/).length, 0) / (total / 60),
+    wordsBy: seen.reduce((o, i) => { o[i.channel] = (o[i.channel] ?? 0) + i.text.split(/\s+/).length / (total / 60); return o; }, {}),
     narration: onScreen.length ? onScreen.filter((i) => i.who === 'street').length / onScreen.length : 0,
     screenRepeat: onScreen.length ? 1 - new Set(onScreen.map((i) => i.text)).size / onScreen.length : 0,
     physicalNearby: near ? nearPhysical / near : 0, physicalOffered: offered ? offeredPhysical / offered : 0,

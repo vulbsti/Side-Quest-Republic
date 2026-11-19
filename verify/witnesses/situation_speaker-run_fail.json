@@ -1,0 +1,11 @@
+{"name":"situation speaker-run:fail","note":"","tempo":"long","expect":{"history":"situation:speaker-run:fail"},"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
+{"clock":"10:12","do":"situation:speaker-run","cmd":{"type":"situation","id":"speaker-run"},"at":{"x":84.5,"z":-188.5}},
+{"clock":"10:12","wait":1},
+{"clock":"10:13","do":"say:speaker-run:intro:2","cmd":{"type":"say","option":2},"at":null},
+{"clock":"10:14","wait":1},
+{"clock":"10:15","do":"drop:cp","cmd":{"type":"drop","x":92,"z":-180},"at":{"x":92,"z":-180}},
+{"clock":"10:17","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"10:36","wait":20},
+{"clock":"10:56","finish":true}
+]}

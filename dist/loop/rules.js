@@ -6,7 +6,15 @@ import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, 
 import { CAPTIONS } from './phone.js';
 import { PESTER_BY } from './talks.js';
 import { createStory } from './story.js';
+import { createSlice } from './slice.js';
 import { streetPath, pathLength } from '../map/route.js';
+import { createTravel } from './travel.js';
+import { createMischief } from './dares.js'; // the 10-minute day: mischief list, followers, trouble director, end reel
+export { DESTINATIONS, TRAVEL_MINUTES, HOP_FROM, MODES } from './travel.js';
+import { DESTINATIONS as TRAVEL_DESTINATIONS } from './travel.js';
+import { createPlaces } from './places.js';
+export { PLACE_DARES, PLACE_LAYOUT, DARE_AT, PLACE_NAMES } from './places.js';
+import { PLACE_DARES } from './places.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -196,7 +204,8 @@ function updateRide(s, dt) {
 }
 const ARRIVAL_EVERY = 7;
 const WALK = 3.2;
-const CHASE = 7; // a constable flat out: faster than a jog (4.7), slower than a sprint (8.1), which the stamina bar rations
+const CHASE = 7.6; // a constable flat out: faster than a jog (4.7), slower than a sprint (8.1), which the stamina bar rations
+const AIM_SMOOTH = 0.35; // seconds of your run he averages to aim a lunge
 const LOSE_AFTER = 3; // seconds out of sight or inside a crowd to lose a chaser
 // The lunge: within range he slows and reaches out (the telegraph), aimed at where you'll be if you keep going,
 // then dives. Keep running straight and he has you; change direction, or burst, during the wind-up and he grabs air.
@@ -212,7 +221,7 @@ const RAID = { breath: 12, ring: 3, reach: 25, near: 10, home: 35, approach: 6, 
 const PINNED = 5; // seconds of uthak-baithak when a constable catches you over his topi
 const TOPI_AGAIN = 30; // clock minutes before the same constable lets his guard down again
 /** A constable whose topi you can flick off right now: standing at his post, not busy, not just robbed. */
-const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && o.mode === 'post' && (o.topiAt == null || s.t - o.topiAt >= mins(TOPI_AGAIN));
+const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && (o.mode === 'post' || o.mode === 'loose') && (o.topiAt == null || s.t - o.topiAt >= mins(s.slice ? SLICE.topiAgain : TOPI_AGAIN));
 const VIRAL = 4000;
 const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const BARRICADE_JAWAN = 'r1'; // the RAF jawan who stands at the barricade beside Sharma from 14:00
@@ -234,6 +243,8 @@ function officer(id, kind, post, extra = {}) {
 }
 
 export function createDay(opts = {}) {
+  if (opts.slice && !opts.tempo) opts = { ...opts, tempo: 'slice' }; // the three-minute slice (slice.js)
+  if (opts.mischief && !opts.tempo) opts = { ...opts, tempo: 'slice' }; // the 10-minute day (dares.js)
   if (opts.tempo) setTempo(opts.tempo);
   const rumour = () => ({ people: {}, places: {}, dead: false, exposure: {}, meeraT: 0, zoyaT: 0 });
   const day = {
@@ -328,6 +339,8 @@ export function createDay(opts = {}) {
     cues: [],
   };
   day.story = STORY.init();
+  if (opts.slice) SLICE.setup(day);
+  else if (opts.mischief) MISCHIEF.setup(day, opts.mischief === true ? {} : opts.mischief);
   return day;
 }
 
@@ -362,6 +375,7 @@ const rep = (s) => s.player.rep;
 function addRep(s, d = {}) {
   const r = rep(s);
   for (const k of ['aura', 'heat', 'help', 'nuisance']) if (d[k]) r[k] = clamp(r[k] + d[k]);
+  if (s.mischief && d.aura > 0) s.mischief.auraIn += d.aura; // the 10-minute day pays followers for aura (dares.js)
 }
 /** Remember the first time the player did something a later rule can call back to. */
 function memo(s, key, data = null) {
@@ -1040,6 +1054,8 @@ function endChase(s, c, how) {
   if (s.memo.chase?.data?.why === 'topi') { addRep(s, { aura: 6 }); emit(s, `topi-kept-${(s.seq.topi || 0) % 3}`, { pos: pl }); happen(s, 'topi', pl); }
 }
 function caught(s, c) {
+  if (s.slice && SLICE.caught(s, c)) return; // in the slice every catch is the light one
+  if (s.mischief && MISCHIEF.caught(s, c)) return; // a trouble incident's catch is the light one (director.js)
   const pl = s.player;
   s.chase = null;
   if (s.memo.chase?.data?.why === 'topi') { // no van for a topi: five seconds of uthak-baithak in front of everyone
@@ -1068,8 +1084,10 @@ function updateChase(s, dt) {
   if (!pl.chasedBy) return;
   const c = officerById(s, pl.chasedBy), ch = s.chase ?? (s.chase = { since: s.t, prev: { x: pl.x, z: pl.z }, lunge: null, whiffs: 0, cool: 0 });
   // How the player is moving, from where they were last tick (the client and the bots move the player).
-  const v = { x: (pl.x - ch.prev.x) / dt, z: (pl.z - ch.prev.z) / dt };
+  const raw = { x: (pl.x - ch.prev.x) / dt, z: (pl.z - ch.prev.z) / dt };
   ch.prev = { x: pl.x, z: pl.z };
+  // He reads your run, not your last step: a steady line (even one rationed by the stamina bar) is easy to aim at.
+  const k = 1 - Math.exp(-dt / AIM_SMOOTH), v = ch.v = ch.v ? { x: ch.v.x + (raw.x - ch.v.x) * k, z: ch.v.z + (raw.z - ch.v.z) * k } : raw;
   ch.cool = Math.max(0, ch.cool - dt);
   if (ch.startle > 0) { ch.startle -= dt; c.path = []; return; } // clutching his bare head
   const crowded = inCrowd(s, pl);
@@ -1106,10 +1124,10 @@ function updateChase(s, dt) {
     if (L.t < LUNGE.stumble) return; // picking himself up
     ch.lunge = null; ch.cool = LUNGE.cool;
   }
-  const tired = s.t - ch.since >= CHASE_TIRES;
+  const tired = s.t - ch.since >= (ch.tires ?? CHASE_TIRES);
   if (tired) { endChase(s, c, 'tired'); return; }
   c.path = [{ x: pl.x, z: pl.z }];
-  walk(c, dt, CHASE * slow);
+  walk(c, dt, CHASE * slow * (ch.boost ?? 1));
   const d = dist(c, pl);
   if (d < 1.2) { caught(s, c); return; }
   if (!crowded && d <= LUNGE.range && !ch.cool) {
@@ -1120,7 +1138,7 @@ function updateChase(s, dt) {
   }
   const cover = pl.unseen || crowded || d > 24;
   s.timers.lose = cover ? s.timers.lose + dt : 0;
-  if (s.timers.lose >= LOSE_AFTER) endChase(s, c, crowded ? 'crowd' : 'sight');
+  if (s.timers.lose >= (ch.loseAfter ?? LOSE_AFTER)) endChase(s, c, crowded ? 'crowd' : 'sight');
 }
 
 // --- low-level games ---------------------------------------------------------------
@@ -2205,7 +2223,7 @@ export function tick(s, dt) {
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // a day keeps the tempo it was created with
   s.t += dt;
   const cdt = clockDt(dt);
-  runSchedule(s);
+  if (!s.slice) runSchedule(s);
   const phase = phaseAt(s.t);
   if (phase !== s.phase) { s.phase = phase; cue(s, 'phase', { data: phase }); }
   updateBus(s, dt);
@@ -2219,6 +2237,7 @@ export function tick(s, dt) {
   updateRaid(s, dt);
   updateGame(s);
   updateRide(s, dt);
+  PLACE_GAMES.tick(s, dt); // a dare at a fast-travel place (places.js)
   const pin = s.player.pinned;
   if (pin) {
     if (s.t < pin.until) Object.assign(s.player, { x: pin.x, z: pin.z });
@@ -2231,8 +2250,9 @@ export function tick(s, dt) {
   updateGroups(s);
   runRules(s, cdt);
   storyFlags(s);
-  STORY.tick(s, dt);
-  if (!s.over && s.t >= at(18, 0)) finish(s);
+  if (s.slice) SLICE.tick(s, dt); else STORY.tick(s, dt);
+  if (s.mischief) MISCHIEF.tick(s, dt); // the 10-minute day: dares, followers, the trouble director
+  if (!s.over && !s.slice && s.t >= at(18, 0)) finish(s);
   return s;
 }
 
@@ -2256,6 +2276,7 @@ export function finish(s, ending = null) {
   s.over = true;
   s.ending = ending ?? chooseEnding(s);
   s.outcome = endingCard(s);
+  if (s.mischief) MISCHIEF.end(s); // the reel, with the card's headline and role (dares.js)
   if (s.history) Object.assign(s.history, { ['ending:' + s.ending]: s.t, ['outcome:' + s.outcome.outcome]: s.t, ['role:' + s.outcome.role]: s.t });
   return s;
 }
@@ -2364,6 +2385,9 @@ export function act(s, cmd) {
   if (s.over) return { ok: false };
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
+  if (cmd.type === 'travel') return TRAVEL.act(s, cmd); // fast travel: refuses with its own line (travel.js)
+  if (cmd.type === 'incident') return s.mischief ? MISCHIEF.act(s, cmd) : { ok: false }; // a trouble incident (director.js)
+  if (cmd.type === 'place') return PLACE_GAMES.act(s, cmd); // a place dare: refuses with its own line (places.js)
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
   if (pl.riding && !(cmd.type === 'ride' || cmd.type === 'film')) return { ok: false, say: 'riding' };
@@ -2410,7 +2434,7 @@ export function act(s, cmd) {
     } else if (cmd.object === 'key' && seen.has('iqbal') && !fromDetentionBus) {
       o.holder = 'hook'; Object.assign(o, SPOTS.keyHook); pl.carrying = null;
       emit(s, 'iqbal-reclaims', { link: 'owner-reclaims' });
-    } else if (cmd.object === 'speaker' && seen.has('ravi')) {
+    } else if (cmd.object === 'speaker' && seen.has('ravi') && !s.slice) { // in the slice Ravi is on his phone (slice.js)
       const r = s.people.ravi;
       o.holder = 'ravi'; r.carrying = 'speaker'; pl.carrying = null;
       emit(s, 'ravi-reclaims', { link: 'owner-reclaims' });
@@ -2749,9 +2773,41 @@ const STORY = createStory({
   provocateurs: storyProvocateurs, rumour: storyRumour,
   nikhilFound: nikhilFoundByPlayer,
 });
+const SLICE = createSlice({
+  dist, SPOTS, CROWD_CENTERS, cue, say, addRep, startChase, startIqbalBreak, endIqbalBreak, crowdAt,
+});
+/** The three-minute slice's HUD: { left, followers, multiplier, dares }, or null on a normal day. */
+export const sliceView = (s) => SLICE.view(s);
 /** Every situation and where it stands: [{ id, title, act, state, card, goal, marker }]. */
 export const situations = (s) => STORY.list(s);
 export const storyCallbackText = (key) => STORY.callbackText(key);
+
+// --- fast travel (travel.js) ------------------------------------------------------
+const TRAVEL = createTravel({ dist, mins, say, cue, advance, crowdAt, allOfficers, dareLine: (s, id) => PLACE_GAMES.travelLine(s, id) });
+
+// --- the 10-minute day (dares.js, director.js, reel.js) ------------------------------------
+const MISCHIEF = createMischief({
+  dist, mins, at, phaseAt, PHASES, PLACES, SPOTS, CROWD_CENTERS, DESTINATIONS: TRAVEL_DESTINATIONS, streetPath, cue, say, addRep,
+  startChase, sendHome, officerById, allOfficers, inCrowd, nearby: (s, p, r) => opportunities(s, p, r), giveObject, walkTo,
+  placeDares: PLACE_DARES.map((d) => ({ ...d, at: d.place })), // one physical dare at each new place (places.js)
+});
+/** The 10-minute day's HUD: { followers, multiplier, dares, incident }, or null on a day without a mischief list. */
+export const mischiefView = (s) => MISCHIEF.view(s);
+/** Where a trouble incident's command points now (a rolling cart, a running Nikhil), for drive.js. */
+export const incidentTarget = (s, cmd) => MISCHIEF.target(s, cmd);
+/** The travel panel: [{ id, name, mode, d, ok, why, text, heat, ... }] for every destination. */
+export const travelBoard = (s) => TRAVEL.board(s);
+/** The best hop towards a far point, or null: { to, name, d }. */
+export const travelHop = (s, target, from) => TRAVEL.hop(s, target, from);
+
+// --- a dare at each fast-travel place (places.js) ------------------------------------
+const PLACE_GAMES = createPlaces({ dist, say, cue, addRep, memo });
+/** The place dares on screen: { done, followers, game: the running one or null }. */
+export const placeView = (s) => PLACE_GAMES.view(s);
+/** Is the player carrying a heavy dare load (langar thalis, a kurta tower)? The client walks them slower. */
+export const placeHeavy = (s) => PLACE_GAMES.heavy(s);
+/** What a good player would do in the running dare now (the verifier's bots): a macro step, or null. */
+export const placeHint = (s) => PLACE_GAMES.hint(s);
 
 // --- what the player can do right here ------------------------------------------
 
@@ -2829,12 +2885,15 @@ export function opportunities(s, pos = s.player, radius = 10) {
   }
   // Rank by distance, but let the rare and urgent things beat a constable who is always nearby,
   // and push down people you have already worked on so the card keeps suggesting something new.
-  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, raid: -25, provocateur: -5, film: -4, give: -3, plead: -20 };
+  const URGENT = { situation: -8, goal: -10, convo: -30, chase: -20, snatch: -2, raid: -25, provocateur: -5, film: -4, give: -3, plead: -20, incident: -22 };
   const score = (o) => {
     let d = o.d + (URGENT[o.kind] ?? 0);
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
     return d;
   };
+  if (s.mischief) for (const o of MISCHIEF.opportunities(s)) push(o.id, o.kind, o.text, o.at, o.cmd); // trouble incidents (director.js)
+  for (const o of PLACE_GAMES.opportunities(s, pos, radius)) push(o.id, o.kind, o.text, o.at, o.cmd); // place dares (places.js)
+  if (s.slice) SLICE.trim(s, out); // the slice's E prompt offers only its own verbs
   for (const o of out) o.rank = score(o);
   out.sort((a, b) => a.rank - b.rank);
   // "Put it down here" is always at distance 0; the HUD already says Q drops it, so it never wins the card
@@ -2848,7 +2907,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   // From 14:00 a far-off chat with a constable is not the point any more: send the player to the hotspot
   // unless the best thing is something rare or urgent.
   const worth = real[0] && (s.t < at(14, 0) || (URGENT[real[0].kind] ?? 0) < 0);
-  return [worth && real[0].d < go.d ? real[0] : go];
+  return [TRAVEL.offer(s, worth && real[0].d < go.d ? real[0] : go)]; // far away: the card carries a hop (travel.js)
 }
 
 // --- the whole action space ------------------------------------------------------
@@ -2880,6 +2939,7 @@ export function affordances(s) {
     return out;
   }
   if (pl.riding) { add('ride:off', 'ride', { type: 'ride', to: 'off' }, null); return out; }
+  for (const a of TRAVEL.affordances(s)) add(a.id, 'travel', a.cmd, null); // hop anywhere from here (travel.js)
   for (const a of STORY.affordances(s)) add(a.id, a.kind === 'goal' ? 'go' : a.kind, a.cmd, a.at);
   if (canRide(s)) for (const [id, k] of Object.entries(RICK_STANDS)) add(`ride:${rickOther(id)}`, 'ride', { type: 'ride', to: rickOther(id) }, SPOTS[k]);
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) add(`take:${id}`, 'take', { type: 'take', object: id }, o);
@@ -2924,6 +2984,9 @@ export function affordances(s) {
   }
   const b = s.bus;
   if (b.phase === 'toJantar' || b.phase === 'toCP') { const q = busPoint(b.s + (b.phase === 'toJantar' ? 6 : -6)); add('lane', 'go', null, { x: q.x, z: q.z }); }
+  if (s.slice) for (const a of SLICE.affordances(s)) add(a.id, a.kind, a.cmd, a.at);
+  if (s.mischief) for (const a of MISCHIEF.affordances(s)) add(a.id, a.kind, a.cmd, a.at); // trouble incidents (director.js)
+  for (const a of PLACE_GAMES.affordances(s)) add(a.id, a.kind, a.cmd, a.at); // place dares (places.js)
   return out;
 }
 

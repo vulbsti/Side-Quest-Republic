@@ -31,7 +31,9 @@ It takes about a minute and writes [`report.md`](report.md).
 5. **Bot players** (`lib/bots.mjs`). Six personalities (idle, random, helpful, chaotic, filmer, explorer)
    play whole days at the 32-minute tempo. From what reached their screens it measures repeated lines,
    how distinct the police sound, new things to do per hour, the longest stretch with nothing new, how
-   busy the phone is and how different their days turn out. Each has a target.
+   busy the phone is and how different their days turn out. Each has a target. Like a player, a bot takes
+   a fast-travel hop (`travel`, `dist/loop/travel.js`) before anything more than 80 m away, so a trace can
+   have the player's position jump; the hop is a step of its own and replays like any other.
 6. **The baseline** (`baseline.json`). Every run is compared with it. Anything that got worse (a property
    that held and now fails, content that was reachable and now isn't, a target that was met and now isn't)
    fails the run. `npm run verify -- --update` accepts the current results.

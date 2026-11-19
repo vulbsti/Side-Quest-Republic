@@ -12,8 +12,11 @@ const THUMB = ['#3b2a4f', '#21424a', '#4a2b22', '#2a3d24', '#3d3420', '#1f2f4a']
  * createPhone(root, pill, { clock, nameOf, onChange })
  *  root: the #phone element; pill: the #phonePill element
  *  clock(): current clock text; nameOf(id): display name for chat senders
+ *  preview(text, tab): the pill's line for a new post, or null for a buzz alone (main.js asks present.js)
  */
-export function createPhone(root, pill, { clock = () => '', nameOf = (id) => id, onChange = () => {} } = {}) {
+export function createPhone(root, pill, { clock = () => '', nameOf = (id) => id, onChange = () => {}, preview = (text) => text } = {}) {
+  /** The pill shakes once: something new arrived that the screen does not spell out. */
+  const buzz = () => { pill.classList.remove('buzz'); void pill.offsetWidth; pill.classList.add('buzz'); };
   root.innerHTML = `
     <div class="ph-status"><span class="ph-clock"></span><span class="ph-net">4G ▮▮▮▯ 23%</span></div>
     <div class="ph-tabs" role="tablist">${TABS.map((t) => `<button role="tab" data-tab="${t}">${TAB_NAME[t]}<i></i></button>`).join('')}</div>
@@ -58,8 +61,9 @@ export function createPhone(root, pill, { clock = () => '', nameOf = (id) => id,
     if (!open || tab !== t) {
       unread[t]++;
       pillTab = t;
-      pill.querySelector('.pill-text').textContent = previewText;
-      pillTimer = 5;
+      const shown = preview(previewText, t); // null: only a buzz (the 10-minute day: present.js routePhone)
+      if (shown == null) buzz();
+      else { pill.querySelector('.pill-text').textContent = shown; pillTimer = 5; }
     }
     render();
   }

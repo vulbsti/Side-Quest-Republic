@@ -1,9 +1,11 @@
 {"name":"cover 49","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
-{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
-{"clock":"12:30","wait":1},
-{"clock":"12:31","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":null},
-{"clock":"12:32","wait":1},
-{"clock":"12:33","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"12:55","do":"say:afwaah:bikes:1","cmd":{"type":"say","option":1},"at":{"x":-51.40408271796168,"z":81.27613361641538}}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","wait":45},
+{"clock":"15:46","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":-37.76953361612079,"z":109.27511945323532}},
+{"clock":"15:47","wait":45},
+{"clock":"16:32","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"16:37","do":"say:detain-me:window:0","cmd":{"type":"say","option":0},"at":{"x":-50.93815568431375,"z":77.53749018979461}}
 ]}
