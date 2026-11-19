@@ -6,6 +6,9 @@
 //
 // The cutaway is a real second render of the live scene into a small portrait viewport (renderer scissor), seen
 // through a second camera that looks at whoever is reacting. It never takes the camera or the controls away.
+//
+// On a full day only the follower pops and the reel cutaway are used ("mini"), for the place dares (places.js),
+// which pay with the same cues: their data carries `place`.
 
 const BEST_KEY = 'sqr-slice-best', DAY_BEST_KEY = 'sqr-day-best';
 const fmt = (n) => Math.round(n).toLocaleString('en-IN');
@@ -56,9 +59,10 @@ export function createSliceUI({ THREE, world, audio, equipCap, getDay, getSim, g
   function begin(day) {
     document.body.classList.toggle('slice', !!day.slice);
     document.body.classList.toggle('day10', !day.slice && !!day.mischief);
-    if (!day.slice && !day.mischief) { if (root) root.classList.add('hidden'); return false; }
+    cut = null; queue = [];
+    if (!day.slice && !day.mischief) { if (root) { root.classList.add('mini'); els.pops.innerHTML = ''; els.reel.classList.add('hidden'); } return false; }
     build();
-    root.classList.remove('hidden');
+    root.classList.remove('hidden', 'mini');
     root.classList.toggle('day', !day.slice);
     shown = 0; last = null; cut = null; queue = []; barkT = 0; flashT = 0;
     els.pops.innerHTML = ''; els.reel.classList.add('hidden'); els.bark.classList.remove('on'); els.flash.classList.remove('on');
@@ -94,8 +98,9 @@ export function createSliceUI({ THREE, world, audio, equipCap, getDay, getSim, g
   /** Engine cues: the slice's own, and the chase's telegraph. */
   function cue(c) {
     const day = getDay();
-    if (!viewOf(day) || !built) return;
     const d = c.data || {};
+    if (day && !viewOf(day) && d.place && c.cue.startsWith('slice:')) { build(); root.classList.remove('hidden'); root.classList.add('mini'); } // a place dare paid on the long day
+    else if (!viewOf(day) || !built) return;
     if (c.cue === 'slice:followers') { pop(d.n, d.why, d.x2); audio.cue('phone-chat'); }
     else if (c.cue === 'slice:dare') {
       const li = els.dares.querySelector(`[data-id="${d.id}"]`);
@@ -115,8 +120,9 @@ export function createSliceUI({ THREE, world, audio, equipCap, getDay, getSim, g
 
   function update(dt) {
     const day = getDay();
+    if (!built) return;
     const v = viewOf(day);
-    if (!v || !built) return;
+    if (!v) { reel(dt); return; } // the long day: only a place dare's cutaway
     const sim = getSim();
     if (v.left != null) { els.timer.textContent = clock(Math.ceil(v.left - 1e-6)); els.timer.classList.toggle('late', v.left <= 30); }
     // The trouble on now (the 10-minute day): what it asks of you, and its clock when it has one.
@@ -147,7 +153,10 @@ export function createSliceUI({ THREE, world, audio, equipCap, getDay, getSim, g
     const topi = day.player.chasedBy && day.memo?.chase?.data?.why === 'topi';
     if (topi && !cap && equipCap) cap = equipCap(getPlayer(), '#b8925a');
     if (cap) cap.visible = !!topi;
-    // The cutaway: one at a time, each about three seconds.
+    reel(dt);
+  }
+  /** The cutaway: one at a time, each about three seconds. */
+  function reel(dt) {
     if (cut && (cut.left -= dt) <= 0) cut = null;
     if (!cut && queue.length) {
       cut = { ...queue.shift(), left: CUT_SECONDS, t: 0, side: Math.random() < 0.5 ? -1 : 1 };

@@ -60,7 +60,8 @@ export function dareSet(loop = 1, placeDares = []) {
   const i = n <= DARE_SETS.length ? n - 1 : 1 + ((n - 2) % (DARE_SETS.length - 1));
   const list = DARE_SETS[i].slice();
   const extra = (placeDares || []).filter((d) => d && d.id && d.text && typeof d.done === 'function');
-  if (extra.length) list[list.length - 1] = extra[(n - 1) % extra.length]; // one place dare, if places.js is wired in
+  // Two place dares a loop, if places.js is wired in: a reason to hop across the map. Each loop brings the next two.
+  for (let k = 0; k < Math.min(2, extra.length); k++) list.push(extra[((n - 1) * 2 + k) % extra.length]);
   return list;
 }
 

@@ -126,7 +126,7 @@ export function clientFeedback(cmd, r, before, s) {
 }
 // Answers to a command show up where the player is looking: a bubble, a toast, the wireless. A chat line on a
 // closed phone is not an answer to "talk your way off the bus".
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo', 'place']);
 const seenTexts = (log, from, to = log.length) => new Set(log.slice(from, to).filter((i) => i.seen && ON_SCREEN.has(i.channel)).map((i) => `${i.channel}|${i.who}|${i.text}`));
 
 /**

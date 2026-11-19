@@ -16,10 +16,12 @@ const SPECTACLE = new Set(['arrival-wave', 'raf-arrive', 'barricades-up', 'canno
 const TALKY = new Set(['talk', 'whisper', 'pester', 'say', 'leave', 'situation', 'plead', 'stance', 'provocateur']);
 // A fast-travel hop is on offer everywhere and uses no body: it never counts as something physical to do.
 const NOT_BODY = new Set([...TALKY, 'travel']);
-const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
+const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo', 'place']);
 const PHONE = new Set(['feed', 'chat', 'ticker', 'stream']);
 
 function choose(persona, s, rand, tried) {
+  // In the middle of a place dare (places.js), play it the way the engine says a good player would.
+  if (s.action?.place && persona !== PERSONAS.idle) { const h = R.placeHint(s); if (h) return h; }
   const affs = R.affordances(s);
   const w = travelOnce(affs, affs.map((a) => dayWeight(a, s, Math.max(0, persona.weight(a, s, tried)))));
   const sum = w.reduce((n, v) => n + v, 0);

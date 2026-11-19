@@ -302,6 +302,9 @@ export function createStory(api) {
     // Already working on its goal: reopening would replay the node and restart the goal's clock.
     if (sit.state === 'active' && sit.node && def.nodes[sit.node]?.goal) return { ok: false, say: 'goal-pending' };
     if (sit.state !== 'active') { sit.state = 'active'; sit.since = s.t; sit.node = def.start; api.memo(s, 'situation:' + id); api.cue(s, 'situation-start', { pos: s.player, data: { id } }); }
+    // Starting one when the last conversation's closing lines are still queued: they play now, so this one's
+    // first lines are not held back behind them (as answering does, say() below).
+    if (!forced) { for (const q of st.queue) if (q.kind === 'beat') q.t = s.t; flushQueue(s); }
     open(s, 'situation', id, (def.cast || [])[0] || null, def, sit.node || def.start);
     return { ok: true, said: true };
   }

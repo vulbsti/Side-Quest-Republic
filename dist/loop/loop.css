@@ -299,3 +299,27 @@ body.slice #touch .acts button:not([data-key=e]):not([data-key=q]):not([data-key
 .slice-end .primary.big{font:900 26px 'Barlow Condensed';letter-spacing:1px;padding:14px 38px}
 .slice-end .primary.big kbd{font-size:10px;margin-left:8px;vertical-align:middle;border-color:#16302366}
 @media(max-width:860px){#slice .sl-timer{font-size:40px;min-width:70px}#slice .sl-dares{top:110px;font-size:13px}#slice .sl-reel{top:auto;bottom:120px;right:12px;width:30vw}}
+/* A full day's place dares (places-ui.js), and the slice's pops and reel cutaway reused for them (slice-ui.js mini) */
+#slice.mini>:not(.sl-pops):not(.sl-reel){display:none!important}
+#slice.mini .sl-pops{top:150px;left:50%;margin-left:-60px}
+#slice.mini .sl-reel{top:118px}
+#placeDare{position:absolute;inset:0;pointer-events:none}
+#placeDare .pd-card{position:absolute;top:14px;left:50%;transform:translateX(-50%);min-width:250px;max-width:min(360px,calc(100vw - 32px));background:#132f28e0;border-top:3px solid var(--lime);border-radius:0 0 10px 10px;padding:7px 14px 9px;text-align:center;backdrop-filter:blur(6px)}
+#placeDare .pd-place{display:block;font-size:9px;letter-spacing:2px;font-weight:700;color:var(--lime)}
+#placeDare .pd-text{display:block;font-size:14px;line-height:1.25;font-weight:600;margin-top:2px}
+#placeDare .pd-big{font:900 26px/1.1 'Barlow Condensed',sans-serif;letter-spacing:.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+#placeDare .pd-big.bad{color:#ff6b6b}#placeDare .pd-big.good{color:var(--lime)}
+#placeDare .pd-meter{position:relative;height:8px;border-radius:4px;background:#ffffff22;overflow:hidden;margin-top:5px}
+#placeDare .pd-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7fe0a0,#ffd44a);transition:width .15s}
+#placeDare .pd-meter.hot i{background:linear-gradient(90deg,#ffd44a,#ff5a4a)}
+#placeDare .pd-time{display:flex;align-items:center;gap:8px;margin-top:6px}
+#placeDare .pd-time i{display:block;height:4px;border-radius:2px;background:var(--lime)}
+#placeDare .pd-time span{margin-left:auto;font:800 14px 'Barlow Condensed';min-width:34px;text-align:right}
+#placeDare .pd-time.late i{background:#ff8a6b}#placeDare .pd-time.late span{color:#ff8a6b}
+#placeDare .pd-coach{position:absolute;left:50%;bottom:118px;transform:translate(-50%,8px);opacity:0;max-width:calc(100vw - 32px);font:800 clamp(18px,2.6vw,26px)/1.1 'Barlow Condensed';text-align:center;color:#fff;text-shadow:0 2px 12px #000,0 0 2px #000;transition:opacity .18s,transform .18s}
+#placeDare .pd-coach.on{opacity:1;transform:translate(-50%,0)}
+#placeDare .pd-flash{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%) scale(.8);opacity:0;font:900 clamp(30px,5vw,56px)/1 'Barlow Condensed';letter-spacing:1px;text-shadow:0 3px 16px #000;white-space:nowrap}
+#placeDare .pd-flash.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform .15s cubic-bezier(.2,1.6,.4,1)}
+#placeDare .pd-flash.warn{color:#ffd44a}#placeDare .pd-flash.good{color:var(--lime)}#placeDare .pd-flash.bad{color:#ff6b6b}
+#placeDare.hidden{display:none}
+@media(max-width:600px){#placeDare .pd-card{top:64px;min-width:0;width:calc(100vw - 32px)}#placeDare .pd-coach{bottom:170px}}

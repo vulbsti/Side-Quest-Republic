@@ -17,12 +17,12 @@ export const PERSONAS = {
   helpful: {
     about: 'Returns things, finds Nikhil, brings water, exposes provocateurs, picks kind choices',
     wait: 0.4,
-    weight: (a, s) => ({ give: 6, say: 4, situation: 5, leave: 0.2, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0 }[a.kind] ?? 0.2),
+    weight: (a, s) => ({ give: 6, say: 4, situation: 5, leave: 0.2, film: 1, talk: a.cmd?.to === 'nikhil' ? 6 : 1.2, take: a.cmd?.object === 'water' ? 5 : 0.4, provocateur: a.cmd?.how === 'expose' ? 6 : a.cmd?.how === 'report' ? 2 : 0, pester: a.cmd?.how === 'career' ? 0.3 : 0.05, whisper: 0, drop: a.id === 'drop:sanaTent' ? 3 : 0.1, stance: a.cmd?.stance === 'protect' ? 3 : 0, place: a.id === 'place:langar' ? 2 : 0.3 }[a.kind] ?? 0.2),
   },
   chaotic: {
     about: 'Steals keys and speakers, spreads rumours, pesters police, joins provocateurs, blocks roads',
     wait: 0.3,
-    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, situation: 2, say: 2, leave: 0.5, film: 1, talk: 0.3, give: 0.1 }[a.kind] ?? 0.3),
+    weight: (a) => ({ take: ['key', 'speaker', 'megaphone'].includes(a.cmd?.object) ? 5 : 1, whisper: 2, pester: a.cmd?.how === 'detainme' || a.cmd?.how === 'cannon' ? 2 : 1, provocateur: a.cmd?.how === 'join' ? 6 : 0.5, rally: 4, go: a.id.startsWith('block') || a.id === 'lane' ? 4 : 0.5, stance: a.cmd?.stance === 'block' ? 3 : 0.3, drop: a.id === 'drop:cp' ? 3 : 0.5, situation: 2, say: 2, leave: 0.5, film: 1, talk: 0.3, give: 0.1, place: 1 }[a.kind] ?? 0.3),
   },
   filmer: {
     about: 'Films whatever happens and follows the crowd',
@@ -49,6 +49,8 @@ export function travelOnce(affs, w) {
 }
 
 function choose(persona, run, rand, tried) {
+  // In the middle of a place dare (places.js), a bot plays it the way the engine says a good player would.
+  if (run.s.action?.place && persona !== PERSONAS.idle) { const h = R.placeHint(run.s); if (h) return h; }
   const affs = R.affordances(run.s);
   const w = travelOnce(affs, affs.map((a) => dayWeight(a, run.s, Math.max(0, persona.weight(a, run.s, tried)))));
   const total = w.reduce((n, v) => n + v, 0) + persona.wait * (affs.length ? Math.max(1, w.reduce((n, v) => n + v, 0) / 3) : 1);

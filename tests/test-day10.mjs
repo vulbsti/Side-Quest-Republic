@@ -38,7 +38,8 @@ const goFar = (s) => Object.assign(s.player, { x: far.x, z: far.z });
 {
   const s = day(1), v = R.mischiefView(s);
   assert(v && v.kind === 'day', 'the HUD has a view');
-  assert(v.dares.length >= 5 && v.dares.length <= 6, `five or six dares (${v.dares.length})`);
+  assert(v.dares.length >= 5 && v.dares.length <= 8, `five to eight dares, two of them at the new places (${v.dares.length})`);
+  assert.equal(v.dares.filter((d) => R.PLACE_DARES.some((p) => p.id === d.id)).length, 2, 'two place dares on the list');
   assert(v.dares.some((d) => d.open), 'one can be done from the first second');
   for (const d of v.dares) assert(d.text.split(/\s+/).length <= 8, `short dare: ${d.text}`);
   assert(v.dares.every((d) => R.DESTINATIONS[d.at]), 'each dare names a fast-travel destination');
@@ -357,3 +358,23 @@ const pay = (s) => s.mischief.followers;
 }
 R.setTempo('long');
 console.log('10-minute day ok');
+
+// --- place dares on the day's list (places.js): two a loop, stamped and paid once by the mischief list ----------
+{
+  const s = R.createDay({ mischief: true });
+  const place = R.mischiefView(s).dares.filter((d) => R.PLACE_DARES.some((p) => p.id === d.id));
+  assert.equal(place.length, 2, 'two place dares on loop 1');
+  assert(place.every((d) => R.DESTINATIONS[d.at]), 'each names its fast-travel place');
+  R.tick(s, 0.1); R.drainCues(s);
+  const before = R.mischiefView(s).followers;
+  s.places = { ...(s.places || {}), done: { ...(s.places?.done || {}), [place[0].id]: s.t } }; // as places.js marks a win
+  R.tick(s, 0.1);
+  const cues = R.drainCues(s);
+  assert(R.mischiefView(s).dares.find((d) => d.id === place[0].id).done, 'winning the place dare ticks it on the list');
+  assert.equal(cues.filter((c) => c.cue === 'slice:dare' && c.data.id === place[0].id).length, 1, 'stamped once');
+  assert(R.mischiefView(s).followers > before, 'and it pays followers');
+  const s2 = R.createDay({ mischief: { loop: 2 } });
+  const next = R.mischiefView(s2).dares.filter((d) => R.PLACE_DARES.some((p) => p.id === d.id)).map((d) => d.id);
+  assert(next.length === 2 && !next.some((id) => place.some((d) => d.id === id)), 'loop 2 brings the next two places');
+}
+console.log('place dares on the day list ok');
