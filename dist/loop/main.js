@@ -7,9 +7,9 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=11';
+import * as R from './rules.js?v=12';
 import { SPEAKERS } from './talks.js?v=2';
-import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=10';
+import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=11';
 import { createLighting } from './lighting.js?v=1';
 import {
   createProps, makeHeldFlag, makeHeldPlacard, waveFlag, setShield,
@@ -17,13 +17,14 @@ import {
 } from './props.js?v=2';
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
-import { routeEvent } from './present.js?v=3';
+import { routeEvent } from './present.js?v=4';
 import { createDriver } from './drive.js?v=5';
 import { canSee, lostSight } from './sight.js?v=1';
 import { createRecorder, setInputs } from './trace.js?v=1';
 import { createStreetLife } from './street-life.js?v=1';
 import { createTravelUI } from './travel-ui.js?v=1';
-import { createSliceUI } from './slice-ui.js?v=1';
+import { createSliceUI } from './slice-ui.js?v=2';
+import { createPlacesUI } from './places-ui.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -43,6 +44,7 @@ const QS = new URLSearchParams(location.search);
 const LONG = !QS.has('short'), DEV = QS.has('dev');
 // The three-minute slice (slice.js, slice-ui.js): ?slice, or the title screen's "3-minute run".
 let sliceMode = QS.has('slice'), sliceUI = null;
+let placesUI = null; // the place dares' props, people and panel (places-ui.js)
 const STEP = 0.1;
 // ?replay or ?drawlog: every line routed to the screen is logged here, for the verifier's playback check.
 const DRAWN = QS.has('replay') || QS.has('drawlog') ? (window.__drawn = []) : null;
@@ -964,6 +966,7 @@ function handleEvents() {
     else if (r.channel === 'officer') { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
     else if (r.channel === 'toast') toast(e.text, 5);
     else if (r.channel === 'slice') sliceUI.line(e);
+    else if (r.channel === 'place') placesUI?.line(e); // a place dare (places-ui.js)
     if (r.learn) learnLink(e.link);
   }
 }
@@ -1120,6 +1123,7 @@ function handleCues() {
     props.cue(c);
     audio.cue(c.cue, { pos: c.pos, data: c.data });
     sliceUI.cue(c);
+    placesUI?.cue(c);
     chatTrigger(c.cue);
     const name = c.cue;
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
@@ -1763,7 +1767,7 @@ function step(dt) {
   const right = frozen ? 0 : (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ix = Math.cos(yaw) * right - Math.sin(yaw) * forward;
   const iz = -Math.sin(yaw) * right - Math.cos(yaw) * forward;
-  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '] && !frozen, heavy: HEAVY.includes(day.player.carrying) });
+  sim.step(dt, { x: ix, z: iz, sprint: keys.shift, jump: keys[' '] && !frozen, heavy: HEAVY.includes(day.player.carrying) || R.placeHeavy(day) });
   keys[' '] = false;
   if (detained) {
     // On the detention bus: you sit inside, by the door.
@@ -2131,6 +2135,7 @@ function frame(now) {
   if (mode === 'play') step(dt);
   if (day && mode !== 'loading') {
     rideSeat = street ? street.update(dt, t, sim.player, day) : null;
+    placesUI?.update(dt, t);
     if (rideSeat) { playerModel.position.set(rideSeat.x, rideSeat.y, rideSeat.z); playerModel.rotation.y = rideSeat.yaw; }
     animate(t);
     updateItems(t);
@@ -2255,6 +2260,7 @@ function setupInput() {
       getDay: () => day, getSim: () => sim, getPlayer: () => playerModel,
       bodyOf: (id) => (id === 'player' ? { x: sim.player.x, z: sim.player.z, y: sim.player.y } : bodies[id] || officerById.get(id) || null),
     });
+    placesUI = createPlacesUI({ THREE, world, R, makeCharacter, animateCharacter, cube, cylinder, ball, sign, getDay: () => day, getPlayer: () => playerModel, bubble, audio: { cue: (...a) => audio.cue(...a) } });
     day = createDay();
     await loadOptional(); // before the people, so their flags and placards are the real models
     makePeople();

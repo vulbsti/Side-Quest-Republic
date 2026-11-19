@@ -75,8 +75,8 @@ export const DESTINATIONS = {
     arrive: ['Mandir. Ghanti baj rahi, laddoo bant rahe.', 'Prasad le lo, hausla free.', 'Jai Bajrangbali. Ab kaam pe.'],
   },
   rivoli: {
-    name: 'Rivoli · Mohan Singh Place', mode: 'paidal', x: -24.7, z: -266.4, look: { x: -18.3, z: -263.5 },
-    from: 'OSM cinema "PVR Rivoli Cinema" (-18.3, -263.5), by Khadi India and Mohan Singh Place',
+    name: 'Rivoli · Mohan Singh Place', mode: 'paidal', x: -5.5, z: -257.5, look: { x: -9.2, z: -262.6 },
+    from: 'OSM cinema "PVR Rivoli Cinema" (-18.3, -263.5): the open forecourt inside its block, where the darzi sits (places.js)',
     card: 'Coffee House wali chai, purana rate',
     vibe: 'Rivoli, Khadi, Coffee House',
     arrive: ['Rivoli. Poster purane, crowd naya.', 'Coffee House upar. Uncle politics pe.', 'Khadi ke bahar, chai ke paas.'],
@@ -96,8 +96,8 @@ export const DESTINATIONS = {
     arrive: ['Bangla Sahib. Langar ki khushboo.', 'Sar dhako, pet bharo, phir protest.', 'Yahan sab shaant. Ajeeb lagta hai.'],
   },
   patel: {
-    name: 'Patel Chowk metro', mode: 'metro', x: -132.6, z: 244, look: { x: -126.1, z: 243.5 },
-    from: 'OSM railway:station "Patel Chowk" (-126.1, 243.5), the kerb outside it',
+    name: 'Patel Chowk metro', mode: 'metro', x: -131, z: 262.5, look: { x: -129.3, z: 259.4 },
+    from: 'OSM railway:station "Patel Chowk" (-126.1, 243.5): the open ground at its south gate, where the queue is (places.js)',
     card: 'Ek stop, poora drama',
     vibe: 'Metro gate, chai thela',
     arrive: ['Patel Chowk. Sardar Patel dekh rahe.', 'Metro se bahar. Sansad bas aage.', 'Ek stop, poora drama.'],
@@ -241,6 +241,8 @@ export function createTravel(E) {
     if (cops >= 2) bits.push(`${cops} police wale`);
     const loose = Object.entries(s.objects).find(([, o]) => (o.holder === null || o.holder === 'hook' || o.holder === 'cart') && dist(o, p) <= 20);
     if (loose && bits.length < 3) { bits.push(`${THING[loose[0]] ?? loose[0]} pada hai`); heat = Math.max(heat, 1); }
+    const dare = E.dareLine?.(s, id); // the place's dare while it is undone (places.js)
+    if (dare) return { text: [dare, ...bits].slice(0, 2).join(' · '), heat: Math.max(heat, 1), dare: true };
     return bits.length ? { text: bits.slice(0, 3).join(' · '), heat } : { text: d.vibe, heat: 0 };
   }
   /** The travel panel: every destination, how far, whether you can go, and what's on there right now. */

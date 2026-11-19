@@ -42,6 +42,8 @@ export function routeEvent(e, v) {
   // The three-minute slice (slice.js): its own short lines go to the slice HUD; the phone, the wireless and the
   // street's long narration stay off the screen.
   if (kind === 'slice') return { kind, channel: 'slice', seen: !!e.text, learn };
+  // A place dare (places.js): its people speak in bubbles over them, the coach on the strip above the HUD.
+  if (kind === 'place') return { kind, channel: 'place', seen: !!e.text && (!e.pos || dist(p, e.pos) <= BUBBLE_RANGE), learn };
   if (v.slice && (onPhone || kind === 'wireless' || e.who === 'street')) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
   // ...and the player only says the slice's own lines: the reel's caption already says how a chase went.
   if (v.slice && e.who === 'player' && !/^(slice-|travel)/.test(String(e.key))) return { kind, channel: 'none', seen: false, learn, why: 'slice' };

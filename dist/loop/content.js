@@ -278,7 +278,7 @@ export const LINES = {
   'megaphone-to-kabir': [['kabir', 'MIC MIL GAYA. Saade teen baje Jantar Mantar ka sabse bada open mic.']],
   'minister-wait': [['dev', 'Minister aa rahe hain! Sab barricade pe chalo, delegation ready!'], ['street', 'Dev leads a stream of people from the stage towards the barricade.']],
   'minister-noshow': [['dev', 'Chaar baj gaye. Koi minister nahi. Koi phone nahi. Phir se.'], ['street', 'The crowd at the barricade starts to mutter.']],
-  'barricade-push': [['dev', 'Agar minister nahi aayenge, toh hum unke paas jaayenge!'], ['wireless', 'Rao: Barricade pe koi nahi hai?! Bheed andar ja rahi hai! Sab units!'], ['street', 'Nobody is guarding the gap. Dev\'s crowd walks through onto Parliament Street.']],
+  'barricade-push': [['dev', 'Agar minister nahi aayenge, toh hum unke paas jaayenge!'], ['wireless', 'Rao: Barricade pe koi nahi hai?! Bheed andar ja rahi hai! Sab units!'], ['street', 'Nobody is guarding the gap. Dev\'s crowd walks through onto Parliament Street.'], ['feed', 'Jantar Updates 🔥: BARRICADE KHAALI! Bheed Parliament Street ki taraf, live dekho 👇']],
   'clash': [['dev', 'Minister ko bulao! Abhi! Yahin!'], ['wireless', 'Rao: Barricade pe dhakka-mukki! Detain karo! Over.'], ['street', 'Pushing at the barricade. Whistles. Constables start pulling people out of the crowd.']],
   'clash-live': [['dev', 'Minister ko bulao! Abhi! Yahin!'], ['stream', 'Zoya Live: Barricade pe dhakka-mukki, main live hoon, sab dekh rahe hain!'], ['wireless', 'Rao: Camera band karwao! …Nahi, camera band mat karwao, wo bhi live jaayega. Over.']],
   'clash-over': [['wireless', 'Rao: Area clear karo. Vans bhar gayi hain. Over.']],
@@ -500,7 +500,7 @@ Object.assign(LINES, {
   'sena-called': [['street', 'More bikes turn up. Then more. The DRS boys heard the rumour about themselves and decided to make it true.'], ['wireless', 'Rao: DRS ki doosri tukdi aa gayi, stage ke saamne. Over.'], ['kabir', 'Bhai inhone apni hi afwaah ka RSVP kar diya.']],
   'sena-called-early': [['street', 'Someone forwards the DRS rumour into the wrong group. Somewhere, bikes are being started.']],
   'opp-photo-op': [['street', 'A man in a white kurta with a ceiling-fan badge climbs onto the stage, takes the mic from nobody, and turns to the cameras.'], ['mira', 'Ji aap kaun? …Haan aap. Aap kaun?'], ['kabir', 'Bhai ye kaun hai? Kisi ne bulaya? Mera mic bhi nahi hai aur inka speech?'], ['street', 'A few students walk off. "Hum LJM ke liye nahi aaye."']],
-  'opp-no-camera': [['street', 'An LJM leader arrives, looks around for a camera, finds none, and starts checking his phone.']],
+  'opp-no-camera': [['street', 'An LJM leader arrives, looks around for a camera, finds none, and starts checking his phone.'], ['chat', 'Meera: LJM wale neta ji aaye, camera dhoondha, nahi mila 😭 ab phone pe Candy Crush']],
   'opp-leaves': [['street', 'The LJM leader leaves for a "prior engagement". His flags stay behind, leaning on a pole.']],
   // Police build-up
   'barricades-up': [['wireless', 'Rao: Sansad Marg pe barricade lagao. RAF reserve wahin. Over.'], ['street', 'Steel barricades clang into place on Parliament Street. Blue camouflage, helmets, shields. The RAF are here.'], ['chat', 'Nikhil: Update: RAF aa gayi. Bahut log hain. Sab ke paas danda hai.']],

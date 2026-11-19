@@ -14,9 +14,9 @@ import { rng } from './explore.mjs';
 const { R } = H;
 const ROOT = new URL('../../', import.meta.url);
 const src = (p) => readFileSync(new URL(p, ROOT), 'utf8');
-export const CLIENT_FILES = ['dist/loop/main.js', 'dist/loop/props.js', 'dist/loop/audio.js', 'dist/loop/cinematic.js', 'dist/loop/phone-ui.js', 'dist/loop/present.js', 'dist/loop/travel-ui.js'];
+export const CLIENT_FILES = ['dist/loop/main.js', 'dist/loop/props.js', 'dist/loop/audio.js', 'dist/loop/cinematic.js', 'dist/loop/phone-ui.js', 'dist/loop/present.js', 'dist/loop/travel-ui.js', 'dist/loop/places-ui.js', 'dist/loop/slice-ui.js'];
 // The engine's source: rules.js and the modules it hands its helpers to (fast travel's cues and lines live in travel.js).
-export const ENGINE_FILES = ['dist/loop/rules.js', 'dist/loop/travel.js'];
+export const ENGINE_FILES = ['dist/loop/rules.js', 'dist/loop/travel.js', 'dist/loop/places.js'];
 
 // --- reading the source -----------------------------------------------------------
 

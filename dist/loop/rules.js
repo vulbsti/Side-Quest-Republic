@@ -10,6 +10,8 @@ import { createSlice } from './slice.js';
 import { streetPath, pathLength } from '../map/route.js';
 import { createTravel } from './travel.js';
 export { DESTINATIONS, TRAVEL_MINUTES, HOP_FROM, MODES } from './travel.js';
+import { createPlaces } from './places.js';
+export { PLACE_DARES, PLACE_LAYOUT, DARE_AT, PLACE_NAMES } from './places.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -2228,6 +2230,7 @@ export function tick(s, dt) {
   updateRaid(s, dt);
   updateGame(s);
   updateRide(s, dt);
+  PLACE_GAMES.tick(s, dt); // a dare at a fast-travel place (places.js)
   const pin = s.player.pinned;
   if (pin) {
     if (s.t < pin.until) Object.assign(s.player, { x: pin.x, z: pin.z });
@@ -2374,6 +2377,7 @@ export function act(s, cmd) {
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
   if (cmd.type === 'travel') return TRAVEL.act(s, cmd); // fast travel: refuses with its own line (travel.js)
+  if (cmd.type === 'place') return PLACE_GAMES.act(s, cmd); // a place dare: refuses with its own line (places.js)
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
   if (pl.riding && !(cmd.type === 'ride' || cmd.type === 'film')) return { ok: false, say: 'riding' };
@@ -2769,11 +2773,20 @@ export const situations = (s) => STORY.list(s);
 export const storyCallbackText = (key) => STORY.callbackText(key);
 
 // --- fast travel (travel.js) ------------------------------------------------------
-const TRAVEL = createTravel({ dist, mins, say, cue, advance, crowdAt, allOfficers });
+const TRAVEL = createTravel({ dist, mins, say, cue, advance, crowdAt, allOfficers, dareLine: (s, id) => PLACE_GAMES.travelLine(s, id) });
 /** The travel panel: [{ id, name, mode, d, ok, why, text, heat, ... }] for every destination. */
 export const travelBoard = (s) => TRAVEL.board(s);
 /** The best hop towards a far point, or null: { to, name, d }. */
 export const travelHop = (s, target, from) => TRAVEL.hop(s, target, from);
+
+// --- a dare at each fast-travel place (places.js) ------------------------------------
+const PLACE_GAMES = createPlaces({ dist, say, cue, addRep, memo });
+/** The place dares on screen: { done, followers, game: the running one or null }. */
+export const placeView = (s) => PLACE_GAMES.view(s);
+/** Is the player carrying a heavy dare load (langar thalis, a kurta tower)? The client walks them slower. */
+export const placeHeavy = (s) => PLACE_GAMES.heavy(s);
+/** What a good player would do in the running dare now (the verifier's bots): a macro step, or null. */
+export const placeHint = (s) => PLACE_GAMES.hint(s);
 
 // --- what the player can do right here ------------------------------------------
 
@@ -2857,6 +2870,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
     return d;
   };
+  for (const o of PLACE_GAMES.opportunities(s, pos, radius)) push(o.id, o.kind, o.text, o.at, o.cmd); // place dares (places.js)
   if (s.slice) SLICE.trim(s, out); // the slice's E prompt offers only its own verbs
   for (const o of out) o.rank = score(o);
   out.sort((a, b) => a.rank - b.rank);
@@ -2949,6 +2963,7 @@ export function affordances(s) {
   const b = s.bus;
   if (b.phase === 'toJantar' || b.phase === 'toCP') { const q = busPoint(b.s + (b.phase === 'toJantar' ? 6 : -6)); add('lane', 'go', null, { x: q.x, z: q.z }); }
   if (s.slice) for (const a of SLICE.affordances(s)) add(a.id, a.kind, a.cmd, a.at);
+  for (const a of PLACE_GAMES.affordances(s)) add(a.id, a.kind, a.cmd, a.at); // place dares (places.js)
   return out;
 }
 
