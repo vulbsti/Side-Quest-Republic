@@ -17,12 +17,13 @@ import {
 } from './props.js?v=2';
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
-import { routeEvent } from './present.js?v=2';
+import { routeEvent } from './present.js?v=3';
 import { createDriver } from './drive.js?v=5';
 import { canSee, lostSight } from './sight.js?v=1';
 import { createRecorder, setInputs } from './trace.js?v=1';
 import { createStreetLife } from './street-life.js?v=1';
 import { createTravelUI } from './travel-ui.js?v=1';
+import { createSliceUI } from './slice-ui.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -40,6 +41,8 @@ function saveRecording() {
 }
 const QS = new URLSearchParams(location.search);
 const LONG = !QS.has('short'), DEV = QS.has('dev');
+// The three-minute slice (slice.js, slice-ui.js): ?slice, or the title screen's "3-minute run".
+let sliceMode = QS.has('slice'), sliceUI = null;
 const STEP = 0.1;
 // ?replay or ?drawlog: every line routed to the screen is logged here, for the verifier's playback check.
 const DRAWN = QS.has('replay') || QS.has('drawlog') ? (window.__drawn = []) : null;
@@ -827,7 +830,7 @@ function updateItems(t) {
   for (const id of OBJECTS) {
     const o = day.objects[id], it = items[id];
     const holderModel = o.holder === 'player' ? playerModel : bodies[o.holder]?.model;
-    it.visible = o.holder !== 'iqbal' && o.holder !== 'bus' && !(holderModel && !holderModel.visible);
+    it.visible = o.holder !== 'iqbal' && o.holder !== 'bus' && o.holder !== 'gayab' && !(holderModel && !holderModel.visible);
     if (id === 'phone' && o.holder === 'zoya') it.visible = false;
     if (holderModel) { attach(it, holderModel, POSE[id]); continue; }
     if (it.parent !== world.scene) world.scene.add(it);
@@ -874,6 +877,7 @@ function updateShuttle() {
 // --- feedback: toast, bubbles, phone, radio -------------------------------------------------
 
 function toast(text, time = 4, isLink = false) {
+  if (day?.slice) return; // the slice draws its own short barks (slice-ui.js)
   const el = $('#toast');
   el.textContent = text;
   el.classList.toggle('linked', isLink);
@@ -938,6 +942,7 @@ const clientView = {
   get now() { return day.t; },
   get player() { return { x: sim.player.x, z: sim.player.z, visible: playerModel?.visible !== false }; },
   get place() { return placeAt(sim.player); },
+  get slice() { return !!day?.slice; },
   body: (id) => (bodies[id] ? { x: bodies[id].x, z: bodies[id].z, visible: bodies[id].model.visible } : null),
   officer: (id) => { const b = officerById.get(id); return b ? { x: b.x, z: b.z, visible: b.model.visible } : null; },
   policeNear: (r) => (bodies.sharma && dist(sim.player, bodies.sharma) < r) || police.some((b) => b.model.visible && dist(b, sim.player) < r),
@@ -958,6 +963,7 @@ function handleEvents() {
     else if (r.channel === 'bubble') say(e.who, e.text, 6);
     else if (r.channel === 'officer') { const b = officerById.get(e.who); bubble('o:' + e.who, b, b.plan?.name?.toUpperCase() || b.label, e.text, 6); }
     else if (r.channel === 'toast') toast(e.text, 5);
+    else if (r.channel === 'slice') sliceUI.line(e);
     if (r.learn) learnLink(e.link);
   }
 }
@@ -1113,6 +1119,7 @@ function handleCues() {
     if (!c || !c.cue) continue;
     props.cue(c);
     audio.cue(c.cue, { pos: c.pos, data: c.data });
+    sliceUI.cue(c);
     chatTrigger(c.cue);
     const name = c.cue;
     if (name === 'crowd-laugh' || name === 'crowd-gasp' || name === 'awkward-silence') react(name, c.pos || sim.player);
@@ -1206,7 +1213,8 @@ function findPrompt() {
       if (!isFree(o) || dist(p, o) >= 2) continue;
       const watching = witnesses().filter((w) => w === OWNER[id] || (id === 'key' && (w === 'sharma' || officerById.has(w))));
       const warn = watching.length ? ` (${watching.map((w) => PEOPLE[w]?.name || 'a constable').join(' and ')} can see you)` : '';
-      options.push({ d: dist(p, o) - 1.5, text: PICKUP[id] + warn, warn: !!warn, run: () => take(id) });
+      if (day.slice && !sliceUI.pickup(id)) continue; // only what the slice's dares need
+      options.push({ d: dist(p, o) - 1.5, text: day.slice ? sliceUI.pickup(id) : PICKUP[id] + warn, warn: !!warn, run: () => take(id) });
     }
   }
   for (const id of Object.keys(bodies)) {
@@ -1229,6 +1237,7 @@ function findPrompt() {
   const o = nearestOpportunity(true, true);
   // Scenes trigger from a few metres away (you walk up to a conversation, not into a person).
   if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  if (day.slice) for (let i = options.length - 1; i >= 0; i--) if (/^(Talk to|Pester|Give) /.test(options[i].text)) options.splice(i, 1); // the slice is all hands
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;
 }
@@ -1419,11 +1428,12 @@ function localOpportunity() {
 // --- loop, screens, board ----------------------------------------------------
 
 function resetDay() {
-  day = createDay();
+  if (!sliceMode && day?.slice) R.setTempo(LONG ? 'long' : 'slice'); // back from a slice run to the full day's tempo
+  day = createDay(sliceMode ? { slice: true } : undefined);
   rec = replayer ? null : createRecorder(day, { loop: memory.loops });
   loopLinks = new Set();
-  sim.player.x = SPOTS.metro.x; sim.player.z = SPOTS.metro.z; sim.player.y = 0;
-  sim.player.vx = sim.player.vz = 0;
+  sim.player.x = day.player.x; sim.player.z = day.player.z; sim.player.y = 0; // the Metro exit, or beside Meena in the slice
+  sim.player.vx = sim.player.vz = 0; sim.player.stamina = 100;
   sim.player.yaw = Math.PI;
   yaw = 0;
   for (const [id, b] of Object.entries(bodies)) Object.assign(b, { x: day.people[id].x, z: day.people[id].z });
@@ -1449,20 +1459,23 @@ function showTitle() {
     <h1>Same day.<em>Again.</em></h1>
     <p>It's 10:00 at the Rajiv Chowk exit. By evening something will have happened at Jantar Mantar: groups arrive, barricades go up, the water cannon rolls in. You can't stop it. You can bend it: how bad it gets, where it breaks out, who they go after.</p>
     <p>Pester the police, steal a bus key, rally a crew, film everything. When the day ends, it starts again. You keep everything you learned.</p>
-    <div class="buttons"><button class="primary" id="go">${memory.loops > 1 ? `Start loop ${memory.loops}` : 'Start the day'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
+    <div class="buttons"><button class="primary" id="goSlice">3-minute run</button><button id="go">${memory.loops > 1 ? `Full day: loop ${memory.loops}` : 'Full day (32 min)'}</button>${seen ? `<button id="wipe">Forget everything</button>` : ''}</div>
     <p class="fine">${seen ? `You know ${seen} of ${Object.keys(LINKS).length} links. ` : ''}WASD move · Space jump · drag to look · E act · F film · R rally · C crew orders · P phone · Tab chaos board · hold T to let time pass. On a phone, use the on-screen buttons.${LONG ? '' : ' · Short day (?short).'}</p></div>`;
   $('#screen').classList.remove('hidden');
   $('#hud').classList.add('hidden');
-  $('#go').onclick = () => startLoop();
+  $('#go').onclick = () => startLoop(false);
+  $('#goSlice').onclick = () => startLoop(true);
   $('#wipe')?.addEventListener('click', () => { memory = { loops: 1, links: [], hints: [], endings: [], showdowns: [] }; saveMemory(); showTitle(); });
 }
 
-function startLoop() {
+function startLoop(slice = sliceMode) {
+  sliceMode = !!slice;
   resetDay();
   mode = 'play';
   $('#screen').classList.add('hidden');
   $('#hud').classList.remove('hidden');
   onPhase(S.phase(day));
+  if (sliceUI.begin(day)) return; // the slice opens mid-chase: no toast, no phone
   phone.chat('Pinky', '⚠️ Forwarded many times: "water cannon aa raha hai Jantar pe??" Kisi ko pata hai?');
   chatTrigger('phase:' + phaseNow);
   for (const line of PHONE.TICKER[phaseNow] || []) phone.ticker(line);
@@ -1495,6 +1508,7 @@ function showEnding() {
   mode = 'end';
   closeChoices();
   phone.close();
+  if (day.slice) { sliceUI.showEnd(day, () => startLoop(true), () => startLoop(false)); return; } // the reel
   const e = S.ending(day);
   const flavourId = e ? (e.flavour ?? e.headlineId ?? e.legacy ?? null) : day.ending;
   const flavour = ENDINGS[flavourId] || null;
@@ -1791,8 +1805,7 @@ function step(dt) {
   playerModel.rotation.y += turn * Math.min(1, dt * 14);
   updateDetainees();
   updateRiders();
-  ambient(dt);
-  barks(dt);
+  if (!day.slice) { ambient(dt); barks(dt); }
   updateFlags();
   updateConvo(dt);
   updateAudio(dt);
@@ -2041,6 +2054,7 @@ function updateHUD(dt) {
   if (recT > 0 && (recT -= dt) <= 0) $('#recFlash').classList.add('hidden');
   phone.update(dt);
   if (day.stream.live) phone.live({ on: true, viewers: day.stream.viewers });
+  sliceUI.update(dt);
 }
 
 let devT = 0, fpsN = 0, fpsT = 0, fps = 0;
@@ -2129,6 +2143,7 @@ function frame(now) {
   updateBubbles(dt);
   if (toastTime > 0 && (toastTime -= dt) <= 0) { $('#toast').style.opacity = 0; $('#hud').classList.remove('toasting'); }
   world.renderer.render(world.scene, world.camera);
+  if (mode === 'play') sliceUI?.render(dt);
 }
 
 function press(k) {
@@ -2138,6 +2153,7 @@ function press(k) {
   if (cine.mode === 'scene') { if (k === ' ' || k === 'enter' || k === 'e') cine.next(); return; }
   if (k === 'e' && prompt) prompt.run();
   if (k === 'q' && day.player.carrying) drop();
+  if (day.slice) return; // the slice is move, E and Q
   if (k === 'p') phone.toggle();
   if (k === 'f') film();
   if (k === 'r') rally();
@@ -2148,6 +2164,8 @@ function setupInput() {
   addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
     if ([' ', 'tab', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
+    if (mode === 'end' && day?.slice && (k === 'enter' || k === 'r') && !e.repeat) { startLoop(true); return; } // Dobara
+    if (k === 'tab' && day?.slice) return;
     if (k === 'tab') { if (mode === 'board') closeBoard(); else if (mode === 'play' || mode === 'end') openBoard(); return; }
     if (k === 'escape') {
       if (mode === 'board') { closeBoard(); return; }
@@ -2232,6 +2250,11 @@ function setupInput() {
         if (kind === 'silence') { react('awkward-silence', at); audio.silence(1.9); }
       },
     });
+    sliceUI = createSliceUI({
+      THREE, world, audio: { cue: (...a) => audio.cue(...a) }, equipCap, sliceView: R.sliceView,
+      getDay: () => day, getSim: () => sim, getPlayer: () => playerModel,
+      bodyOf: (id) => (id === 'player' ? { x: sim.player.x, z: sim.player.z, y: sim.player.y } : bodies[id] || officerById.get(id) || null),
+    });
     day = createDay();
     await loadOptional(); // before the people, so their flags and placards are the real models
     makePeople();
@@ -2245,12 +2268,12 @@ function setupInput() {
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
     $('#loading').classList.add('hidden');
     if (DEV) $('#dev').classList.remove('hidden');
-    if (REPLAY) await startReplay(); else showTitle();
+    if (REPLAY) await startReplay(); else if (sliceMode) startLoop(true); else showTitle();
     requestAnimationFrame(frame);
     // For debugging and automated browser checks.
     window.__loop = {
       get day() { return day; }, get sim() { return sim; }, get mode() { return mode; }, get world() { return world; },
-      startLoop, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
+      startLoop, startSlice: () => startLoop(true), get sliceUI() { return sliceUI; }, openBoard, act, at, advance, SPOTS, bodies, crowd, police, crew, provs, props, phone, cine, lighting,
       // After a time jump: people snap to where they now are, and lines said an hour ago stop hanging in the air.
       snap: () => { crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; for (const b of bubbles) b.ttl = 0; },
       playScene: devPlayScene, setAudio, stings: (on) => { stingsOn = !!on; },

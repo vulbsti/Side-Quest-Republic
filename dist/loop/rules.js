@@ -6,6 +6,7 @@ import { LINES, RUMOURS, PESTER, CALLBACKS, SHOWDOWNS, ROLES, ENDINGS, INTENTS, 
 import { CAPTIONS } from './phone.js';
 import { PESTER_BY } from './talks.js';
 import { createStory } from './story.js';
+import { createSlice } from './slice.js';
 import { streetPath, pathLength } from '../map/route.js';
 import { createTravel } from './travel.js';
 export { DESTINATIONS, TRAVEL_MINUTES, HOP_FROM, MODES } from './travel.js';
@@ -198,7 +199,8 @@ function updateRide(s, dt) {
 }
 const ARRIVAL_EVERY = 7;
 const WALK = 3.2;
-const CHASE = 7; // a constable flat out: faster than a jog (4.7), slower than a sprint (8.1), which the stamina bar rations
+const CHASE = 7.6; // a constable flat out: faster than a jog (4.7), slower than a sprint (8.1), which the stamina bar rations
+const AIM_SMOOTH = 0.35; // seconds of your run he averages to aim a lunge
 const LOSE_AFTER = 3; // seconds out of sight or inside a crowd to lose a chaser
 // The lunge: within range he slows and reaches out (the telegraph), aimed at where you'll be if you keep going,
 // then dives. Keep running straight and he has you; change direction, or burst, during the wind-up and he grabs air.
@@ -214,7 +216,7 @@ const RAID = { breath: 12, ring: 3, reach: 25, near: 10, home: 35, approach: 6, 
 const PINNED = 5; // seconds of uthak-baithak when a constable catches you over his topi
 const TOPI_AGAIN = 30; // clock minutes before the same constable lets his guard down again
 /** A constable whose topi you can flick off right now: standing at his post, not busy, not just robbed. */
-const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && o.mode === 'post' && (o.topiAt == null || s.t - o.topiAt >= mins(TOPI_AGAIN));
+const snatchable = (s, o) => /^c\d$/.test(o.id) && !o.hidden && o.mode === 'post' && (o.topiAt == null || s.t - o.topiAt >= mins(s.slice ? SLICE.topiAgain : TOPI_AGAIN));
 const VIRAL = 4000;
 const CROWD_PLACES = ['stage', 'cp', 'barricade', 'parliament'];
 const BARRICADE_JAWAN = 'r1'; // the RAF jawan who stands at the barricade beside Sharma from 14:00
@@ -236,6 +238,7 @@ function officer(id, kind, post, extra = {}) {
 }
 
 export function createDay(opts = {}) {
+  if (opts.slice && !opts.tempo) opts = { ...opts, tempo: 'slice' }; // the three-minute slice (slice.js)
   if (opts.tempo) setTempo(opts.tempo);
   const rumour = () => ({ people: {}, places: {}, dead: false, exposure: {}, meeraT: 0, zoyaT: 0 });
   const day = {
@@ -330,6 +333,7 @@ export function createDay(opts = {}) {
     cues: [],
   };
   day.story = STORY.init();
+  if (opts.slice) SLICE.setup(day);
   return day;
 }
 
@@ -1042,6 +1046,7 @@ function endChase(s, c, how) {
   if (s.memo.chase?.data?.why === 'topi') { addRep(s, { aura: 6 }); emit(s, `topi-kept-${(s.seq.topi || 0) % 3}`, { pos: pl }); happen(s, 'topi', pl); }
 }
 function caught(s, c) {
+  if (s.slice && SLICE.caught(s, c)) return; // in the slice every catch is the light one
   const pl = s.player;
   s.chase = null;
   if (s.memo.chase?.data?.why === 'topi') { // no van for a topi: five seconds of uthak-baithak in front of everyone
@@ -1070,8 +1075,10 @@ function updateChase(s, dt) {
   if (!pl.chasedBy) return;
   const c = officerById(s, pl.chasedBy), ch = s.chase ?? (s.chase = { since: s.t, prev: { x: pl.x, z: pl.z }, lunge: null, whiffs: 0, cool: 0 });
   // How the player is moving, from where they were last tick (the client and the bots move the player).
-  const v = { x: (pl.x - ch.prev.x) / dt, z: (pl.z - ch.prev.z) / dt };
+  const raw = { x: (pl.x - ch.prev.x) / dt, z: (pl.z - ch.prev.z) / dt };
   ch.prev = { x: pl.x, z: pl.z };
+  // He reads your run, not your last step: a steady line (even one rationed by the stamina bar) is easy to aim at.
+  const k = 1 - Math.exp(-dt / AIM_SMOOTH), v = ch.v = ch.v ? { x: ch.v.x + (raw.x - ch.v.x) * k, z: ch.v.z + (raw.z - ch.v.z) * k } : raw;
   ch.cool = Math.max(0, ch.cool - dt);
   if (ch.startle > 0) { ch.startle -= dt; c.path = []; return; } // clutching his bare head
   const crowded = inCrowd(s, pl);
@@ -1108,10 +1115,10 @@ function updateChase(s, dt) {
     if (L.t < LUNGE.stumble) return; // picking himself up
     ch.lunge = null; ch.cool = LUNGE.cool;
   }
-  const tired = s.t - ch.since >= CHASE_TIRES;
+  const tired = s.t - ch.since >= (ch.tires ?? CHASE_TIRES);
   if (tired) { endChase(s, c, 'tired'); return; }
   c.path = [{ x: pl.x, z: pl.z }];
-  walk(c, dt, CHASE * slow);
+  walk(c, dt, CHASE * slow * (ch.boost ?? 1));
   const d = dist(c, pl);
   if (d < 1.2) { caught(s, c); return; }
   if (!crowded && d <= LUNGE.range && !ch.cool) {
@@ -1122,7 +1129,7 @@ function updateChase(s, dt) {
   }
   const cover = pl.unseen || crowded || d > 24;
   s.timers.lose = cover ? s.timers.lose + dt : 0;
-  if (s.timers.lose >= LOSE_AFTER) endChase(s, c, crowded ? 'crowd' : 'sight');
+  if (s.timers.lose >= (ch.loseAfter ?? LOSE_AFTER)) endChase(s, c, crowded ? 'crowd' : 'sight');
 }
 
 // --- low-level games ---------------------------------------------------------------
@@ -2207,7 +2214,7 @@ export function tick(s, dt) {
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // a day keeps the tempo it was created with
   s.t += dt;
   const cdt = clockDt(dt);
-  runSchedule(s);
+  if (!s.slice) runSchedule(s);
   const phase = phaseAt(s.t);
   if (phase !== s.phase) { s.phase = phase; cue(s, 'phase', { data: phase }); }
   updateBus(s, dt);
@@ -2233,8 +2240,8 @@ export function tick(s, dt) {
   updateGroups(s);
   runRules(s, cdt);
   storyFlags(s);
-  STORY.tick(s, dt);
-  if (!s.over && s.t >= at(18, 0)) finish(s);
+  if (s.slice) SLICE.tick(s, dt); else STORY.tick(s, dt);
+  if (!s.over && !s.slice && s.t >= at(18, 0)) finish(s);
   return s;
 }
 
@@ -2413,7 +2420,7 @@ export function act(s, cmd) {
     } else if (cmd.object === 'key' && seen.has('iqbal') && !fromDetentionBus) {
       o.holder = 'hook'; Object.assign(o, SPOTS.keyHook); pl.carrying = null;
       emit(s, 'iqbal-reclaims', { link: 'owner-reclaims' });
-    } else if (cmd.object === 'speaker' && seen.has('ravi')) {
+    } else if (cmd.object === 'speaker' && seen.has('ravi') && !s.slice) { // in the slice Ravi is on his phone (slice.js)
       const r = s.people.ravi;
       o.holder = 'ravi'; r.carrying = 'speaker'; pl.carrying = null;
       emit(s, 'ravi-reclaims', { link: 'owner-reclaims' });
@@ -2752,6 +2759,11 @@ const STORY = createStory({
   provocateurs: storyProvocateurs, rumour: storyRumour,
   nikhilFound: nikhilFoundByPlayer,
 });
+const SLICE = createSlice({
+  dist, SPOTS, CROWD_CENTERS, cue, say, addRep, startChase, startIqbalBreak, endIqbalBreak, crowdAt,
+});
+/** The three-minute slice's HUD: { left, followers, multiplier, dares }, or null on a normal day. */
+export const sliceView = (s) => SLICE.view(s);
 /** Every situation and where it stands: [{ id, title, act, state, card, goal, marker }]. */
 export const situations = (s) => STORY.list(s);
 export const storyCallbackText = (key) => STORY.callbackText(key);
@@ -2845,6 +2857,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
     if (o.kind === 'pester') { const of = officerById(s, o.id.slice(7)); d += (of?.pestered?.length ?? 0) * 3 + (of?.id === 'sharma' ? 0 : 2); }
     return d;
   };
+  if (s.slice) SLICE.trim(s, out); // the slice's E prompt offers only its own verbs
   for (const o of out) o.rank = score(o);
   out.sort((a, b) => a.rank - b.rank);
   // "Put it down here" is always at distance 0; the HUD already says Q drops it, so it never wins the card
@@ -2935,6 +2948,7 @@ export function affordances(s) {
   }
   const b = s.bus;
   if (b.phase === 'toJantar' || b.phase === 'toCP') { const q = busPoint(b.s + (b.phase === 'toJantar' ? 6 : -6)); add('lane', 'go', null, { x: q.x, z: q.z }); }
+  if (s.slice) for (const a of SLICE.affordances(s)) add(a.id, a.kind, a.cmd, a.at);
   return out;
 }
 

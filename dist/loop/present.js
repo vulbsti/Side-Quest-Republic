@@ -22,9 +22,10 @@ export const PHONE_KINDS = new Set(['wireless', 'feed', 'stream', 'chat', 'ticke
  *   body(id): { x, z, visible } | null   a named person's body,
  *   officer(id): { x, z, visible } | null   a constable or RAF body,
  *   policeNear(range): bool   any visible officer (or Sharma) within range of the player,
+ *   slice: bool   the three-minute slice is running (its lines have their own channel; the phone is away),
  * }
  * Returns { kind, channel, seen, learn }.
- *   channel: 'convo' | 'radio' | 'feed' | 'stream' | 'chat' | 'ticker' | 'bark' | 'player' | 'bubble' | 'officer' | 'toast' | 'none'
+ *   channel: 'convo' | 'radio' | 'feed' | 'stream' | 'chat' | 'ticker' | 'bark' | 'player' | 'bubble' | 'officer' | 'toast' | 'slice' | 'none'
  *   seen: the player can actually notice it (on screen, in range, or on the phone)
  *   learn: the event's chaos-board link is learned
  */
@@ -38,6 +39,12 @@ export function routeEvent(e, v) {
   const heard = onPhone || near || here || (!!body && dist(p, body) < HEAR);
   const learn = !!e.link && heard;
   if (!onPhone && v.now - e.t > STALE) return { kind, channel: 'none', seen: false, learn, why: 'stale' };
+  // The three-minute slice (slice.js): its own short lines go to the slice HUD; the phone, the wireless and the
+  // street's long narration stay off the screen.
+  if (kind === 'slice') return { kind, channel: 'slice', seen: !!e.text, learn };
+  if (v.slice && (onPhone || kind === 'wireless' || e.who === 'street')) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
+  // ...and the player only says the slice's own lines: the reel's caption already says how a chase went.
+  if (v.slice && e.who === 'player' && !String(e.key).startsWith('slice-')) return { kind, channel: 'none', seen: false, learn, why: 'slice' };
   const inView = (b) => !!b && b.visible !== false && dist(p, b) <= BUBBLE_RANGE;
   // A conversation's beats are on screen while you're in it (the options card, the reel frame, bubbles).
   if (kind === 'beat') return { kind, channel: 'convo', seen: !!e.text, learn: !!e.link };
@@ -59,6 +66,7 @@ export function engineView(s, placeAt) {
   const officers = () => [P.sharma, ...Object.values(s.officers)].filter((o) => !o.hidden);
   return {
     now: s.t,
+    slice: !!s.slice,
     player: { x: s.player.x, z: s.player.z, visible: playerVisible },
     place: placeAt(s.player),
     body: (id) => (P[id] ? { x: P[id].x, z: P[id].z, visible: !P[id].hidden } : null),
