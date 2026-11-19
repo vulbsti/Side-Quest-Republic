@@ -1,9 +1,7 @@
 {"name":"cover 52","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
-{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
-{"clock":"17:00","do":"say:ghar-jaana-hai:gate:3","cmd":{"type":"say","option":3},"at":{"x":150,"z":-296.5899999999999}},
-{"clock":"17:01","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":150,"z":-296.5899999999999}},
-{"clock":"17:02","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
-{"clock":"17:34","wait":3},
-{"clock":"17:37","do":"take:phone","cmd":{"type":"take","object":"phone"},"at":{"x":-58.5,"z":104.5}}
+{"clock":"10:00","wait":365},
+{"clock":"16:05","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"16:33","wait":1},
+{"clock":"16:34","do":"say:dhuan:smoke:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:35","do":"say:dhuan:nikhil:3","cmd":{"type":"say","option":3},"at":{"x":-53.81589416719956,"z":100.62874114885429}}
 ]}

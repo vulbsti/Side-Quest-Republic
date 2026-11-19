@@ -1,0 +1,7 @@
+{"name":"ending packed · block · instigator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"instigator"},"trace":[
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"place:kurta","cmd":{"type":"place","id":"kurta","move":"start"},"at":{"x":168.5,"z":17}},
+{"clock":"17:19","do":"prov:p2:join","cmd":{"type":"provocateur","id":"p2","how":"join"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:35","wait":20},
+{"clock":"17:55","do":"place:bus","cmd":{"type":"place","id":"bus","move":"start"},"at":{"x":-82,"z":-329.6}}
+]}

@@ -3,13 +3,7 @@
 {"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
 {"clock":"10:33","wait":1},
 {"clock":"10:34","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":205},
-{"clock":"14:00","do":"situation:cannon-request","cmd":{"type":"situation","id":"cannon-request"},"at":{"x":-51,"z":82}},
-{"clock":"14:01","wait":1},
-{"clock":"14:02","do":"say:cannon-request:heat:2","cmd":{"type":"say","option":2},"at":null},
-{"clock":"14:02","wait":1},
-{"clock":"14:03","do":"go:stage","cmd":null,"at":{"x":-58,"z":101},"hold":1},
-{"clock":"14:05","do":"say:cannon-request:sana:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"14:06","wait":1},
-{"clock":"14:07","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"14:09","do":"say:cannon-request:bottle:1","cmd":{"type":"say","option":1},"at":null}
+{"clock":"14:00","do":"pester:c7:career","cmd":{"type":"pester","to":"c7","how":"career"},"at":{"x":-22.2,"z":-56.4}},
+{"clock":"14:10","do":"talk:sharma","cmd":{"type":"talk","to":"sharma"},"at":{"x":-51,"z":80}},
+{"clock":"14:19","do":"say:cannon-request:heat:0","cmd":{"type":"say","option":0},"at":{"x":-50.94809890127291,"z":77.61727552105727}}
 ]}

@@ -11,7 +11,7 @@
 /** Real seconds each dare may take before it fails as too slow. */
 const LIMIT = { chashma: 45, laddoo: 40, langar: 75, photobomb: 50, kurta: 45, darzi: 25, metro: 40, bus: 30 };
 const PER_AURA = 120; // followers per point of aura, as in the slice (slice.js SLICE.perAura)
-const REACH = 3; // how close to a dare's start you must stand to start it
+const REACH = 5; // how close to a dare's start you must stand to start it
 const AWAY = 45; // walk this far from the dare's place and it's off
 
 // --- where everything stands -------------------------------------------------------------------------

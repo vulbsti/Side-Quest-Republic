@@ -1,11 +1,10 @@
 {"name":"ending packed · riot · instigator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"instigator"},"trace":[
-{"clock":"10:00","wait":5},
-{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
-{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
-{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
-{"clock":"10:39","wait":248},
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
 {"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
-{"clock":"14:48","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
-{"clock":"14:51","do":"prov:p1:join","cmd":{"type":"provocateur","id":"p1","how":"join"},"at":{"x":-53,"z":106}},
-{"clock":"14:55","finish":true}
+{"clock":"14:47","wait":45},
+{"clock":"15:32","do":"whisper:sena:meera","cmd":{"type":"whisper","to":"meera","rumour":"sena"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"15:33","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"15:34","do":"film:stone-thrown@stage","cmd":{"type":"film"},"at":{"x":-51,"z":110.5}},
+{"clock":"15:35","finish":true}
 ]}

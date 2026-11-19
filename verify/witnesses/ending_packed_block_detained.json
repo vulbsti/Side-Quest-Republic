@@ -1,13 +1,7 @@
 {"name":"ending packed · block · detained","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"detained"},"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
-{"clock":"16:02","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
-{"clock":"16:03","do":"travel:metro","cmd":{"type":"travel","to":"metro"},"at":{"x":-58.08238491141063,"z":101.5187938128769}},
-{"clock":"16:06","do":"travel:bangla","cmd":{"type":"travel","to":"bangla"},"at":{"x":147.9,"z":-291.5}},
-{"clock":"16:08","wait":10},
-{"clock":"16:18","wait":10},
-{"clock":"16:28","wait":45},
-{"clock":"17:13","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
-{"clock":"17:42","do":"prov:p1:report:c1","cmd":{"type":"provocateur","id":"p1","how":"report","to":"c1"},"at":{"x":-48.7,"z":116.3}},
-{"clock":"17:43","wait":20}
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"pester:r2:detainme","cmd":{"type":"pester","to":"r2","how":"detainme"},"at":{"x":-64.6,"z":61.4}},
+{"clock":"17:28","do":"pester:sharma:detainme","cmd":{"type":"pester","to":"sharma","how":"detainme"},"at":{"x":-51,"z":80}},
+{"clock":"17:29","do":"raid:c1","cmd":{"type":"raid","move":"start"},"at":{"x":-43,"z":121}},
+{"clock":"17:34","wait":45}
 ]}

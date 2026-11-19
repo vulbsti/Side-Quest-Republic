@@ -1,11 +1,11 @@
 {"name":"cover 73","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
-{"clock":"16:01","wait":1},
-{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:03","wait":45},
-{"clock":"16:48","wait":20},
-{"clock":"17:08","do":"say:dhuan:meera:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
-{"clock":"17:09","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
-{"clock":"17:10","do":"say:dhuan:meera-caught:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
+{"clock":"10:51","wait":1},
+{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:53","do":"whisper:cannon:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"cannon"},"at":{"x":88.70221152742067,"z":-190.60577246140312}},
+{"clock":"10:54","do":"whisper:biryani:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"biryani"},"at":{"x":88,"z":-190}},
+{"clock":"10:55","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":88,"z":-190}},
+{"clock":"10:55","wait":45},
+{"clock":"11:40","do":"say:chabi:rishta:2","cmd":{"type":"say","option":2},"at":{"x":88.57948594133595,"z":-190.95765602109574}}
 ]}

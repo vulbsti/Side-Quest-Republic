@@ -1,4 +1,4 @@
-{"name":"cover 1","note":"155 covered keys","tempo":"long","expect":null,"trace":[
+{"name":"cover 1","note":"156 covered keys","tempo":"long","expect":null,"trace":[
 {"clock":"10:00","do":"travel:cp","cmd":{"type":"travel","to":"cp"},"at":{"x":150,"z":-298}},
 {"clock":"10:02","do":"pester:c2:cute","cmd":{"type":"pester","to":"c2","how":"cute"},"at":{"x":106.5,"z":-184}},
 {"clock":"10:04","do":"travel:stage","cmd":{"type":"travel","to":"stage"},"at":{"x":104.73190915016346,"z":-185.1787272332244}},

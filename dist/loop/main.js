@@ -1247,7 +1247,7 @@ function findPrompt() {
   // (Talk, take, give, pester and provocateur have their own richer prompts above.)
   const o = nearestOpportunity(true, true);
   // Scenes trigger from a few metres away (you walk up to a conversation, not into a person).
-  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
+  if ((o?.cmd || o?.choices) && o.d < (o.kind === 'situation' ? 6 : o.kind === 'place' ? 4.8 : 2.6) && !LOCAL_KINDS.has(o.kind)) options.push({ d: o.d - 0.2, text: o.label, run: () => runOpportunity(o) });
   if (day.slice) for (let i = options.length - 1; i >= 0; i--) if (/^(Talk to|Pester|Give) /.test(options[i].text)) options.splice(i, 1); // the slice is all hands
   options.sort((a, b) => a.d - b.d);
   return options[0] || null;

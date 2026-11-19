@@ -1,10 +1,9 @@
 {"name":"ending noshow · block · spectator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
-{"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
-{"clock":"10:33","do":"travel:metro","cmd":{"type":"travel","to":"metro"},"at":{"x":-58.144009075836664,"z":101.29361448454286}},
-{"clock":"10:36","do":"whisper:minister:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"minister"},"at":{"x":150.6956832418964,"z":-297.27001143719616}},
-{"clock":"10:37","do":"raid:c3","cmd":{"type":"raid","move":"start"},"at":{"x":-29,"z":99}},
-{"clock":"11:08","wait":3},
-{"clock":"11:11","wait":45},
-{"clock":"11:56","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"travel:metro","cmd":{"type":"travel","to":"metro"},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:03","wait":10},
+{"clock":"16:13","do":"pester:c7:cute","cmd":{"type":"pester","to":"c7","how":"cute"},"at":{"x":-22.2,"z":-56.4}},
+{"clock":"16:40","do":"whisper:sena:sana","cmd":{"type":"whisper","to":"sana","rumour":"sena"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:51","do":"whisper:minister:dev","cmd":{"type":"whisper","to":"dev","rumour":"minister"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"16:52","finish":true}
 ]}

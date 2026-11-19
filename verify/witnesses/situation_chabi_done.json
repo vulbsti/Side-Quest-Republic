@@ -11,6 +11,5 @@
 {"clock":"11:19","do":"say:chabi:decide:3","cmd":{"type":"say","option":3},"at":null},
 {"clock":"11:20","wait":1},
 {"clock":"11:21","do":"give:iqbal","cmd":{"type":"give","to":"iqbal"},"at":null},
-{"clock":"11:24","wait":1},
-{"clock":"11:25","do":"say:chabi:returned:0","cmd":{"type":"say","option":0},"at":null}
+{"clock":"11:24","do":"say:chabi:returned:0","cmd":{"type":"say","option":0},"at":{"x":89.30108658202128,"z":-192.1689378581573}}
 ]}

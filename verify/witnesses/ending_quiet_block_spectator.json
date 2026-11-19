@@ -1,9 +1,0 @@
-{"name":"ending quiet · block · spectator","note":"","tempo":"long","expect":{"ending":"quiet","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-190},"hold":3},
-{"clock":"10:12","do":"situation:speaker-run","cmd":{"type":"situation","id":"speaker-run"},"at":{"x":84.5,"z":-188.5}},
-{"clock":"10:12","wait":1},
-{"clock":"10:13","do":"say:speaker-run:intro:2","cmd":{"type":"say","option":2},"at":null},
-{"clock":"10:14","do":"ride:jantar","cmd":{"type":"ride","to":"jantar"},"at":{"x":91,"z":-202}},
-{"clock":"10:16","wait":45},
-{"clock":"11:01","finish":true}
-]}

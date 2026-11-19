@@ -1,6 +1,5 @@
 {"name":"ending packed · block · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"spectator"},"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"pester:c2:cannon","cmd":{"type":"pester","to":"c2","how":"cannon"},"at":{"x":-49.37081295594942,"z":97.15910986569853}},
-{"clock":"16:02","do":"raid:c2","cmd":{"type":"raid","move":"start"},"at":{"x":-43.810661886727004,"z":76.19485394036764}},
-{"clock":"16:04","finish":true}
+{"clock":"10:00","wait":2},
+{"clock":"10:02","do":"pester:c2:career","cmd":{"type":"pester","to":"c2","how":"career"},"at":{"x":106.5,"z":-184}},
+{"clock":"10:12","finish":true}
 ]}

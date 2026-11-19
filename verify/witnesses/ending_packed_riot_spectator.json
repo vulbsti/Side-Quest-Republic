@@ -1,11 +1,13 @@
 {"name":"ending packed · riot · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"spectator"},"trace":[
-{"clock":"10:00","wait":5},
-{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
-{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
-{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
-{"clock":"10:39","wait":248},
-{"clock":"14:47","do":"whisper:sena:sana","cmd":{"type":"whisper","to":"sana","rumour":"sena"},"at":{"x":-60.5,"z":101}},
-{"clock":"14:48","do":"talk:ravi","cmd":{"type":"talk","to":"ravi"},"at":{"x":-45.4,"z":100.4}},
-{"clock":"14:49","do":"leave","cmd":{"type":"leave"},"at":{"x":-47.68121504541837,"z":100.6376669283241}},
-{"clock":"14:50","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:47","wait":45},
+{"clock":"15:32","do":"whisper:sena:meera","cmd":{"type":"whisper","to":"meera","rumour":"sena"},"at":{"x":-56.3,"z":104.5}},
+{"clock":"15:33","do":"stance:block","cmd":{"type":"stance","stance":"block"},"at":{"x":-55.65897991172628,"z":103.40626668219505}},
+{"clock":"15:34","do":"talk:zoya","cmd":{"type":"talk","to":"zoya"},"at":{"x":-58.5,"z":104.5}},
+{"clock":"15:35","wait":45},
+{"clock":"16:20","wait":45},
+{"clock":"17:05","do":"leave","cmd":{"type":"leave"},"at":{"x":-56.09759887504053,"z":103.5751258099351}},
+{"clock":"17:06","finish":true}
 ]}

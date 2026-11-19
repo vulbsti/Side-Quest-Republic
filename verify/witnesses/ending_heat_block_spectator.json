@@ -1,0 +1,5 @@
+{"name":"ending heat · block · spectator","note":"","tempo":"long","expect":{"ending":"heat","outcome":"block","role":"spectator"},"trace":[
+{"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
+{"clock":"10:10","wait":20},
+{"clock":"10:30","finish":true}
+]}

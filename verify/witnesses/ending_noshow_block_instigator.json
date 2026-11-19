@@ -1,15 +1,13 @@
 {"name":"ending noshow · block · instigator","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"block","role":"instigator"},"trace":[
-{"clock":"10:00","wait":365},
-{"clock":"16:05","do":"ride:jantar","cmd":{"type":"ride","to":"jantar"},"at":{"x":91,"z":-202}},
-{"clock":"16:14","wait":10},
-{"clock":"16:24","do":"pester:sharma:cannon","cmd":{"type":"pester","to":"sharma","how":"cannon"},"at":{"x":-51,"z":80}},
-{"clock":"16:27","wait":10},
-{"clock":"16:37","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":{"x":-50.96620899801336,"z":77.76259268285415}},
-{"clock":"16:38","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
-{"clock":"16:44","do":"whisper:minister:mira","cmd":{"type":"whisper","to":"mira","rumour":"minister"},"at":{"x":-51,"z":95.5}},
-{"clock":"16:46","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"16:47","do":"travel:palika","cmd":{"type":"travel","to":"palika"},"at":{"x":-50.98634963099164,"z":103.56517878778405}},
-{"clock":"16:49","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
-{"clock":"17:21","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":-51,"z":83.8}},
-{"clock":"17:25","finish":true}
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"place:kurta","cmd":{"type":"place","id":"kurta","move":"start"},"at":{"x":168.5,"z":17}},
+{"clock":"17:19","do":"prov:p2:join","cmd":{"type":"provocateur","id":"p2","how":"join"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:35","do":"talk:c4","cmd":{"type":"talk","to":"c4"},"at":{"x":-40.76953361612079,"z":109.27511945323532}},
+{"clock":"17:37","do":"say:rawat-a1:a:1","cmd":{"type":"say","option":1},"at":{"x":-43.078836552775414,"z":109.32872022197306}},
+{"clock":"17:37","wait":3},
+{"clock":"17:40","do":"whisper:sena:sana","cmd":{"type":"whisper","to":"sana","rumour":"sena"},"at":{"x":-60.5,"z":101}},
+{"clock":"17:42","do":"whisper:minister:mira","cmd":{"type":"whisper","to":"mira","rumour":"minister"},"at":{"x":-51,"z":95.5}},
+{"clock":"17:43","do":"film:provocateur-joined@stage","cmd":{"type":"film"},"at":{"x":-50.64,"z":111.54}},
+{"clock":"17:44","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"17:48","wait":45}
 ]}

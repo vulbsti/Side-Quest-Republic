@@ -1,13 +1,12 @@
-{"name":"cover 19","note":"5 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
-{"clock":"15:03","wait":1},
-{"clock":"15:04","do":"say:naye-joote:suv:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"15:05","wait":45},
-{"clock":"15:50","wait":10},
-{"clock":"16:00","wait":20},
-{"clock":"16:20","wait":20},
-{"clock":"16:40","do":"say:naye-joote:overhear:1","cmd":{"type":"say","option":1},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
-{"clock":"16:40","do":"say:naye-joote:swept:0","cmd":{"type":"say","option":0},"at":{"x":-37.985814335698116,"z":118.29662747836474}}
+{"name":"cover 19","note":"4 covered keys","tempo":"long","expect":null,"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
+{"clock":"15:01","wait":50},
+{"clock":"15:51","do":"travel:hanuman","cmd":{"type":"travel","to":"hanuman"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
+{"clock":"15:54","do":"pester:c4:career","cmd":{"type":"pester","to":"c4","how":"career"},"at":{"x":-40.76953361612079,"z":109.27511945323532}},
+{"clock":"16:26","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:32","finish":true}
 ]}

@@ -1,14 +1,14 @@
 {"name":"situation pattiyan:done","note":"","tempo":"long","expect":{"history":"situation:pattiyan:done"},"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
-{"clock":"10:29","wait":258},
-{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
-{"clock":"14:48","wait":13},
-{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
-{"clock":"15:01","wait":50},
-{"clock":"15:51","do":"travel:shivaji","cmd":{"type":"travel","to":"shivaji"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
-{"clock":"15:54","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"16:24","do":"talk:zoya","cmd":{"type":"talk","to":"zoya"},"at":{"x":-58.5,"z":104.5}},
-{"clock":"16:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-55.99626574417471,"z":104.34228009443447}},
-{"clock":"16:26","do":"situation:pattiyan","cmd":{"type":"situation","id":"pattiyan"},"at":{"x":-60.5,"z":101}},
-{"clock":"16:27","do":"say:pattiyan:tent:0","cmd":{"type":"say","option":0},"at":{"x":-56.75111373627587,"z":103.7820975270327}}
+{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
+{"clock":"10:30","wait":272},
+{"clock":"15:02","do":"situation:naye-joote","cmd":{"type":"situation","id":"naye-joote"},"at":{"x":-36,"z":118}},
+{"clock":"15:03","do":"say:naye-joote:suv:2","cmd":{"type":"say","option":2},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:04","wait":45},
+{"clock":"15:49","do":"say:naye-joote:joined:1","cmd":{"type":"say","option":1},"at":{"x":-37.985814335698116,"z":118.29662747836474}},
+{"clock":"15:49","wait":10},
+{"clock":"15:59","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:06","wait":45},
+{"clock":"16:51","do":"leave","cmd":{"type":"leave"},"at":{"x":-58.04319790998571,"z":101.30617803824501}},
+{"clock":"16:52","do":"situation:pattiyan","cmd":{"type":"situation","id":"pattiyan"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:52","do":"say:pattiyan:tent:0","cmd":{"type":"say","option":0},"at":{"x":-58.04319790998571,"z":101.30617803824501}}
 ]}
