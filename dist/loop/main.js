@@ -2,7 +2,7 @@
 // The rules (rules.js) decide what happens; this file only shows it and turns keys into actions.
 // Every engine field beyond the original loop is read defensively through S (below), so this
 // client runs against the engine contract in plans/slice-spec.md and the story layer (dist/loop/story.js).
-import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=27';
+import { THREE, buildWorld, cube, ball, cylinder, sign, mat } from '../world.js?v=28';
 import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
