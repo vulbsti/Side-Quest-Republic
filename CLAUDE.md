@@ -1,7 +1,8 @@
 # Side Quest Republic
 
 A Three.js browser game (plain ES modules, no build step). The rules live in `dist/loop/rules.js`, a pure
-engine with no DOM, so whole days run in Node. `npm start` serves the game: the day is 32 minutes, and `?short` is the 10-minute slice.
+engine with no DOM, so whole days run in Node. `npm start` serves the game: the day is 10 minutes with the mischief list and the trouble director
+(`dist/loop/modes.js`, `dares.js`, `director.js`), `?long` is the old 32-minute day, and `?slice` the 3-minute run.
 
 ## Before calling any change done
 

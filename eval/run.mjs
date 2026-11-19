@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, append
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { timedDay, chaseProbe } from './lib/days.mjs';
+import { timedDay, chaseProbe, DAY } from './lib/days.mjs';
 import { placeReport } from './lib/place.mjs';
 import { corpus, promptCopy, voiceReport } from './lib/text.mjs';
 import { latestJudgements, writePackets, judgeWithClaude, saveJudgement } from './lib/judge.mjs';
@@ -35,7 +35,7 @@ const PEOPLE = ['random', 'helpful', 'chaotic', 'filmer', 'explorer'];
 const SEEDS = QUICK ? [1] : [1, 2, 3];
 const days = [timedDay('idle', 1), ...PEOPLE.flatMap((p) => SEEDS.map((sd) => timedDay(p, sd)))];
 const active = days.filter((d) => d.name !== 'idle' && !d.crashed);
-const quiet = PEOPLE.map((p) => playDay(p, { seed: 1 }).metrics).filter(Boolean);
+const quiet = PEOPLE.map((p) => playDay(p, { seed: 1, tempo: DAY.tempo, opts: DAY.opts(1) }).metrics).filter(Boolean); // the day the game starts (days.mjs DAY)
 const chase = chaseProbe();
 const explorer = active.filter((d) => d.name === 'explorer');
 const charges = active.map((d) => d.chargeMinute).filter((x) => x != null);
@@ -160,7 +160,7 @@ for (const p of pillars) {
   for (const m of p.metrics) L.push(`| ${m.text} | ${m.how}${m.by ? ` (${m.by})` : ''}${m.stale ? ` · judged at ${m.stale}` : ''} | ${fmt(m.value)} | ${fmt(m.floor)} → ${fmt(m.target)} | ${m.score == null ? (m.how === 'browser' ? 'run with --browser' : m.how === 'judge' ? 'run with --judge, or add eval/judgements/' : m.how === 'human' ? 'add eval/playtests/' : '–') : Math.round(m.score * 100)} |`);
 }
 L.push('', '## Evidence', '');
-L.push(`- **Where the day goes** (active bots, share of 32 minutes): skill moments ${pct(VALUES['action-share'])}%, conversation cards ${pct(VALUES['reading-share'])}%, detained ${pct(mean(active.map((d) => d.shares.detained)))}%, walking about ${pct(mean(active.map((d) => d.shares.free)))}%. Fast-travel hops per day: ${fmt(mean(active.map((d) => d.hops ?? 0)))}.`);
+L.push(`- **Where the day goes** (active bots, share of the ${DAY.tempo === 'slice' ? '10-minute' : '32-minute'} day): skill moments ${pct(VALUES['action-share'])}%, conversation cards ${pct(VALUES['reading-share'])}%, detained ${pct(mean(active.map((d) => d.shares.detained)))}%, walking about ${pct(mean(active.map((d) => d.shares.free)))}%. Fast-travel hops per day: ${fmt(mean(active.map((d) => d.hops ?? 0)))}.`);
 L.push(`- **Low-level games found:** ${[...games].join(', ') || 'none'}. The chase probe (steal the key in front of an officer, then run): standing still escapes ${pct(chase.rates.stand)}%, jogging straight ${pct(chase.rates.jog)}%, sprinting straight ${pct(chase.rates.sprint)}%, sprinting for a crowd ${pct(chase.rates.crowd)}%, sprinting and cutting sideways at each lunge ${pct(chase.rates.dodge)}%.`);
 L.push(`- **Set pieces seen within 30 m:** ${[...new Set(active.flatMap((d) => d.spectacle))].join(', ') || 'none'}.`);
 L.push(`- **Map:** ground ${Math.round(place.area.groundM2 ?? 0).toLocaleString('en')} m² (${fmt(place.area.km2)} km², real patch ${DELHI.realExtent.km2} km²), fog at ${place.area.fogEnd} m. ${place.landmarksPlaced} of ${place.landmarksTotal} landmarks placed, at ${fmt(place.scale)}× real distance, layout error ${fmt(place.layoutError)}.`);

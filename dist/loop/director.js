@@ -343,6 +343,7 @@ export function createDirector(api) {
     if (L.kind === 'cart' && (cmd.move === 'stop' || cmd.move === 'ride')) {
       const c = L.cart;
       if (dist(pl, c) > DIRECTOR.reach + 0.6 || pl.carrying || pl.chasedBy) return { ok: false };
+      if (c.rider) return { ok: false }; // already riding it
       if (cmd.move === 'stop' && !c.stopped) {
         c.stopped = true; c.v = 0; c.stoppedAt = s.t;
         say(s, 'street', SAY.cartStop, { key: 'trouble-cart-stop', pos: c, kind: 'bark' });

@@ -216,6 +216,7 @@ const pay = (s) => s.mischief.followers;
   assert(after > 0, 'stopping it pays');
   assert(R.affordances(s).some((x) => x.id === 'incident:ride'), 'then you can ride it');
   assert(R.act(s, { type: 'incident', move: 'ride' }).ok);
+  assert(!R.act(s, { type: 'incident', move: 'stop' }).ok, 'stopping it again while riding does not pay twice');
   let cues = [];
   for (let i = 0; i < 80 && s.trouble.live; i++) { R.tick(s, 0.1); cues.push(...drain(s)); }
   assert(cues.some((c) => c.cue === 'action:cart:win' && c.data.ride), 'the ride wins');
