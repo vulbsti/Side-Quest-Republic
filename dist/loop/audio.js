@@ -96,6 +96,7 @@ export const CUES = {
   'crew-join': [{ clip: ['cheer-a', 'applause'], gain: 0.6 }, { clip: 'jingle-pass', ui: true, at: 0.2, gain: 0.8 }],
   'crew-block': [{ fx: 'chant', seconds: 12 }, { clip: 'clap-cheer', gain: 0.8 }, { clip: 'shield-thud', at: 1.5, gain: 0.5 }],
   'clip-posted': [{ clip: 'whoosh', ui: true, gain: 0.7 }, { clip: 'phone-ding', ui: true, at: 0.25 }],
+  'travel': [{ clip: 'whoosh', ui: true, gain: 0.8 }, { clip: 'jingle-pass', ui: true, at: 0.25, gain: 0.6 }], // a fast-travel hop lands (travel.js)
   'scene-start': [{ fx: 'scene', on: true }, { clip: 'whoosh', ui: true, gain: 0.5 }],
   'scene-end': [{ fx: 'scene', on: false }, { clip: 'jingle-pass', ui: true, gain: 0.7 }],
   'phase': [{ fx: 'phase' }],

@@ -5,5 +5,8 @@
 {"clock":"12:31","do":"say:afwaah:forward:3","cmd":{"type":"say","option":3},"at":null},
 {"clock":"12:32","wait":1},
 {"clock":"12:33","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
-{"clock":"12:55","do":"say:afwaah:bikes:1","cmd":{"type":"say","option":1},"at":{"x":-51.40408271796168,"z":81.27613361641538}}
+{"clock":"12:55","do":"say:afwaah:bikes:3","cmd":{"type":"say","option":3},"at":null},
+{"clock":"12:55","wait":1},
+{"clock":"12:56","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":1},
+{"clock":"12:59","do":"say:afwaah:rawat:1","cmd":{"type":"say","option":1},"at":null}
 ]}

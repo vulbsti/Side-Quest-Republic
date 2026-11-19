@@ -1,0 +1,22 @@
+{"name":"ending viral · riot · spectator","note":"","tempo":"long","expect":{"ending":"viral","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
+{"clock":"10:51","wait":1},
+{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:53","wait":20},
+{"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"11:14","wait":10},
+{"clock":"11:24","do":"pester:c2:career","cmd":{"type":"pester","to":"c2","how":"career"},"at":{"x":88,"z":-190}},
+{"clock":"11:25","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"11:47","do":"travel:parliament","cmd":{"type":"travel","to":"parliament"},"at":{"x":-49.212417409256126,"z":99.42128596046147}},
+{"clock":"11:49","do":"drop:here","cmd":{"type":"drop"},"at":{"x":-62.2,"z":56.7}},
+{"clock":"11:50","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":-41,"z":111}},
+{"clock":"11:56","wait":45},
+{"clock":"12:41","do":"travel:cp","cmd":{"type":"travel","to":"cp"},"at":{"x":-57.5,"z":99.5}},
+{"clock":"12:44","do":"snatch:c1","cmd":{"type":"snatch","to":"c1"},"at":{"x":147,"z":-284}},
+{"clock":"12:53","do":"talk:c6","cmd":{"type":"talk","to":"c6"},"at":{"x":28.6,"z":-131.1}},
+{"clock":"13:08","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
+{"clock":"13:24","do":"whisper:minister:asha","cmd":{"type":"whisper","to":"asha","rumour":"minister"},"at":{"x":-41.064715067675664,"z":56.03951514890288}},
+{"clock":"13:27","do":"drop:stageSpeaker","cmd":{"type":"drop","x":-47.8,"z":99.6},"at":{"x":-47.8,"z":99.6}},
+{"clock":"13:30","finish":true}
+]}

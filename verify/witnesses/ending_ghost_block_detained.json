@@ -1,0 +1,14 @@
+{"name":"ending ghost · block · detained","note":"","tempo":"long","expect":{"ending":"ghost","outcome":"block","role":"detained"},"trace":[
+{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
+{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
+{"clock":"17:00","do":"say:ghar-jaana-hai:gate:3","cmd":{"type":"say","option":3},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:01","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":150,"z":-296.5899999999999}},
+{"clock":"17:02","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
+{"clock":"17:34","do":"whisper:cannon:zoya","cmd":{"type":"whisper","to":"zoya","rumour":"cannon"},"at":{"x":-58.5,"z":104.5}},
+{"clock":"17:35","do":"snatch:c3","cmd":{"type":"snatch","to":"c3"},"at":{"x":-32,"z":99}},
+{"clock":"17:43","do":"pester:r5:cute","cmd":{"type":"pester","to":"r5","how":"cute"},"at":{"x":-63,"z":65.6}},
+{"clock":"17:49","do":"talk:c1","cmd":{"type":"talk","to":"c1"},"at":{"x":-46,"z":121}},
+{"clock":"17:54","do":"say:yadav-a1:a:1","cmd":{"type":"say","option":1},"at":{"x":-45.952028433390765,"z":118.62140982229157}},
+{"clock":"17:55","do":"raid:c1","cmd":{"type":"raid","move":"start"},"at":{"x":-43,"z":121}},
+{"clock":"17:56","wait":45}
+]}

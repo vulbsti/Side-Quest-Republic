@@ -1,9 +1,10 @@
 {"name":"cover 75","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
-{"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
-{"clock":"10:51","wait":1},
-{"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"10:53","wait":10},
-{"clock":"11:03","do":"pester:c1:cannon","cmd":{"type":"pester","to":"c1","how":"cannon"},"at":{"x":147,"z":-284}},
-{"clock":"11:13","do":"say:chabi:rishta:3","cmd":{"type":"say","option":3},"at":{"x":145.57586733573544,"z":-285.7899900480774}}
+{"clock":"10:00","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
+{"clock":"10:28","do":"situation:career-counselling","cmd":{"type":"situation","id":"career-counselling"},"at":{"x":-51,"z":82}},
+{"clock":"10:28","wait":1},
+{"clock":"10:29","do":"say:career-counselling:intro:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:30","wait":15},
+{"clock":"10:45","do":"say:career-counselling:panel:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"10:46","wait":3},
+{"clock":"10:49","do":"say:career-counselling:tomar:1","cmd":{"type":"say","option":1},"at":{"x":-51.43281252159288,"z":81.50666432988982}}
 ]}

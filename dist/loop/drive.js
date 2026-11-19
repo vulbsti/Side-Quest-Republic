@@ -5,6 +5,7 @@
 // A trace is a list of macro steps:
 //   { do: id, cmd, at }        jog to the command's target (or `at`), then act(cmd) and watch 3 s
 //   { do: id, cmd: null, at, hold } jog to `at`, then stand there `hold` clock minutes
+//   { do: 'travel:<id>', cmd: { type: 'travel', to } } hop from wherever you stand (the player's position jumps)
 //   { wait: minutes }          stand still while the day runs
 //   { finish: true }           stand still until 18:00
 // Pure module: it uses only the engine functions it is given.
@@ -13,10 +14,10 @@ export const STEP = 0.1; // the client's fixed step
 export const JOG = 4.7; // the player's jog, m/s
 export const FEEDBACK_SECONDS = 3; // after a command, watch this long for an answer
 export const WALK_LIMIT = 150; // give up walking after this many seconds
-export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1 };
+export const REACH = { talk: 2.6, give: 2.6, take: 1.5, pester: 2.4, provocateur: 2.4, situation: 5, film: 10, rally: 1, drop: 0.6, go: 1, travel: Infinity };
 export const reachOf = (cmd) => (cmd ? REACH[cmd.type] ?? 1.5 : REACH.go);
 // Commands that work wherever you are, so they are tried even if the walk didn't get there.
-const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave'].includes(cmd.type) || (cmd.type === 'ride' && cmd.to === 'off');
+const ANYWHERE = (cmd) => ['stance', 'plead', 'say', 'leave', 'travel'].includes(cmd.type) || (cmd.type === 'ride' && cmd.to === 'off');
 
 /** How many STEP ticks `for (t = 0; t < seconds; t += STEP)` runs (floating point included). */
 export function ticksFor(seconds) {

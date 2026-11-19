@@ -1,5 +1,6 @@
 {"name":"situation bus-andar:done","note":"","tempo":"long","expect":{"history":"situation:bus-andar:done"},"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
-{"clock":"10:29","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":-41,"z":111}},
-{"clock":"10:30","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"pester:c2:cannon","cmd":{"type":"pester","to":"c2","how":"cannon"},"at":{"x":-49.37081295594942,"z":97.15910986569853}},
+{"clock":"16:02","do":"raid:c2","cmd":{"type":"raid","move":"start"},"at":{"x":-43.810661886727004,"z":76.19485394036764}},
+{"clock":"16:04","finish":true}
 ]}

@@ -1,11 +1,11 @@
 {"name":"cover 55","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":141},
-{"clock":"12:30","do":"situation:afwaah","cmd":{"type":"situation","id":"afwaah"},"at":{"x":86,"z":-193}},
-{"clock":"12:30","wait":20},
-{"clock":"12:50","wait":10},
-{"clock":"13:00","wait":45},
-{"clock":"13:45","do":"say:afwaah:forward:2","cmd":{"type":"say","option":2},"at":{"x":89.46923367715117,"z":-192.60783027595392}},
-{"clock":"13:46","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":116.3,"z":-188.2}},
-{"clock":"13:49","do":"rally:cp","cmd":{"type":"rally"},"at":{"x":108.5,"z":-188}},
-{"clock":"13:51","finish":true}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
+{"clock":"16:01","wait":1},
+{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
+{"clock":"16:03","wait":1},
+{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
+{"clock":"16:05","wait":10},
+{"clock":"16:15","do":"say:dhuan:meera-saved:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
+{"clock":"16:16","do":"say:dhuan:hub:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
 ]}

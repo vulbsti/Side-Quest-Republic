@@ -1,0 +1,11 @@
+{"name":"ending ghost · block · peacemaker","note":"","tempo":"long","expect":{"ending":"ghost","outcome":"block","role":"peacemaker"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"whisper:sena:dev","cmd":{"type":"whisper","to":"dev","rumour":"sena"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"16:02","wait":45},
+{"clock":"16:47","do":"prov:p1:expose","cmd":{"type":"provocateur","id":"p1","how":"expose"},"at":{"x":-51.4,"z":111.6}},
+{"clock":"16:48","do":"whisper:cannon:dev","cmd":{"type":"whisper","to":"dev","rumour":"cannon"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"16:48","do":"raid:c3","cmd":{"type":"raid","move":"start"},"at":{"x":-29,"z":99}},
+{"clock":"16:50","wait":45},
+{"clock":"17:35","do":"pester:r6:cannon","cmd":{"type":"pester","to":"r6","how":"cannon"},"at":{"x":-64.6,"z":67}},
+{"clock":"17:40","wait":45}
+]}

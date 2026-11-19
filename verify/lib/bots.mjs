@@ -31,13 +31,29 @@ export const PERSONAS = {
   explorer: { about: 'Tries whatever it has not tried yet', wait: 0.2, weight: (a, s, tried) => 1 / (1 + 3 * (tried.get(a.id) || 0)) },
 };
 
+/** Fast travel is one choice, whichever place it goes to: the hops share one affordance's weight between them. */
+export function travelOnce(affs, w) {
+  const n = affs.filter((a) => a.kind === 'travel').length;
+  return n > 1 ? w.map((x, i) => (affs[i].kind === 'travel' ? x / n : x)) : w;
+}
+
 function choose(persona, run, rand, tried) {
   const affs = R.affordances(run.s);
-  const w = affs.map((a) => Math.max(0, persona.weight(a, run.s, tried)));
+  const w = travelOnce(affs, affs.map((a) => Math.max(0, persona.weight(a, run.s, tried))));
   const total = w.reduce((n, v) => n + v, 0) + persona.wait * (affs.length ? Math.max(1, w.reduce((n, v) => n + v, 0) / 3) : 1);
   let x = rand() * total;
   for (let i = 0; i < affs.length; i++) { x -= w[i]; if (x <= 0) { const a = affs[i]; tried.set(a.id, (tried.get(a.id) || 0) + 1); return a.cmd ? { do: a.id, cmd: a.cmd, at: a.at } : { do: a.id, cmd: null, at: a.at, hold: 3 }; } }
   return { wait: persona === PERSONAS.idle ? 30 : 4 + Math.floor(rand() * 12) };
+}
+
+/**
+ * Like a player, a bot hops (fast travel, rules.js travelHop) when what it chose is more than 80 m away, then walks
+ * the rest. Returns the steps to run: [hop, step] or [step]. The hop is a step of its own, so the trace replays it.
+ */
+export function withHop(s, step) {
+  if (!step.at || step.cmd?.type === 'travel') return [step];
+  const h = R.travelHop(s, step.at);
+  return h ? [{ do: `travel:${h.to}`, cmd: { type: 'travel', to: h.to }, at: { x: s.player.x, z: s.player.z } }, step] : [step];
 }
 
 /** One bot day. Returns the run and what was measured. */
@@ -47,10 +63,13 @@ export function playDay(name, { seed = 1, tempo = 'long' } = {}) {
   const acts = [], affSeen = new Map();
   while (!run.s.over) {
     for (const a of R.affordances(run.s)) if (STORY.has(a.kind) && !affSeen.has(a.id)) affSeen.set(a.id, run.s.t);
-    const step = choose(persona, run, rand, tried);
-    const out = H.perform(run, step);
-    if (out.crash) break;
-    if (step.cmd) acts.push({ t: run.s.t, clock: H.clock(run.s), cmd: step.cmd, ok: !!out.r?.ok, silent: !!out.silent, raw: out.raw, line: out.r?.line ?? null, repeat: !!out.r?.repeat });
+    for (const step of withHop(run.s, choose(persona, run, rand, tried))) {
+      const out = H.perform(run, step);
+      if (out.crash) break;
+      if (step.cmd) acts.push({ t: run.s.t, clock: H.clock(run.s), cmd: step.cmd, ok: !!out.r?.ok, silent: !!out.silent, raw: out.raw, line: out.r?.line ?? null, repeat: !!out.r?.repeat });
+      if (run.s.over) break;
+    }
+    if (run.crashed) break;
   }
   return { name, seed, tempo, run, acts, affSeen, crash: run.crashed ?? null, metrics: run.crashed ? null : measure(run, acts, affSeen) };
 }

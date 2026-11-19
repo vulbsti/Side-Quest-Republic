@@ -1,7 +1,7 @@
 // Bot days played tick by tick so we can say how the time was spent: in a skill moment, reading a card, sitting
 // in the bus, walking about. Uses the verifier's personalities and the same driver as the client and the replays.
 import * as H from '../../verify/lib/harness.mjs';
-import { PERSONAS } from '../../verify/lib/bots.mjs';
+import { PERSONAS, withHop, travelOnce } from '../../verify/lib/bots.mjs';
 import { rng } from '../../verify/lib/explore.mjs';
 import { createDriver, STEP, JOG } from '../../dist/loop/drive.js';
 
@@ -14,12 +14,14 @@ export const gameOf = (c) => (c === 'chase-start' ? 'chase' : c.split(':')[1]);
 const SPECTACLE = new Set(['arrival-wave', 'raf-arrive', 'barricades-up', 'cannon-roll', 'cannon-spray', 'cannon-dance', 'gas-fired', 'charge-start', 'stone-thrown', 'sena-bikes', 'party-suv', 'ambulance', 'bus-stalled', 'detainees-escape', 'faint']);
 // What uses the body: everything on offer except talking, whispering, pestering and answering cards.
 const TALKY = new Set(['talk', 'whisper', 'pester', 'say', 'leave', 'situation', 'plead', 'stance', 'provocateur']);
+// A fast-travel hop is on offer everywhere and uses no body: it never counts as something physical to do.
+const NOT_BODY = new Set([...TALKY, 'travel']);
 const ON_SCREEN = new Set(['bubble', 'officer', 'player', 'toast', 'radio', 'bark', 'convo']);
 const PHONE = new Set(['feed', 'chat', 'ticker', 'stream']);
 
 function choose(persona, s, rand, tried) {
   const affs = R.affordances(s);
-  const w = affs.map((a) => Math.max(0, persona.weight(a, s, tried)));
+  const w = travelOnce(affs, affs.map((a) => Math.max(0, persona.weight(a, s, tried))));
   const sum = w.reduce((n, v) => n + v, 0);
   let x = rand() * (sum + persona.wait * (affs.length ? Math.max(1, sum / 3) : 1));
   for (let i = 0; i < affs.length; i++) {
@@ -36,12 +38,12 @@ export function timedDay(name, seed = 1) {
   const drv = createDriver(R, [], {}, { sight: H.SIGHT });
   const time = { action: 0, reading: 0, detained: 0, free: 0 };
   const beats = [], games = new Set(), spectacle = new Set(), caughtAt = [], freedAfter = [];
-  let near = 0, nearPhysical = 0, offered = 0, offeredPhysical = 0, k = 0;
+  let near = 0, nearPhysical = 0, offered = 0, offeredPhysical = 0, k = 0, hops = 0;
   let wasDetained = false, detainedSince = 0;
   while (!s.over) {
-    if (drv.done || drv.index < 0) drv.push(choose(persona, s, rand, tried));
+    if (drv.done || drv.index < 0) drv.push(...withHop(s, choose(persona, s, rand, tried))); // a far choice goes by fast travel first
     const cmd = drv.before(s);
-    if (cmd) { try { R.act(s, cmd); } catch (e) { run.crashed = e.message; break; } }
+    if (cmd) { try { if (R.act(s, cmd)?.ok && cmd.type === 'travel') hops++; } catch (e) { run.crashed = e.message; break; } }
     // Cues are drained by observe(); look at them first.
     for (const c of s.cues) {
       if (ACTION_START(c.cue)) { beats.push(s.t); games.add(gameOf(c.cue)); }
@@ -60,9 +62,9 @@ export function timedDay(name, seed = 1) {
     if (++k % 50 === 0 && mode === 'free') {
       const opp = R.opportunities(s, pl, 10).filter((o) => o.d <= 10 && o.kind !== 'go');
       near++;
-      if (opp.some((o) => !TALKY.has(o.kind))) nearPhysical++;
+      if (opp.some((o) => !NOT_BODY.has(o.kind))) nearPhysical++;
       const affs = R.affordances(s);
-      offered += affs.length; offeredPhysical += affs.filter((a) => !TALKY.has(a.kind)).length;
+      offered += affs.length; offeredPhysical += affs.filter((a) => !NOT_BODY.has(a.kind)).length;
     }
   }
   H.finishDay(run);
@@ -80,6 +82,7 @@ export function timedDay(name, seed = 1) {
   return {
     name, seed, crashed: run.crashed ?? null,
     seconds: total, time, shares: Object.fromEntries(Object.entries(time).map(([k2, v]) => [k2, v / total])),
+    hops, // fast-travel hops taken (each skips TRAVEL_MINUTES of clock: the day is that much shorter in real time)
     firstAction: beats.length ? beats[0] : null, beats: beats.length, games: [...games],
     spectacle: [...spectacle], caught: caughtAt.length, freedAfter,
     wordsPerMinute: seen.reduce((n, i) => n + i.text.split(/\s+/).length, 0) / (total / 60),

@@ -110,6 +110,7 @@ export function clientFeedback(cmd, r, before, s) {
     case 'pester': case 'provocateur': return { shown: !r?.ok, raw };
     case 'whisper': return { shown: !r?.ok || r?.say === 'already-dead', raw }; // main.js toasts a dead rumour
     case 'leave': return { shown: true, raw: null }; // the card closes
+    case 'travel': return { shown: true, raw: null }; // the transition card, or the player's line saying why not (travel-ui.js)
     case 'say': case 'situation': case 'plead': return { shown: !!s.story.convo || (!r?.ok && !!r?.say), raw }; // the options card or the next node
 
     default: return { shown: false, raw };

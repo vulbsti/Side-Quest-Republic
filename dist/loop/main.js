@@ -7,7 +7,7 @@ import { enhanceEnvironment } from '../environment-detail.js?v=27';
 import { loadCharacters, makeCharacter, animateCharacter, playOnce, CARRY_POSES } from '../characters.js?v=28';
 import { Simulation, clamp, dist, steer, visible, separateBodies, nearObstacles } from '../simulation.js?v=27';
 import { warmupRenderer } from '../render-warmup.js?v=27';
-import * as R from './rules.js?v=10';
+import * as R from './rules.js?v=11';
 import { SPEAKERS } from './talks.js?v=2';
 import { PEOPLE, HINTS, LINKS, ENDINGS, RUMOURS, AMBIENT } from './content.js?v=10';
 import { createLighting } from './lighting.js?v=1';
@@ -18,10 +18,11 @@ import {
 import { createCinematic } from './cinematic.js?v=3';
 import { createPhone } from './phone-ui.js?v=1';
 import { routeEvent } from './present.js?v=2';
-import { createDriver } from './drive.js?v=4';
+import { createDriver } from './drive.js?v=5';
 import { canSee, lostSight } from './sight.js?v=1';
 import { createRecorder, setInputs } from './trace.js?v=1';
 import { createStreetLife } from './street-life.js?v=1';
+import { createTravelUI } from './travel-ui.js?v=1';
 
 const { createDay, tick, drainEvents, finish, levers, moods, isFree, clockText, placeAt, SPOTS, PLACES, at, advance } = R;
 const $ = (s) => document.querySelector(s);
@@ -1135,6 +1136,7 @@ function handleCues() {
     if (name === 'chase-lost') toast(c.data?.how === 'tired' ? 'Uncle thak gaye. Haath ghutno pe, saans Lodhi Garden tak.' : c.data?.how === 'whiffs' ? 'Teen baar hawa pakdi. Woh gave up.' : 'Lost him. He\'s bent over, hands on knees, swearing at a pigeon.', 4);
     if (name === 'caught') toast(c.data?.light ? 'PAKDE GAYE! 50 uthak-baithak, live, 4K mein. Phir chhutti.' : 'Caught. Dilli Police ki free van seva.', 4);
     if (name === 'phase' && c.data) onPhase(c.data.phase ?? c.data);
+    if (name === 'travel') travelArrived();
     const st = STINGS[name];
     if (st && stingsOn && !stung.has(name) && mode === 'play' && !cine.active && !choices && !S.detained(day) && day.t - lastStingT > 6) {
       stung.add(name);
@@ -1395,7 +1397,7 @@ function nearestOpportunity(fresh = false, nearest = false) {
       if (!o) continue;
       const x = o.x ?? o.pos?.x, z = o.z ?? o.pos?.z;
       const d = x === undefined ? (o.d ?? o.dist ?? 0) : Math.hypot(x - _oppPos.x, z - _oppPos.z);
-      const item = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null };
+      const item = { label: o.label ?? o.text ?? o.title ?? o.intent ?? 'Something is happening', x, z, d, cmd: o.cmd ?? null, kind: o.kind, choices: o.choices ?? null, hop: o.hop ?? null };
       best ??= item;
       if ((item.cmd || item.choices) && !LOCAL_KINDS.has(item.kind) && d < bd) { bd = d; near = item; }
     }
@@ -2031,6 +2033,8 @@ function updateHUD(dt) {
     }
     $('#objArrow').classList.toggle('hidden', !far);
   }
+  travel?.hint(o); // far away: "M: seedha wahan"
+  travel?.update(dt);
   // Toasts, radio, phase banner, REC flash.
   if (radioT > 0 && (radioT -= dt) <= 0) $('#radio').classList.add('hidden');
   if (phaseBannerT > 0 && (phaseBannerT -= dt) <= 0) { $('#phaseBanner').classList.remove('on'); $('#phaseBanner').classList.add('hidden'); }
@@ -2084,6 +2088,26 @@ async function startReplay() {
   };
 }
 
+// --- fast travel (travel.js, travel-ui.js) ------------------------------------------------
+let travel = null, travelDone = { day: null, hops: 0 };
+/**
+ * After a hop (once per hop: the panel calls it right after act, a replay through the travel cue): the body goes
+ * where the engine put the player, facing the place, the camera cuts in behind, people snap to where they are.
+ */
+function travelArrived() {
+  const hops = day.travel?.hops ?? 0;
+  if (!hops || (travelDone.day === day && travelDone.hops === hops)) return;
+  travelDone = { day, hops };
+  const pl = day.player, p = sim.player, look = R.DESTINATIONS[day.travel.last?.to]?.look;
+  Object.assign(p, { x: pl.x, z: pl.z, y: 0, vx: 0, vz: 0 });
+  if (look) p.yaw = Math.atan2(look.x - p.x, look.z - p.z);
+  yaw = p.yaw + Math.PI;
+  playerModel.position.set(p.x, 0, p.z); playerModel.rotation.y = p.yaw;
+  world.camera.position.set(p.x + Math.sin(yaw) * zoom, 1.55 + zoom * pitch, p.z + Math.cos(yaw) * zoom);
+  world.camera.lookAt(p.x, 1.55, p.z);
+  crowdSnap = true; policeSnap = true; crowdClock = 0; policeClock = 0; oppT = 0;
+}
+
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.1, last ? (now - last) / 1000 : 1 / 60);
@@ -2118,6 +2142,7 @@ function press(k) {
   if (k === 'f') film();
   if (k === 'r') rally();
   if (k === 'c') openStance();
+  if (k === 'm') travel?.toggle(); // fast travel (travel-ui.js)
 }
 function setupInput() {
   addEventListener('keydown', (e) => {
@@ -2212,6 +2237,11 @@ function setupInput() {
     makePeople();
     resetDay();
     setupInput();
+    travel = createTravelUI({
+      R, day: () => day, player: () => sim.player, act: (cmd) => act(day, cmd), toast: (t) => toast(t, 3),
+      pause: (on) => { if (on && mode === 'play') mode = 'travel'; else if (!on && mode === 'travel') mode = 'play'; },
+      arrive: () => travelArrived(),
+    });
     await warmupRenderer({ renderer: world.renderer, scene: world.scene, camera: world.camera, onProgress: (text) => ($('#loadtext').textContent = text) });
     $('#loading').classList.add('hidden');
     if (DEV) $('#dev').classList.remove('hidden');

@@ -1,0 +1,13 @@
+{"name":"ending packed · hold · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"hold","role":"spectator"},"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:48","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"14:51","wait":20},
+{"clock":"15:11","do":"whisper:biryani:dev","cmd":{"type":"whisper","to":"dev","rumour":"biryani"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"15:15","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"15:16","finish":true}
+]}

@@ -1,0 +1,5 @@
+{"name":"ending biryani · block · spectator","note":"","tempo":"long","expect":{"ending":"biryani","outcome":"block","role":"spectator"},"trace":[
+{"clock":"10:00","do":"go:cp","cmd":null,"at":{"x":90,"z":-192},"hold":42},
+{"clock":"10:51","do":"whisper:biryani:nikhil","cmd":{"type":"whisper","to":"nikhil","rumour":"biryani"},"at":{"x":93.20580027313106,"z":-248.8127706137456}},
+{"clock":"10:53","finish":true}
+]}

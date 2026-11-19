@@ -7,6 +7,8 @@ import { CAPTIONS } from './phone.js';
 import { PESTER_BY } from './talks.js';
 import { createStory } from './story.js';
 import { streetPath, pathLength } from '../map/route.js';
+import { createTravel } from './travel.js';
+export { DESTINATIONS, TRAVEL_MINUTES, HOP_FROM, MODES } from './travel.js';
 
 /** A caption for a clip kind: 'now' when posted, 'later' for the 17:00 repost. */
 function caption(kind, when, n = 0) {
@@ -2364,6 +2366,7 @@ export function act(s, cmd) {
   if (s.over) return { ok: false };
   if (s.tempo !== SECONDS_PER_MINUTE) setTempo(s.tempo); // at()/mins() below must use this day's tempo, not the last one ticked
   const pl = s.player;
+  if (cmd.type === 'travel') return TRAVEL.act(s, cmd); // fast travel: refuses with its own line (travel.js)
   // On the bus you can still talk your way out, talk to who is in there with you, or film through the window.
   if (pl.detained && !['plead', 'talk', 'say', 'leave', 'situation', 'film', 'window'].includes(cmd.type)) return { ok: false, say: 'detained' };
   if (pl.riding && !(cmd.type === 'ride' || cmd.type === 'film')) return { ok: false, say: 'riding' };
@@ -2753,6 +2756,13 @@ const STORY = createStory({
 export const situations = (s) => STORY.list(s);
 export const storyCallbackText = (key) => STORY.callbackText(key);
 
+// --- fast travel (travel.js) ------------------------------------------------------
+const TRAVEL = createTravel({ dist, mins, say, cue, advance, crowdAt, allOfficers });
+/** The travel panel: [{ id, name, mode, d, ok, why, text, heat, ... }] for every destination. */
+export const travelBoard = (s) => TRAVEL.board(s);
+/** The best hop towards a far point, or null: { to, name, d }. */
+export const travelHop = (s, target, from) => TRAVEL.hop(s, target, from);
+
 // --- what the player can do right here ------------------------------------------
 
 /**
@@ -2848,7 +2858,7 @@ export function opportunities(s, pos = s.player, radius = 10) {
   // From 14:00 a far-off chat with a constable is not the point any more: send the player to the hotspot
   // unless the best thing is something rare or urgent.
   const worth = real[0] && (s.t < at(14, 0) || (URGENT[real[0].kind] ?? 0) < 0);
-  return [worth && real[0].d < go.d ? real[0] : go];
+  return [TRAVEL.offer(s, worth && real[0].d < go.d ? real[0] : go)]; // far away: the card carries a hop (travel.js)
 }
 
 // --- the whole action space ------------------------------------------------------
@@ -2880,6 +2890,7 @@ export function affordances(s) {
     return out;
   }
   if (pl.riding) { add('ride:off', 'ride', { type: 'ride', to: 'off' }, null); return out; }
+  for (const a of TRAVEL.affordances(s)) add(a.id, 'travel', a.cmd, null); // hop anywhere from here (travel.js)
   for (const a of STORY.affordances(s)) add(a.id, a.kind === 'goal' ? 'go' : a.kind, a.cmd, a.at);
   if (canRide(s)) for (const [id, k] of Object.entries(RICK_STANDS)) add(`ride:${rickOther(id)}`, 'ride', { type: 'ride', to: rickOther(id) }, SPOTS[k]);
   if (!pl.carrying) for (const [id, o] of Object.entries(s.objects)) if (isFree(o)) add(`take:${id}`, 'take', { type: 'take', object: id }, o);

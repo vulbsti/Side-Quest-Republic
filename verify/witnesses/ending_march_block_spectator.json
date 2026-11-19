@@ -3,11 +3,7 @@
 {"clock":"10:51","do":"situation:chabi","cmd":{"type":"situation","id":"chabi"},"at":{"x":86,"z":-193}},
 {"clock":"10:51","wait":1},
 {"clock":"10:52","do":"say:chabi:intro:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"10:53","wait":20},
-{"clock":"11:13","do":"say:chabi:rishta:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"11:14","wait":1},
-{"clock":"11:15","do":"take:key","cmd":{"type":"take","object":"key"},"at":null},
-{"clock":"11:18","do":"say:chabi:decide:0","cmd":{"type":"say","option":0},"at":{"x":116.7378032613433,"z":-189.29888618597164}},
-{"clock":"11:19","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"11:42","finish":true}
+{"clock":"10:53","do":"ride:jantar","cmd":{"type":"ride","to":"jantar"},"at":{"x":91,"z":-202}},
+{"clock":"10:54","do":"ride:off","cmd":{"type":"ride","to":"off"},"at":{"x":79.84604585591283,"z":-210.6153486186376}},
+{"clock":"10:55","finish":true}
 ]}

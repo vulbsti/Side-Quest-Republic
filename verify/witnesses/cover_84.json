@@ -7,6 +7,6 @@
 {"clock":"12:33","do":"go:barricade","cmd":null,"at":{"x":-51,"z":82},"hold":1},
 {"clock":"12:55","do":"say:afwaah:bikes:3","cmd":{"type":"say","option":3},"at":null},
 {"clock":"12:55","wait":45},
-{"clock":"13:40","do":"talk:mira","cmd":{"type":"talk","to":"mira"},"at":{"x":-51,"z":95.5}},
-{"clock":"13:42","do":"say:afwaah:rawat:3","cmd":{"type":"say","option":3},"at":{"x":-51.07041414849451,"z":93.02139501349588}}
+{"clock":"13:40","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"13:42","do":"say:afwaah:rawat:0","cmd":{"type":"say","option":0},"at":{"x":-51.0116103204062,"z":103.83271947104213}}
 ]}

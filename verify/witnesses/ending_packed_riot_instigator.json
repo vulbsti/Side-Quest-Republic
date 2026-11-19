@@ -1,9 +1,15 @@
 {"name":"ending packed · riot · instigator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"instigator"},"trace":[
-{"clock":"10:00","do":"go:suv","cmd":null,"at":{"x":-38,"z":119},"hold":1},
-{"clock":"10:30","wait":272},
-{"clock":"15:02","do":"prov:p2:join","cmd":{"type":"provocateur","id":"p2","how":"join"},"at":{"x":-50.64,"z":111.54}},
-{"clock":"15:03","do":"film:provocateur-joined@stage","cmd":{"type":"film"},"at":{"x":-50.64,"z":111.54}},
-{"clock":"15:04","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
-{"clock":"15:05","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-50.77893428795777,"z":105.29548742804579}},
-{"clock":"15:06","finish":true}
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
+{"clock":"14:48","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
+{"clock":"14:51","wait":20},
+{"clock":"15:11","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
+{"clock":"15:15","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
+{"clock":"15:19","wait":10},
+{"clock":"15:29","do":"travel:shivaji","cmd":{"type":"travel","to":"shivaji"},"at":{"x":91,"z":-202}},
+{"clock":"15:32","finish":true}
 ]}

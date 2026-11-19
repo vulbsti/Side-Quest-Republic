@@ -1,0 +1,56 @@
+/* --- fast travel: the M panel, the transition card, the objective card's hop hint (travel-ui.js) --- */
+#travel{position:absolute;inset:0;z-index:6;background:#0b211dd8;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px}
+#travel .tv-inner{width:min(1180px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px}
+#travel header{display:flex;align-items:flex-end;gap:16px}
+#travel header>div{flex:1}
+#travel h2{font:800 34px/1 'Barlow Condensed',sans-serif;margin:6px 0 0}
+#travel .tv-clock{font:800 26px/1 'Barlow Condensed',sans-serif;color:var(--lime)}
+#travel .tv-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);gap:14px;min-height:0;flex:1}
+#travel .tv-map{background:#10261f;border:1px solid #ffffff1c;border-radius:10px;overflow:hidden;min-height:0;display:flex}
+#travel .tv-map svg{width:100%;height:100%;max-height:calc(100vh - 150px);display:block}
+.tv-park{fill:#2c5a3a;opacity:.55}
+.tv-road{fill:none;stroke:#e8e2c8;stroke-opacity:.22;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.tv-road.big{stroke-opacity:.38;stroke-width:7}
+.tv-pin{cursor:pointer}
+.tv-pin .tv-dot{fill:#1e4033;stroke:var(--cream);stroke-width:2.5}
+.tv-pin .tv-num{font:700 15px 'DM Sans',sans-serif;fill:var(--cream);pointer-events:none}
+.tv-pin .tv-lab{font:700 15px 'Barlow Condensed',sans-serif;fill:var(--cream);paint-order:stroke;stroke:#0b211d;stroke-width:4px;pointer-events:none}
+.tv-pin.heat1 .tv-dot{fill:#3d6650}
+.tv-pin.heat2 .tv-dot{fill:#c98a2b}
+.tv-pin.heat3 .tv-dot{fill:var(--heat)}
+.tv-pin.off{opacity:.4}
+.tv-pin.sel .tv-dot{stroke:var(--lime);stroke-width:5}
+.tv-pin.sel .tv-lab{fill:var(--lime)}
+.tv-pin.hop .tv-dot{stroke:var(--lime);stroke-dasharray:6 4}
+.tv-me circle{fill:var(--lime)}
+.tv-me .tv-me-ring{fill:none;stroke:var(--lime);stroke-width:2;opacity:.6}
+#travel .tv-list{list-style:none;margin:0;padding:0;overflow:auto;max-height:calc(100vh - 150px)}
+.tv-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 10px;margin:0 0 5px;border-radius:7px;background:#132f28c8;border-left:3px solid #ffffff20;cursor:pointer}
+.tv-row b{display:block;font-size:13px;font-weight:700}
+.tv-row small{font-size:9px;letter-spacing:1.5px;color:var(--lime);text-transform:uppercase;font-weight:700}
+.tv-row span{display:block;font-size:12px;color:#e6ead6;line-height:1.35}
+.tv-row em{font-style:normal;font-size:11px;color:#cfe0c4;white-space:nowrap}
+.tv-row.heat1{border-left-color:#5f9a76}
+.tv-row.heat2{border-left-color:#ffcf6b}
+.tv-row.heat3{border-left-color:var(--heat)}
+.tv-row.off{opacity:.45}
+.tv-row.off span{font-style:italic}
+.tv-row.sel{background:#2a5442;outline:2px solid var(--lime)}
+.tv-row.hop small::after{content:' · card wala';color:var(--cream)}
+#travel .tv-foot{margin:0}
+
+#travelWipe{position:absolute;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;pointer-events:none;background:var(--lime);clip-path:inset(0 100% 0 0)}
+#travelWipe.in{animation:tw-in .35s cubic-bezier(.7,0,.3,1) forwards}
+#travelWipe.hold{clip-path:inset(0 0 0 0)}
+#travelWipe.out{animation:tw-out .35s cubic-bezier(.7,0,.3,1) forwards}
+@keyframes tw-in{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes tw-out{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 0 100%)}}
+.tw-card{color:var(--ink);text-align:center;transform:rotate(-2deg)}
+.tw-card small{display:block;font-size:12px;letter-spacing:4px;font-weight:700}
+.tw-card b{display:block;font:900 64px/1 'Barlow Condensed',sans-serif;margin:8px 0}
+.tw-card em{display:inline-block;font-style:normal;font-weight:600;font-size:18px;background:var(--ink);color:var(--lime);padding:6px 14px;border-radius:4px}
+
+#objHop{font-size:9px;letter-spacing:1px;color:var(--cream)}
+#objHop kbd{margin-right:3px;font-size:9px;padding:1px 4px}
+
+@media(max-width:860px){#travel{padding:8px}#travel .tv-body{grid-template-columns:1fr;grid-template-rows:38vh 1fr}#travel h2{font-size:26px}#travel .tv-map svg{max-height:38vh}#travel .tv-list{max-height:none}.tw-card b{font-size:40px}}
