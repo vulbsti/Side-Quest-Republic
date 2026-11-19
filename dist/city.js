@@ -4,7 +4,7 @@
 // renderer culls what is behind the camera; walls are collision boxes from the importer (MAP.solids).
 import { MAP } from './map/delhi-map.js?v=1';
 import { labels } from './map/labels.js?v=1';
-import { PLACES, SPOTS, BUS_BAY, BUS_ROUTE, busSide } from './loop/rules.js?v=10';
+import { PLACES, SPOTS, BUS_BAY, BUS_ROUTE, busSide } from './loop/rules.js?v=11';
 
 const TILE = 96;
 const CP = { x: 177, z: -385 }; // Rajiv Chowk Central Park, the middle of Connaught Place

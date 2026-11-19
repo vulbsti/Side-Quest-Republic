@@ -1,4 +1,4 @@
-{"name":"cover 12","note":"10 covered keys","tempo":"long","expect":null,"trace":[
+{"name":"cover 12","note":"9 covered keys","tempo":"long","expect":null,"trace":[
 {"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
 {"clock":"10:29","wait":258},
 {"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
