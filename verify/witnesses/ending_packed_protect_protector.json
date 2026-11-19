@@ -6,6 +6,7 @@
 {"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
 {"clock":"15:01","wait":50},
 {"clock":"15:51","do":"travel:hanuman","cmd":{"type":"travel","to":"hanuman"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
-{"clock":"15:54","do":"whisper:cannon:meera","cmd":{"type":"whisper","to":"meera","rumour":"cannon"},"at":{"x":-56.3,"z":104.5}},
-{"clock":"16:25","finish":true}
+{"clock":"15:54","do":"pester:c4:career","cmd":{"type":"pester","to":"c4","how":"career"},"at":{"x":-40.76953361612079,"z":109.27511945323532}},
+{"clock":"16:26","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:32","finish":true}
 ]}

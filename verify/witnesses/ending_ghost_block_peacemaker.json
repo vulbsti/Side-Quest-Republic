@@ -4,8 +4,8 @@
 {"clock":"16:02","wait":45},
 {"clock":"16:47","do":"prov:p1:expose","cmd":{"type":"provocateur","id":"p1","how":"expose"},"at":{"x":-51.4,"z":111.6}},
 {"clock":"16:48","do":"whisper:cannon:dev","cmd":{"type":"whisper","to":"dev","rumour":"cannon"},"at":{"x":-45.8,"z":106.8}},
-{"clock":"16:48","do":"raid:c3","cmd":{"type":"raid","move":"start"},"at":{"x":-29,"z":99}},
-{"clock":"16:50","wait":45},
-{"clock":"17:35","do":"pester:r6:cannon","cmd":{"type":"pester","to":"r6","how":"cannon"},"at":{"x":-64.6,"z":67}},
-{"clock":"17:40","wait":45}
+{"clock":"16:48","do":"talk:dev","cmd":{"type":"talk","to":"dev"},"at":{"x":-45.8,"z":106.8}},
+{"clock":"16:49","wait":10},
+{"clock":"16:59","wait":20},
+{"clock":"17:19","wait":45}
 ]}

@@ -1,0 +1,15 @@
+{"name":"ending noshow · protect · protector","note":"","tempo":"long","expect":{"ending":"noshow","outcome":"protect","role":"protector"},"trace":[
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
+{"clock":"15:01","wait":50},
+{"clock":"15:51","do":"travel:hanuman","cmd":{"type":"travel","to":"hanuman"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
+{"clock":"15:54","wait":20},
+{"clock":"16:14","wait":10},
+{"clock":"16:24","wait":10},
+{"clock":"16:34","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-102.7,"z":-230.6}},
+{"clock":"16:35","do":"whisper:minister:mira","cmd":{"type":"whisper","to":"mira","rumour":"minister"},"at":{"x":-51,"z":95.5}},
+{"clock":"17:05","finish":true}
+]}

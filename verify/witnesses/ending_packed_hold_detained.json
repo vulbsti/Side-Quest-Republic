@@ -1,4 +1,4 @@
-{"name":"ending packed · hold · peacemaker","note":"","tempo":"long","expect":{"ending":"packed","outcome":"hold","role":"peacemaker"},"trace":[
+{"name":"ending packed · hold · detained","note":"","tempo":"long","expect":{"ending":"packed","outcome":"hold","role":"detained"},"trace":[
 {"clock":"10:00","do":"take:water","cmd":{"type":"take","object":"water"},"at":null},
 {"clock":"10:10","do":"give:sana","cmd":{"type":"give","to":"sana"},"at":null},
 {"clock":"10:33","wait":1},
@@ -20,9 +20,13 @@
 {"clock":"15:20","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":-33.19454805091768,"z":99.00514484936221}},
 {"clock":"15:20","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
 {"clock":"15:26","wait":10},
-{"clock":"15:36","wait":45},
-{"clock":"16:21","do":"leave","cmd":{"type":"leave"},"at":{"x":-58.01085960264861,"z":101.31020818765789}},
-{"clock":"16:22","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
-{"clock":"16:23","do":"prov:p3:expose","cmd":{"type":"provocateur","id":"p3","how":"expose"},"at":{"x":-50.94,"z":110.9}},
-{"clock":"16:24","finish":true}
+{"clock":"15:36","wait":20},
+{"clock":"15:56","do":"say:sana-water-arrived:a:0","cmd":{"type":"say","option":0},"at":{"x":-58.01085960264861,"z":101.31020818765789}},
+{"clock":"15:57","do":"raid:c4","cmd":{"type":"raid","move":"start"},"at":{"x":-37.76953361612079,"z":109.27511945323532}},
+{"clock":"15:59","do":"plead","cmd":{"type":"plead"},"at":{"x":-40.92317787204026,"z":107.84110639798688}},
+{"clock":"15:59","wait":45},
+{"clock":"16:44","do":"talk:sana","cmd":{"type":"talk","to":"sana"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:46","wait":10},
+{"clock":"16:56","wait":45},
+{"clock":"17:41","wait":20}
 ]}

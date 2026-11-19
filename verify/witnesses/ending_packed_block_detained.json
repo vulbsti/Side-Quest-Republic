@@ -1,11 +1,13 @@
 {"name":"ending packed · block · detained","note":"","tempo":"long","expect":{"ending":"packed","outcome":"block","role":"detained"},"trace":[
-{"clock":"10:00","do":"go:metro","cmd":null,"at":{"x":150,"z":-296},"hold":420},
-{"clock":"17:00","do":"situation:ghar-jaana-hai","cmd":{"type":"situation","id":"ghar-jaana-hai"},"at":{"x":150,"z":-296}},
-{"clock":"17:00","do":"say:ghar-jaana-hai:gate:3","cmd":{"type":"say","option":3},"at":{"x":150,"z":-296.5899999999999}},
-{"clock":"17:01","do":"stance:hold","cmd":{"type":"stance","stance":"hold"},"at":{"x":150,"z":-296.5899999999999}},
-{"clock":"17:02","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":4},
-{"clock":"17:34","wait":3},
-{"clock":"17:37","do":"take:phone","cmd":{"type":"take","object":"phone"},"at":{"x":-58.5,"z":104.5}},
-{"clock":"17:38","do":"take:key","cmd":{"type":"take","object":"key"},"at":{"x":-40.615889360201315,"z":107.58503263812108}},
-{"clock":"17:40","wait":20}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
+{"clock":"16:01","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":{"x":-47.8,"z":99.6}},
+{"clock":"16:02","do":"take:water","cmd":{"type":"take","object":"water"},"at":{"x":-59.4,"z":101.6}},
+{"clock":"16:03","do":"travel:metro","cmd":{"type":"travel","to":"metro"},"at":{"x":-58.08238491141063,"z":101.5187938128769}},
+{"clock":"16:06","do":"travel:bangla","cmd":{"type":"travel","to":"bangla"},"at":{"x":147.9,"z":-291.5}},
+{"clock":"16:08","wait":10},
+{"clock":"16:18","wait":10},
+{"clock":"16:28","wait":45},
+{"clock":"17:13","do":"hide:stage","cmd":null,"at":{"x":-51,"z":104.5},"hold":1},
+{"clock":"17:42","do":"prov:p1:report:c1","cmd":{"type":"provocateur","id":"p1","how":"report","to":"c1"},"at":{"x":-48.7,"z":116.3}},
+{"clock":"17:43","wait":20}
 ]}

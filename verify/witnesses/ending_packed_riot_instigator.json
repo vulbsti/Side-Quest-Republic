@@ -6,10 +6,6 @@
 {"clock":"10:39","wait":248},
 {"clock":"14:47","do":"take:megaphone","cmd":{"type":"take","object":"megaphone"},"at":null},
 {"clock":"14:48","do":"pester:r4:cute","cmd":{"type":"pester","to":"r4","how":"cute"},"at":{"x":-64.6,"z":64.2}},
-{"clock":"14:51","wait":20},
-{"clock":"15:11","do":"prov:p3:join","cmd":{"type":"provocateur","id":"p3","how":"join"},"at":{"x":-50.94,"z":110.9}},
-{"clock":"15:15","do":"ride:cp","cmd":{"type":"ride","to":"cp"},"at":{"x":-38,"z":44}},
-{"clock":"15:19","wait":10},
-{"clock":"15:29","do":"travel:shivaji","cmd":{"type":"travel","to":"shivaji"},"at":{"x":91,"z":-202}},
-{"clock":"15:32","finish":true}
+{"clock":"14:51","do":"prov:p1:join","cmd":{"type":"provocateur","id":"p1","how":"join"},"at":{"x":-53,"z":106}},
+{"clock":"14:55","finish":true}
 ]}

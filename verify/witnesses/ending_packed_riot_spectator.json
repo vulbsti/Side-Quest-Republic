@@ -1,0 +1,11 @@
+{"name":"ending packed · riot · spectator","note":"","tempo":"long","expect":{"ending":"packed","outcome":"riot","role":"spectator"},"trace":[
+{"clock":"10:00","wait":5},
+{"clock":"10:05","do":"talk:nikhil","cmd":{"type":"talk","to":"nikhil"},"at":{"x":155.5,"z":-295.5}},
+{"clock":"10:05","do":"leave","cmd":{"type":"leave"},"at":null},
+{"clock":"10:06","do":"go:stage","cmd":null,"at":{"x":-54,"z":109},"hold":4},
+{"clock":"10:39","wait":248},
+{"clock":"14:47","do":"whisper:sena:sana","cmd":{"type":"whisper","to":"sana","rumour":"sena"},"at":{"x":-60.5,"z":101}},
+{"clock":"14:48","do":"talk:ravi","cmd":{"type":"talk","to":"ravi"},"at":{"x":-45.4,"z":100.4}},
+{"clock":"14:49","do":"leave","cmd":{"type":"leave"},"at":{"x":-47.68121504541837,"z":100.6376669283241}},
+{"clock":"14:50","finish":true}
+]}

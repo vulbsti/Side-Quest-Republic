@@ -1,11 +1,17 @@
 {"name":"cover 55","note":"1 covered keys","tempo":"long","expect":null,"trace":[
-{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-49,"z":105},"hold":333},
-{"clock":"16:01","do":"situation:dhuan","cmd":{"type":"situation","id":"dhuan"},"at":{"x":-49,"z":105}},
-{"clock":"16:01","wait":1},
-{"clock":"16:02","do":"say:dhuan:smoke:1","cmd":{"type":"say","option":1},"at":null},
-{"clock":"16:03","wait":1},
-{"clock":"16:04","do":"say:dhuan:meera:0","cmd":{"type":"say","option":0},"at":null},
-{"clock":"16:05","wait":10},
-{"clock":"16:15","do":"say:dhuan:meera-saved:0","cmd":{"type":"say","option":0},"at":{"x":-49.55178223045137,"z":104.93018265655513}},
-{"clock":"16:16","do":"say:dhuan:hub:2","cmd":{"type":"say","option":2},"at":{"x":-49.55178223045137,"z":104.93018265655513}}
+{"clock":"10:00","do":"go:stage","cmd":null,"at":{"x":-54,"z":101},"hold":1},
+{"clock":"10:29","wait":258},
+{"clock":"14:47","do":"take:speaker","cmd":{"type":"take","object":"speaker"},"at":null},
+{"clock":"14:48","wait":13},
+{"clock":"15:01","do":"stance:protect","cmd":{"type":"stance","stance":"protect"},"at":null},
+{"clock":"15:01","wait":50},
+{"clock":"15:51","do":"travel:shivaji","cmd":{"type":"travel","to":"shivaji"},"at":{"x":-49.07856824975368,"z":99.72068300548952}},
+{"clock":"15:54","do":"rally:stage","cmd":{"type":"rally"},"at":{"x":-51,"z":104.5}},
+{"clock":"16:24","do":"talk:zoya","cmd":{"type":"talk","to":"zoya"},"at":{"x":-58.5,"z":104.5}},
+{"clock":"16:25","do":"leave","cmd":{"type":"leave"},"at":{"x":-55.99626574417471,"z":104.34228009443447}},
+{"clock":"16:26","do":"situation:pattiyan","cmd":{"type":"situation","id":"pattiyan"},"at":{"x":-60.5,"z":101}},
+{"clock":"16:27","do":"say:pattiyan:tent:0","cmd":{"type":"say","option":0},"at":{"x":-56.75111373627587,"z":103.7820975270327}},
+{"clock":"16:27","do":"situation:detain-me","cmd":{"type":"situation","id":"detain-me"},"at":{"x":-43,"z":40}},
+{"clock":"16:32","do":"say:detain-me:window:2","cmd":{"type":"say","option":2},"at":{"x":-42.530971097878655,"z":44.626495238133685}},
+{"clock":"16:32","do":"say:detain-me:window2:1","cmd":{"type":"say","option":1},"at":{"x":-42.530971097878655,"z":44.626495238133685}}
 ]}
